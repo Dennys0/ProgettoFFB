@@ -1,0 +1,45 @@
+NARRATOR|SCENA 5 — IL VASCELLO MAGICO. Il vento scuote le vele dorate dello Skíðblaðnir. Martino è aggrappato al timone d'ottone...
+ARTHUR|Martino, dobbiamo parlare. Ieri sera eravamo in una taverna. Adesso siamo su una nave che vola sopra le nuvole. Mi devi una spiegazione.
+MARTINO|Una spiegazione? Ah! Il mare è troppo basso, il cielo è troppo alto e il capitano non ha tempo per le domande dei mozzi!
+ARTHUR|Non sono il tuo mozzo.
+MARTINO|Lo diventerai quando avrai imparato a distinguere una cima da una corda e una nuvola da una montagna.
+ARTHUR|E come torno a casa?
+NARRATOR|Martino smette di sorridere. Osserva per qualche istante l'orizzonte, dove enormi nubi si rincorrono come animali addormentati.
+MARTINO|Vedi quelle correnti? Questa nave può attraversarle tutte, ma non può sfuggire al cielo che la tiene prigioniera.
+ARTHUR|Quindi siamo intrappolati?
+MARTINO|Io preferisco dire che siamo ospiti non invitati.
+ARTHUR|E come facciamo ad andarcene?
+MARTINO|Con un po' di fortuna, una buona dose di coraggio e qualcosa che gli dèi apprezzano più dell'oro.
+ARTHUR|L'idromele?
+MARTINO|Peggio. Un cocktail.
+ARTHUR|Dimmi che stai scherzando.
+MARTINO|Magari! Il tuo calderone ti aspetta nella cabina dell'alchimista. Ma non basta versarci dentro quello che trovi in giro. Il cielo è pieno di cose meravigliose che non vedono l'ora di rovinarti la giornata.
+ARTHUR|Allora dimmi cosa devo cercare.
+MARTINO|Ah, no, mio caro. Un capitano indica la rotta, non rema al posto dell'equipaggio. Ti darò tre indizi. Ascolta bene!
+NARRATOR|INDIZIO 1 — CIÒ CHE NON PUOI CATTURARE. Una raffica scuote le vele.
+MARTINO|Prima di tutto, devi trovare qualcosa che non si vede, ma che può abbattere alberi, piegare vele e scaraventare una nave contro le stelle.
+ARTHUR|Il vento?
+MARTINO|Non un vento qualsiasi. Sto parlando di quello che nasce quando il cielo sbatte le ali. Lassù vive una creatura che non ha bisogno di remi. Quando apre le ali, persino le tempeste si fanno da parte.
+ARTHUR|E dovrei chiedere a questa creatura di soffiare dentro una bottiglia?
+MARTINO|Sarebbe maleducato chiederle di fare altro. Se un giorno dovessi affrontarla, ricordati: non tutto ciò che vola è libero, e non tutto ciò che sembra vuoto è privo di potere.
+ARTHUR|Il respiro di una creatura alata… Credo di capire.
+MARTINO|Bene. Ma non correre troppo. Un ingrediente da solo non fa un cocktail.
+NARRATOR|INDIZIO 2 — CIÒ CHE BRILLA E CIÒ CHE INGANNA. Martino indica una piccola piuma gialla tra le assi del ponte.
+MARTINO|Vedi quella piuma? Il suo proprietario deve aver attraversato una tempesta particolarmente vivace.
+ARTHUR|È gialla. E sembra emanare piccole scintille.
+MARTINO|Alcuni uccelli lasciano piume. Altri lasciano promesse di tuoni. Ma non farti abbindolare da tutto ciò che luccica.
+ARTHUR|Perché?
+MARTINO|C'è una polvere dorata che galleggia nell'aria. Quella polvere non appartiene a questo cocktail. Ti farà vedere un sogno dentro un sogno, e quando riaprirai gli occhi sarai esattamente dove hai cominciato.
+ARTHUR|Quindi una piuma che sprigiona scintille sì, una polvere dorata sospesa nell'aria no.
+MARTINO|Vedi? Stai già imparando a navigare.
+NARRATOR|INDIZIO 3 — L'ACQUA CHE NON CADE. Una goccia scivola lungo il bordo del cannocchiale di Martino.
+MARTINO|Cerca l'acqua che non conosce la caduta. La trovi dove il cielo si posa sulle cose, prima che il sole possa portarsela via.
+ARTHUR|La rugiada?
+MARTINO|Diciamo che sei sulla strada giusta. Ma non cercarla in una pozzanghera. Guarda la polena a drago, osserva le sue scaglie e cerca ciò che brilla senza scintillare.
+ARTHUR|E se trovassi una fiala piena di fumo?
+MARTINO|Non aprirla. Non annusarla. E, per tutti gli dèi, non versarla nel calderone. Contiene il freddo di un regno in cui perfino le ombre hanno i brividi. Se entra nel calderone, lo spezzerà!
+ARTHUR|Quindi niente fumo denso, niente polvere dorata. Devo trovare qualcosa di leggero, ma stabile.
+MARTINO|Ecco il segreto dell'alchimia! Prima ciò che dà forza alla miscela, poi ciò che la risveglia, infine ciò che la rende stabile.
+ARTHUR|Una base… una scintilla… qualcosa che lo trattenga.
+MARTINO|Esatto. E un'ultima cosa: se senti qualcuno sussurrare il tuo nome mentre sei solo, non rispondere. Perché non tutti quelli che ti chiamano vogliono che tu torni a casa.
+ARTHUR|Ho capito. Preparerò questo cocktail.
