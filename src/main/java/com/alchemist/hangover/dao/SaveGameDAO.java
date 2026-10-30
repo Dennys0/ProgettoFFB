@@ -150,6 +150,10 @@ public class SaveGameDAO {
                 try { conn.rollback(); conn.setAutoCommit(true); } catch (SQLException ignored) {}
             }
             return false;
+        } finally {
+            if (conn != null) {
+                try { conn.close(); } catch (SQLException ignored) { }
+            }
         }
     }
 

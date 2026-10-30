@@ -4,57 +4,79 @@ import com.alchemist.hangover.dao.ItemDAO;
 import com.alchemist.hangover.dao.SaveGameDAO;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Test isolati: NON aprono, modificano o cancellano mai saves/alchemist.mv.db.
+ * Anche lo slot 1 esiste esclusivamente nel database jdbc:h2:mem.
+ */
 public class DatabaseSelfTest {
-    public static void main(String[] args) {
-        System.out.println("--- Inizio Test H2 Database ---");
+    private static final int TEST_SLOT = 1;
+
+    @BeforeAll
+    static void setupDatabase() {
+        System.setProperty(DatabaseManager.TEST_DATABASE_PROPERTY,
+                "jdbc:h2:mem:alchemist_test;DB_CLOSE_DELAY=-1");
         DatabaseManager.initDatabase();
+    }
 
-        // Test 1: Catalogo Oggetti
-        Item mapItem = ItemDAO.getItemById("MAPPA_CIELO");
-        if (mapItem == null || !"Mappa del Cielo".equals(mapItem.getName())) {
-            throw new RuntimeException("Test 1 Fallito: Mappa del cielo non trovata!");
-        }
-        System.out.println("Test 1 PASSATO: Catalogo oggetti OK (" + mapItem.getName() + ")");
+    @AfterAll
+    static void shutdownDatabase() {
+        DatabaseManager.close();
+        System.clearProperty(DatabaseManager.TEST_DATABASE_PROPERTY);
+    }
 
-        // Test 2: Salvataggio GameState
+    @BeforeEach
+    void resetGame() {
+        GameState.getInstance().resetState();
+    }
+
+    @AfterEach
+    void cleanupTestSlot() {
+        SaveGameDAO.deleteSave(TEST_SLOT);
+        GameState.getInstance().resetState();
+    }
+
+    @Test
+    void catalogContainsItemsFromBothChapters() {
+        Item map = ItemDAO.getItemById("MAPPA_CIELO");
+        assertNotNull(map);
+        assertEquals("Mappa del Cielo", map.getName());
+        assertNotNull(ItemDAO.getItemById("DIARIO_CAPITANO"));
+        assertNotNull(ItemDAO.getItemById("SCHIUMA_AEGIR"));
+    }
+
+    @Test
+    void savesAndRestoresChapterHealthAndInventory() {
         GameState state = GameState.getInstance();
-        state.resetState();
         state.setChapter(2);
         state.setCurrentRoom(4);
-        state.takeDamage(); // 2 cuori
+        state.takeDamage();
         state.setGivenMapToMartino(true);
-        state.addItem(mapItem);
+        state.addItem(ItemDAO.getItemById("MAPPA_CIELO"));
 
-        boolean saved = SaveGameDAO.saveGame(1, "Partita Test Alchimista");
-        if (!saved) throw new RuntimeException("Test 2 Fallito: Errore nel salvataggio!");
-        System.out.println("Test 2 PASSATO: Salvataggio effettuato!");
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Test in memoria"));
+        assertEquals(2, SaveGameDAO.getSlot(TEST_SLOT).getCurrentChapter());
 
-        // Test 3: Reset e Caricamento
         state.resetState();
-        if (state.getCurrentRoom() != 1 || state.getInventory().size() != 0) {
-            throw new RuntimeException("Reset fallito");
-        }
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(2, state.getChapter());
+        assertEquals(4, state.getCurrentRoom());
+        assertEquals(2, state.getCurrentHealth());
+        assertTrue(state.hasGivenMapToMartino());
+        assertTrue(state.hasItem("MAPPA_CIELO"));
+    }
 
-        boolean loaded = SaveGameDAO.loadGame(1);
-        if (!loaded) throw new RuntimeException("Test 3 Fallito: Errore caricamento!");
-        if (state.getChapter() != 2 || state.getCurrentRoom() != 4
-                || state.getCurrentHealth() != 2 || !state.hasGivenMapToMartino()) {
-            throw new RuntimeException("Test 3 Fallito: Dati di stato non corrispondenti!");
-        }
-        if (!state.hasItem("MAPPA_CIELO")) {
-            throw new RuntimeException("Test 3 Fallito: Inventario non ripristinato!");
-        }
-        System.out.println("Test 3 PASSATO: Caricamento ripristinato con successo!");
-
-        // Test 4: Eliminazione
-        SaveGameDAO.deleteSave(1);
-        if (SaveGameDAO.getSlot(1) != null) {
-            throw new RuntimeException("Test 4 Fallito: Cancellazione slot non riuscita!");
-        }
-        System.out.println("Test 4 PASSATO: Eliminazione slot OK!");
-
-        DatabaseManager.close();
-        System.out.println("--- TUTTI I TEST H2 COMPLETATI CON SUCCESSO! ---");
+    @Test
+    void deletesOnlyTheTestSlot() {
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Eliminazione di prova"));
+        assertTrue(SaveGameDAO.deleteSave(TEST_SLOT));
+        assertNull(SaveGameDAO.getSlot(TEST_SLOT));
     }
 }

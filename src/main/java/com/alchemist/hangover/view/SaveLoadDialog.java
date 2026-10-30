@@ -4,7 +4,6 @@ import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.dao.SaveGameDAO;
 import com.alchemist.hangover.dao.SaveGameDAO.SaveSlotInfo;
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.model.GameState;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
