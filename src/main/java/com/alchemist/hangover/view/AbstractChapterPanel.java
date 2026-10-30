@@ -111,6 +111,8 @@ public abstract class AbstractChapterPanel extends JPanel {
         Item item = new Item(definition.id, definition.name, definition.description, definition.iconPath);
         state.addItem(item);
         button.setVisible(false);
+        com.alchemist.hangover.controller.AudioManager.getInstance()
+                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.PICKUP);
         hudPanel.updateHUD();
         ToastNotification.show(this, "Oggetto raccolto: " + item.getName(), item.getIconPath());
     }
@@ -167,7 +169,11 @@ public abstract class AbstractChapterPanel extends JPanel {
 
     protected void navigate(String direction) {
         Integer destination = roomExits.getOrDefault(currentRoom, Map.of()).get(direction);
-        if (destination != null) loadRoom(destination);
+        if (destination != null) {
+            com.alchemist.hangover.controller.AudioManager.getInstance()
+                    .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.CLICK);
+            loadRoom(destination);
+        }
     }
 
     @Override

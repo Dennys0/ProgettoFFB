@@ -211,6 +211,8 @@ public class BossFightOverlay extends JDialog {
 
     private void failStep(String reason) {
         GameState.getInstance().takeDamage();
+        com.alchemist.hangover.controller.AudioManager.getInstance()
+                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.DAMAGE);
         int hp = GameState.getInstance().getCurrentHealth();
 
         if (hp <= 0) {

@@ -136,6 +136,8 @@ public class RanStrategyBossOverlay extends JDialog {
             // Errore
             GameState gs = GameState.getInstance();
             gs.takeDamage();
+            com.alchemist.hangover.controller.AudioManager.getInstance()
+                    .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.DAMAGE);
             if (gs.getCurrentHealth() <= 0) {
                 dispose();
                 JOptionPane.showMessageDialog(null,

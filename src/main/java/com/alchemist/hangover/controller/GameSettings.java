@@ -28,6 +28,7 @@ public final class GameSettings {
     public void setSoundEnabled(boolean enabled) {
         soundEnabled = enabled;
         store("audio.enabled", enabled);
+        AudioManager.getInstance().refreshSettings();
     }
 
     public void setTransitionsEnabled(boolean enabled) {
