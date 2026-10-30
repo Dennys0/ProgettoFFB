@@ -141,13 +141,13 @@ private void loadSprite(String name, String path) {
         addItemWorldButton("NEBBIA_NIFLHEIM", "/images/items/item_fog.png", 780, 520, 60, 60, 5,
                 "Nebbia di Niflheim", "Una fiala sigillata contenente fumo denso e gelido.");
 
-        addItemWorldButton("PIUMA_FOLGORE", "/images/items/item_feather.png", 610, 220, 65, 65, 6,
+        addItemWorldButton("PIUMA_FOLGORE", "/images/items/item_feather.png", 740, 520, 80, 80, 6,
                 "Piuma di Folgore", "Una piuma dorata carica di elettricitÃ  incastrata tra le carrucole.");
 
-        addItemWorldButton("POLLINE_YGGDRASIL", "/images/items/item_pollen.png", 350, 300, 65, 65, 3,
+        addItemWorldButton("POLLINE_YGGDRASIL", "/images/items/item_pollen.png", 445, 530, 65, 65, 3,
                 "Polline di Yggdrasil", "Polvere dorata fluttuante nell'aria.");
 
-        addItemWorldButton("RUGIADA_ASGARD", "/images/items/item_dew.png", 850, 380, 65, 65, 3,
+        addItemWorldButton("RUGIADA_ASGARD", "/images/items/item_dew.png", 655, 486, 65, 65, 3,
                 "Rugiada delle Nuvole di Asgard", "Acqua fluttuante condensata sulla polena drago.");
     }
 

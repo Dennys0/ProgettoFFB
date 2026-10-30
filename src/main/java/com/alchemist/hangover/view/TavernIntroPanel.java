@@ -151,22 +151,22 @@ public class TavernIntroPanel extends JPanel {
             }
         });
 
-        JButton skipButton = new JButton("SKIP â©");
-skipButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-skipButton.setForeground(new Color(255, 215, 0));
-skipButton.setBackground(new Color(30, 30, 30, 180));
-skipButton.setFocusPainted(false);
-skipButton.setFocusable(false); // Impedisce al focus di evidenziare o mostrare testo di background
-skipButton.setBorder(BorderFactory.createLineBorder(new Color(200, 160, 80), 1));
-skipButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-skipButton.setBounds(1140, 20, 100, 35);
+        JButton skipButton = new JButton("SKIP");
+        skipButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        skipButton.setForeground(new Color(255, 215, 0));
+        skipButton.setBackground(new Color(30, 30, 30, 180));
+        skipButton.setFocusPainted(false);
+        skipButton.setFocusable(false); // Impedisce al focus di evidenziare o mostrare testo di background
+        skipButton.setBorder(BorderFactory.createLineBorder(new Color(200, 160, 80), 1));
+        skipButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        skipButton.setBounds(1140, 20, 100, 35);
 
-skipButton.addActionListener(e -> {
-    if (dialogueSystem != null) {
-        dialogueSystem.stop(); // Interrompe il timer del testo
-    }
-    SceneManager.getInstance().showScene("CHAPTER1");
-});
+        skipButton.addActionListener(e -> {
+            if (dialogueSystem != null) {
+                dialogueSystem.stop(); // Interrompe il timer del testo
+            }
+            SceneManager.getInstance().showScene("CHAPTER1");
+        });
 
 // Aggiungiamo il tasto Skip al livello 2 del JLayeredPane (sopra allo sfondo)
         layeredPane.add(skipButton, Integer.valueOf(2));

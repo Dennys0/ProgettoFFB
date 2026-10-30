@@ -7,16 +7,16 @@ public class GameState {
 
     private static GameState instance;
 
-    private int maxHealth = 3;
     private int currentHealth = 3;
-    private int currentRoom = 1;
-    private List<Item> inventory;
+    private int maxHealth = 3;
+    private int currentChapter = 1;
+    private int currentRoom = 1; // Traccia della stanza attuale per i salvataggi
 
-    // Flag di avanzamento del Capitolo 1
-    private boolean hasGivenMapToMartino = false;
+    private List<Item> inventory;
+    private boolean givenMapToMartino = false;
     private boolean hasDragonKey = false;
-    private boolean isDragonUnlocked = false;
-    private boolean isBossDefeated = false;
+    private boolean dragonUnlocked = false; // Flag per sblocco polena/drago
+    private boolean bossDefeated = false;
 
     private GameState() {
         inventory = new ArrayList<>();
@@ -29,12 +29,39 @@ public class GameState {
         return instance;
     }
 
-    // Gestione Salute
-    public int getCurrentHealth() { return currentHealth; }
-    public void setCurrentHealth(int currentHealth) { this.currentHealth = currentHealth; }
+    // --- Gestione Stanza & Capitolo ---
+    public int getCurrentRoom() {
+        return currentRoom;
+    }
 
-    public int getMaxHealth() { return maxHealth; }
-    public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
+    public void setCurrentRoom(int room) {
+        this.currentRoom = room;
+    }
+
+    public int getChapter() {
+        return currentChapter;
+    }
+
+    public void setChapter(int chapter) {
+        this.currentChapter = chapter;
+    }
+
+    // --- Gestione Salute ---
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public void setCurrentHealth(int health) {
+        this.currentHealth = health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
 
     public void takeDamage() {
         if (currentHealth > 0) {
@@ -43,18 +70,20 @@ public class GameState {
     }
 
     public void resetHealth() {
-        currentHealth = maxHealth;
+        this.currentHealth = maxHealth;
     }
 
-    // Gestione Stanza
-    public int getCurrentRoom() { return currentRoom; }
-    public void setCurrentRoom(int currentRoom) { this.currentRoom = currentRoom; }
+    // --- Gestione Inventario ---
+    public List<Item> getInventory() {
+        return inventory;
+    }
 
-    // Gestione Inventario
-    public List<Item> getInventory() { return inventory; }
+    public void setInventory(List<Item> items) {
+        this.inventory = items;
+    }
 
     public void addItem(Item item) {
-        if (item != null && !hasItem(item.getId())) {
+        if (!hasItem(item.getId())) {
             inventory.add(item);
         }
     }
@@ -74,26 +103,29 @@ public class GameState {
                 .orElse(null);
     }
 
-    // Gestione Flag
-    public boolean hasGivenMapToMartino() { return hasGivenMapToMartino; }
-    public void setGivenMapToMartino(boolean val) { this.hasGivenMapToMartino = val; }
+    // --- Flag di Gioco ---
+    public boolean hasGivenMapToMartino() { return givenMapToMartino; }
+    public void setGivenMapToMartino(boolean val) { this.givenMapToMartino = val; }
 
     public boolean hasDragonKey() { return hasDragonKey; }
     public void setHasDragonKey(boolean val) { this.hasDragonKey = val; }
 
-    public boolean isDragonUnlocked() { return isDragonUnlocked; }
-    public void setDragonUnlocked(boolean val) { this.isDragonUnlocked = val; }
+    public boolean isDragonUnlocked() { return dragonUnlocked; }
+    public void setDragonUnlocked(boolean val) { this.dragonUnlocked = val; }
 
-    public boolean isBossDefeated() { return isBossDefeated; }
-    public void setBossDefeated(boolean val) { this.isBossDefeated = val; }
+    public boolean isBossDefeated() { return bossDefeated; }
+    public void setBossDefeated(boolean val) { this.bossDefeated = val; }
 
+    // --- Reset Stato Generale ---
     public void resetState() {
-        currentHealth = maxHealth;
-        currentRoom = 1;
-        inventory.clear();
-        hasGivenMapToMartino = false;
-        hasDragonKey = false;
-        isDragonUnlocked = false;
-        isBossDefeated = false;
+        this.currentHealth = 3;
+        this.maxHealth = 3;
+        this.currentChapter = 1;
+        this.currentRoom = 1;
+        this.inventory.clear();
+        this.givenMapToMartino = false;
+        this.hasDragonKey = false;
+        this.dragonUnlocked = false;
+        this.bossDefeated = false;
     }
 }

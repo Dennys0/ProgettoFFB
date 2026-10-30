@@ -5,14 +5,11 @@ import com.alchemist.hangover.model.Item;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class DialogueChoiceOverlay extends JDialog {
 
     private Image bgImage;
+    private Image mapIcon;
 
     public interface ChoiceCallback {
         void onChoiceMade(boolean gaveMap);
@@ -27,8 +24,9 @@ public class DialogueChoiceOverlay extends JDialog {
 
         try {
             bgImage = new ImageIcon(getClass().getResource("/images/ui/dialogue_choice_bg.png")).getImage();
+            mapIcon = new ImageIcon(getClass().getResource("/images/items/item_map.png")).getImage();
         } catch (Exception e) {
-            System.err.println("Errore caricamento dialogue_choice_bg.png: " + e.getMessage());
+            System.err.println("Errore caricamento immagini in DialogueChoiceOverlay: " + e.getMessage());
         }
 
         JPanel contentPanel = new JPanel() {
@@ -38,6 +36,11 @@ public class DialogueChoiceOverlay extends JDialog {
                 if (bgImage != null) {
                     g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
                 }
+
+                // Disegno dell'icona della Mappa del Cielo
+                if (mapIcon != null && GameState.getInstance().hasItem("MAPPA_CIELO")) {
+                    g.drawImage(mapIcon, (getWidth() - 90) / 2, 200, 90, 90, this);
+                }
             }
         };
         contentPanel.setLayout(null);
@@ -46,42 +49,34 @@ public class DialogueChoiceOverlay extends JDialog {
 
         boolean hasMap = GameState.getInstance().hasItem("MAPPA_CIELO");
 
-        // 1. Tasto Consegna Mappa (senza immagine della mappa, solo testo pulito sulla targhetta centrale)
-        JButton btnGiveMap = new JButton(hasMap ? "CONSEGNA MAPPA DEL CIELO" : "MAPPA NON TROVATA");
-        btnGiveMap.setFont(new Font("Georgia", Font.BOLD, 14));
-        btnGiveMap.setForeground(hasMap ? new Color(255, 215, 0) : Color.GRAY);
-        btnGiveMap.setBounds(240, 318, 270, 52);
-        btnGiveMap.setContentAreaFilled(false);
-        btnGiveMap.setBorderPainted(false);
-        btnGiveMap.setFocusPainted(false);
-        btnGiveMap.setFocusable(false);
-        btnGiveMap.setEnabled(hasMap);
-        btnGiveMap.setCursor(hasMap ? new Cursor(Cursor.HAND_CURSOR) : new Cursor(Cursor.DEFAULT_CURSOR));
+        // Bottone DONA (Posizionato sotto la mappa)
+        JButton btnDonate = new JButton(hasMap ? "DONA" : "MAPPA NON TROVATA");
+        btnDonate.setFont(new Font("Georgia", Font.BOLD, 18));
+        btnDonate.setForeground(hasMap ? new Color(255, 215, 0) : Color.GRAY);
+        btnDonate.setBounds(275, 320, 200, 48);
+        btnDonate.setContentAreaFilled(false);
+        btnDonate.setBorderPainted(false);
+        btnDonate.setFocusPainted(false);
+        btnDonate.setFocusable(false);
+        btnDonate.setEnabled(hasMap);
+        btnDonate.setCursor(hasMap ? new Cursor(Cursor.HAND_CURSOR) : new Cursor(Cursor.DEFAULT_CURSOR));
 
-        btnGiveMap.addActionListener(e -> {
+        btnDonate.addActionListener(e -> {
             GameState gs = GameState.getInstance();
             Item mapItem = gs.getItemById("MAPPA_CIELO");
             if (mapItem != null) {
                 gs.removeItem(mapItem);
             }
-
-            Item dragonKey = new Item("CHIAVE_DRAGO", "Chiave del Drago",
-                    "Una pesante chiave d'ottone con incisioni a forma di drago celeste.",
-                    "/images/items/item_key.png");
-            gs.addItem(dragonKey);
+            gs.addItem(new Item("CHIAVE_DRAGO", "Chiave del Drago", "Una pesante chiave d'ottone con incisioni a forma di drago celeste.", "/images/items/item_key.png"));
             gs.setGivenMapToMartino(true);
             gs.setHasDragonKey(true);
 
             dispose();
             if (callback != null) callback.onChoiceMade(true);
-
-            // Mostra popup grafico della Chiave del Drago appena ottenuta
-            ItemPickupOverlay pickup = new ItemPickupOverlay(parent, dragonKey);
-            pickup.setVisible(true);
         });
-        contentPanel.add(btnGiveMap);
+        contentPanel.add(btnDonate);
 
-        // 2. Tasto Congedati / Esci (senza scritta sovrapposta: opera direttamente sul tasto disegnato nell'immagine)
+        // Bottone Congedati / Esci
         JButton btnExit = new JButton();
         btnExit.setBounds(275, 382, 200, 48);
         btnExit.setContentAreaFilled(false);
@@ -96,7 +91,7 @@ public class DialogueChoiceOverlay extends JDialog {
         });
         contentPanel.add(btnExit);
 
-        // 3. Tasto X in alto a destra
+        // Tasto X in alto a destra
         JButton btnClose = new JButton();
         btnClose.setBounds(620, 35, 45, 45);
         btnClose.setContentAreaFilled(false);
@@ -104,33 +99,7 @@ public class DialogueChoiceOverlay extends JDialog {
         btnClose.setFocusPainted(false);
         btnClose.setFocusable(false);
         btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnClose.addActionListener(e -> {
-            dispose();
-            if (callback != null) callback.onChoiceMade(false);
-        });
+        btnClose.addActionListener(e -> dispose());
         contentPanel.add(btnClose);
-
-        // Chiusura tramite ESC
-        contentPanel.setFocusable(true);
-        contentPanel.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    dispose();
-                    if (callback != null) callback.onChoiceMade(false);
-                }
-            }
-        });
-
-        // Chiusura al clic esterno
-        contentPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (e.getX() < 120 || e.getX() > 630 || e.getY() < 60 || e.getY() > 440) {
-                    dispose();
-                    if (callback != null) callback.onChoiceMade(false);
-                }
-            }
-        });
     }
 }

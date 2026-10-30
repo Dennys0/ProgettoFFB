@@ -1,0 +1,4 @@
+SIEGFRIED|Benvenuto al Banchetto delle Maree, viaggiatore! Bevi con me o temi la furia di Rán?
+ARTHUR|Cerco la ricetta per il Maelstrom Martini. Sai come si prepara?
+SIEGFRIED|Ah, la bevanda abissale! Ma le tue mani sono vuote e la tua mente è ancora offuscata.
+SIEGFRIED|Sulla Balconata dei Relitti giace la memoria di chi è venuto prima di te. Trova il Diario del Capitano, poi ne riparleremo!

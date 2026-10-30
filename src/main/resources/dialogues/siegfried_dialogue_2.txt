@@ -1,0 +1,5 @@
+SIEGFRIED|Vedo che hai recuperato il Diario del Capitano! Ora sei pronto a conoscere la verità.
+SIEGFRIED|Ascolta bene: per il Maelstrom Martini ti serve la Schiuma della Regina delle Onde, strappata alla sua rete.
+SIEGFRIED|Il contrasto aspro richiede il Corallo di Sangue che cresce nei giardini scarlatti...
+SIEGFRIED|...e per stabilizzare la magia ti serve la sapidità del Cristallo di Squama, nascosto nella fossa profonda!
+SIEGFRIED|Ma attento: evita l'Acqua del Lete e l'Inchiostro di Kraken, o il tuo viaggio finirà qui.

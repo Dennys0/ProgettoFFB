@@ -71,7 +71,8 @@ public class CauldronOverlay extends JDialog {
                 ImageIcon icon = new ImageIcon(getClass().getResource(item.getIconPath()));
                 Image img = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
                 btnItem.setIcon(new ImageIcon(img));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
             btnItem.setText("<html><center><font color='white'><b>" + item.getName() + "</b></font></center></html>");
 
@@ -82,7 +83,7 @@ public class CauldronOverlay extends JDialog {
                 }
             });
             inventoryGrid.add(btnItem);
-        }     
+        }
 
         // 4. Bottone Trasparente sovrapposto a "MIX INGREDIENTI..."
         JButton btnMix = new JButton();
@@ -140,7 +141,8 @@ public class CauldronOverlay extends JDialog {
                     lbl.setIcon(new ImageIcon(img));
                     lbl.setVerticalTextPosition(SwingConstants.BOTTOM);
                     lbl.setHorizontalTextPosition(SwingConstants.CENTER);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
 
                 slot.add(lbl, BorderLayout.CENTER);
             }
@@ -164,9 +166,9 @@ public class CauldronOverlay extends JDialog {
 
         if (hasFog) {
             dispose();
-            JOptionPane.showMessageDialog(null, 
-                "La Nebbia di Niflheim congela all'istante il calderone spaccandolo in due!\nGAME OVER!", 
-                "Game Over!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "La Nebbia di Niflheim congela all'istante il calderone spaccandolo in due!\nGAME OVER!",
+                    "Game Over!", JOptionPane.ERROR_MESSAGE);
             GameState.getInstance().resetState();
             SceneManager.getInstance().showScene("MENU");
             return;
@@ -174,26 +176,79 @@ public class CauldronOverlay extends JDialog {
 
         if (hasPollen) {
             dispose();
-            JOptionPane.showMessageDialog(null, 
-                "Il Polline di Yggdrasil provoca un'allucinazione nell'allucinazione!\nTi risvegli smarrito sul ponte...", 
-                "Reset Livello!", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Il Polline di Yggdrasil provoca un'allucinazione nell'allucinazione!\nTi risvegli smarrito sul ponte...",
+                    "Reset Livello!", JOptionPane.WARNING_MESSAGE);
             SceneManager.getInstance().showScene("CHAPTER1");
             return;
         }
 
         if (hasBreath && hasFeather && hasDew) {
             dispose();
-            JOptionPane.showMessageDialog(null, 
-                "✨ COMPLIMENTI! Hai creato l'Asgardian Aviation! ✨\n" +
-                "La bevanda brilla di azzurro e ristora la tua mente.\nCapitolo 1 Completato!", 
-                "Vittoria Capitolo 1!", JOptionPane.INFORMATION_MESSAGE);
+
+            // Mostra prima il pop-up custom per l'Asgardian Aviation
+            ItemPickupOverlay pickupOverlay = new ItemPickupOverlay(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    "ASGARDIAN AVIATION CREATO!"
+            );
+            pickupOverlay.setVisible(true);
+
+            // Ripristina la salute e avvia la transizione
+            // RESET INVENTARIO PER IL CAPITOLO 2
+            GameState.getInstance().getInventory().clear();
             GameState.getInstance().resetHealth();
+
+            // Effettua la transizione verso la schermata di intermezzo
+            SceneManager.getInstance().showScene("TRANSITION_CH1_CH2");
             return;
         }
 
         dispose();
-        JOptionPane.showMessageDialog(null, 
-            "La miscela emette un fumo strano e svanisce... Non era la combinazione giusta!", 
-            "Tentativo Fallito", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null,
+                "La miscela emette un fumo strano e svanisce... Non era la combinazione giusta!",
+                "Tentativo Fallito", JOptionPane.WARNING_MESSAGE);
+
+        // Controlli per gli ingredienti del Capitolo 2
+        boolean hasSchiumaAegir = selectedItems.stream().anyMatch(i -> i.getId().equals("SCHIUMA_AEGIR"));
+        boolean hasCoralloRan = selectedItems.stream().anyMatch(i -> i.getId().equals("CORALLO_RAN"));
+        boolean hasSaleJormungandr = selectedItems.stream().anyMatch(i -> i.getId().equals("SALE_JORMUNGANDR"));
+        boolean hasAcquaLete = selectedItems.stream().anyMatch(i -> i.getId().equals("ACQUA_LETE"));
+        boolean hasInchiostroKraken = selectedItems.stream().anyMatch(i -> i.getId().equals("INCHIOSTRO_KRAKEN"));
+
+// 1. ACQUA DEL LETE -> RESET MEMORIA & INVENTARIO
+        if (hasAcquaLete) {
+            dispose();
+            JOptionPane.showMessageDialog(null,
+                    "L'Acqua del Lete ti fa dimenticare ogni ricetta ed enigma!\nL'inventario si svuota e il livello si resetta!",
+                    "Amnesia Alchemica", JOptionPane.ERROR_MESSAGE);
+            GameState.getInstance().getInventory().clear();
+            SceneManager.getInstance().showScene("CHAPTER2");
+            return;
+        }
+
+// 2. INCHIOSTRO DI KRAKEN -> GAME OVER (Il calderone viene risucchiato)
+        if (hasInchiostroKraken) {
+            dispose();
+            JOptionPane.showMessageDialog(null,
+                    "L'Inchiostro di Kraken crea un buco nero liquido che risucchia il calderone stesso!\nGAME OVER!",
+                    "Game Over!", JOptionPane.ERROR_MESSAGE);
+            GameState.getInstance().resetState();
+            SceneManager.getInstance().showScene("MENU");
+            return;
+        }
+
+// 3. COMBINAZIONE VINCENTE CAPITOLO 2 (Maelstrom Martini)
+        if (hasSchiumaAegir && hasCoralloRan && hasSaleJormungandr) {
+            dispose();
+            ItemPickupOverlay pickupOverlay = new ItemPickupOverlay(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    "MAELSTROM MARTINI CREATO!"
+            );
+            pickupOverlay.setVisible(true);
+
+            GameState.getInstance().resetHealth();
+            SceneManager.getInstance().showScene("TRANSITION_CH2_CH3");
+            return;
+        }
     }
 }

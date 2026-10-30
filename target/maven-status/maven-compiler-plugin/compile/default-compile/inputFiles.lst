@@ -9,6 +9,8 @@ C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\model\It
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\BossFightOverlay.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\CauldronOverlay.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\Chapter1Panel.java
+C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\Chapter2Panel.java
+C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\ChapterTransitionPanel.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\DialogueChoiceOverlay.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\GameOverPanel.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\HUDPanel.java
@@ -16,5 +18,6 @@ C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\Inv
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\ItemPickupOverlay.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\MainFrame.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\MainMenuPanel.java
+C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\RanStrategyBossOverlay.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\SaveLoadDialog.java
 C:\Users\trend\Desktop\ProgettoFFB\src\main\java\com\alchemist\hangover\view\TavernIntroPanel.java
