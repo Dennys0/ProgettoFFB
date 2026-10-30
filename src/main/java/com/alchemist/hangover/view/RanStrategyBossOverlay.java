@@ -1,6 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.Item;
 
 import javax.swing.*;
@@ -126,7 +127,10 @@ public class RanStrategyBossOverlay extends JDialog {
             gs.takeDamage();
             if (gs.getCurrentHealth() <= 0) {
                 dispose();
-                JOptionPane.showMessageDialog(null, "La furia di Rán ti travolge! Hai esaurito i cuori.", "Sconfitta", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,
+                        "La furia di Rán ti travolge! Hai esaurito i cuori.",
+                        "Sconfitta", JOptionPane.ERROR_MESSAGE);
+                SceneManager.getInstance().showScene("GAMEOVER");
             } else {
                 JOptionPane.showMessageDialog(this, "Risposta errata! Rán ti colpisce con la sua rete. Perdi 1 Cuore!", "Errore!", JOptionPane.WARNING_MESSAGE);
                 currentTurn = 1;

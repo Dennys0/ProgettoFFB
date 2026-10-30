@@ -22,6 +22,7 @@ MERGE INTO items KEY(id) VALUES
 CREATE TABLE IF NOT EXISTS save_slots (
     slot_id INT PRIMARY KEY,
     slot_name VARCHAR(100) NOT NULL,
+    current_chapter INT DEFAULT 1,
     current_room INT DEFAULT 1,
     current_health INT DEFAULT 3,
     max_health INT DEFAULT 3,
@@ -31,6 +32,18 @@ CREATE TABLE IF NOT EXISTS save_slots (
     is_boss_defeated BOOLEAN DEFAULT FALSE,
     last_saved TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Migrazione non distruttiva per database creati con lo schema precedente.
+ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS current_chapter INT DEFAULT 1;
+
+-- Catalogo oggetti del Capitolo 2.
+MERGE INTO items KEY(id) VALUES
+('DIARIO_CAPITANO', 'Diario del Capitano', 'Un diario con il codice per decifrare le strategie di Rán.', '/images/items/item_journl.png'),
+('CORALLO_RAN', 'Corallo di Rán', 'Un ramo di corallo aspro rosso sangue incastrato nelle rocce.', '/images/items/item_coral.png'),
+('INCHIOSTRO_KRAKEN', 'Inchiostro di Kraken', 'Una boccetta di liquido buio e denso depositata nell''anfratto.', '/images/items/item_ink.png'),
+('SALE_JORMUNGANDR', 'Sale di Jörmungandr', 'Cristalli lucenti di squama salmastra staccati dalle pareti.', '/images/items/item_salt.png'),
+('ACQUA_LETE', 'Acqua del Lete', 'Una linfa trasparente e stranamente immobile.', '/images/items/item_lete.png'),
+('SCHIUMA_AEGIR', 'Schiuma di Ægir', 'La birra sottomarina lucente estratta dalle reti della dea Rán.', '/images/items/item_foam.png');
 
 -- Inventario associato a ciascun salvataggio
 CREATE TABLE IF NOT EXISTS save_inventory (

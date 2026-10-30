@@ -3,6 +3,8 @@ package com.alchemist.hangover.view;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.dao.SaveGameDAO;
 import com.alchemist.hangover.dao.SaveGameDAO.SaveSlotInfo;
+import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.GameState;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -105,7 +107,8 @@ public class SaveLoadDialog extends JDialog {
             nameLabel.setText("Slot " + slotId + ": " + slotInfo.getSlotName());
             nameLabel.setForeground(new Color(255, 230, 130));
 
-            detailsLabel.setText("Stanza: " + slotInfo.getCurrentRoom()
+            detailsLabel.setText("Capitolo: " + slotInfo.getCurrentChapter()
+                    + "  |  Stanza: " + slotInfo.getCurrentRoom()
                     + "  |  Salute: " + slotInfo.getCurrentHealth() + "/" + slotInfo.getMaxHealth() + " ❤️"
                     + "  |  Salvataggio: " + slotInfo.getFormattedDate());
             detailsLabel.setForeground(new Color(190, 190, 200));
@@ -167,12 +170,18 @@ public class SaveLoadDialog extends JDialog {
             if (ok) {
                 dispose();
 
-                // Aggiorna Chapter1Panel e naviga
-                Chapter1Panel ch1 = (Chapter1Panel) SceneManager.getInstance().getPanel("CHAPTER1");
-                if (ch1 != null) {
-                    ch1.refreshFromGameState();
+                GameState state = GameState.getInstance();
+                if (state.getChapter() == 2) {
+                    Chapter2Panel chapter2 =
+                            (Chapter2Panel) SceneManager.getInstance().getPanel("CHAPTER2");
+                    if (chapter2 != null) chapter2.refreshFromGameState();
+                    SceneManager.getInstance().showScene("CHAPTER2");
+                } else {
+                    Chapter1Panel chapter1 =
+                            (Chapter1Panel) SceneManager.getInstance().getPanel("CHAPTER1");
+                    if (chapter1 != null) chapter1.refreshFromGameState();
+                    SceneManager.getInstance().showScene("CHAPTER1");
                 }
-                SceneManager.getInstance().showScene("CHAPTER1");
             } else {
                 JOptionPane.showMessageDialog(this, "Errore nel caricamento della partita.", "Errore", JOptionPane.ERROR_MESSAGE);
             }

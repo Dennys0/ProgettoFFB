@@ -20,6 +20,7 @@ public class DatabaseSelfTest {
         // Test 2: Salvataggio GameState
         GameState state = GameState.getInstance();
         state.resetState();
+        state.setChapter(2);
         state.setCurrentRoom(4);
         state.takeDamage(); // 2 cuori
         state.setGivenMapToMartino(true);
@@ -37,7 +38,8 @@ public class DatabaseSelfTest {
 
         boolean loaded = SaveGameDAO.loadGame(1);
         if (!loaded) throw new RuntimeException("Test 3 Fallito: Errore caricamento!");
-        if (state.getCurrentRoom() != 4 || state.getCurrentHealth() != 2 || !state.hasGivenMapToMartino()) {
+        if (state.getChapter() != 2 || state.getCurrentRoom() != 4
+                || state.getCurrentHealth() != 2 || !state.hasGivenMapToMartino()) {
             throw new RuntimeException("Test 3 Fallito: Dati di stato non corrispondenti!");
         }
         if (!state.hasItem("MAPPA_CIELO")) {

@@ -14,6 +14,7 @@ public class SaveGameDAO {
     public static class SaveSlotInfo {
         private int slotId;
         private String slotName;
+        private int currentChapter;
         private int currentRoom;
         private int currentHealth;
         private int maxHealth;
@@ -23,11 +24,12 @@ public class SaveGameDAO {
         private boolean isBossDefeated;
         private Timestamp lastSaved;
 
-        public SaveSlotInfo(int slotId, String slotName, int currentRoom, int currentHealth,
+        public SaveSlotInfo(int slotId, String slotName, int currentChapter, int currentRoom, int currentHealth,
                             int maxHealth, boolean hasGivenMap, boolean hasDragonKey,
                             boolean isDragonUnlocked, boolean isBossDefeated, Timestamp lastSaved) {
             this.slotId = slotId;
             this.slotName = slotName;
+            this.currentChapter = currentChapter;
             this.currentRoom = currentRoom;
             this.currentHealth = currentHealth;
             this.maxHealth = maxHealth;
@@ -40,6 +42,7 @@ public class SaveGameDAO {
 
         public int getSlotId() { return slotId; }
         public String getSlotName() { return slotName; }
+        public int getCurrentChapter() { return currentChapter; }
         public int getCurrentRoom() { return currentRoom; }
         public int getCurrentHealth() { return currentHealth; }
         public int getMaxHealth() { return maxHealth; }
@@ -98,9 +101,9 @@ public class SaveGameDAO {
      */
     public static boolean saveGame(int slotId, String slotName) {
         GameState state = GameState.getInstance();
-        String upsertSql = "MERGE INTO save_slots (slot_id, slot_name, current_room, current_health, "
+        String upsertSql = "MERGE INTO save_slots (slot_id, slot_name, current_chapter, current_room, current_health, "
                 + "max_health, has_given_map, has_dragon_key, is_dragon_unlocked, is_boss_defeated, last_saved) "
-                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         Connection conn = null;
         try {
@@ -111,13 +114,14 @@ public class SaveGameDAO {
             try (PreparedStatement ps = conn.prepareStatement(upsertSql)) {
                 ps.setInt(1, slotId);
                 ps.setString(2, (slotName == null || slotName.trim().isEmpty()) ? "Partita " + slotId : slotName.trim());
-                ps.setInt(3, state.getCurrentRoom());
-                ps.setInt(4, state.getCurrentHealth());
-                ps.setInt(5, state.getMaxHealth());
-                ps.setBoolean(6, state.hasGivenMapToMartino());
-                ps.setBoolean(7, state.hasDragonKey());
-                ps.setBoolean(8, state.isDragonUnlocked());
-                ps.setBoolean(9, state.isBossDefeated());
+                ps.setInt(3, state.getChapter());
+                ps.setInt(4, state.getCurrentRoom());
+                ps.setInt(5, state.getCurrentHealth());
+                ps.setInt(6, state.getMaxHealth());
+                ps.setBoolean(7, state.hasGivenMapToMartino());
+                ps.setBoolean(8, state.hasDragonKey());
+                ps.setBoolean(9, state.isDragonUnlocked());
+                ps.setBoolean(10, state.isBossDefeated());
                 ps.executeUpdate();
             }
 
@@ -162,6 +166,7 @@ public class SaveGameDAO {
                     GameState state = GameState.getInstance();
                     state.resetState();
 
+                    state.setChapter(rs.getInt("current_chapter"));
                     state.setCurrentRoom(rs.getInt("current_room"));
                     state.setCurrentHealth(rs.getInt("current_health"));
                     state.setMaxHealth(rs.getInt("max_health"));
@@ -222,6 +227,7 @@ public class SaveGameDAO {
         return new SaveSlotInfo(
                 rs.getInt("slot_id"),
                 rs.getString("slot_name"),
+                rs.getInt("current_chapter"),
                 rs.getInt("current_room"),
                 rs.getInt("current_health"),
                 rs.getInt("max_health"),

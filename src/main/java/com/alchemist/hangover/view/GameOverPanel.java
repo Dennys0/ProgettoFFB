@@ -35,12 +35,19 @@ public class GameOverPanel extends JPanel {
         btnRetry.setBounds(440, 360, 400, 50);
 
         btnRetry.addActionListener(e -> {
-            GameState.getInstance().resetHealth();
-            Chapter1Panel ch1 = (Chapter1Panel) SceneManager.getInstance().getPanel("CHAPTER1");
-            if (ch1 != null) {
-                ch1.refreshFromGameState();
+            GameState state = GameState.getInstance();
+            state.resetHealth();
+            if (state.getChapter() == 2) {
+                Chapter2Panel chapter2 =
+                        (Chapter2Panel) SceneManager.getInstance().getPanel("CHAPTER2");
+                if (chapter2 != null) chapter2.refreshFromGameState();
+                SceneManager.getInstance().showScene("CHAPTER2");
+            } else {
+                Chapter1Panel chapter1 =
+                        (Chapter1Panel) SceneManager.getInstance().getPanel("CHAPTER1");
+                if (chapter1 != null) chapter1.refreshFromGameState();
+                SceneManager.getInstance().showScene("CHAPTER1");
             }
-            SceneManager.getInstance().showScene("CHAPTER1");
         });
         add(btnRetry);
 

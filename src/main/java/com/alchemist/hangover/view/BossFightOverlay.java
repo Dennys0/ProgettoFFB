@@ -204,11 +204,10 @@ public class BossFightOverlay extends JDialog {
 
         if (hp <= 0) {
             dispose();
-            JOptionPane.showMessageDialog(null, 
-                reason + "\nHai perso tutti i cuori di vita!\nGAME OVER!", 
+            JOptionPane.showMessageDialog(null,
+                reason + "\nHai perso tutti i cuori di vita!",
                 "Sconfitto dalla Tempesta", JOptionPane.ERROR_MESSAGE);
-            GameState.getInstance().resetState();
-            SceneManager.getInstance().showScene("MENU");
+            SceneManager.getInstance().showScene("GAMEOVER");
         } else {
             JOptionPane.showMessageDialog(this, 
                 reason + "\nHai perso 1 cuore di vita! Cuori rimasti: " + hp, 
