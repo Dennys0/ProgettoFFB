@@ -66,6 +66,9 @@ public class MainMenuPanel extends JPanel {
             switch (text) {
                 case "START GAME":
                     com.alchemist.hangover.model.GameState.getInstance().resetState();
+                    TavernIntroPanel intro = (TavernIntroPanel)
+                            SceneManager.getInstance().getPanel("INTRO");
+                    if (intro != null) intro.restartDialogue();
                     SceneManager.getInstance().showScene("INTRO");
                     break;
                 case "LOAD GAME":
@@ -83,6 +86,15 @@ public class MainMenuPanel extends JPanel {
                     break;
                 case "OPTIONS":
                     new GameSettingsDialog((JFrame) SwingUtilities.getWindowAncestor(this)).setVisible(true);
+                    break;
+                case "CREDITS":
+                    JOptionPane.showMessageDialog(this,
+                            "THE ALCHEMIST'S HANGOVER\n"
+                            + "Avventura grafica sviluppata in Java Swing.\n"
+                            + "Database di salvataggio: H2.\n"
+                            + "Musica ambientale ed effetti: generazione sonora originale.\n\n"
+                            + "I crediti definitivi degli asset saranno completati a fine sviluppo.",
+                            "Crediti", JOptionPane.INFORMATION_MESSAGE);
                     break;
                 case "EXIT GAME":
                     System.exit(0);

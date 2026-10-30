@@ -133,7 +133,7 @@ public class DialogueSystem {
         isTyping = true;
         textLabel.setText("");
 
-        // Effetto macchina da scrivere (15ms a carattere)
+        // Effetto macchina da scrivere, con pause naturali alla punteggiatura.
         typewriterTimer = new Timer(15, e -> {
             if (charIndex < currentFullText.length()) {
                 char ch = currentFullText.charAt(charIndex);

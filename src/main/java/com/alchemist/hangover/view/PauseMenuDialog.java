@@ -33,7 +33,7 @@ public final class PauseMenuDialog extends JDialog {
         actions.add(button("Comandi", () -> JOptionPane.showMessageDialog(this,
                 "Frecce e hotspot: esplora le stanze\n"
                 + "Click / SPAZIO / INVIO: avanza dialogo\n"
-                + "J: diario di Arthur\nESC: pausa o chiudi\nF2: capitolo 2 (debug)",
+                + "J: diario di Arthur\nESC: pausa o chiudi",
                 "Comandi", JOptionPane.INFORMATION_MESSAGE)));
         actions.add(button("Torna al menu", () -> {
             int confirm = JOptionPane.showConfirmDialog(this,

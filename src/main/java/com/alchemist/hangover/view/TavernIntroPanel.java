@@ -126,8 +126,7 @@ public class TavernIntroPanel extends JPanel {
                 }
         );
 
-        dialogueSystem.loadDialogue("/dialogues/intro_dialogue.txt");
-        dialogueSystem.startDialogue();
+        restartDialogue();
 
         // I click sui componenti figli non risalgono automaticamente al JPanel.
         // Colleghiamo l'avanzamento anche ai singoli elementi visibili.
@@ -194,6 +193,12 @@ public class TavernIntroPanel extends JPanel {
 // Livello dedicato ai controlli, sopra sprite e dialogue box.
         layeredPane.add(skipButton, Integer.valueOf(3));
 
+    }
+
+    /** Il pannello intro rimane in memoria: ogni nuova partita deve ricominciare da zero. */
+    public void restartDialogue() {
+        dialogueSystem.loadDialogue("/dialogues/intro_dialogue.txt");
+        dialogueSystem.startDialogue();
     }
 
     private void loadSprite(String name, String path) {
