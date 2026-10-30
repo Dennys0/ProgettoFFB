@@ -110,12 +110,11 @@ public class DialogueSystem {
             onSpeakerChanged.run();
         }
 
+        stop(); // Ferma eventuali timer precedenti.
         currentFullText = line.getText();
         charIndex = 0;
         isTyping = true;
-        textLabel.setText("");
-
-        stop(); // Ferma eventuali timer precedenti
+        textLabel.setText("")
 
         // Effetto macchina da scrivere (15ms a carattere)
         typewriterTimer = new Timer(15, e -> {

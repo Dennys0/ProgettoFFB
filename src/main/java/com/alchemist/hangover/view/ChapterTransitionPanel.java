@@ -51,6 +51,8 @@ public class ChapterTransitionPanel extends JPanel {
         continueButton.addActionListener(e -> {
             // Avanza lo stato di gioco al Capitolo 2
             GameState.getInstance().setChapter(2);
+            // Il flag del boss del Capitolo 1 non deve bloccare Rán.
+            GameState.getInstance().setBossDefeated(false);
             // Mostreremo la scena del Capitolo 2
             SceneManager.getInstance().showScene("CHAPTER2");
         });

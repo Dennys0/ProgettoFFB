@@ -13,18 +13,9 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Chapter1Panel extends JPanel {
+public class Chapter1Panel extends AbstractChapterPanel {
 
-    private int currentRoom = 1;
-    private HUDPanel hudPanel;
-    private Image currentBgImage;
     private JButton room7ScreenClickHotspot;
-    // Frecce UI
-    private JButton btnUp, btnDown, btnLeft, btnRight;
-    private Map<Integer, String> roomBgPaths;
-
-    // Mappa per i pulsanti degli oggetti nel mondo di gioco
-    private Map<String, JButton> itemButtons = new HashMap<>();
 
     // Elementi UI per il sistema di dialogo in-game
     private JPanel dialogueBoxOverlay;
@@ -35,26 +26,33 @@ public class Chapter1Panel extends JPanel {
     private Image dialogueBoxImage;
     private DialogueSystem dialogueSystem;
     private Map<String, ImageIcon> characterSprites;
-    private JFrame mainFrameRef;
 
     // Hotspots
     private JButton martinoHotspot;
     private JButton cauldronHotspot;
 
     public Chapter1Panel(JFrame mainFrame) {
-        this.mainFrameRef = mainFrame;
-        setLayout(null);
-        setPreferredSize(new Dimension(1280, 720));
-
-        // 1. Mappatura Sfondi
-        roomBgPaths = new HashMap<>();
-        roomBgPaths.put(1, "/images/chapter1/room1_deck.png");
-        roomBgPaths.put(2, "/images/chapter1/room2_helm.png");
-        roomBgPaths.put(3, "/images/chapter1/room3_prow.png");
-        roomBgPaths.put(4, "/images/chapter1/room4_lab.png");
-        roomBgPaths.put(5, "/images/chapter1/room5_hold.png");
-        roomBgPaths.put(6, "/images/chapter1/room6_crowsnest.png");
-        roomBgPaths.put(7, "/images/chapter1/room7_boss.png");
+        initializeChapterBase(
+                mainFrame,
+                Map.of(
+                        1, "/images/chapter1/room1_deck.png",
+                        2, "/images/chapter1/room2_helm.png",
+                        3, "/images/chapter1/room3_prow.png",
+                        4, "/images/chapter1/room4_lab.png",
+                        5, "/images/chapter1/room5_hold.png",
+                        6, "/images/chapter1/room6_crowsnest.png",
+                        7, "/images/chapter1/room7_boss.png"
+                ),
+                Map.of(
+                        1, Map.of("LEFT", 3, "RIGHT", 2, "DOWN", 5),
+                        2, Map.of("LEFT", 1, "UP", 6),
+                        3, Map.of("RIGHT", 1, "LEFT", 7),
+                        4, Map.of("RIGHT", 5),
+                        5, Map.of("UP", 1, "LEFT", 4),
+                        6, Map.of("DOWN", 2),
+                        7, Map.of("RIGHT", 3)
+                )
+        );
 
         // 2. Caricamento Risorse Grafiche Dialoghi
         try {
@@ -69,19 +67,11 @@ public class Chapter1Panel extends JPanel {
         loadSprite("SIEGFRIED", "/images/characters/siegfried_realms.png");
         loadSprite("GUNNAR", "/images/characters/gunnar_realms.png");
 
-        // 3. HUD (Cuori + Inventario)
-        hudPanel = new HUDPanel(mainFrame);
-        hudPanel.setBounds(0, 0, 1280, 80);
-        add(hudPanel);
-
         // 4. Inizializzazione Hotspots & Oggetti
         initHotspots();
 
         // 5. Inizializzazione UI Dialoghi
         initDialogueUI();
-
-        // 6. Frecce di Navigazione
-        initArrowButtons();
 
         loadRoom(1);
     }
@@ -149,48 +139,6 @@ private void loadSprite(String name, String path) {
 
         addItemWorldButton("RUGIADA_ASGARD", "/images/items/item_dew.png", 655, 486, 65, 65, 3,
                 "Rugiada delle Nuvole di Asgard", "Acqua fluttuante condensata sulla polena drago.");
-    }
-
-    private void addItemWorldButton(String itemId, String iconPath, int x, int y, int w, int h, int roomId, String name, String desc) {
-        JButton btn = new JButton();
-        btn.setBounds(x, y, w, h);
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setFocusable(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setToolTipText(name);
-
-        try {
-            ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
-            Image img = icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
-            btn.setIcon(new ImageIcon(img));
-        } catch (Exception e) {
-            btn.setText(name);
-            btn.setForeground(Color.YELLOW);
-        }
-
-        btn.addActionListener(e -> {
-            GameState gs = GameState.getInstance();
-
-            if (itemId.equals("RUGIADA_ASGARD") && !gs.hasDragonKey()) {
-                JOptionPane.showMessageDialog(this,
-                        "La polena a drago Ã¨ bloccata da un meccanismo d'ottone. Serve la Chiave del Drago!",
-                        "Serbatoio Bloccato", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            Item item = new Item(itemId, name, desc, iconPath);
-            gs.addItem(item);
-            btn.setVisible(false);
-            hudPanel.updateHUD();
-
-            ItemPickupOverlay pickup = new ItemPickupOverlay(mainFrameRef, item);
-            pickup.setVisible(true);
-        });
-
-        itemButtons.put(itemId, btn);
-        add(btn);
     }
 
     private void interactWithCauldron() {
@@ -278,6 +226,29 @@ add(characterSpriteLabel);
         });
     }
 
+    @Override
+    protected void onRoomChanged() {
+        martinoHotspot.setVisible(currentRoom == 2);
+        cauldronHotspot.setVisible(currentRoom == 4);
+        room7ScreenClickHotspot.setVisible(currentRoom == 7);
+    }
+
+    @Override
+    protected boolean canCollectWorldItem(String itemId, GameState state) {
+        if ("RUGIADA_ASGARD".equals(itemId) && !state.hasDragonKey()) {
+            JOptionPane.showMessageDialog(this,
+                    "La polena a drago è bloccata da un meccanismo d'ottone. Serve la Chiave del Drago!",
+                    "Serbatoio Bloccato", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected boolean shouldShowWorldItem(String itemId, GameState state) {
+        return !("MAPPA_CIELO".equals(itemId) && state.hasGivenMapToMartino());
+    }
+
     private void startMartinoDialogue() {
         setArrowsVisible(false);
         martinoHotspot.setVisible(false);
@@ -324,199 +295,6 @@ add(characterSpriteLabel);
         hudPanel.updateHUD();
     }
 }
-    private void initArrowButtons() {
-        btnUp = createArrowButton("/images/ui/arrow_up.png", "â–²");
-        btnDown = createArrowButton("/images/ui/arrow_down.png", "â–¼");
-        btnLeft = createArrowButton("/images/ui/arrow_left.png", "â—„");
-        btnRight = createArrowButton("/images/ui/arrow_right.png", "â–º");
-
-        btnUp.setBounds(600, 90, 80, 80);
-        btnDown.setBounds(600, 610, 80, 80);
-        btnLeft.setBounds(30, 320, 80, 80);
-        btnRight.setBounds(1170, 320, 80, 80);
-
-        btnUp.addActionListener(e -> navigate("UP"));
-        btnDown.addActionListener(e -> navigate("DOWN"));
-        btnLeft.addActionListener(e -> navigate("LEFT"));
-        btnRight.addActionListener(e -> navigate("RIGHT"));
-
-        add(btnUp);
-        add(btnDown);
-        add(btnLeft);
-        add(btnRight);
-    }
-
-    private JButton createArrowButton(String iconPath, String fallbackText) {
-        JButton btn = new JButton();
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setFocusable(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        try {
-            ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
-            Image img = icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
-            btn.setIcon(new ImageIcon(img));
-        } catch (Exception e) {
-            btn.setText(fallbackText);
-            btn.setFont(new Font("SansSerif", Font.BOLD, 36));
-            btn.setForeground(new Color(255, 215, 0));
-        }
-        return btn;
-    }
-
-    public void refreshFromGameState() {
-        loadRoom(GameState.getInstance().getCurrentRoom());
-        hudPanel.updateHUD();
-    }
-
-    public void loadRoom(int roomId) {
-        this.currentRoom = roomId;
-        GameState.getInstance().setCurrentRoom(roomId);
-
-        try {
-            currentBgImage = new ImageIcon(getClass().getResource(roomBgPaths.get(roomId))).getImage();
-        } catch (Exception e) {
-            currentBgImage = null;
-        }
-
-        GameState gs = GameState.getInstance();
-
-        martinoHotspot.setVisible(currentRoom == 2);
-        cauldronHotspot.setVisible(currentRoom == 4);
-        room7ScreenClickHotspot.setVisible(currentRoom == 7);
-        updateWorldItemsVisibility(gs);
-        updateArrowVisibility();
-        hudPanel.updateHUD();
-        repaint();
-    }
-
-    private void updateWorldItemsVisibility(GameState gs) {
-        if (itemButtons.containsKey("MAPPA_CIELO")) {
-            itemButtons.get("MAPPA_CIELO").setVisible(currentRoom == 5 && !gs.hasItem("MAPPA_CIELO") && !gs.hasGivenMapToMartino());
-        }
-
-        if (itemButtons.containsKey("NEBBIA_NIFLHEIM")) {
-            itemButtons.get("NEBBIA_NIFLHEIM").setVisible(currentRoom == 5 && !gs.hasItem("NEBBIA_NIFLHEIM"));
-        }
-
-        if (itemButtons.containsKey("PIUMA_FOLGORE")) {
-            itemButtons.get("PIUMA_FOLGORE").setVisible(currentRoom == 6 && !gs.hasItem("PIUMA_FOLGORE"));
-        }
-
-        if (itemButtons.containsKey("POLLINE_YGGDRASIL")) {
-            itemButtons.get("POLLINE_YGGDRASIL").setVisible(currentRoom == 3 && !gs.hasItem("POLLINE_YGGDRASIL"));
-        }
-
-        if (itemButtons.containsKey("RUGIADA_ASGARD")) {
-            itemButtons.get("RUGIADA_ASGARD").setVisible(currentRoom == 3 && !gs.hasItem("RUGIADA_ASGARD"));
-        }
-    }
-
-    private void setArrowsVisible(boolean visible) {
-        btnUp.setVisible(visible);
-        btnDown.setVisible(visible);
-        btnLeft.setVisible(visible);
-        btnRight.setVisible(visible);
-    }
-
-    private void updateArrowVisibility() {
-        setArrowsVisible(false);
-
-        switch (currentRoom) {
-            case 1:
-                btnLeft.setVisible(true);
-                btnRight.setVisible(true);
-                btnDown.setVisible(true);
-                break;
-            case 2:
-                btnLeft.setVisible(true);
-                btnUp.setVisible(true);
-                break;
-            case 3:
-                btnRight.setVisible(true);
-                btnLeft.setVisible(true);
-                break;
-            case 4:
-                btnRight.setVisible(true);
-                break;
-            case 5:
-                btnUp.setVisible(true);
-                btnLeft.setVisible(true);
-                break;
-            case 6:
-                btnDown.setVisible(true);
-                break;
-            case 7:
-                btnRight.setVisible(true);
-                break;
-        }
-    }
-
-    private void navigate(String direction) {
-        switch (currentRoom) {
-            case 1:
-                if (direction.equals("LEFT")) {
-                    loadRoom(3);
-                } else if (direction.equals("RIGHT")) {
-                    loadRoom(2);
-                } else if (direction.equals("DOWN")) {
-                    loadRoom(5);
-                }
-                break;
-            case 2:
-                if (direction.equals("LEFT")) {
-                    loadRoom(1);
-                } else if (direction.equals("UP")) {
-                    loadRoom(6);
-                }
-                break;
-            case 3:
-                if (direction.equals("RIGHT")) {
-                    loadRoom(1);
-                } else if (direction.equals("LEFT")) {
-                    loadRoom(7);
-                }
-                break;
-            case 4:
-                if (direction.equals("RIGHT")) {
-                    loadRoom(5);
-                }
-                break;
-            case 5:
-                if (direction.equals("UP")) {
-                    loadRoom(1);
-                } else if (direction.equals("LEFT")) {
-                    loadRoom(4);
-                }
-                break;
-            case 6:
-                if (direction.equals("DOWN")) {
-                    loadRoom(2);
-                }
-                break;
-            case 7:
-                if (direction.equals("RIGHT")) {
-                    loadRoom(3);
-                }
-                break;
-        }
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (currentBgImage != null) {
-            g.drawImage(currentBgImage, 0, 0, getWidth(), getHeight(), this);
-        } else {
-            g.setColor(new Color(25, 25, 35));
-            g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Georgia", Font.BOLD, 28));
-            g.drawString("STANZA " + currentRoom, 580, 360);
-        }
-    }
     private void triggerBossEncounter() {
     GameState gs = GameState.getInstance();
     if (gs.isBossDefeated()) {

@@ -51,6 +51,12 @@ public class CauldronOverlay extends JDialog {
         slotsPanel.setBounds(145, 110, 690, 140);
         contentPanel.add(slotsPanel);
 
+        statusLabel = new JLabel("", SwingConstants.CENTER);
+        statusLabel.setFont(new Font("Georgia", Font.BOLD, 14));
+        statusLabel.setForeground(new Color(255, 230, 170));
+        statusLabel.setBounds(145, 455, 690, 38);
+        contentPanel.add(statusLabel);
+
         // 2. Griglia degli ingredienti disponibili dall'inventario (Spazio centrale)
         JPanel inventoryGrid = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         inventoryGrid.setOpaque(false);
@@ -151,20 +157,16 @@ public class CauldronOverlay extends JDialog {
         slotsPanel.revalidate();
         slotsPanel.repaint();
     }
-
     private void processMixing() {
-        if (selectedItems.size() < 3) {
-            statusLabel.setText("Devi inserire esattamente 3 ingredienti!");
+        if (selectedItems.size() != 3) {
+            statusLabel.setText("Devi selezionare esattamente 3 ingredienti!");
             return;
         }
+        java.util.Set<String> ids = selectedItems.stream()
+                .map(Item::getId)
+                .collect(java.util.stream.Collectors.toSet());
 
-        boolean hasBreath = selectedItems.stream().anyMatch(i -> i.getId().equals("SOFFIO_HRAESVELGR"));
-        boolean hasFeather = selectedItems.stream().anyMatch(i -> i.getId().equals("PIUMA_FOLGORE"));
-        boolean hasDew = selectedItems.stream().anyMatch(i -> i.getId().equals("RUGIADA_ASGARD"));
-        boolean hasFog = selectedItems.stream().anyMatch(i -> i.getId().equals("NEBBIA_NIFLHEIM"));
-        boolean hasPollen = selectedItems.stream().anyMatch(i -> i.getId().equals("POLLINE_YGGDRASIL"));
-
-        if (hasFog) {
+        if (ids.contains("NEBBIA_NIFLHEIM")) {
             dispose();
             JOptionPane.showMessageDialog(null,
                     "La Nebbia di Niflheim congela all'istante il calderone spaccandolo in due!\nGAME OVER!",
@@ -173,8 +175,7 @@ public class CauldronOverlay extends JDialog {
             SceneManager.getInstance().showScene("MENU");
             return;
         }
-
-        if (hasPollen) {
+        if (ids.contains("POLLINE_YGGDRASIL")) {
             dispose();
             JOptionPane.showMessageDialog(null,
                     "Il Polline di Yggdrasil provoca un'allucinazione nell'allucinazione!\nTi risvegli smarrito sul ponte...",
@@ -182,41 +183,7 @@ public class CauldronOverlay extends JDialog {
             SceneManager.getInstance().showScene("CHAPTER1");
             return;
         }
-
-        if (hasBreath && hasFeather && hasDew) {
-            dispose();
-
-            // Mostra prima il pop-up custom per l'Asgardian Aviation
-            ItemPickupOverlay pickupOverlay = new ItemPickupOverlay(
-                    (Frame) SwingUtilities.getWindowAncestor(this),
-                    "ASGARDIAN AVIATION CREATO!"
-            );
-            pickupOverlay.setVisible(true);
-
-            // Ripristina la salute e avvia la transizione
-            // RESET INVENTARIO PER IL CAPITOLO 2
-            GameState.getInstance().getInventory().clear();
-            GameState.getInstance().resetHealth();
-
-            // Effettua la transizione verso la schermata di intermezzo
-            SceneManager.getInstance().showScene("TRANSITION_CH1_CH2");
-            return;
-        }
-
-        dispose();
-        JOptionPane.showMessageDialog(null,
-                "La miscela emette un fumo strano e svanisce... Non era la combinazione giusta!",
-                "Tentativo Fallito", JOptionPane.WARNING_MESSAGE);
-
-        // Controlli per gli ingredienti del Capitolo 2
-        boolean hasSchiumaAegir = selectedItems.stream().anyMatch(i -> i.getId().equals("SCHIUMA_AEGIR"));
-        boolean hasCoralloRan = selectedItems.stream().anyMatch(i -> i.getId().equals("CORALLO_RAN"));
-        boolean hasSaleJormungandr = selectedItems.stream().anyMatch(i -> i.getId().equals("SALE_JORMUNGANDR"));
-        boolean hasAcquaLete = selectedItems.stream().anyMatch(i -> i.getId().equals("ACQUA_LETE"));
-        boolean hasInchiostroKraken = selectedItems.stream().anyMatch(i -> i.getId().equals("INCHIOSTRO_KRAKEN"));
-
-// 1. ACQUA DEL LETE -> RESET MEMORIA & INVENTARIO
-        if (hasAcquaLete) {
+        if (ids.contains("ACQUA_LETE")) {
             dispose();
             JOptionPane.showMessageDialog(null,
                     "L'Acqua del Lete ti fa dimenticare ogni ricetta ed enigma!\nL'inventario si svuota e il livello si resetta!",
@@ -225,9 +192,7 @@ public class CauldronOverlay extends JDialog {
             SceneManager.getInstance().showScene("CHAPTER2");
             return;
         }
-
-// 2. INCHIOSTRO DI KRAKEN -> GAME OVER (Il calderone viene risucchiato)
-        if (hasInchiostroKraken) {
+        if (ids.contains("INCHIOSTRO_KRAKEN")) {
             dispose();
             JOptionPane.showMessageDialog(null,
                     "L'Inchiostro di Kraken crea un buco nero liquido che risucchia il calderone stesso!\nGAME OVER!",
@@ -237,18 +202,38 @@ public class CauldronOverlay extends JDialog {
             return;
         }
 
-// 3. COMBINAZIONE VINCENTE CAPITOLO 2 (Maelstrom Martini)
-        if (hasSchiumaAegir && hasCoralloRan && hasSaleJormungandr) {
+        boolean chapter1Recipe = ids.contains("SOFFIO_HRAESVELGR")
+                && ids.contains("PIUMA_FOLGORE")
+                && ids.contains("RUGIADA_ASGARD");
+        if (chapter1Recipe) {
             dispose();
-            ItemPickupOverlay pickupOverlay = new ItemPickupOverlay(
+            ItemPickupOverlay pickup = new ItemPickupOverlay(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    "ASGARDIAN AVIATION CREATO!"
+            );
+            pickup.setVisible(true);
+            GameState.getInstance().getInventory().clear();
+            GameState.getInstance().resetHealth();
+            SceneManager.getInstance().showScene("TRANSITION_CH1_CH2");
+            return;
+        }
+
+        boolean chapter2Recipe = ids.contains("SCHIUMA_AEGIR")
+                && ids.contains("CORALLO_RAN")
+                && ids.contains("SALE_JORMUNGANDR");
+        if (chapter2Recipe) {
+            dispose();
+            ItemPickupOverlay pickup = new ItemPickupOverlay(
                     (Frame) SwingUtilities.getWindowAncestor(this),
                     "MAELSTROM MARTINI CREATO!"
             );
-            pickupOverlay.setVisible(true);
-
+            pickup.setVisible(true);
             GameState.getInstance().resetHealth();
             SceneManager.getInstance().showScene("TRANSITION_CH2_CH3");
             return;
         }
+
+        statusLabel.setText("La miscela svanisce... Non è la combinazione giusta. Riprova!");
     }
 }
+
