@@ -17,6 +17,11 @@ public class SceneManager {
     private Timer fadeTimer;
     private boolean isFading = false;
     private String pendingSceneName = null;
+    private String currentSceneName = "MENU";
+
+    public String getCurrentSceneName() {
+        return currentSceneName;
+    }
 
     private SceneManager() {
         cardLayout = new CardLayout();
@@ -65,6 +70,7 @@ public class SceneManager {
 
                 // Cambia la scena effettiva
                 cardLayout.show(mainPanel, pendingSceneName);
+                currentSceneName = pendingSceneName;
                 scenes.get(pendingSceneName).requestFocusInWindow();
 
                 // Avvia Fade In (da nero a trasparente)

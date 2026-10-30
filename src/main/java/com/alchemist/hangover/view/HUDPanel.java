@@ -45,6 +45,20 @@ public class HUDPanel extends JPanel {
 
         add(inventoryButton);
 
+        // Diario di Arthur: sempre disponibile durante l'esplorazione.
+        JButton journalButton = new JButton("📜");
+        journalButton.setBounds(1045, 15, 55, 50);
+        journalButton.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
+        journalButton.setForeground(new Color(255, 215, 0));
+        journalButton.setBackground(new Color(30, 30, 45));
+        journalButton.setBorder(BorderFactory.createLineBorder(new Color(212, 175, 55), 1));
+        journalButton.setToolTipText("Diario di Arthur (J)");
+        journalButton.setFocusPainted(false);
+        journalButton.setFocusable(false);
+        journalButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        journalButton.addActionListener(e -> new GameJournalDialog(mainFrame).setVisible(true));
+        add(journalButton);
+
         // 3. Icona Salva Partita in Alto a Destra (accanto all'inventario)
         JButton saveButton = new JButton("💾");
         saveButton.setBounds(1115, 15, 50, 50);

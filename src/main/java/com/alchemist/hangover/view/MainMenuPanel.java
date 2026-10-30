@@ -73,6 +73,17 @@ public class MainMenuPanel extends JPanel {
                     SaveLoadDialog loadDialog = new SaveLoadDialog(topFrame, SaveLoadDialog.Mode.LOAD);
                     loadDialog.setVisible(true);
                     break;
+                case "HOW TO PLAY":
+                    JOptionPane.showMessageDialog(this,
+                            "ESPLORAZIONE: clicca gli oggetti e usa le frecce.\n"
+                            + "DIALOGHI: click, spazio o invio per avanzare.\n"
+                            + "DIARIO: J. PAUSA: ESC.\n"
+                            + "Usa il calderone per creare le ricette con gli ingredienti.",
+                            "Come giocare", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case "OPTIONS":
+                    new GameSettingsDialog((JFrame) SwingUtilities.getWindowAncestor(this)).setVisible(true);
+                    break;
                 case "EXIT GAME":
                     System.exit(0);
                     break;
