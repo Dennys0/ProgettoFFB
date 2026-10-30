@@ -129,13 +129,20 @@ public class TavernIntroPanel extends JPanel {
         dialogueSystem.loadDialogue("/dialogues/intro_dialogue.txt");
         dialogueSystem.startDialogue();
 
-        // Mouse Listener per advance
-        addMouseListener(new MouseAdapter() {
+        // I click sui componenti figli non risalgono automaticamente al JPanel.
+        // Colleghiamo l'avanzamento anche ai singoli elementi visibili.
+        MouseAdapter advanceOnClick = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 dialogueSystem.nextLine();
             }
-        });
+        };
+        addMouseListener(advanceOnClick);
+        layeredPane.addMouseListener(advanceOnClick);
+        dialogueBox.addMouseListener(advanceOnClick);
+        nameLabel.addMouseListener(advanceOnClick);
+        dialogueTextLabel.addMouseListener(advanceOnClick);
+        characterSpriteLabel.addMouseListener(advanceOnClick);
 
         // KeyBindings per SPAZIO e INVIO
         InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -150,6 +157,18 @@ public class TavernIntroPanel extends JPanel {
                 dialogueSystem.nextLine();
             }
         });
+
+        JButton revealButton = new JButton("MOSTRA FRASE");
+        revealButton.setFont(new Font("SansSerif", Font.BOLD, 12));
+        revealButton.setForeground(new Color(255, 225, 160));
+        revealButton.setBackground(new Color(30, 30, 30));
+        revealButton.setOpaque(true);
+        revealButton.setFocusPainted(false);
+        revealButton.setFocusable(false);
+        revealButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        revealButton.setBounds(985, 20, 145, 35);
+        revealButton.addActionListener(e -> dialogueSystem.revealCurrentLine());
+        layeredPane.add(revealButton, Integer.valueOf(3));
 
         JButton skipButton = new JButton("SKIP");
         skipButton.setFont(new Font("SansSerif", Font.BOLD, 14));

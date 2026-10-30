@@ -191,7 +191,10 @@ add(characterSpriteLabel);
         dialogueTextLabel.setVerticalAlignment(SwingConstants.TOP);
         dialogueBoxOverlay.add(dialogueTextLabel);
 
-        dialogueSkipLabel = new JLabel("");
+        dialogueSkipLabel = new JLabel("MOSTRA FRASE", SwingConstants.RIGHT);
+        dialogueSkipLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
+        dialogueSkipLabel.setForeground(new Color(255, 218, 145));
+        dialogueSkipLabel.setBounds(950, 155, 180, 25);
         dialogueBoxOverlay.add(dialogueSkipLabel);
 
         add(dialogueBoxOverlay);
@@ -206,6 +209,26 @@ add(characterSpriteLabel);
                 this::updateDialogueSprite,
                 this::onDialogueFinished
         );
+
+        dialogueSkipLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        dialogueSkipLabel.setToolTipText("Mostra subito il testo completo");
+        dialogueSkipLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dialogueSystem.revealCurrentLine();
+            }
+        });
+
+        MouseAdapter advanceOnClick = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (dialogueBoxOverlay.isVisible()) dialogueSystem.nextLine();
+            }
+        };
+        dialogueBoxOverlay.addMouseListener(advanceOnClick);
+        dialogueNameLabel.addMouseListener(advanceOnClick);
+        dialogueTextLabel.addMouseListener(advanceOnClick);
+        characterSpriteLabel.addMouseListener(advanceOnClick);
 
         addMouseListener(new MouseAdapter() {
             @Override
