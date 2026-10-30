@@ -154,7 +154,11 @@ public class TavernIntroPanel extends JPanel {
         JButton skipButton = new JButton("SKIP");
         skipButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         skipButton.setForeground(new Color(255, 215, 0));
-        skipButton.setBackground(new Color(30, 30, 30, 180));
+        // Sfondo pienamente opaco: evita artefatti del testo della dialogue box
+        // durante il repaint e il passaggio del mouse sul pulsante.
+        skipButton.setBackground(new Color(30, 30, 30));
+        skipButton.setOpaque(true);
+        skipButton.setContentAreaFilled(true);
         skipButton.setFocusPainted(false);
         skipButton.setFocusable(false); // Impedisce al focus di evidenziare o mostrare testo di background
         skipButton.setBorder(BorderFactory.createLineBorder(new Color(200, 160, 80), 1));
@@ -168,8 +172,8 @@ public class TavernIntroPanel extends JPanel {
             SceneManager.getInstance().showScene("CHAPTER1");
         });
 
-// Aggiungiamo il tasto Skip al livello 2 del JLayeredPane (sopra allo sfondo)
-        layeredPane.add(skipButton, Integer.valueOf(2));
+// Livello dedicato ai controlli, sopra sprite e dialogue box.
+        layeredPane.add(skipButton, Integer.valueOf(3));
 
     }
 

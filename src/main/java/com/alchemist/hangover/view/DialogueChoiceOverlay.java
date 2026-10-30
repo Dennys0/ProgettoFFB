@@ -49,11 +49,12 @@ public class DialogueChoiceOverlay extends JDialog {
 
         boolean hasMap = GameState.getInstance().hasItem("MAPPA_CIELO");
 
-        // Bottone DONA (Posizionato sotto la mappa)
-        JButton btnDonate = new JButton(hasMap ? "DONA" : "MAPPA NON TROVATA");
-        btnDonate.setFont(new Font("Georgia", Font.BOLD, 18));
-        btnDonate.setForeground(hasMap ? new Color(255, 215, 0) : Color.GRAY);
-        btnDonate.setBounds(275, 320, 200, 48);
+        // L'immagine contiene gia' il pulsante dorato "DONA".
+        // Questo JButton e' soltanto un hotspot trasparente sopra il disegno.
+        JButton btnDonate = new JButton();
+        btnDonate.setBounds(235, 323, 218, 65);
+        btnDonate.setToolTipText(hasMap ? "Consegna la Mappa del Cielo a Martino" : "Prima devi trovare la Mappa del Cielo");
+        btnDonate.getAccessibleContext().setAccessibleName("Consegna la Mappa del Cielo");
         btnDonate.setContentAreaFilled(false);
         btnDonate.setBorderPainted(false);
         btnDonate.setFocusPainted(false);
@@ -64,9 +65,8 @@ public class DialogueChoiceOverlay extends JDialog {
         btnDonate.addActionListener(e -> {
             GameState gs = GameState.getInstance();
             Item mapItem = gs.getItemById("MAPPA_CIELO");
-            if (mapItem != null) {
-                gs.removeItem(mapItem);
-            }
+            if (mapItem == null || gs.hasGivenMapToMartino()) return;
+            gs.removeItem(mapItem);
             gs.addItem(new Item("CHIAVE_DRAGO", "Chiave del Drago", "Una pesante chiave d'ottone con incisioni a forma di drago celeste.", "/images/items/item_key.png"));
             gs.setGivenMapToMartino(true);
             gs.setHasDragonKey(true);
@@ -78,7 +78,7 @@ public class DialogueChoiceOverlay extends JDialog {
 
         // Bottone Congedati / Esci
         JButton btnExit = new JButton();
-        btnExit.setBounds(275, 382, 200, 48);
+        btnExit.setBounds(235, 397, 218, 55);
         btnExit.setContentAreaFilled(false);
         btnExit.setBorderPainted(false);
         btnExit.setFocusPainted(false);
@@ -93,13 +93,16 @@ public class DialogueChoiceOverlay extends JDialog {
 
         // Tasto X in alto a destra
         JButton btnClose = new JButton();
-        btnClose.setBounds(620, 35, 45, 45);
+        btnClose.setBounds(584, 57, 65, 70);
         btnClose.setContentAreaFilled(false);
         btnClose.setBorderPainted(false);
         btnClose.setFocusPainted(false);
         btnClose.setFocusable(false);
         btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnClose.addActionListener(e -> dispose());
+        btnClose.addActionListener(e -> {
+            dispose();
+            if (callback != null) callback.onChoiceMade(false);
+        });
         contentPanel.add(btnClose);
     }
 }

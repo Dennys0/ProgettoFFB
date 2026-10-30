@@ -195,6 +195,10 @@ add(characterSpriteLabel);
         dialogueBoxOverlay.add(dialogueSkipLabel);
 
         add(dialogueBoxOverlay);
+        // In Swing l'indice zero e' davanti: la cornice deve coprire
+        // la parte inferiore dello sprite, non essere coperta dal personaggio.
+        setComponentZOrder(dialogueBoxOverlay, 0);
+        setComponentZOrder(characterSpriteLabel, 1);
 
         dialogueSystem = new DialogueSystem(
                 dialogueNameLabel,
