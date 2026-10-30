@@ -204,7 +204,7 @@ public final class InventoryOverlay extends JDialog {
                 KeyStroke.getKeyStroke("ESCAPE"),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
         getRootPane().registerKeyboardAction(e -> dispose(),
-                KeyStroke.getKeyStroke('I'),
+                KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         refreshInventory();
