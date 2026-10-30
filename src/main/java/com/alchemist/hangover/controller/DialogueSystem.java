@@ -114,7 +114,7 @@ public class DialogueSystem {
         currentFullText = line.getText();
         charIndex = 0;
         isTyping = true;
-        textLabel.setText("")
+        textLabel.setText("");
 
         // Effetto macchina da scrivere (15ms a carattere)
         typewriterTimer = new Timer(15, e -> {
