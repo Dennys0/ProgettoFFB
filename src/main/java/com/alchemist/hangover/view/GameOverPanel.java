@@ -25,7 +25,7 @@ public class GameOverPanel extends JPanel {
         add(subLabel);
 
         // Bottone 1: RIPROVA
-        JButton btnRetry = new JButton("RIPROVA ðŸ”„");
+        JButton btnRetry = new JButton("RIPROVA LO SCONTRO");
         btnRetry.setFont(new Font("Georgia", Font.BOLD, 18));
         btnRetry.setForeground(Color.BLACK);
         btnRetry.setBackground(new Color(255, 215, 0));
@@ -36,17 +36,20 @@ public class GameOverPanel extends JPanel {
 
         btnRetry.addActionListener(e -> {
             GameState state = GameState.getInstance();
+            boolean retryBoss = state.isBossRetryAvailable();
             state.resetHealth();
+            state.setBossRetryAvailable(false);
+            SceneManager manager = SceneManager.getInstance();
             if (state.getChapter() == 2) {
-                Chapter2Panel chapter2 =
-                        (Chapter2Panel) SceneManager.getInstance().getPanel("CHAPTER2");
+                Chapter2Panel chapter2 = (Chapter2Panel) manager.getPanel("CHAPTER2");
                 if (chapter2 != null) chapter2.refreshFromGameState();
-                SceneManager.getInstance().showScene("CHAPTER2");
+                manager.showScene("CHAPTER2",
+                        retryBoss && chapter2 != null ? chapter2::retryBossEncounter : null);
             } else {
-                Chapter1Panel chapter1 =
-                        (Chapter1Panel) SceneManager.getInstance().getPanel("CHAPTER1");
+                Chapter1Panel chapter1 = (Chapter1Panel) manager.getPanel("CHAPTER1");
                 if (chapter1 != null) chapter1.refreshFromGameState();
-                SceneManager.getInstance().showScene("CHAPTER1");
+                manager.showScene("CHAPTER1",
+                        retryBoss && chapter1 != null ? chapter1::retryBossEncounter : null);
             }
         });
         add(btnRetry);

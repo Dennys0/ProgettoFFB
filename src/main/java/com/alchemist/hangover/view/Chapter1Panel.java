@@ -322,6 +322,18 @@ add(characterSpriteLabel);
         hudPanel.updateHUD();
     }
 }
+    /** Checkpoint del boss: salta il dialogo introduttivo gia' visto. */
+    public void retryBossEncounter() {
+        if (GameState.getInstance().isBossDefeated()) return;
+        loadRoom(7);
+        setArrowsVisible(false);
+        room7ScreenClickHotspot.setVisible(false);
+        new BossFightOverlay(mainFrameRef).setVisible(true);
+        room7ScreenClickHotspot.setVisible(true);
+        updateArrowVisibility();
+        hudPanel.updateHUD();
+    }
+
     private void triggerBossEncounter() {
     GameState gs = GameState.getInstance();
     if (gs.isBossDefeated()) {

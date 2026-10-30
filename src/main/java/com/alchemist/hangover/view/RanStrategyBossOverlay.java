@@ -139,15 +139,13 @@ public class RanStrategyBossOverlay extends JDialog {
             com.alchemist.hangover.controller.AudioManager.getInstance()
                     .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.DAMAGE);
             if (gs.getCurrentHealth() <= 0) {
+                gs.setBossRetryAvailable(true);
                 dispose();
-                JOptionPane.showMessageDialog(null,
-                        "La furia di Rán ti travolge! Hai esaurito i cuori.",
-                        "Sconfitta", JOptionPane.ERROR_MESSAGE);
                 SceneManager.getInstance().showScene("GAMEOVER");
             } else {
-                JOptionPane.showMessageDialog(this, "Risposta errata! Rán ti colpisce con la sua rete. Perdi 1 Cuore!", "Errore!", JOptionPane.WARNING_MESSAGE);
                 currentTurn = 1;
                 startNewTurn();
+                ToastNotification.show(this, "Rán ti ha colpito! Cuori rimasti: " + gs.getCurrentHealth());
             }
         }
     }
@@ -155,6 +153,9 @@ public class RanStrategyBossOverlay extends JDialog {
     private void winBossFight() {
         GameState gs = GameState.getInstance();
         gs.setBossDefeated(true);
+        gs.setBossRetryAvailable(false);
+        com.alchemist.hangover.controller.AudioManager.getInstance()
+                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.SUCCESS);
 
         Item foam = new Item("SCHIUMA_AEGIR", "Schiuma di Ægir",
                 "La birra sottomarina lucente estratta dalle reti della dea Rán.",

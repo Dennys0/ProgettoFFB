@@ -160,6 +160,18 @@ public class Chapter2Panel extends AbstractChapterPanel {
         dialogueSystem.startDialogue();
     }
 
+    /** Checkpoint del boss: salta il dialogo introduttivo gia' visto. */
+    public void retryBossEncounter() {
+        if (GameState.getInstance().isBossDefeated()) return;
+        loadRoom(7);
+        setArrowsVisible(false);
+        ranBossHotspot.setVisible(false);
+        new RanStrategyBossOverlay(mainFrameRef).setVisible(true);
+        ranBossHotspot.setVisible(!GameState.getInstance().isBossDefeated());
+        updateArrowVisibility();
+        hudPanel.updateHUD();
+    }
+
     private void triggerRanBossEncounter() {
         GameState gs = GameState.getInstance();
         if (gs.isBossDefeated()) {

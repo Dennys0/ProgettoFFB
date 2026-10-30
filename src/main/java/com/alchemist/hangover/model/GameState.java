@@ -20,6 +20,8 @@ public class GameState {
     private boolean hasDragonKey = false;
     private boolean dragonUnlocked = false; // Flag per sblocco polena/drago
     private boolean bossDefeated = false;
+    // Checkpoint di sessione: non viene serializzato nei salvataggi H2.
+    private boolean bossRetryAvailable = false;
 
     private GameState() {
         inventory = new ArrayList<>();
@@ -139,6 +141,9 @@ public class GameState {
     public boolean isBossDefeated() { return bossDefeated; }
     public void setBossDefeated(boolean val) { this.bossDefeated = val; }
 
+    public boolean isBossRetryAvailable() { return bossRetryAvailable; }
+    public void setBossRetryAvailable(boolean val) { this.bossRetryAvailable = val; }
+
     // --- Reset Stato Generale ---
     public void resetState() {
         int oldHealth = currentHealth;
@@ -152,6 +157,7 @@ public class GameState {
         this.hasDragonKey = false;
         this.dragonUnlocked = false;
         this.bossDefeated = false;
+        this.bossRetryAvailable = false;
         if (oldHealth != currentHealth || oldMaxHealth != maxHealth) {
             notifyHealthChanged();
         }

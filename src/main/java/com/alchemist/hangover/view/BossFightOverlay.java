@@ -216,17 +216,13 @@ public class BossFightOverlay extends JDialog {
         int hp = GameState.getInstance().getCurrentHealth();
 
         if (hp <= 0) {
+            GameState.getInstance().setBossRetryAvailable(true);
             dispose();
-            JOptionPane.showMessageDialog(null,
-                reason + "\nHai perso tutti i cuori di vita!",
-                "Sconfitto dalla Tempesta", JOptionPane.ERROR_MESSAGE);
             SceneManager.getInstance().showScene("GAMEOVER");
         } else {
-            JOptionPane.showMessageDialog(this, 
-                reason + "\nHai perso 1 cuore di vita! Cuori rimasti: " + hp, 
-                "Colpo Subito", JOptionPane.WARNING_MESSAGE);
-            // Ricomincia dallo step 1
+            // Non interrompiamo il ritmo con un JOptionPane modale.
             currentRoomStep(1);
+            statusLabel.setText(reason + " Cuori rimasti: " + hp);
         }
     }
 
@@ -234,6 +230,9 @@ public class BossFightOverlay extends JDialog {
         dispose();
         GameState gs = GameState.getInstance();
         gs.setBossDefeated(true);
+        gs.setBossRetryAvailable(false);
+        com.alchemist.hangover.controller.AudioManager.getInstance()
+                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.SUCCESS);
         Item breath = new Item("SOFFIO_HRAESVELGR", "Soffio di Hræsvelgr",
                 "L'ampolla contenente il vento celestiale puro donato dall'aquila gigante.",
                 "/images/items/item_breath.png");
