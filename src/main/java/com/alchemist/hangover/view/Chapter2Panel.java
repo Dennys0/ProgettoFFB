@@ -88,6 +88,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
         siegfriedHotspot.setFocusPainted(false);
         siegfriedHotspot.setFocusable(false);
         siegfriedHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        siegfriedHotspot.setToolTipText("Parla con Siegfried");
         siegfriedHotspot.addActionListener(e -> startSiegfriedDialogue());
         add(siegfriedHotspot);
 
@@ -99,6 +100,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
         cauldronHotspot.setFocusPainted(false);
         cauldronHotspot.setFocusable(false);
         cauldronHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cauldronHotspot.setToolTipText("Usa il calderone");
         cauldronHotspot.addActionListener(e -> interactWithCauldron());
         add(cauldronHotspot);
 
@@ -110,6 +112,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
         ranBossHotspot.setFocusPainted(false);
         ranBossHotspot.setFocusable(false);
         ranBossHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        ranBossHotspot.setToolTipText("Affronta Rán");
         ranBossHotspot.addActionListener(e -> triggerRanBossEncounter());
         add(ranBossHotspot);
 

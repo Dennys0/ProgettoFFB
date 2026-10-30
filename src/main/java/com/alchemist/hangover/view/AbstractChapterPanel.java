@@ -43,6 +43,10 @@ public abstract class AbstractChapterPanel extends JPanel {
         btnDown.setBounds(600, 610, 80, 80);
         btnLeft.setBounds(30, 320, 80, 80);
         btnRight.setBounds(1170, 320, 80, 80);
+        btnUp.setToolTipText("Vai in alto");
+        btnDown.setToolTipText("Vai in basso");
+        btnLeft.setToolTipText("Vai a sinistra");
+        btnRight.setToolTipText("Vai a destra");
         btnUp.addActionListener(e -> navigate("UP"));
         btnDown.addActionListener(e -> navigate("DOWN"));
         btnLeft.addActionListener(e -> navigate("LEFT"));
@@ -73,7 +77,7 @@ public abstract class AbstractChapterPanel extends JPanel {
     /** Crea un hotspot grafico e registra i dati necessari all'oggetto. */
     protected void addItemWorldButton(String id, String iconPath, int x, int y,
             int width, int height, int roomId, String name, String description) {
-        JButton button = new JButton();
+        JButton button = new HotspotButton();
         button.setBounds(x, y, width, height);
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
@@ -108,7 +112,7 @@ public abstract class AbstractChapterPanel extends JPanel {
         state.addItem(item);
         button.setVisible(false);
         hudPanel.updateHUD();
-        new ItemPickupOverlay(mainFrameRef, item).setVisible(true);
+        ToastNotification.show(this, "Oggetto raccolto: " + item.getName(), item.getIconPath());
     }
 
     protected boolean canCollectWorldItem(String itemId, GameState state) { return true; }

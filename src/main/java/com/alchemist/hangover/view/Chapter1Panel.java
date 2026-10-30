@@ -108,7 +108,7 @@ private void loadSprite(String name, String path) {
         martinoHotspot.setFocusPainted(false);
         martinoHotspot.setFocusable(false);
         martinoHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        martinoHotspot.setToolTipText("Parla con Martino (Capitano MÃ¦lstrom)");
+        martinoHotspot.setToolTipText("Parla con Martino");
         martinoHotspot.addActionListener(e -> startMartinoDialogue());
         add(martinoHotspot);
 
