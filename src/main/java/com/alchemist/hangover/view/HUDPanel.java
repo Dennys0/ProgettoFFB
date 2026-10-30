@@ -7,36 +7,18 @@ import java.awt.*;
 
 public class HUDPanel extends JPanel {
 
-    private JLabel[] heartLabels;
+    private HealthDisplayPanel heartDisplay;
     private JButton inventoryButton;
-    private Image heartFullImg;
-    private Image heartEmptyImg;
 
     public HUDPanel(JFrame mainFrame) {
         setLayout(null);
         setOpaque(false);
         setBounds(0, 0, 1280, 80);
 
-        // Caricamento immagini cuori
-        try {
-            heartFullImg = new ImageIcon(getClass().getResource("/images/ui/heart_full.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-            heartEmptyImg = new ImageIcon(getClass().getResource("/images/ui/heart_empty.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-        } catch (Exception e) {
-            System.err.println("Errore caricamento cuori HUD: " + e.getMessage());
-        }
-
-        // 1. Cuori in Alto a Sinistra
-        heartLabels = new JLabel[3];
-        for (int i = 0; i < 3; i++) {
-            heartLabels[i] = new JLabel();
-            heartLabels[i].setBounds(30 + (i * 45), 20, 40, 40);
-            if (heartFullImg != null) {
-                heartLabels[i].setIcon(new ImageIcon(heartFullImg));
-            } else {
-                heartLabels[i].setText("â¤ï¸");
-            }
-            add(heartLabels[i]);
-        }
+        // Indicatore condiviso con le finestre dei boss.
+        heartDisplay = new HealthDisplayPanel(40);
+        heartDisplay.setBounds(25, 20, 175, 42);
+        add(heartDisplay);
 
         // 2. Icona Inventario in Alto a Destra
         inventoryButton = new JButton();
@@ -83,15 +65,6 @@ public class HUDPanel extends JPanel {
     }
 
     public void updateHUD() {
-        int hp = GameState.getInstance().getCurrentHealth();
-        for (int i = 0; i < 3; i++) {
-            if (i < hp) {
-                if (heartFullImg != null) heartLabels[i].setIcon(new ImageIcon(heartFullImg));
-                else heartLabels[i].setText("â¤ï¸");
-            } else {
-                if (heartEmptyImg != null) heartLabels[i].setIcon(new ImageIcon(heartEmptyImg));
-                else heartLabels[i].setText("ðŸ–¤");
-            }
-        }
+        heartDisplay.refresh();
     }
 }

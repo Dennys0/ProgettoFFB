@@ -70,6 +70,17 @@ public class RanStrategyBossOverlay extends JDialog {
         choicesPanel.setBounds(100, 180, 650, 280);
         contentPanel.add(choicesPanel);
 
+        // I cuori cambiano immediatamente quando si sbaglia una risposta.
+        JLabel healthTitle = new JLabel("VITA", SwingConstants.RIGHT);
+        healthTitle.setFont(new Font("SansSerif", Font.BOLD, 16));
+        healthTitle.setForeground(Color.WHITE);
+        healthTitle.setBounds(280, 475, 85, 36);
+        contentPanel.add(healthTitle);
+
+        HealthDisplayPanel bossHearts = new HealthDisplayPanel(34);
+        bossHearts.setBounds(375, 475, 150, 36);
+        contentPanel.add(bossHearts);
+
         startNewTurn();
     }
 

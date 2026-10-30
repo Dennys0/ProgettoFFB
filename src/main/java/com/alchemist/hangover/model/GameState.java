@@ -1,5 +1,7 @@
 package com.alchemist.hangover.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ public class GameState {
 
     private static GameState instance;
 
+    private final PropertyChangeSupport healthChanges = new PropertyChangeSupport(this);
     private int currentHealth = 3;
     private int maxHealth = 3;
     private int currentChapter = 1;
@@ -52,7 +55,11 @@ public class GameState {
     }
 
     public void setCurrentHealth(int health) {
-        this.currentHealth = health;
+        int newHealth = Math.max(0, health);
+        if (currentHealth != newHealth) {
+            currentHealth = newHealth;
+            notifyHealthChanged();
+        }
     }
 
     public int getMaxHealth() {
@@ -60,17 +67,33 @@ public class GameState {
     }
 
     public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
+        if (this.maxHealth != maxHealth) {
+            this.maxHealth = maxHealth;
+            notifyHealthChanged();
+        }
     }
 
     public void takeDamage() {
         if (currentHealth > 0) {
-            currentHealth--;
+            setCurrentHealth(currentHealth - 1);
         }
     }
 
     public void resetHealth() {
-        this.currentHealth = maxHealth;
+        setCurrentHealth(maxHealth);
+    }
+
+    // Gli indicatori grafici si aggiornano anche mentre un JDialog modale e' aperto.
+    public void addHealthChangeListener(PropertyChangeListener listener) {
+        healthChanges.addPropertyChangeListener("health", listener);
+    }
+
+    public void removeHealthChangeListener(PropertyChangeListener listener) {
+        healthChanges.removePropertyChangeListener("health", listener);
+    }
+
+    private void notifyHealthChanged() {
+        healthChanges.firePropertyChange("health", null, new int[]{currentHealth, maxHealth});
     }
 
     // --- Gestione Inventario ---
@@ -118,6 +141,8 @@ public class GameState {
 
     // --- Reset Stato Generale ---
     public void resetState() {
+        int oldHealth = currentHealth;
+        int oldMaxHealth = maxHealth;
         this.currentHealth = 3;
         this.maxHealth = 3;
         this.currentChapter = 1;
@@ -127,5 +152,8 @@ public class GameState {
         this.hasDragonKey = false;
         this.dragonUnlocked = false;
         this.bossDefeated = false;
+        if (oldHealth != currentHealth || oldMaxHealth != maxHealth) {
+            notifyHealthChanged();
+        }
     }
 }

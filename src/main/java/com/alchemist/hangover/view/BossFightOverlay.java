@@ -92,6 +92,17 @@ public class BossFightOverlay extends JDialog {
         statusLabel.setBounds(50, 310, 700, 30);
         contentPanel.add(statusLabel);
 
+        // La salute rimane visibile e si aggiorna ad ogni colpo anche nel dialogo modale.
+        JLabel healthTitle = new JLabel("VITA", SwingConstants.RIGHT);
+        healthTitle.setFont(new Font("SansSerif", Font.BOLD, 16));
+        healthTitle.setForeground(Color.WHITE);
+        healthTitle.setBounds(270, 365, 75, 36);
+        contentPanel.add(healthTitle);
+
+        HealthDisplayPanel bossHearts = new HealthDisplayPanel(34);
+        bossHearts.setBounds(355, 366, 150, 36);
+        contentPanel.add(bossHearts);
+
         // Istruzioni Input
         JLabel infoInput = new JLabel("Usa i tasti [W] [A] [S] [D] oppure le Frecce Direzionali", SwingConstants.CENTER);
         infoInput.setFont(new Font("SansSerif", Font.PLAIN, 13));
