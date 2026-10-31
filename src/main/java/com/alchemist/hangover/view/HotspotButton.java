@@ -29,7 +29,7 @@ public final class HotspotButton extends JButton {
         setBorder(null);
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         setRolloverEnabled(true);
-        ToolTipManager.sharedInstance().setInitialDelay(220);
+        ToolTipManager.sharedInstance().setInitialDelay(1150);
         ToolTipManager.sharedInstance().setDismissDelay(4200);
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
