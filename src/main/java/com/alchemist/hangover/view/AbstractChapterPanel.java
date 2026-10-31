@@ -77,7 +77,9 @@ public abstract class AbstractChapterPanel extends JPanel {
     /** Crea un hotspot grafico e registra i dati necessari all'oggetto. */
     protected void addItemWorldButton(String id, String iconPath, int x, int y,
             int width, int height, int roomId, String name, String description) {
-        JButton button = new HotspotButton();
+        HotspotButton button = new HotspotButton();
+        // Solo gli oggetti raccoglibili conservano il feedback luminoso.
+        button.setHoverHighlightEnabled(true);
         button.setBounds(x, y, width, height);
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);

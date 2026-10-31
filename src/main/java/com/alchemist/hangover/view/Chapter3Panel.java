@@ -20,6 +20,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private JButton gunnarHotspot;
     private JButton breathingCrackHotspot;
     private EarthBreathEffect breathingEffect;
+    private JComponent crackArtwork;
     private int crackInspections;
     private JButton steleHotspot;
     private JButton forgeHotspot;
@@ -70,7 +71,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         // La crepa e' gia' disegnata nel terreno in room1_hub.png.
         breathingCrackHotspot = new HotspotButton();
         breathingCrackHotspot.setBounds(690, 522, 255, 102);
-        breathingCrackHotspot.setToolTipText("Ascolta il battito sotto la roccia");
+        breathingCrackHotspot.setToolTipText("Interagisci con la crepa");
         breathingCrackHotspot.getAccessibleContext().setAccessibleName(
                 "Ascolta la crepa che respira nella Radura delle Radici");
         breathingCrackHotspot.addActionListener(e -> inspectBreathingCrack());
@@ -81,6 +82,35 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         breathingEffect.setBounds(655, 506, 320, 140);
         add(breathingEffect);
         breathingEffect.setVisible(false);
+
+        // Overlay artistico opzionale: quando crepa.png verra' pubblicato
+        // sara' disegnato sulla roccia con opacita' tenue.
+        java.net.URL crackResource = getClass().getResource("/images/ui/crepa.png");
+        if (crackResource != null) {
+            Image crack = new ImageIcon(crackResource).getImage();
+            crackArtwork = new JComponent() {
+                @Override
+                public boolean contains(int x, int y) {
+                    return false; // il click raggiunge sempre l'hotspot sottostante
+                }
+                @Override
+                protected void paintComponent(Graphics graphics) {
+                    super.paintComponent(graphics);
+                    Graphics2D g = (Graphics2D) graphics.create();
+                    try {
+                        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                        g.setComposite(AlphaComposite.SrcOver.derive(0.40f));
+                        g.drawImage(crack, 0, 0, getWidth(), getHeight(), this);
+                    } finally {
+                        g.dispose();
+                    }
+                }
+            };
+            crackArtwork.setBounds(655, 473, 320, 210);
+            add(crackArtwork);
+            crackArtwork.setVisible(false);
+        }
     }
 
     private void inspectBreathingCrack() {
@@ -104,7 +134,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         // Coordinate in base alla risoluzione di gioco 1280x720.
         gunnarHotspot = new HotspotButton();
         gunnarHotspot.setBounds(143, 268, 139, 174);
-        gunnarHotspot.setToolTipText("Parla con Gunnar, l'eremita seduto sulla roccia");
+        gunnarHotspot.setToolTipText("Parla con Gunnar");
         gunnarHotspot.getAccessibleContext().setAccessibleName("Parla con Gunnar");
         gunnarHotspot.addActionListener(e -> startGunnarDialogue());
         add(gunnarHotspot);
@@ -231,7 +261,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         steleHotspot = new HotspotButton();
         // La pietra iscritta a sinistra diventa una zona cliccabile.
         steleHotspot.setBounds(150, 238, 175, 235);
-        steleHotspot.setToolTipText("Esamina le rune incise nella pietra");
+        steleHotspot.setToolTipText("Leggi la stele runica");
         steleHotspot.getAccessibleContext().setAccessibleName(
                 "Leggi la stele dei tre versi sulla Rupe dell'Eco");
         steleHotspot.addActionListener(e ->
@@ -243,7 +273,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private void createForgeHotspot() {
         forgeHotspot = new HotspotButton();
         forgeHotspot.setBounds(548, 282, 235, 260);
-        forgeHotspot.setToolTipText("Prepara l'Ymir's Old Fashioned nel boccale di pietra");
+        forgeHotspot.setToolTipText("Interagisci con il calderone");
         forgeHotspot.getAccessibleContext().setAccessibleName("Apri il boccale di pietra");
         forgeHotspot.addActionListener(e -> openForge());
         add(forgeHotspot);
@@ -298,34 +328,37 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     }
 
     private void createYmirHotspot() {
-        ymirHotspot = new JButton();
-        ymirHotspot.setBounds(308, 165, 664, 443);
-        ymirHotspot.setContentAreaFilled(false);
-        ymirHotspot.setBorderPainted(false);
-        ymirHotspot.setFocusPainted(false);
-        ymirHotspot.setFocusable(false);
-        ymirHotspot.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        ymirHotspot.setToolTipText("Ymir - il gigante primordiale");
-        ymirHotspot.getAccessibleContext().setAccessibleName("Esamina Ymir");
-
-        java.net.URL image = getClass().getResource("/images/characters/boss_ymir.png");
-        if (image != null) {
-            Image sprite = new ImageIcon(image).getImage().getScaledInstance(664, 443, Image.SCALE_SMOOTH);
-            ymirHotspot.setIcon(new ImageIcon(sprite));
-        } else {
-            ymirHotspot.setText("Ymir");
-            ymirHotspot.setForeground(new Color(255, 216, 137));
-            ymirHotspot.setFont(new Font("Georgia", Font.BOLD, 40));
-            System.err.println("[Chapter3Panel] Sprite Ymir non trovato.");
-        }
-        ymirHotspot.addActionListener(e -> triggerYmirEncounter());
+        // Nella nuova room7_boss.png la sagoma scura e' gia' parte
+        // del fondale: NON sovrapporre il PNG del boss a questa stanza.
+        // Il sprite completo boss_ymir.png resta nel combattimento.
+        ymirHotspot = new HotspotButton();
+        // Area provvisoria al centro della scena: verra' affinata
+        // controllando il fondale aggiornato su GitHub.
+        ymirHotspot.setBounds(445, 175, 390, 415);
+        ymirHotspot.setToolTipText("Parla con Ymir");
+        ymirHotspot.getAccessibleContext().setAccessibleName(
+                "Parla con Ymir: scegli se iniziare il combattimento");
+        ymirHotspot.addActionListener(e -> triggerYmirEncounter(true));
         add(ymirHotspot);
         ymirHotspot.setVisible(false);
     }
 
-    private void triggerYmirEncounter() {
+    private void triggerYmirEncounter(boolean askConfirmation) {
         GameState state = GameState.getInstance();
         if (state.isYmirPacified()) return;
+
+        if (askConfirmation) {
+            String[] options = {"AFFRONTA YMIR", "NON ANCORA"};
+            int choice = JOptionPane.showOptionDialog(mainFrameRef,
+                    "Un'ombra gigantesca siede immobile tra le rocce.\n"
+                    + "Un solo movimento potrebbe risvegliare il mondo intero.\n\n"
+                    + "Vuoi affrontare Ymir e tentare il rituale del sonno?",
+                    "Il Cuore di Roccia — Ymir",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null, options, options[1]);
+            if (choice != 0) return;
+        }
         if (!state.hasLearnedGunnarWisdom() || !state.hasReadYmirStele()) {
             JOptionPane.showMessageDialog(mainFrameRef,
                     "Il gigante si muove e la roccia trema sotto i tuoi piedi.\n\n"
@@ -350,7 +383,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     public void retryBossEncounter() {
         if (GameState.getInstance().isYmirPacified()) return;
         loadRoom(7);
-        triggerYmirEncounter();
+        // Il retry e' gia' una scelta esplicita: non richiede altra conferma.
+        triggerYmirEncounter(false);
     }
 
     @Override
@@ -367,6 +401,10 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     protected void onRoomChanged() {
         if (gunnarConversationActive) closeGunnarDialogue(false);
         if (breathingEffect != null && currentRoom != 1) breathingEffect.stopEffect();
+        if (crackArtwork != null) {
+            crackArtwork.setVisible(currentRoom == 1);
+            if (currentRoom == 1) setComponentZOrder(crackArtwork, 0);
+        }
         if (breathingCrackHotspot != null) {
             breathingCrackHotspot.setVisible(currentRoom == 1);
             if (currentRoom == 1) setComponentZOrder(breathingCrackHotspot, 0);
