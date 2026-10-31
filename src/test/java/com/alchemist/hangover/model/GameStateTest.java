@@ -36,6 +36,19 @@ class GameStateTest {
     }
 
     @Test
+    void ymirRewardStateIsIndependentFromEarlierBosses() {
+        GameState state = GameState.getInstance();
+        state.resetState();
+        state.setBossDefeated(true);
+        assertFalse(state.isYmirPacified(),
+                "La vittoria del boss precedente non deve sbloccare Ymir");
+        state.setYmirPacified(true);
+        assertTrue(state.isYmirPacified());
+        state.resetState();
+        assertFalse(state.isYmirPacified());
+    }
+
+    @Test
     void bossCheckpointClearsOnReset() {
         GameState state = GameState.getInstance();
         state.setBossRetryAvailable(true);

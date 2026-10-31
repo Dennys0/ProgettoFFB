@@ -68,9 +68,9 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             // Il rituale di rune e posizionamento verra' scritto insieme
             // al dialogo di Gunnar. Nessun drop prima della vera vittoria.
             JOptionPane.showMessageDialog(mainFrameRef,
-                    "La roccia pulsa al ritmo del respiro di Ymir.\\n"
+                    "La roccia pulsa al ritmo del respiro di Ymir.\n"
                     + "Per riaddormentarlo dovrai comprendere le rune della Rupe dell'Eco"
-                    + " e ascoltare Gunnar.\\n\\n"
+                    + " e ascoltare Gunnar.\n\n"
                     + "Il rituale del boss verra' implementato nella prossima fase.",
                     "Ymir si sta risvegliando", JOptionPane.INFORMATION_MESSAGE);
         });
