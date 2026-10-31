@@ -23,7 +23,6 @@ public class Chapter1Panel extends AbstractChapterPanel {
     private JLabel dialogueTextLabel;
     private JLabel dialogueSkipLabel;
     private JLabel characterSpriteLabel;
-    private Image dialogueBoxImage;
     private DialogueSystem dialogueSystem;
     private Map<String, ImageIcon> characterSprites;
 
@@ -55,11 +54,6 @@ public class Chapter1Panel extends AbstractChapterPanel {
         );
 
         // 2. Caricamento Risorse Grafiche Dialoghi
-        try {
-            dialogueBoxImage = javax.imageio.ImageIO.read(getClass().getResourceAsStream("/images/ui/dialogue_box.png"));
-        } catch (Exception e) {
-            System.err.println("Errore caricamento dialogue_box.png in Chapter1: " + e.getMessage());
-        }
 
         characterSprites = new HashMap<>();
         loadSprite("MARTINO", "/images/characters/martino_realms.png");
@@ -159,43 +153,13 @@ characterSpriteLabel.setVerticalAlignment(SwingConstants.CENTER);
 characterSpriteLabel.setVisible(false);
 add(characterSpriteLabel);
 
-        dialogueBoxOverlay = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                if (dialogueBoxImage != null) {
-                    g2d.drawImage(dialogueBoxImage, 0, 0, getWidth(), getHeight(), this);
-                } else {
-                    g2d.setColor(new Color(20, 20, 20, 230));
-                    g2d.fillRect(0, 0, getWidth(), getHeight());
-                }
-            }
-        };
-        dialogueBoxOverlay.setLayout(null);
-        dialogueBoxOverlay.setOpaque(false);
+        SharedDialogueBox sharedDialogueBox = new SharedDialogueBox();
+        dialogueBoxOverlay = sharedDialogueBox;
         dialogueBoxOverlay.setBounds(40, 470, 1200, 200);
         dialogueBoxOverlay.setVisible(false);
-
-        dialogueNameLabel = new JLabel("");
-        dialogueNameLabel.setFont(new Font("Georgia", Font.BOLD, 24));
-        dialogueNameLabel.setForeground(new Color(255, 215, 0));
-        dialogueNameLabel.setBounds(65, 25, 500, 30);
-        dialogueBoxOverlay.add(dialogueNameLabel);
-
-        dialogueTextLabel = new JLabel("");
-        dialogueTextLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        dialogueTextLabel.setForeground(Color.WHITE);
-        dialogueTextLabel.setBounds(65, 60, 1070, 95);
-        dialogueTextLabel.setVerticalAlignment(SwingConstants.TOP);
-        dialogueBoxOverlay.add(dialogueTextLabel);
-
-        dialogueSkipLabel = new JLabel("MOSTRA FRASE", SwingConstants.RIGHT);
-        dialogueSkipLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
-        dialogueSkipLabel.setForeground(new Color(255, 218, 145));
-        dialogueSkipLabel.setBounds(950, 155, 180, 25);
-        dialogueBoxOverlay.add(dialogueSkipLabel);
+        dialogueNameLabel = sharedDialogueBox.getSpeakerLabel();
+        dialogueTextLabel = sharedDialogueBox.getTextLabel();
+        dialogueSkipLabel = sharedDialogueBox.getRevealLabel();
 
         add(dialogueBoxOverlay);
         // In Swing l'indice zero e' davanti: la cornice deve coprire
