@@ -1,6 +1,8 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.model.GameState;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Capitolo III - Terra: Il Dominio di Ymir.
@@ -9,6 +11,7 @@ import javax.swing.*;
  * Gunnar, l'enigma di Ymir e il calderone arriveranno nelle tappe successive.
  */
 public final class Chapter3Panel extends AbstractChapterPanel {
+    private JButton ymirHotspot;
 
     public Chapter3Panel(JFrame mainFrame) {
         initializeChapterBase(mainFrame,
@@ -30,6 +33,69 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 830, 465, 140, 100, 5, "Polvere di Ossa di Gigante",
                 "Una polvere biancastra di ossa antiche, straordinariamente pesante.");
 
+        // La Lacrima di Ymir e' disponibile solo dopo il rituale del boss.
+        // Non viene aggiunta automaticamente dall'anteprima dello scontro.
+        addItemWorldButton("LACRIMA_YMIR", "/images/items/item_ymircry.png",
+                575, 480, 125, 108, 7, "Lacrima di Ymir",
+                "Una lacrima cristallina del gigante primordiale, intrisa della memoria della terra.");
+
+        createYmirHotspot();
         loadRoom(1);
+    }
+
+    private void createYmirHotspot() {
+        ymirHotspot = new JButton();
+        ymirHotspot.setBounds(308, 165, 664, 443);
+        ymirHotspot.setContentAreaFilled(false);
+        ymirHotspot.setBorderPainted(false);
+        ymirHotspot.setFocusPainted(false);
+        ymirHotspot.setFocusable(false);
+        ymirHotspot.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        ymirHotspot.setToolTipText("Ymir - il gigante primordiale");
+        ymirHotspot.getAccessibleContext().setAccessibleName("Esamina Ymir");
+
+        java.net.URL image = getClass().getResource("/images/characters/boss_ymir.png");
+        if (image != null) {
+            Image sprite = new ImageIcon(image).getImage().getScaledInstance(664, 443, Image.SCALE_SMOOTH);
+            ymirHotspot.setIcon(new ImageIcon(sprite));
+        } else {
+            ymirHotspot.setText("Ymir");
+            ymirHotspot.setForeground(new Color(255, 216, 137));
+            ymirHotspot.setFont(new Font("Georgia", Font.BOLD, 40));
+            System.err.println("[Chapter3Panel] Sprite Ymir non trovato.");
+        }
+        ymirHotspot.addActionListener(e -> {
+            // Il rituale di rune e posizionamento verra' scritto insieme
+            // al dialogo di Gunnar. Nessun drop prima della vera vittoria.
+            JOptionPane.showMessageDialog(mainFrameRef,
+                    "La roccia pulsa al ritmo del respiro di Ymir.\\n"
+                    + "Per riaddormentarlo dovrai comprendere le rune della Rupe dell'Eco"
+                    + " e ascoltare Gunnar.\\n\\n"
+                    + "Il rituale del boss verra' implementato nella prossima fase.",
+                    "Ymir si sta risvegliando", JOptionPane.INFORMATION_MESSAGE);
+        });
+        add(ymirHotspot);
+        ymirHotspot.setVisible(false);
+    }
+
+    @Override
+    protected boolean shouldShowWorldItem(String itemId, GameState state) {
+        return !"LACRIMA_YMIR".equals(itemId) || state.isYmirPacified();
+    }
+
+    @Override
+    protected boolean canCollectWorldItem(String itemId, GameState state) {
+        return !"LACRIMA_YMIR".equals(itemId) || state.isYmirPacified();
+    }
+
+    @Override
+    protected void onRoomChanged() {
+        // Dopo la vittoria il gigante si placa e appare la sua lacrima.
+        // Lo sprite compare solo nella stanza 7, senza coprire l'HUD.
+        if (ymirHotspot != null) {
+            boolean visible = currentRoom == 7 && !GameState.getInstance().isYmirPacified();
+            ymirHotspot.setVisible(visible);
+            if (visible) setComponentZOrder(ymirHotspot, 0);
+        }
     }
 }

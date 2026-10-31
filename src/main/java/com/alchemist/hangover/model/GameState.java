@@ -20,6 +20,8 @@ public class GameState {
     private boolean hasDragonKey = false;
     private boolean dragonUnlocked = false; // Flag per sblocco polena/drago
     private boolean bossDefeated = false;
+    // Stato separato: Rán e Hræsvelgr non devono sbloccare la ricompensa di Ymir.
+    private boolean ymirPacified = false;
     // Checkpoint di sessione: non viene serializzato nei salvataggi H2.
     private boolean bossRetryAvailable = false;
 
@@ -138,6 +140,9 @@ public class GameState {
     public boolean isDragonUnlocked() { return dragonUnlocked; }
     public void setDragonUnlocked(boolean val) { this.dragonUnlocked = val; }
 
+    public boolean isYmirPacified() { return ymirPacified; }
+    public void setYmirPacified(boolean value) { this.ymirPacified = value; }
+
     public boolean isBossDefeated() { return bossDefeated; }
     public void setBossDefeated(boolean val) { this.bossDefeated = val; }
 
@@ -157,6 +162,7 @@ public class GameState {
         this.hasDragonKey = false;
         this.dragonUnlocked = false;
         this.bossDefeated = false;
+        this.ymirPacified = false;
         this.bossRetryAvailable = false;
         if (oldHealth != currentHealth || oldMaxHealth != maxHealth) {
             notifyHealthChanged();

@@ -78,6 +78,28 @@ public class MainFrame extends JFrame {
                 manager.showScene("CHAPTER3");
             }
         });
+
+        // F4: scelta rapida della stanza di Ymir, senza azzerare inventario.
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), "chapter3RoomPicker");
+        getRootPane().getActionMap().put("chapter3RoomPicker", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (!"CHAPTER3".equals(manager.getCurrentSceneName())) return;
+                Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
+                String[] rooms = java.util.stream.IntStream.rangeClosed(1, 7)
+                        .mapToObj(n -> n + " - " + Chapter3World.roomName(n))
+                        .toArray(String[]::new);
+                Object selection = javax.swing.JOptionPane.showInputDialog(
+                        MainFrame.this, "Scegli una stanza da provare:",
+                        "Debug Capitolo III", javax.swing.JOptionPane.QUESTION_MESSAGE,
+                        null, rooms, rooms[GameState.getInstance().getCurrentRoom() - 1]);
+                if (selection != null && chapter3 != null) {
+                    int room = Integer.parseInt(selection.toString().split(" - ", 2)[0]);
+                    chapter3.loadRoom(room);
+                }
+            }
+        });
     }
 
     private boolean isPlayingChapter() {

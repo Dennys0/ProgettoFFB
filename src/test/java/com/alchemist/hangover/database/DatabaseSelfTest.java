@@ -90,12 +90,14 @@ public class DatabaseSelfTest {
         state.addItem(ItemDAO.getItemById("RADICE_NIDHOGG"));
         state.addItem(ItemDAO.getItemById("FRAMMENTO_YGGDRASIL"));
         state.addItem(ItemDAO.getItemById("POLVERE_OSSA_GIGANTE"));
+        state.setYmirPacified(true);
 
         assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Terra: test"));
         state.resetState();
         assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
         assertEquals(3, state.getChapter());
         assertEquals(5, state.getCurrentRoom());
+        assertTrue(state.isYmirPacified(), "Vittoria di Ymir non ripristinata");
         for (String id : java.util.List.of("MUSCHIO_MIDGARD",
                 "RADICE_NIDHOGG", "FRAMMENTO_YGGDRASIL", "POLVERE_OSSA_GIGANTE")) {
             assertTrue(state.hasItem(id), "Oggetto non ripristinato: " + id);

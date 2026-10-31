@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS save_slots (
 
 -- Migrazione non distruttiva per database creati con lo schema precedente.
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS current_chapter INT DEFAULT 1;
+-- Flag indipendente per lo scontro con Ymir. Aggiunta non distruttiva.
+ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS is_ymir_pacified BOOLEAN DEFAULT FALSE;
 
 -- Catalogo oggetti del Capitolo 2.
 MERGE INTO items KEY(id) VALUES

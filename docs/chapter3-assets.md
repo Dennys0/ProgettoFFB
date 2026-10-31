@@ -64,3 +64,17 @@ Non cancella il database H2 né gli slot su disco.
 I salvataggi con capitolo 3 possono già riaprire la stanza corretta.
 L'accesso narrativo dal finale del capitolo 2 rimane in modalità
 anteprima fino a quando il terzo capitolo sarà completato.
+
+## Anteprima interattiva della seconda milestone
+
+- **Stanza 4**: Muschio di Midgard e Radice Nera di Nidhogg, raccoglibili.
+- **Stanza 5**: Frammento di Yggdrasil e Polvere di Ossa di Gigante, raccoglibili.
+- **Stanza 7**: Ymir compare come sprite cliccabile; il dialogo attuale è
+  provvisorio, non una battaglia funzionante.
+- La **Lacrima di Ymir** è catalogata ma diventa raccoglibile soltanto
+  quando `GameState.isYmirPacified()` sarà true dopo il futuro rituale.
+- **F3**: ricomincia l'anteprima del capitolo (azzera solo lo stato in memoria).
+- **F4**: nella scena del capitolo 3 apre la scelta rapida delle sette stanze,
+  senza azzerare l'inventario.
+- Salvataggi H2: schema aggiornato con `is_ymir_pacified` tramite
+  `ALTER TABLE ... ADD COLUMN IF NOT EXISTS`, senza cancellare slot esistenti.

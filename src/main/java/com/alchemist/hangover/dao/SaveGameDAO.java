@@ -102,8 +102,9 @@ public class SaveGameDAO {
     public static boolean saveGame(int slotId, String slotName) {
         GameState state = GameState.getInstance();
         String upsertSql = "MERGE INTO save_slots (slot_id, slot_name, current_chapter, current_room, current_health, "
-                + "max_health, has_given_map, has_dragon_key, is_dragon_unlocked, is_boss_defeated, last_saved) "
-                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                + "max_health, has_given_map, has_dragon_key, is_dragon_unlocked, is_boss_defeated, "
+                + "is_ymir_pacified, last_saved) "
+                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         Connection conn = null;
         try {
@@ -122,6 +123,7 @@ public class SaveGameDAO {
                 ps.setBoolean(8, state.hasDragonKey());
                 ps.setBoolean(9, state.isDragonUnlocked());
                 ps.setBoolean(10, state.isBossDefeated());
+                ps.setBoolean(11, state.isYmirPacified());
                 ps.executeUpdate();
             }
 
@@ -178,6 +180,7 @@ public class SaveGameDAO {
                     state.setHasDragonKey(rs.getBoolean("has_dragon_key"));
                     state.setDragonUnlocked(rs.getBoolean("is_dragon_unlocked"));
                     state.setBossDefeated(rs.getBoolean("is_boss_defeated"));
+                    state.setYmirPacified(rs.getBoolean("is_ymir_pacified"));
 
                     // Carica gli oggetti dell'inventario
                     loadInventoryForSlot(conn, slotId, state);
