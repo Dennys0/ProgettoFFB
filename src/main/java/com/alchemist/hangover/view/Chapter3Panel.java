@@ -2,14 +2,18 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.controller.SceneManager;
+import com.alchemist.hangover.controller.DialogueSystem;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * Capitolo III - Terra: Il Dominio di Ymir.
  *
- * Navigazione tra sette stanze e raccolta degli ingredienti della Terra.
- * Gunnar, l'enigma di Ymir e il calderone arriveranno nelle tappe successive.
+ * Navigazione, dialoghi cinematografici, rituale delle rune e alchimia.
+ * Gunnar usa la stessa cornice visuale dei capitoli precedenti.
  */
 public final class Chapter3Panel extends AbstractChapterPanel {
     private JButton ymirHotspot;
@@ -17,6 +21,12 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private JButton steleHotspot;
     private JButton forgeHotspot;
     private YmirCauldronPanel brewingPanel;
+    // La cornice originale e lo sprite si aprono NELLA stanza,
+    // come avviene nei primi due capitoli.
+    private SharedDialogueBox gunnarDialogueBox;
+    private JLabel gunnarDialogueSprite;
+    private DialogueSystem gunnarDialogueSystem;
+    private boolean gunnarConversationActive;
 
     public Chapter3Panel(JFrame mainFrame) {
         initializeChapterBase(mainFrame,
@@ -45,6 +55,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 "Una lacrima cristallina del gigante primordiale, intrisa della memoria della terra.");
 
         createGunnarHotspot();
+        initGunnarDialogue();
         createSteleHotspot();
         createForgeHotspot();
         createYmirHotspot();
@@ -60,15 +71,125 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarHotspot.setBounds(143, 268, 139, 174);
         gunnarHotspot.setToolTipText("Parla con Gunnar, l'eremita seduto sulla roccia");
         gunnarHotspot.getAccessibleContext().setAccessibleName("Parla con Gunnar");
-        gunnarHotspot.addActionListener(e -> {
-            boolean alreadyLearned = GameState.getInstance().hasLearnedGunnarWisdom();
-            new GunnarDialogueDialog(mainFrameRef).setVisible(true);
-            if (!alreadyLearned && GameState.getInstance().hasLearnedGunnarWisdom()) {
-                ToastNotification.show(this, "Il linguaggio delle rune e' stato annotato nel Diario.");
-            }
-        });
+        gunnarHotspot.addActionListener(e -> startGunnarDialogue());
         add(gunnarHotspot);
         gunnarHotspot.setVisible(false);
+    }
+
+    private void initGunnarDialogue() {
+        gunnarDialogueSprite = new JLabel("", SwingConstants.CENTER);
+        gunnarDialogueSprite.setBounds(340, 30, 600, 620);
+        gunnarDialogueSprite.setOpaque(false);
+        java.net.URL spriteUrl = getClass().getResource("/images/characters/gunnar_realms.png");
+        if (spriteUrl != null) {
+            Image sprite = new ImageIcon(spriteUrl).getImage()
+                    .getScaledInstance(-1, 520, Image.SCALE_SMOOTH);
+            gunnarDialogueSprite.setIcon(new ImageIcon(sprite));
+        } else {
+            gunnarDialogueSprite.setText("GUNNAR");
+            gunnarDialogueSprite.setFont(new Font("Georgia", Font.BOLD, 32));
+            gunnarDialogueSprite.setForeground(new Color(255, 215, 160));
+        }
+        add(gunnarDialogueSprite);
+        gunnarDialogueSprite.setVisible(false);
+
+        gunnarDialogueBox = new SharedDialogueBox();
+        gunnarDialogueBox.setBounds(40, 470, 1200, 200);
+        gunnarDialogueBox.setVisible(false);
+        add(gunnarDialogueBox);
+        // Zero significa davanti in Swing; il testo copre la parte
+        // inferiore dello sprite, come nei capitoli precedenti.
+        setComponentZOrder(gunnarDialogueBox, 0);
+        setComponentZOrder(gunnarDialogueSprite, 1);
+
+        JButton interrupt = new JButton("INTERROMPI");
+        interrupt.setBounds(980, 18, 160, 34);
+        interrupt.setFont(new Font("SansSerif", Font.BOLD, 12));
+        interrupt.setForeground(new Color(255, 225, 165));
+        interrupt.setBackground(new Color(44, 35, 40));
+        interrupt.setBorder(BorderFactory.createLineBorder(new Color(177, 135, 80)));
+        interrupt.setFocusable(false);
+        interrupt.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        interrupt.setToolTipText("Interrompe Gunnar senza concedere gli indizi");
+        interrupt.addActionListener(e -> closeGunnarDialogue(false));
+        gunnarDialogueBox.add(interrupt);
+
+        gunnarDialogueSystem = new DialogueSystem(
+                gunnarDialogueBox.getSpeakerLabel(),
+                gunnarDialogueBox.getTextLabel(),
+                null,
+                () -> closeGunnarDialogue(true)
+        );
+        gunnarDialogueSystem.setWrapWidth(995);
+
+        gunnarDialogueBox.getRevealLabel().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (gunnarConversationActive) gunnarDialogueSystem.revealCurrentLine();
+            }
+        });
+
+        MouseAdapter advance = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (gunnarConversationActive) gunnarDialogueSystem.nextLine();
+            }
+        };
+        gunnarDialogueSprite.addMouseListener(advance);
+        gunnarDialogueBox.addMouseListener(advance);
+        gunnarDialogueBox.getSpeakerLabel().addMouseListener(advance);
+        gunnarDialogueBox.getTextLabel().addMouseListener(advance);
+
+        InputMap inputs = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actions = getActionMap();
+        inputs.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "continueGunnar");
+        inputs.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "continueGunnar");
+        actions.put("continueGunnar", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (gunnarConversationActive) gunnarDialogueSystem.nextLine();
+            }
+        });
+        inputs.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "interruptGunnar");
+        actions.put("interruptGunnar", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (gunnarConversationActive) closeGunnarDialogue(false);
+                else new PauseMenuDialog(mainFrameRef).setVisible(true);
+            }
+        });
+    }
+
+    private void startGunnarDialogue() {
+        if (gunnarConversationActive || currentRoom != 2) return;
+        gunnarConversationActive = true;
+        setArrowsVisible(false);
+        gunnarHotspot.setVisible(false);
+        gunnarDialogueSprite.setVisible(true);
+        gunnarDialogueBox.setVisible(true);
+        setComponentZOrder(gunnarDialogueBox, 0);
+        setComponentZOrder(gunnarDialogueSprite, 1);
+        gunnarDialogueSystem.loadDialogue("/dialogues/ch3_gunnar.txt");
+        gunnarDialogueSystem.startDialogue();
+        repaint();
+    }
+
+    private void closeGunnarDialogue(boolean completed) {
+        if (!gunnarConversationActive) return;
+        gunnarConversationActive = false;
+        gunnarDialogueSystem.stop();
+        gunnarDialogueBox.setVisible(false);
+        gunnarDialogueSprite.setVisible(false);
+        if (completed) {
+            boolean firstTime = !GameState.getInstance().hasLearnedGunnarWisdom();
+            GameState.getInstance().setGunnarWisdomLearned(true);
+            if (firstTime) ToastNotification.show(this,
+                    "Hai compreso il linguaggio delle rune: indizi nel Diario.");
+        }
+        gunnarHotspot.setVisible(currentRoom == 2);
+        updateArrowVisibility();
+        hudPanel.updateHUD();
+        repaint();
     }
 
     private void createSteleHotspot() {
@@ -203,6 +324,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
     @Override
     protected void onRoomChanged() {
+        if (gunnarConversationActive) closeGunnarDialogue(false);
         if (gunnarHotspot != null) {
             gunnarHotspot.setVisible(currentRoom == 2);
             if (currentRoom == 2) setComponentZOrder(gunnarHotspot, 0);
