@@ -56,6 +56,7 @@ public class CauldronOverlay extends JDialog {
             btnItem.setContentAreaFilled(false);
             btnItem.setBorder(BorderFactory.createLineBorder(new Color(200, 160, 80), 1));
             btnItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btnItem.setToolTipText("Seleziona: " + item.getName());
 
             try {
                 ImageIcon icon = new ImageIcon(getClass().getResource(item.getIconPath()));
@@ -76,7 +77,8 @@ public class CauldronOverlay extends JDialog {
         }
 
         // 4. Bottone Trasparente sovrapposto a "MIX INGREDIENTI..."
-        JButton btnMix = new JButton();
+        JButton btnMix = new HotspotButton();
+        btnMix.setToolTipText("Mescola i tre ingredienti");
         btnMix.setBounds(210, 528, 282, 60);
         btnMix.setContentAreaFilled(false);
         btnMix.setBorderPainted(false);
@@ -87,7 +89,8 @@ public class CauldronOverlay extends JDialog {
         contentPanel.add(btnMix);
 
         // 5. Bottone Trasparente sovrapposto a "RESET SLOT"
-        JButton btnReset = new JButton();
+        JButton btnReset = new HotspotButton();
+        btnReset.setToolTipText("Svuota gli slot del calderone");
         btnReset.setBounds(520, 528, 252, 60);
         btnReset.setContentAreaFilled(false);
         btnReset.setBorderPainted(false);
@@ -101,7 +104,8 @@ public class CauldronOverlay extends JDialog {
         contentPanel.add(btnReset);
 
         // 6. Bottone Trasparente sovrapposto a "CHIUDI"
-        JButton btnClose = new JButton();
+        JButton btnClose = new HotspotButton();
+        btnClose.setToolTipText("Chiudi il calderone");
         btnClose.setBounds(440, 620, 100, 30);
         btnClose.setContentAreaFilled(false);
         btnClose.setBorderPainted(false);

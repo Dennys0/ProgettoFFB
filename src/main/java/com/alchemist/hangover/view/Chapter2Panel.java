@@ -242,6 +242,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
         InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "advanceDialogue2");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "advanceDialogue2");
         actionMap.put("advanceDialogue2", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
