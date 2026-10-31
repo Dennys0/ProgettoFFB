@@ -36,6 +36,13 @@ public class DialogueSystem {
     private int charIndex = 0;
     private boolean isTyping = false;
     private boolean finished = false;
+    // La larghezza resta opzionale, così i dialoghi dei capitoli precedenti
+    // mantengono l'impaginazione originale.
+    private int wrapWidth = 0;
+
+    public void setWrapWidth(int width) {
+        this.wrapWidth = Math.max(0, width);
+    }
 
     public DialogueSystem(JLabel speakerLabel, JLabel textLabel, Runnable onSpeakerChanged, Runnable onDialogueComplete) {
         this.speakerLabel = speakerLabel;
@@ -156,9 +163,16 @@ public class DialogueSystem {
     }
 
     private String formatLine(String source) {
-        return "<html>" + source.replace("&", "&amp;")
+        String escaped = source.replace("&", "&amp;")
                 .replace("<", "&lt;").replace(">", "&gt;")
-                .replace("\n", "<br>") + "</html>";
+                .replace("\n", "<br>");
+        if (wrapWidth > 0) {
+            // Tabelle HTML Swing rispettano la larghezza anche per righe lunghe.
+            return "<html><table width='" + wrapWidth
+                    + "' cellspacing='0' cellpadding='0'><tr><td>"
+                    + escaped + "</td></tr></table></html>";
+        }
+        return "<html>" + escaped + "</html>";
     }
 
     // Ferma il timer quando la scena cambia, senza attivare callback.

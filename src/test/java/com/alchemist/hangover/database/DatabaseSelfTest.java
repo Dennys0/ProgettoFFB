@@ -113,6 +113,29 @@ public class DatabaseSelfTest {
     }
 
     @Test
+    void repeatedSchemaInitializationKeepsSavedProgress() {
+        GameState state = GameState.getInstance();
+        state.setChapter(3);
+        state.setCurrentRoom(6);
+        state.setYmirRuneSeed(123456);
+        state.setGunnarWisdomLearned(true);
+        state.setYmirSteleRead(true);
+        state.addItem(ItemDAO.getItemById("MUSCHIO_MIDGARD"));
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Schema ripetuto"));
+
+        // La stessa migrazione che viene eseguita ai normali avvii del gioco.
+        DatabaseManager.initDatabase();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(3, state.getChapter());
+        assertEquals(6, state.getCurrentRoom());
+        assertEquals(123456, state.getYmirRuneSeed());
+        assertTrue(state.hasLearnedGunnarWisdom())
+        ;
+        assertTrue(state.hasReadYmirStele());
+        assertTrue(state.hasItem("MUSCHIO_MIDGARD"));
+    }
+
+    @Test
     void deletesOnlyTheTestSlot() {
         assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Eliminazione di prova"));
         assertTrue(SaveGameDAO.deleteSave(TEST_SLOT));

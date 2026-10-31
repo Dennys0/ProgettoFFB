@@ -65,6 +65,7 @@ public final class GunnarDialogueDialog extends JDialog {
             GameState.getInstance().setGunnarWisdomLearned(true);
             dispose();
         });
+        dialogue.setWrapWidth(510);
         dialogue.loadDialogue("/dialogues/ch3_gunnar.txt");
 
         JPanel buttons = new JPanel(new GridLayout(1, 3, 10, 0));

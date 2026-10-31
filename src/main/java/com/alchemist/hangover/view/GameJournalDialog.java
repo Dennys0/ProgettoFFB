@@ -146,7 +146,9 @@ public final class GameJournalDialog extends JDialog {
                     .append("Il suolo è la carne del gigante primordiale. Sento il suo cuore sotto i piedi.\n");
             if (state.hasLearnedGunnarWisdom()) text.append("Gunnar mi ha finalmente insegnato il linguaggio delle rune.\n");
             if (state.hasReadYmirStele()) text.append("Ho copiato i versi della Rupe dell'Eco.\n");
-            if (state.isYmirPacified()) text.append("Ymir è tornato al sonno. La sua Lacrima mi attende.\n");
+            if (state.isYmirPacified()) text.append(state.hasItem("LACRIMA_YMIR")
+                    ? "Ymir dorme. Ho raccolto la sua Lacrima.\n"
+                    : "Ymir è tornato al sonno. La sua Lacrima mi attende.\n");
         }
         return text.toString();
     }
