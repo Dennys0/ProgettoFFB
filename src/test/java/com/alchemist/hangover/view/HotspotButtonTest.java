@@ -23,7 +23,7 @@ class HotspotButtonTest {
             Graphics g = buffer.createGraphics();
             try { button.paint(g); }
             finally { g.dispose(); }
-            assertEquals(0, buffer.getRGB(3, 3) >>> 24,
+            assertEquals(0, buffer.getRGB(90, 50) >>> 24,
                     "L'hotspot narrativo non deve mostrare alcun rettangolo.");
             assertEquals("Parla con Gunnar", button.getToolTipText());
             assertEquals(new Color(31, 27, 38), button.createToolTip().getBackground());
@@ -42,7 +42,7 @@ class HotspotButtonTest {
             Graphics g = buffer.createGraphics();
             try { button.paint(g); }
             finally { g.dispose(); }
-            assertTrue((buffer.getRGB(3, 3) >>> 24) > 0,
+            assertTrue((buffer.getRGB(90, 50) >>> 24) > 0,
                     "Gli oggetti possono ancora evidenziarsi al passaggio del mouse.");
         });
     }
