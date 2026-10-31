@@ -129,8 +129,7 @@ public class DatabaseSelfTest {
         assertEquals(3, state.getChapter());
         assertEquals(6, state.getCurrentRoom());
         assertEquals(123456, state.getYmirRuneSeed());
-        assertTrue(state.hasLearnedGunnarWisdom())
-        ;
+        assertTrue(state.hasLearnedGunnarWisdom());
         assertTrue(state.hasReadYmirStele());
         assertTrue(state.hasItem("MUSCHIO_MIDGARD"));
     }
