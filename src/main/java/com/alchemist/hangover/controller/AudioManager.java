@@ -8,7 +8,7 @@ import java.util.Random;
  * Se il computer non offre un'uscita audio compatibile, il gioco rimane utilizzabile.
  */
 public final class AudioManager {
-    public enum Effect { CLICK, PICKUP, DAMAGE, SUCCESS }
+    public enum Effect { CLICK, PICKUP, DAMAGE, SUCCESS, EARTH_BREATH }
 
     private static final AudioManager INSTANCE = new AudioManager();
     private static final int SAMPLE_RATE = 8000;
@@ -118,6 +118,7 @@ public final class AudioManager {
     }
 
     private static byte[] makeEffect(Effect effect) {
+        if (effect == Effect.EARTH_BREATH) return makeEarthBreath();
         double seconds = effect == Effect.DAMAGE ? 0.38 : 0.27;
         int length = (int) (SAMPLE_RATE * seconds);
         byte[] pcm = new byte[length * 2];
@@ -129,10 +130,31 @@ public final class AudioManager {
                 case DAMAGE -> 250 - 160 * progress;
                 case SUCCESS -> 420 + 600 * progress;
                 case CLICK -> 550;
+                case EARTH_BREATH -> 55; // gestito separatamente sopra
             };
             double envelope = Math.pow(1 - progress, 2) * Math.min(1, progress * 35);
             writeSample(pcm, i, 0.24 * envelope
                     * Math.sin(2 * Math.PI * frequency * t));
+        }
+        return pcm;
+    }
+
+    /** Due battiti profondi e un respiro lento, generati senza file WAV. */
+    private static byte[] makeEarthBreath() {
+        double duration = 1.8;
+        int length = (int) (SAMPLE_RATE * duration);
+        byte[] pcm = new byte[length * 2];
+        for (int i = 0; i < length; i++) {
+            double t = (double) i / SAMPLE_RATE;
+            double firstBeat = Math.exp(-Math.pow((t - 0.20) / 0.095, 2));
+            double secondBeat = Math.exp(-Math.pow((t - 0.57) / 0.13, 2));
+            double breath = Math.sin(Math.PI * t / duration);
+            double fade = Math.min(1.0, Math.min(t / 0.05, (duration - t) / 0.26));
+            double bass = Math.sin(2 * Math.PI * 54 * t)
+                    + 0.28 * Math.sin(2 * Math.PI * 35 * t);
+            double rumble = 0.035 * breath * Math.sin(2 * Math.PI * 73 * t);
+            writeSample(pcm, i, (0.24 * (firstBeat + secondBeat) * bass + rumble)
+                    * Math.max(0, fade));
         }
         return pcm;
     }

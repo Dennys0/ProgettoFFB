@@ -67,3 +67,16 @@ e Gunnar in `/images/characters/gunnar_realms.png`.
 - I test usano esclusivamente `jdbc:h2:mem:` e non accedono al
   database del giocatore.
 - Sono esclusi dai commit i file `saves/` e `target/`.
+
+## Finitura ambientale del Dominio
+
+- Radura (stanza 1): clic sulla crepa, bagliore pulsante e battito generato in Java.
+- Rupe dell'Eco (stanza 6): zona trasparente con tooltip al posto della scritta sovrapposta.
+- Gli scenari PNG rimangono invariati. Nessun nuovo asset richiesto.
+
+## Finale e Game Over
+
+- Il finale offre SALVA PARTITA direttamente dall'epilogo.
+- Il caricamento di un capitolo 3 completato riapre CHAPTER3_COMPLETE.
+- La miscela sbagliata mostra RIPROVA LA RICETTA: Forgia e inventario sono conservati.
+- Ymir mantiene il suo checkpoint separato e RIPROVA LO SCONTRO.

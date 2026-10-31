@@ -18,6 +18,9 @@ import java.awt.event.KeyEvent;
 public final class Chapter3Panel extends AbstractChapterPanel {
     private JButton ymirHotspot;
     private JButton gunnarHotspot;
+    private JButton breathingCrackHotspot;
+    private EarthBreathEffect breathingEffect;
+    private int crackInspections;
     private JButton steleHotspot;
     private JButton forgeHotspot;
     private YmirCauldronPanel brewingPanel;
@@ -54,12 +57,44 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 575, 480, 125, 108, 7, "Lacrima di Ymir",
                 "Una lacrima cristallina del gigante primordiale, intrisa della memoria della terra.");
 
+        createBreathingCrackHotspot();
         createGunnarHotspot();
         initGunnarDialogue();
         createSteleHotspot();
         createForgeHotspot();
         createYmirHotspot();
         loadRoom(1);
+    }
+
+    private void createBreathingCrackHotspot() {
+        // La crepa e' gia' disegnata nel terreno in room1_hub.png.
+        breathingCrackHotspot = new HotspotButton();
+        breathingCrackHotspot.setBounds(690, 522, 255, 102);
+        breathingCrackHotspot.setToolTipText("Ascolta il battito sotto la roccia");
+        breathingCrackHotspot.getAccessibleContext().setAccessibleName(
+                "Ascolta la crepa che respira nella Radura delle Radici");
+        breathingCrackHotspot.addActionListener(e -> inspectBreathingCrack());
+        add(breathingCrackHotspot);
+        breathingCrackHotspot.setVisible(false);
+
+        breathingEffect = new EarthBreathEffect();
+        breathingEffect.setBounds(655, 506, 320, 140);
+        add(breathingEffect);
+        breathingEffect.setVisible(false);
+    }
+
+    private void inspectBreathingCrack() {
+        if (currentRoom != 1) return;
+        breathingEffect.startEffect();
+        com.alchemist.hangover.controller.AudioManager.getInstance()
+                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.EARTH_BREATH);
+        String[] thoughts = {
+                "Arthur: Il terreno sta respirando. Spero non sia allergico a me.",
+                "Arthur: Questo non e' un terremoto... e' un battito cardiaco!",
+                "Arthur: Se il mondo si gira nel sonno, finisco sotto al cuscino."
+        };
+        ToastNotification.show(this, thoughts[crackInspections % thoughts.length]);
+        crackInspections++;
     }
 
     private void createGunnarHotspot() {
@@ -194,11 +229,11 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
     private void createSteleHotspot() {
         steleHotspot = new HotspotButton();
-        steleHotspot.setBounds(140, 285, 200, 178);
-        steleHotspot.setForeground(new Color(255, 190, 83));
-        steleHotspot.setFont(new Font("Georgia", Font.BOLD, 18));
-        steleHotspot.setText("<html><center>STELE<br>RUNICA</center></html>");
-        steleHotspot.setToolTipText("Leggi i tre versi della Rupe dell'Eco");
+        // La pietra iscritta a sinistra diventa una zona cliccabile.
+        steleHotspot.setBounds(150, 238, 175, 235);
+        steleHotspot.setToolTipText("Esamina le rune incise nella pietra");
+        steleHotspot.getAccessibleContext().setAccessibleName(
+                "Leggi la stele dei tre versi sulla Rupe dell'Eco");
         steleHotspot.addActionListener(e ->
                 new RuneSteleDialog(mainFrameRef).setVisible(true));
         add(steleHotspot);
@@ -331,6 +366,11 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     @Override
     protected void onRoomChanged() {
         if (gunnarConversationActive) closeGunnarDialogue(false);
+        if (breathingEffect != null && currentRoom != 1) breathingEffect.stopEffect();
+        if (breathingCrackHotspot != null) {
+            breathingCrackHotspot.setVisible(currentRoom == 1);
+            if (currentRoom == 1) setComponentZOrder(breathingCrackHotspot, 0);
+        }
         if (gunnarHotspot != null) {
             gunnarHotspot.setVisible(currentRoom == 2);
             if (currentRoom == 2) setComponentZOrder(gunnarHotspot, 0);
