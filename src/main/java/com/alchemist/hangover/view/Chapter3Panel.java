@@ -15,6 +15,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private JButton ymirHotspot;
     private JButton gunnarHotspot;
     private JButton steleHotspot;
+    private JButton forgeHotspot;
+    private YmirCauldronPanel brewingPanel;
 
     public Chapter3Panel(JFrame mainFrame) {
         initializeChapterBase(mainFrame,
@@ -44,6 +46,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
         createGunnarHotspot();
         createSteleHotspot();
+        createForgeHotspot();
         createYmirHotspot();
         loadRoom(1);
     }
@@ -83,6 +86,57 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 new RuneSteleDialog(mainFrameRef).setVisible(true));
         add(steleHotspot);
         steleHotspot.setVisible(false);
+    }
+
+    private void createForgeHotspot() {
+        forgeHotspot = new HotspotButton();
+        forgeHotspot.setBounds(548, 282, 235, 260);
+        forgeHotspot.setToolTipText("Prepara l'Ymir's Old Fashioned nel boccale di pietra");
+        forgeHotspot.getAccessibleContext().setAccessibleName("Apri il boccale di pietra");
+        forgeHotspot.addActionListener(e -> openForge());
+        add(forgeHotspot);
+        forgeHotspot.setVisible(false);
+
+        brewingPanel = new YmirCauldronPanel(this::closeForge,
+                this::finishYmirDrink, this::onBrewingDisaster);
+        brewingPanel.setBounds(270, 108, 740, 536);
+        add(brewingPanel);
+        brewingPanel.setVisible(false);
+    }
+
+    private void openForge() {
+        brewingPanel.refreshIngredients();
+        brewingPanel.setVisible(true);
+        forgeHotspot.setVisible(false);
+        setArrowsVisible(false);
+        setComponentZOrder(brewingPanel, 0);
+        brewingPanel.requestFocusInWindow();
+        repaint();
+    }
+
+    private void closeForge() {
+        brewingPanel.setVisible(false);
+        updateArrowVisibility();
+        forgeHotspot.setVisible(currentRoom == 3);
+        repaint();
+    }
+
+    private void onBrewingDisaster(String message) {
+        closeForge();
+        GameState state = GameState.getInstance();
+        state.setCurrentHealth(0);
+        state.setBossRetryAvailable(false);
+        GameOverPanel gameOver = (GameOverPanel) SceneManager.getInstance().getPanel("GAMEOVER");
+        if (gameOver != null) gameOver.showReason(message);
+        SceneManager.getInstance().showScene("GAMEOVER");
+    }
+
+    private void finishYmirDrink() {
+        closeForge();
+        GameState.getInstance().setYmirOldFashionedCreated(true);
+        com.alchemist.hangover.controller.AudioManager.getInstance()
+                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.SUCCESS);
+        SceneManager.getInstance().showScene("CHAPTER3_COMPLETE");
     }
 
     private void createYmirHotspot() {
@@ -160,6 +214,11 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         if (steleHotspot != null) {
             steleHotspot.setVisible(currentRoom == 6);
             if (currentRoom == 6) setComponentZOrder(steleHotspot, 0);
+        }
+        if (brewingPanel != null) brewingPanel.setVisible(false);
+        if (forgeHotspot != null) {
+            forgeHotspot.setVisible(currentRoom == 3);
+            if (currentRoom == 3) setComponentZOrder(forgeHotspot, 0);
         }
         // Dopo la vittoria il gigante si placa e appare la sua lacrima.
         // Lo sprite compare solo nella stanza 7, senza coprire l'HUD.
