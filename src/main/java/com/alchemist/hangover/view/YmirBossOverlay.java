@@ -120,14 +120,41 @@ public final class YmirBossOverlay extends JDialog {
         feedbackLabel.setFont(new Font("Georgia", Font.PLAIN, 15));
         status.add(feedbackLabel, BorderLayout.CENTER);
 
+        JPanel tools = new JPanel(new GridLayout(1, 2, 10, 0));
+        tools.setOpaque(false);
+        JButton verses = runeButton("RILEGGI I VERSI");
+        verses.addActionListener(e -> readClues());
+        tools.add(verses);
         JButton retreat = runeButton("RITIRATI");
         retreat.addActionListener(e -> dispose());
-        status.add(retreat, BorderLayout.SOUTH);
+        tools.add(retreat);
+        status.add(tools, BorderLayout.SOUTH);
         interaction.add(status, BorderLayout.SOUTH);
 
-        refreshPhase("Il cuore di Ymir scuote le pareti. Consulta il Diario (J) prima del rituale.");
+        refreshPhase("Il cuore di Ymir scuote le pareti. Rileggi i versi per capire il rituale.");
         getRootPane().registerKeyboardAction(e -> dispose(),
                 KeyStroke.getKeyStroke("ESCAPE"), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    private void readClues() {
+        String text = YmirRuneRitual.steleInscription(ritual)
+                + "\n\n--- L'INSEGNAMENTO DI GUNNAR ---\n"
+                + "RADICE: la radice trattiene il mondo.\n"
+                + "BATTITO: il cuore pulsa nel granito.\n"
+                + "RESPIRO: il vento torna al silenzio.\n\n"
+                + "Per ogni verso scegli la piattaforma e poi la runa.";
+        JTextArea message = new JTextArea(text);
+        message.setEditable(false);
+        message.setLineWrap(true);
+        message.setWrapStyleWord(true);
+        message.setFont(new Font("Georgia", Font.PLAIN, 17));
+        message.setBackground(new Color(35, 31, 44));
+        message.setForeground(new Color(238, 224, 191));
+        message.setMargin(new Insets(15, 17, 15, 17));
+        JScrollPane scroll = new JScrollPane(message);
+        scroll.setPreferredSize(new Dimension(650, 390));
+        JOptionPane.showMessageDialog(this, scroll,
+                "Il Diario di Arthur: la Rupe dell'Eco", JOptionPane.PLAIN_MESSAGE);
     }
 
     private static JButton runeButton(String text) {

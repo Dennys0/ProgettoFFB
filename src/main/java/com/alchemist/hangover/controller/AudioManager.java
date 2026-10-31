@@ -29,7 +29,8 @@ public final class AudioManager {
         activeScene = scene;
         if (!GameSettings.getInstance().isSoundEnabled()) return;
         if (!("INTRO".equals(scene) || "CHAPTER1".equals(scene)
-                || "CHAPTER2".equals(scene) || "MENU".equals(scene))) return;
+                || "CHAPTER2".equals(scene) || "CHAPTER3".equals(scene)
+                || "MENU".equals(scene))) return;
         try {
             byte[] samples = makeAmbience(scene);
             ambience = AudioSystem.getClip();
@@ -91,7 +92,9 @@ public final class AudioManager {
         Random random = new Random(scene.hashCode());
         boolean water = "CHAPTER2".equals(scene);
         boolean menu = "MENU".equals(scene);
+        boolean earth = "CHAPTER3".equals(scene);
         double[] notes = water ? new double[]{110.0, 146.8, 164.8, 146.8}
+                : earth ? new double[]{65.4, 82.4, 73.4, 82.4}
                 : menu ? new double[]{130.8, 164.8, 196.0, 164.8}
                 : new double[]{146.8, 174.6, 220.0, 174.6};
         double filteredNoise = 0;

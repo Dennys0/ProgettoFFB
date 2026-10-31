@@ -1,80 +1,69 @@
-# Capitolo 3 — Terra: Il Dominio di Ymir
+# Capitolo III — Terra: Il Dominio di Ymir
 
-## Asset consegnati (7 scenari)
+Branch: \`feat/chapter3\`
 
-I PNG devono essere copiati nella cartella
-`src/main/resources/images/chapter3/`, con **questi nomi esatti**:
+## Risorse
 
-| Stanza | Scenario | PNG |
+Gli scenari sono in \`src/main/resources/images/chapter3/room1_hub.png\` ...
+\`room7_boss.png\`; gli oggetti sono in \`src/main/resources/images/items/\`,
+lo sprite del boss in \`src/main/resources/images/characters/boss_ymir.png\`
+e Gunnar in \`/images/characters/gunnar_realms.png\`.
+
+## Mappa
+
+| Stanza | Nome | Uscite |
 |---|---|---|
-| 1 | Radura delle Radici | room1_hub.png |
-| 2 | Cerchio delle Rune | room2_rune.png |
-| 3 | Forgia di Caverna | room3_forge.png |
-| 4 | Foresta Pietrificata | room4_forest.png |
-| 5 | Miniere Basaltiche | room5_miners.png |
-| 6 | Rupe dell'Eco | room6_eco.png |
-| 7 | Cuore di Roccia | room7_boss.png |
+| 1 | Radura delle Radici | UP 2, DOWN 5, LEFT 3, RIGHT 4 |
+| 2 | Cerchio delle Rune | UP 6, DOWN 1 |
+| 3 | Forgia di Caverna | RIGHT 1 |
+| 4 | Foresta Pietrificata | LEFT 1 |
+| 5 | Miniere Basaltiche | UP 1, DOWN 7 |
+| 6 | Rupe dell'Eco | DOWN 2 |
+| 7 | Cuore di Roccia | UP 5 |
 
-Tutti gli scenari ricevuti sono PNG 1672 x 941 (16:9). Il motore li
-ridimensiona a 1280 x 720, senza richiedere un'ulteriore conversione.
-I sette PNG non fanno parte del commit del codice: devono essere copiati
-dall'archivio degli asset nell'albero di progetto.
+## Storia, enigmi e boss
 
-## Collegamenti già implementati
+- Nella **stanza 2**, clicca Gunnar e completa tutti i dialoghi.
+  **INTERROMPI** chiude la conversazione senza concedere la conoscenza delle
+  rune. **MOSTRA FRASE** rivela solo la frase corrente, senza saltare
+  l'intera conversazione.
+- Nella **stanza 6**, clicca la Stele Runica. I tre versi e le piattaforme
+  sicure sono generati casualmente una sola volta per partita.
+- Nel **Diario di Arthur (J)** sono conservati gli indizi già scoperti,
+  compresa la sequenza dei versi della specifica partita.
+- Nella **stanza 7**, clicca Ymir per aprire lo scontro, disponibile solo
+  dopo aver ascoltato Gunnar e letto la stele. In ogni fase scegli una
+  piattaforma e una runa. Errore: un cuore. Tre successi: Ymir dorme.
+  Puoi rileggere i versi durante lo scontro. Dopo il terzo successo,
+  torna alla stanza e raccogli la Lacrima di Ymir.
+- Nella **stanza 3**, clicca direttamente il boccale visibile
+  nell'immagine: la postazione di preparazione appare SOPRA lo
+  scenario. Scegli tre ingredienti:
+    - Muschio di Midgard + Frammento di Yggdrasil + Lacrima di Ymir
+      -> Ymir's Old Fashioned e finale Capitolo III;
+    - Radice Nera di Nidhogg -> il boccale si scioglie (Game Over);
+    - Polvere di Ossa di Gigante -> il drink diventa pietra (Game Over).
+  In entrambi i fallimenti il giocatore può riprovare senza perdere
+  le partite già salvate sul database.
 
-| Da | UP | DOWN | LEFT | RIGHT |
-|---|---|---|---|---|
-| 1 | 2 | 5 | 3 | 4 |
-| 2 | 6 | 1 | - | - |
-| 3 | - | - | - | 1 |
-| 4 | - | - | 1 | - |
-| 5 | 1 | 7 | - | - |
-| 6 | - | 2 | - | - |
-| 7 | 5 | - | - | - |
+## Prova in locale
 
-Le parole *avanti* e *indietro* della sceneggiatura sono state rese
-mediante frecce cardinali per evitare ambiguità nel motore.
+1. Assicurati che la copia locale sia sul branch \`feat/chapter3\`.
+2. \`mvn clean test\`
+3. \`mvn exec:java\`
+4. **F3** avvia una NUOVA anteprima del capitolo 3, resettando solo
+   lo stato in memoria: salva prima di usarlo.
+5. **F4** apre la scelta rapida delle stanze, senza toccare l'inventario.
+6. Verifica la consistenza della sequenza della stele: salvala su uno
+   slot, caricala, rileggila e poi riprova il boss.
+7. Salva dal pulsante nell'HUD dopo il finale, se vuoi conservare
+   lo stato \`ymir_old_fashioned_created\`.
 
-## Elementi in attesa di sprite e posizionamento
+### Sicurezza dei salvataggi
 
-- Stanza 1: hotspot sulla crepa che emette il respiro di Ymir.
-- Stanza 2: Gunnar, monologo sulla pazienza e indizio sulla radice velenosa.
-- Stanza 3: boccale di pietra e ricetta dell'**Ymir's Old Fashioned**.
-- Stanza 4: Muschio di Midgard e Radice Nera di Nidhogg.
-- Stanza 5: Frammento di Yggdrasil e Polvere di Ossa di Gigante.
-- Stanza 6: stele con la combinazione dei versi per Ymir.
-- Stanza 7: enigma di posizionamento e rune; drop Lacrima di Ymir.
-
-Non sono ancora presenti gli hotspot, gli sprite, la logica del boss
-o i dialoghi. Saranno implementati con gli asset dei personaggi e
-delle creature, dopo aver scelto insieme le coordinate delle interazioni.
-
-## Prova del livello (anteprima)
-
-1. Passa al branch `feat/chapter3`.
-2. Copia le sette immagini in `src/main/resources/images/chapter3/`.
-3. Avvia `mvn clean test` e `mvn exec:java`.
-4. Nel gioco premi **F3** per aprire il capitolo 3 in modalità anteprima.
-5. Esplora le sette stanze con le quattro frecce.
-
-**Attenzione:** F3 è una scorciatoia da sviluppo; azzera lo stato
-corrente in memoria, quindi salva la partita prima di usarla.
-Non cancella il database H2 né gli slot su disco.
-
-I salvataggi con capitolo 3 possono già riaprire la stanza corretta.
-L'accesso narrativo dal finale del capitolo 2 rimane in modalità
-anteprima fino a quando il terzo capitolo sarà completato.
-
-## Anteprima interattiva della seconda milestone
-
-- **Stanza 4**: Muschio di Midgard e Radice Nera di Nidhogg, raccoglibili.
-- **Stanza 5**: Frammento di Yggdrasil e Polvere di Ossa di Gigante, raccoglibili.
-- **Stanza 7**: Ymir compare come sprite cliccabile; il dialogo attuale è
-  provvisorio, non una battaglia funzionante.
-- La **Lacrima di Ymir** è catalogata ma diventa raccoglibile soltanto
-  quando `GameState.isYmirPacified()` sarà true dopo il futuro rituale.
-- **F3**: ricomincia l'anteprima del capitolo (azzera solo lo stato in memoria).
-- **F4**: nella scena del capitolo 3 apre la scelta rapida delle sette stanze,
-  senza azzerare l'inventario.
-- Salvataggi H2: schema aggiornato con `is_ymir_pacified` tramite
-  `ALTER TABLE ... ADD COLUMN IF NOT EXISTS`, senza cancellare slot esistenti.
+- L'H2 su disco resta in \`saves/\`.
+- Le nuove colonne vengono aggiunte con migrazioni
+  \`ADD COLUMN IF NOT EXISTS\`: nessuna cancellazione delle partite.
+- I test usano esclusivamente \`jdbc:h2:mem:\` e non accedono al
+  database del giocatore.
+- Sono esclusi dai commit i file \`saves/\` e \`target/\`.
