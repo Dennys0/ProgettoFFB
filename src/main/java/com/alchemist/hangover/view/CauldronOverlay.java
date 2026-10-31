@@ -11,7 +11,6 @@ import java.util.List;
 
 public class CauldronOverlay extends JDialog {
 
-    private Image bgImage;
     private List<Item> selectedItems;
     private JPanel slotsPanel;
     private JLabel statusLabel;
@@ -25,24 +24,9 @@ public class CauldronOverlay extends JDialog {
 
         selectedItems = new ArrayList<>();
 
-        // Caricamento dello sfondo custom
-        try {
-            bgImage = new ImageIcon(getClass().getResource("/images/ui/cauldron_bg.png")).getImage();
-        } catch (Exception e) {
-            System.err.println("Errore caricamento cauldron_bg.png: " + e.getMessage());
-        }
-
-        JPanel contentPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (bgImage != null) {
-                    g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
-                }
-            }
-        };
-        contentPanel.setLayout(null);
-        contentPanel.setOpaque(false);
+        // Un unico asset visivo per tutte le postazioni alchemiche.
+        // I risultati e le ricette rimangono specifici dei capitoli.
+        JPanel contentPanel = new SharedCauldronArtworkPanel();
         setContentPane(contentPanel);
 
         // 1. I 3 Slot Rettangolari per gli ingredienti scelti (Posizionati sui 3 riquadri luminosi in alto)

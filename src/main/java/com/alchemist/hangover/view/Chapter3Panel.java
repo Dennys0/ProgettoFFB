@@ -216,7 +216,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
         brewingPanel = new YmirCauldronPanel(this::closeForge,
                 this::finishYmirDrink, this::onBrewingDisaster);
-        brewingPanel.setBounds(270, 108, 740, 536);
+        brewingPanel.setBounds(220, 90, YmirCauldronPanel.WIDTH, YmirCauldronPanel.HEIGHT);
         add(brewingPanel);
         brewingPanel.setVisible(false);
     }

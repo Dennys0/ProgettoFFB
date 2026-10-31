@@ -5,141 +5,181 @@ import com.alchemist.hangover.model.Item;
 import com.alchemist.hangover.model.YmirCauldronRecipe;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Postazione alchemica SOVRAPPOSTA alla stanza 3: non usa un altro sfondo.
- * Nel mondo restano visibili i contorni e il boccale di room3_forge.png.
+ * Postazione sopra room3_forge.png, senza aprire una finestra separata.
+ * Riusa i tre slot, le posizioni dei pulsanti e il disegno del calderone
+ * originale dei Capitoli I e II, ma mantiene la ricetta di Ymir.
  */
-public final class YmirCauldronPanel extends JPanel {
-    private static final Color GOLD = new Color(242, 192, 116);
+public final class YmirCauldronPanel extends SharedCauldronArtworkPanel {
+    public static final int WIDTH = 840;
+    public static final int HEIGHT = 583;
+
     private final Set<String> selected = new LinkedHashSet<>();
-    private final JPanel cards = new JPanel(new GridLayout(2, 3, 10, 10));
-    private final JLabel selectionLabel = new JLabel("", SwingConstants.CENTER);
+    private final JPanel slotsPanel = new JPanel(new GridLayout(1, 3, 30, 0));
+    private final JPanel inventoryGrid = new JPanel(new GridLayout(2, 3, 8, 7));
     private final JLabel statusLabel = new JLabel("", SwingConstants.CENTER);
     private final Runnable onClose;
     private final Runnable onSuccess;
     private final Consumer<String> onDisaster;
 
-    public YmirCauldronPanel(Runnable onClose, Runnable onSuccess, Consumer<String> onDisaster) {
+    public YmirCauldronPanel(Runnable onClose, Runnable onSuccess,
+                            Consumer<String> onDisaster) {
         this.onClose = onClose;
         this.onSuccess = onSuccess;
         this.onDisaster = onDisaster;
-        setOpaque(false);
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setFocusable(true);
-        setLayout(new BorderLayout(14, 12));
-        setBorder(new EmptyBorder(24, 29, 22, 29));
 
-        JLabel heading = new JLabel("IL BOCCALE DI PIETRA — YMIR'S OLD FASHIONED", SwingConstants.CENTER);
-        heading.setFont(new Font("Georgia", Font.BOLD, 23));
-        heading.setForeground(GOLD);
-        add(heading, BorderLayout.NORTH);
+        // La grafica e' ridimensionata da 980x680 ai 840x583 del pannello,
+        // con le stesse coordinate proporzionali della UI originale.
+        slotsPanel.setOpaque(false);
+        slotsPanel.setBounds(125, 94, 590, 120);
+        add(slotsPanel);
 
-        JPanel center = new JPanel(new BorderLayout(0, 12));
-        center.setOpaque(false);
-        JLabel note = new JLabel("Scegli tre ingredienti per la miscela della Terra", SwingConstants.CENTER);
-        note.setFont(new Font("Georgia", Font.ITALIC, 16));
-        note.setForeground(new Color(231, 223, 202));
-        center.add(note, BorderLayout.NORTH);
+        inventoryGrid.setOpaque(false);
+        inventoryGrid.setBounds(103, 249, 634, 137);
+        add(inventoryGrid);
 
-        cards.setOpaque(false);
-        center.add(cards, BorderLayout.CENTER);
-        add(center, BorderLayout.CENTER);
+        statusLabel.setForeground(new Color(255, 228, 174));
+        statusLabel.setFont(new Font("Georgia", Font.BOLD, 13));
+        statusLabel.setBounds(124, 390, 592, 34);
+        add(statusLabel);
 
-        JPanel bottom = new JPanel(new BorderLayout(0, 9));
-        bottom.setOpaque(false);
-        selectionLabel.setForeground(new Color(246, 218, 174));
-        selectionLabel.setFont(new Font("Georgia", Font.PLAIN, 14));
-        bottom.add(selectionLabel, BorderLayout.NORTH);
-
-        JPanel actions = new JPanel(new GridLayout(1, 3, 10, 0));
-        actions.setOpaque(false);
-        JButton mix = makeButton("MESCOLA");
+        JButton mix = invisibleAction("MESCOLA", 180, 453, 242, 51);
         mix.addActionListener(e -> mix());
-        JButton reset = makeButton("AZZERA");
-        reset.addActionListener(e -> { selected.clear(); refreshIngredients(); });
-        JButton exit = makeButton("CHIUDI");
-        exit.addActionListener(e -> onClose.run());
-        actions.add(mix);
-        actions.add(reset);
-        actions.add(exit);
-        bottom.add(actions, BorderLayout.CENTER);
+        add(mix);
 
-        statusLabel.setForeground(new Color(239, 206, 146));
-        statusLabel.setFont(new Font("Georgia", Font.PLAIN, 13));
-        bottom.add(statusLabel, BorderLayout.SOUTH);
-        add(bottom, BorderLayout.SOUTH);
+        JButton reset = invisibleAction("RESET", 446, 453, 216, 51);
+        reset.addActionListener(e -> {
+            selected.clear();
+            refreshIngredients();
+        });
+        add(reset);
+
+        JButton close = invisibleAction("CHIUDI", 377, 529, 86, 31);
+        close.addActionListener(e -> onClose.run());
+        add(close);
 
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-                .put(KeyStroke.getKeyStroke("ESCAPE"), "closeBrewing");
-        getActionMap().put("closeBrewing", new AbstractAction() {
+                .put(KeyStroke.getKeyStroke("ESCAPE"), "closeEarthCauldron");
+        getActionMap().put("closeEarthCauldron", new AbstractAction() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent event) {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 if (isVisible()) onClose.run();
             }
         });
     }
 
-    @Override
-    protected void paintComponent(Graphics graphics) {
-        super.paintComponent(graphics);
-        Graphics2D g = (Graphics2D) graphics.create();
-        try {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setColor(new Color(20, 18, 28, 240));
-            g.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 25, 25);
-            g.setColor(GOLD);
-            g.setStroke(new BasicStroke(2));
-            g.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 25, 25);
-        } finally {
-            g.dispose();
-        }
+    private static JButton invisibleAction(String label, int x, int y, int w, int h) {
+        JButton button = new JButton();
+        button.setBounds(x, y, w, h);
+        button.setToolTipText(label);
+        button.getAccessibleContext().setAccessibleName(label);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setFocusable(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return button;
     }
 
+    /** La selezione si rigenera a ogni apertura della postazione. */
     public void refreshIngredients() {
-        cards.removeAll();
-        Set<String> available = new LinkedHashSet<>();
+        selected.clear();
+        populateIngredients();
+    }
+
+    private void populateIngredients() {
+        inventoryGrid.removeAll();
+        List<Item> available = new ArrayList<>();
         for (Item item : GameState.getInstance().getInventory()) {
-            if (!YmirCauldronRecipe.ALL.contains(item.getId())) continue;
-            available.add(item.getId());
-            JButton button = makeButton("<html><center>" + html(item.getName()) + "</center></html>");
-            button.setToolTipText(item.getDescription());
+            if (YmirCauldronRecipe.ALL.contains(item.getId())) available.add(item);
+        }
+
+        for (Item item : available) {
+            JButton button = new JButton();
+            button.setForeground(new Color(255, 223, 175));
+            button.setFont(new Font("Georgia", Font.BOLD, 12));
+            button.setBackground(new Color(60, 43, 44));
+            button.setContentAreaFilled(false);
+            button.setBorder(BorderFactory.createLineBorder(
+                    selected.contains(item.getId())
+                            ? new Color(255, 225, 121)
+                            : new Color(166, 129, 69),
+                    selected.contains(item.getId()) ? 2 : 1));
+            button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            button.setFocusPainted(false);
+            button.setToolTipText(item.getName() + ": " + item.getDescription());
+            button.setText("<html><center>" + escapeHtml(item.getName()) + "</center></html>");
             button.setHorizontalTextPosition(SwingConstants.CENTER);
             button.setVerticalTextPosition(SwingConstants.BOTTOM);
-            URL image = getClass().getResource(item.getIconPath());
-            if (image != null) {
-                Image icon = new ImageIcon(image).getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-                button.setIcon(new ImageIcon(icon));
+            URL icon = getClass().getResource(item.getIconPath());
+            if (icon != null) {
+                button.setIcon(new ImageIcon(new ImageIcon(icon).getImage()
+                        .getScaledInstance(42, 42, Image.SCALE_SMOOTH)));
             }
-            button.setBackground(selected.contains(item.getId())
-                    ? new Color(112, 80, 48) : new Color(53, 48, 58));
             button.addActionListener(e -> {
                 if (selected.contains(item.getId())) {
                     selected.remove(item.getId());
                 } else if (selected.size() < 3) {
                     selected.add(item.getId());
                 } else {
-                    statusLabel.setText("Tre ingredienti al massimo. Deselezionane uno.");
+                    statusLabel.setText("Massimo tre ingredienti. Deselezionane uno.");
+                    return;
                 }
-                refreshIngredients();
+                populateIngredients();
             });
-            cards.add(button);
+            inventoryGrid.add(button);
         }
-        selected.retainAll(available);
-        int owned = available.size();
-        for (int i = owned; i < 6; i++) {
-            JLabel placeholder = new JLabel(i == 0 ? "Nessun ingrediente" : "—", SwingConstants.CENTER);
-            placeholder.setForeground(new Color(137, 127, 124));
-            cards.add(placeholder);
+
+        for (int i = available.size(); i < 6; i++) {
+            JLabel empty = new JLabel(i == 0 ? "Nessun ingrediente" : "", SwingConstants.CENTER);
+            empty.setForeground(new Color(213, 200, 173));
+            inventoryGrid.add(empty);
         }
-        selectionLabel.setText("Ingredienti nel boccale: " + selected.size() + " / 3");
-        cards.revalidate();
-        cards.repaint();
+
+        slotsPanel.removeAll();
+        List<String> ids = new ArrayList<>(selected);
+        for (int i = 0; i < 3; i++) {
+            JPanel slot = new JPanel(new BorderLayout(0, 2));
+            slot.setOpaque(false);
+            if (i < ids.size()) {
+                String id = ids.get(i);
+                for (Item item : available) {
+                    if (!id.equals(item.getId())) continue;
+                    JLabel label = new JLabel(
+                            "<html><center>" + escapeHtml(item.getName()) + "</center></html>",
+                            SwingConstants.CENTER);
+                    label.setForeground(new Color(255, 229, 143));
+                    label.setFont(new Font("Georgia", Font.BOLD, 12));
+                    URL resource = getClass().getResource(item.getIconPath());
+                    if (resource != null) {
+                        label.setIcon(new ImageIcon(new ImageIcon(resource).getImage()
+                                .getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+                    }
+                    label.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label.setVerticalTextPosition(SwingConstants.BOTTOM);
+                    slot.add(label, BorderLayout.CENTER);
+                    break;
+                }
+            }
+            slotsPanel.add(slot);
+        }
+
+        slotsPanel.revalidate();
+        inventoryGrid.revalidate();
+        slotsPanel.repaint();
+        inventoryGrid.repaint();
+        if (selected.isEmpty()) statusLabel.setText("Seleziona tre ingredienti dall'inventario.");
+        else statusLabel.setText(selected.size() + " / 3 ingredienti nel boccale.");
     }
 
     private void mix() {
@@ -154,18 +194,8 @@ public final class YmirCauldronPanel extends JPanel {
         }
     }
 
-    private static String html(String value) {
-        return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-    }
-
-    private static JButton makeButton(String text) {
-        JButton button = new JButton(text);
-        button.setBackground(new Color(53, 48, 58));
-        button.setForeground(new Color(251, 225, 176));
-        button.setFont(new Font("Georgia", Font.BOLD, 13));
-        button.setBorder(BorderFactory.createLineBorder(new Color(181, 134, 75), 2));
-        button.setFocusPainted(false);
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        return button;
+    private static String escapeHtml(String text) {
+        return text == null ? "" : text.replace("&", "&amp;")
+                .replace("<", "&lt;").replace(">", "&gt;");
     }
 }
