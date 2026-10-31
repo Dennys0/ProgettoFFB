@@ -55,7 +55,7 @@ public abstract class AbstractChapterPanel extends JPanel {
     }
 
     private JButton createArrowButton(String path, String fallback) {
-        JButton button = new JButton();
+        JButton button = new HotspotButton();
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
@@ -78,7 +78,7 @@ public abstract class AbstractChapterPanel extends JPanel {
     protected void addItemWorldButton(String id, String iconPath, int x, int y,
             int width, int height, int roomId, String name, String description) {
         HotspotButton button = new HotspotButton();
-        // Solo gli oggetti raccoglibili conservano il feedback luminoso.
+        // Gli oggetti raccolti hanno un bagliore circolare leggermente piu' evidente.
         button.setHoverHighlightEnabled(true);
         button.setBounds(x, y, width, height);
         button.setContentAreaFilled(false);
@@ -86,7 +86,7 @@ public abstract class AbstractChapterPanel extends JPanel {
         button.setFocusPainted(false);
         button.setFocusable(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setToolTipText(name);
+        button.setToolTipText("Raccogli: " + name);
         java.net.URL url = getClass().getResource(iconPath);
         if (url != null) {
             Image img = new ImageIcon(url).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);

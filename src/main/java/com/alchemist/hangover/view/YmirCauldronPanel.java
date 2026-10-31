@@ -79,7 +79,7 @@ public final class YmirCauldronPanel extends SharedCauldronArtworkPanel {
     }
 
     private static JButton invisibleAction(String label, int x, int y, int w, int h) {
-        JButton button = new JButton();
+        JButton button = new HotspotButton();
         button.setBounds(x, y, w, h);
         button.setToolTipText(label);
         button.getAccessibleContext().setAccessibleName(label);
