@@ -56,6 +56,7 @@ public class CauldronOverlay extends JDialog {
             btnItem.setContentAreaFilled(false);
             btnItem.setBorder(BorderFactory.createLineBorder(new Color(200, 160, 80), 1));
             btnItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btnItem.setToolTipText("Seleziona: " + item.getName());
 
             try {
                 ImageIcon icon = new ImageIcon(getClass().getResource(item.getIconPath()));
@@ -76,7 +77,8 @@ public class CauldronOverlay extends JDialog {
         }
 
         // 4. Bottone Trasparente sovrapposto a "MIX INGREDIENTI..."
-        JButton btnMix = new JButton();
+        JButton btnMix = new HotspotButton();
+        btnMix.setToolTipText("Mescola i tre ingredienti");
         btnMix.setBounds(210, 528, 282, 60);
         btnMix.setContentAreaFilled(false);
         btnMix.setBorderPainted(false);
@@ -87,7 +89,8 @@ public class CauldronOverlay extends JDialog {
         contentPanel.add(btnMix);
 
         // 5. Bottone Trasparente sovrapposto a "RESET SLOT"
-        JButton btnReset = new JButton();
+        JButton btnReset = new HotspotButton();
+        btnReset.setToolTipText("Svuota gli slot del calderone");
         btnReset.setBounds(520, 528, 252, 60);
         btnReset.setContentAreaFilled(false);
         btnReset.setBorderPainted(false);
@@ -101,7 +104,8 @@ public class CauldronOverlay extends JDialog {
         contentPanel.add(btnReset);
 
         // 6. Bottone Trasparente sovrapposto a "CHIUDI"
-        JButton btnClose = new JButton();
+        JButton btnClose = new HotspotButton();
+        btnClose.setToolTipText("Chiudi il calderone");
         btnClose.setBounds(440, 620, 100, 30);
         btnClose.setContentAreaFilled(false);
         btnClose.setBorderPainted(false);
@@ -141,6 +145,15 @@ public class CauldronOverlay extends JDialog {
         slotsPanel.revalidate();
         slotsPanel.repaint();
     }
+    /** Uses the same in-game visual prompt as Chapter I/II encounters. */
+    private void showAlchemyWarning(String title, String message) {
+        Frame owner = getOwner() instanceof Frame frame ? frame : null;
+        StoryPromptDialog.Theme theme = GameState.getInstance().getChapter() == 2
+                ? StoryPromptDialog.Theme.OCEAN
+                : StoryPromptDialog.Theme.SKY;
+        StoryPromptDialog.message(owner, theme, title, message);
+    }
+
     private void processMixing() {
         if (selectedItems.size() != 3) {
             statusLabel.setText("Devi selezionare esattamente 3 ingredienti!");
@@ -152,35 +165,27 @@ public class CauldronOverlay extends JDialog {
 
         if (ids.contains("NEBBIA_NIFLHEIM")) {
             dispose();
-            JOptionPane.showMessageDialog(null,
-                    "La Nebbia di Niflheim congela all'istante il calderone spaccandolo in due!\nGAME OVER!",
-                    "Game Over!", JOptionPane.ERROR_MESSAGE);
+            showAlchemyWarning("Game Over!", "La Nebbia di Niflheim congela all'istante il calderone spaccandolo in due!\nGAME OVER!");
             GameState.getInstance().resetState();
             SceneManager.getInstance().showScene("MENU");
             return;
         }
         if (ids.contains("POLLINE_YGGDRASIL")) {
             dispose();
-            JOptionPane.showMessageDialog(null,
-                    "Il Polline di Yggdrasil provoca un'allucinazione nell'allucinazione!\nTi risvegli smarrito sul ponte...",
-                    "Reset Livello!", JOptionPane.WARNING_MESSAGE);
+            showAlchemyWarning("Reset Livello!", "Il Polline di Yggdrasil provoca un'allucinazione nell'allucinazione!\nTi risvegli smarrito sul ponte...");
             SceneManager.getInstance().showScene("CHAPTER1");
             return;
         }
         if (ids.contains("ACQUA_LETE")) {
             dispose();
-            JOptionPane.showMessageDialog(null,
-                    "L'Acqua del Lete ti fa dimenticare ogni ricetta ed enigma!\nL'inventario si svuota e il livello si resetta!",
-                    "Amnesia Alchemica", JOptionPane.ERROR_MESSAGE);
+            showAlchemyWarning("Amnesia Alchemica", "L'Acqua del Lete ti fa dimenticare ogni ricetta ed enigma!\nL'inventario si svuota e il livello si resetta!");
             GameState.getInstance().getInventory().clear();
             SceneManager.getInstance().showScene("CHAPTER2");
             return;
         }
         if (ids.contains("INCHIOSTRO_KRAKEN")) {
             dispose();
-            JOptionPane.showMessageDialog(null,
-                    "L'Inchiostro di Kraken crea un buco nero liquido che risucchia il calderone stesso!\nGAME OVER!",
-                    "Game Over!", JOptionPane.ERROR_MESSAGE);
+            showAlchemyWarning("Game Over!", "L'Inchiostro di Kraken crea un buco nero liquido che risucchia il calderone stesso!\nGAME OVER!");
             GameState.getInstance().resetState();
             SceneManager.getInstance().showScene("MENU");
             return;

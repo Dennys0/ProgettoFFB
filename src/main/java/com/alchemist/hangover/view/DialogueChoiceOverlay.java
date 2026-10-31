@@ -51,7 +51,7 @@ public class DialogueChoiceOverlay extends JDialog {
 
         // L'immagine contiene gia' il pulsante dorato "DONA".
         // Questo JButton e' soltanto un hotspot trasparente sopra il disegno.
-        JButton btnDonate = new JButton();
+        JButton btnDonate = new HotspotButton();
         btnDonate.setBounds(235, 323, 218, 65);
         btnDonate.setToolTipText(hasMap ? "Consegna la Mappa del Cielo a Martino" : "Prima devi trovare la Mappa del Cielo");
         btnDonate.getAccessibleContext().setAccessibleName("Consegna la Mappa del Cielo");
@@ -77,7 +77,8 @@ public class DialogueChoiceOverlay extends JDialog {
         contentPanel.add(btnDonate);
 
         // Bottone Congedati / Esci
-        JButton btnExit = new JButton();
+        JButton btnExit = new HotspotButton();
+        btnExit.setToolTipText("Saluta Martino e torna a esplorare");
         btnExit.setBounds(235, 397, 218, 55);
         btnExit.setContentAreaFilled(false);
         btnExit.setBorderPainted(false);
@@ -92,7 +93,8 @@ public class DialogueChoiceOverlay extends JDialog {
         contentPanel.add(btnExit);
 
         // Tasto X in alto a destra
-        JButton btnClose = new JButton();
+        JButton btnClose = new HotspotButton();
+        btnClose.setToolTipText("Chiudi la conversazione");
         btnClose.setBounds(584, 57, 65, 70);
         btnClose.setContentAreaFilled(false);
         btnClose.setBorderPainted(false);

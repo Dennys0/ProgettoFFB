@@ -137,10 +137,12 @@ private void loadSprite(String name, String path) {
     }
 
     private void interactWithCauldron() {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Vuoi interagire con il Calderone d'Ottone e iniziare a mixare gli ingredienti?",
-                "Calderone Alchemico", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
+        boolean confirm = StoryPromptDialog.confirm(mainFrameRef,
+                StoryPromptDialog.Theme.SKY, "CALDERONE D'OTTONE",
+                "Il calderone e' pronto a raccogliere tre ingredienti.\n"
+                + "Vuoi iniziare la preparazione dell'Asgardian Aviation?",
+                "PREPARA IL DRINK", "NON ANCORA");
+        if (confirm) {
             CauldronOverlay cauldron = new CauldronOverlay(mainFrameRef);
             cauldron.setVisible(true);
         }
@@ -228,9 +230,10 @@ add(characterSpriteLabel);
     @Override
     protected boolean canCollectWorldItem(String itemId, GameState state) {
         if ("RUGIADA_ASGARD".equals(itemId) && !state.hasDragonKey()) {
-            JOptionPane.showMessageDialog(this,
-                    "La polena a drago è bloccata da un meccanismo d'ottone. Serve la Chiave del Drago!",
-                    "Serbatoio Bloccato", JOptionPane.WARNING_MESSAGE);
+            StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.SKY,
+                    "SERBATOIO BLOCCATO",
+                    "La polena a drago e' bloccata da un meccanismo d'ottone.\n"
+                    + "Serve la Chiave del Drago!");
             return false;
         }
         return true;
@@ -302,9 +305,19 @@ add(characterSpriteLabel);
     private void triggerBossEncounter() {
     GameState gs = GameState.getInstance();
     if (gs.isBossDefeated()) {
-        JOptionPane.showMessageDialog(this, "La tempesta si Ã¨ placata. HrÃ¦svelgr osserva il vascello in silenzio.", "Boss GiÃ  Placato", JOptionPane.INFORMATION_MESSAGE);
+        StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.SKY,
+                "IL GUARDIANO DORME",
+                "La tempesta si e' placata. Hraesvelgr osserva il vascello in silenzio.");
         return;
     }
+
+    boolean fight = StoryPromptDialog.confirm(mainFrameRef,
+            StoryPromptDialog.Theme.SKY, "IL GUARDIANO DELLE TEMPESTE",
+            "Tra le nubi, Hraesvelgr spiega le sue ali sul ponte.\n"
+            + "Affrontarlo potrebbe mettere in pericolo l'intero equipaggio.\n\n"
+            + "Vuoi iniziare lo scontro?",
+            "AFFRONTA IL BOSS", "NON ANCORA");
+    if (!fight) return;
 
     // Passa allo sfondo room7_boss2.png
     try {
