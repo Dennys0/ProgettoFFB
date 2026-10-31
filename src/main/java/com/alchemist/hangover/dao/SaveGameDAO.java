@@ -101,10 +101,12 @@ public class SaveGameDAO {
      */
     public static boolean saveGame(int slotId, String slotName) {
         GameState state = GameState.getInstance();
+        if (state.getChapter() == 3) state.ensureYmirRuneSeed();
         String upsertSql = "MERGE INTO save_slots (slot_id, slot_name, current_chapter, current_room, current_health, "
                 + "max_health, has_given_map, has_dragon_key, is_dragon_unlocked, is_boss_defeated, "
-                + "is_ymir_pacified, last_saved) "
-                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                + "is_ymir_pacified, ymir_rune_seed, gunnar_wisdom, ymir_stele_read, "
+                + "ymir_old_fashioned_created, last_saved) "
+                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         Connection conn = null;
         try {
@@ -124,6 +126,10 @@ public class SaveGameDAO {
                 ps.setBoolean(9, state.isDragonUnlocked());
                 ps.setBoolean(10, state.isBossDefeated());
                 ps.setBoolean(11, state.isYmirPacified());
+                ps.setInt(12, state.getYmirRuneSeed());
+                ps.setBoolean(13, state.hasLearnedGunnarWisdom());
+                ps.setBoolean(14, state.hasReadYmirStele());
+                ps.setBoolean(15, state.isYmirOldFashionedCreated());
                 ps.executeUpdate();
             }
 
@@ -181,6 +187,10 @@ public class SaveGameDAO {
                     state.setDragonUnlocked(rs.getBoolean("is_dragon_unlocked"));
                     state.setBossDefeated(rs.getBoolean("is_boss_defeated"));
                     state.setYmirPacified(rs.getBoolean("is_ymir_pacified"));
+                    state.setYmirRuneSeed(rs.getInt("ymir_rune_seed"));
+                    state.setGunnarWisdomLearned(rs.getBoolean("gunnar_wisdom"));
+                    state.setYmirSteleRead(rs.getBoolean("ymir_stele_read"));
+                    state.setYmirOldFashionedCreated(rs.getBoolean("ymir_old_fashioned_created"));
 
                     // Carica gli oggetti dell'inventario
                     loadInventoryForSlot(conn, slotId, state);

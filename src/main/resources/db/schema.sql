@@ -37,6 +37,12 @@ CREATE TABLE IF NOT EXISTS save_slots (
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS current_chapter INT DEFAULT 1;
 -- Flag indipendente per lo scontro con Ymir. Aggiunta non distruttiva.
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS is_ymir_pacified BOOLEAN DEFAULT FALSE;
+-- Nuovi progressi del capitolo 3: tutte le colonne sono aggiunte senza
+-- cancellare o sovrascrivere slot, inventari o salvataggi già presenti.
+ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ymir_rune_seed INT DEFAULT 0;
+ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS gunnar_wisdom BOOLEAN DEFAULT FALSE;
+ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ymir_stele_read BOOLEAN DEFAULT FALSE;
+ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ymir_old_fashioned_created BOOLEAN DEFAULT FALSE;
 
 -- Catalogo oggetti del Capitolo 2.
 MERGE INTO items KEY(id) VALUES

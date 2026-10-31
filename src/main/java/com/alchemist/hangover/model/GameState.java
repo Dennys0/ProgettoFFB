@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameState {
 
@@ -22,6 +23,10 @@ public class GameState {
     private boolean bossDefeated = false;
     // Stato separato: Rán e Hræsvelgr non devono sbloccare la ricompensa di Ymir.
     private boolean ymirPacified = false;
+    private int ymirRuneSeed = 0;
+    private boolean gunnarWisdomLearned = false;
+    private boolean ymirSteleRead = false;
+    private boolean ymirOldFashionedCreated = false;
     // Checkpoint di sessione: non viene serializzato nei salvataggi H2.
     private boolean bossRetryAvailable = false;
 
@@ -140,6 +145,29 @@ public class GameState {
     public boolean isDragonUnlocked() { return dragonUnlocked; }
     public void setDragonUnlocked(boolean val) { this.dragonUnlocked = val; }
 
+    /**
+     * The random seed is created once per Chapter III adventure and is persisted
+     * in H2, so Gunnar, the stele and the boss share the exact same ritual.
+     */
+    public int ensureYmirRuneSeed() {
+        if (ymirRuneSeed == 0) {
+            ymirRuneSeed = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
+        }
+        return ymirRuneSeed;
+    }
+
+    public int getYmirRuneSeed() { return ymirRuneSeed; }
+    public void setYmirRuneSeed(int seed) { this.ymirRuneSeed = seed; }
+
+    public boolean hasLearnedGunnarWisdom() { return gunnarWisdomLearned; }
+    public void setGunnarWisdomLearned(boolean value) { gunnarWisdomLearned = value; }
+
+    public boolean hasReadYmirStele() { return ymirSteleRead; }
+    public void setYmirSteleRead(boolean value) { ymirSteleRead = value; }
+
+    public boolean isYmirOldFashionedCreated() { return ymirOldFashionedCreated; }
+    public void setYmirOldFashionedCreated(boolean value) { ymirOldFashionedCreated = value; }
+
     public boolean isYmirPacified() { return ymirPacified; }
     public void setYmirPacified(boolean value) { this.ymirPacified = value; }
 
@@ -163,6 +191,10 @@ public class GameState {
         this.dragonUnlocked = false;
         this.bossDefeated = false;
         this.ymirPacified = false;
+        this.ymirRuneSeed = 0;
+        this.gunnarWisdomLearned = false;
+        this.ymirSteleRead = false;
+        this.ymirOldFashionedCreated = false;
         this.bossRetryAvailable = false;
         if (oldHealth != currentHealth || oldMaxHealth != maxHealth) {
             notifyHealthChanged();

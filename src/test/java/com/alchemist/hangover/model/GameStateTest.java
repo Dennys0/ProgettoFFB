@@ -49,6 +49,23 @@ class GameStateTest {
     }
 
     @Test
+    void ritualSeedDoesNotChangeWhilePlayingButResetsOnNewGame() {
+        GameState state = GameState.getInstance();
+        state.resetState();
+        int seed = state.ensureYmirRuneSeed();
+        assertTrue(seed > 0);
+        assertEquals(seed, state.ensureYmirRuneSeed());
+        state.setGunnarWisdomLearned(true);
+        state.setYmirSteleRead(true);
+        state.setYmirOldFashionedCreated(true);
+        state.resetState();
+        assertEquals(0, state.getYmirRuneSeed());
+        assertFalse(state.hasLearnedGunnarWisdom());
+        assertFalse(state.hasReadYmirStele());
+        assertFalse(state.isYmirOldFashionedCreated());
+    }
+
+    @Test
     void bossCheckpointClearsOnReset() {
         GameState state = GameState.getInstance();
         state.setBossRetryAvailable(true);
