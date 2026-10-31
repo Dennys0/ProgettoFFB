@@ -347,28 +347,10 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         GameState state = GameState.getInstance();
         if (state.isYmirPacified()) return;
 
-        if (askConfirmation) {
-            String[] options = {"AFFRONTA YMIR", "NON ANCORA"};
-            int choice = JOptionPane.showOptionDialog(mainFrameRef,
-                    "Un'ombra gigantesca siede immobile tra le rocce.\n"
-                    + "Un solo movimento potrebbe risvegliare il mondo intero.\n\n"
-                    + "Vuoi affrontare Ymir e tentare il rituale del sonno?",
-                    "Il Cuore di Roccia — Ymir",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null, options, options[1]);
-            if (choice != 0) return;
-        }
+        if (askConfirmation && !YmirStoryPrompt.confirmFight(mainFrameRef)) return;
         if (!state.hasLearnedGunnarWisdom() || !state.hasReadYmirStele()) {
-            JOptionPane.showMessageDialog(mainFrameRef,
-                    "Il gigante si muove e la roccia trema sotto i tuoi piedi.\n\n"
-                    + (!state.hasLearnedGunnarWisdom()
-                        ? "Devi ascoltare Gunnar fino alla fine nel Cerchio delle Rune.\n" : "")
-                    + (!state.hasReadYmirStele()
-                        ? "Devi leggere la stele della Rupe dell'Eco.\n" : "")
-                    + "\nRaccogli gli indizi prima di iniziare il rituale.",
-                    "Il sonno di Ymir non puo' essere spezzato",
-                    JOptionPane.WARNING_MESSAGE);
+            YmirStoryPrompt.showMissingClues(mainFrameRef,
+                    !state.hasLearnedGunnarWisdom(), !state.hasReadYmirStele());
             return;
         }
         setArrowsVisible(false);
