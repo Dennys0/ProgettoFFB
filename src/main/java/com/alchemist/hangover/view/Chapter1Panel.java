@@ -247,6 +247,9 @@ add(characterSpriteLabel);
                 this::updateDialogueSprite,
                 this::onDialogueFinished
         );
+        // I nuovi dialoghi includono frasi lunghe: manteniamo il testo
+        // entro la cornice illustrata anche durante l'effetto macchina da scrivere.
+        dialogueSystem.setWrapWidth(1000);
 
         dialogueSkipLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         dialogueSkipLabel.setToolTipText("Mostra subito il testo completo");
