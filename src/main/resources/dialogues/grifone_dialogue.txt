@@ -1,0 +1,9 @@
+# Grifone intravisto tra le nuvole della prua.
+NARRATOR|Un piccolo grifone emerge per un istante dalla foschia, aggrappato a una corrente d'aria.
+ARTHUR|Ehi! Tu sei un leone con le ali oppure ho bevuto davvero troppo?
+GRIFONE|Quando il vento si ferma, il cielo trattiene il respiro.
+ARTHUR|E questo sarebbe un saluto?
+GRIFONE|Non guardare soltanto chi spalanca le ali. Ascolta ciò che resta in silenzio.
+ARTHUR|Siete tutti così criptici quassù?
+GRIFONE|Solo quelli che hanno ancora il tempo di avvertirti.
+NARRATOR|Il grifone scompare dietro una nuvola, lasciando Arthur a fissare l'orizzonte.

@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Chapter1Panel extends AbstractChapterPanel {
 
@@ -29,6 +31,15 @@ public class Chapter1Panel extends AbstractChapterPanel {
     // Hotspots
     private JButton martinoHotspot;
     private JButton cauldronHotspot;
+
+    /** Ogni conversazione ha una conseguenza propria: gli NPC non aprono il boss. */
+    enum DialogueKind { NONE, MARTINO, NPC, BOSS_INTRO }
+    private DialogueKind activeDialogueKind = DialogueKind.NONE;
+    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
+
+    static boolean opensBossAfterDialogue(DialogueKind kind, int room, boolean bossDefeated) {
+        return kind == DialogueKind.BOSS_INTRO && room == 7 && !bossDefeated;
+    }
 
     public Chapter1Panel(JFrame mainFrame) {
         initializeChapterBase(
@@ -60,6 +71,9 @@ public class Chapter1Panel extends AbstractChapterPanel {
         loadSprite("HELA", "/images/characters/hela_realms.png");
         loadSprite("SIEGFRIED", "/images/characters/siegfried_realms.png");
         loadSprite("GUNNAR", "/images/characters/gunnar_realms.png");
+        loadSprite("MOZZO", "/images/characters/mozzo_realms.png");
+        loadSprite("DIAVOLETTO", "/images/characters/diavoletto_realms.png");
+        loadSprite("GRIFONE", "/images/characters/grifone_realms.png");
 
         // 4. Inizializzazione Hotspots & Oggetti
         initHotspots();
@@ -119,6 +133,19 @@ private void loadSprite(String name, String path) {
         cauldronHotspot.addActionListener(e -> interactWithCauldron());
         add(cauldronHotspot);
 
+        // Gli NPC sono gia' disegnati nelle cinque nuove immagini delle stanze.
+        // Usiamo quindi soltanto aree invisibili e lo sprite nei dialoghi.
+        addNpcHotspot(1, new Rectangle(710, 130, 150, 180),
+                "Parla con il mozzo", "/dialogues/mozzo_dialogue.txt");
+        addNpcHotspot(3, new Rectangle(855, 192, 245, 205),
+                "Osserva il grifone", "/dialogues/grifone_dialogue.txt");
+        addNpcHotspot(4, new Rectangle(120, 218, 195, 220),
+                "Parla con il diavoletto", "/dialogues/diavoletto_dialogue.txt");
+        addNpcHotspot(6, new Rectangle(278, 300, 195, 190),
+                "Parla con Huginn", "/dialogues/huginn_dialogue.txt");
+        addNpcHotspot(7, new Rectangle(135, 178, 420, 290),
+                "Parla con Veðrfölnir", "/dialogues/vedrfolnir_dialogue.txt");
+
         // Creazione bottoni visibili per gli oggetti raccolti a schermo
         addItemWorldButton("MAPPA_CIELO", "/images/items/item_map.png", 1080, 280, 100, 120, 5,
                 "Mappa del Cielo", "Una pergamena cosmica trovata nella stiva.");
@@ -134,6 +161,50 @@ private void loadSprite(String name, String path) {
 
         addItemWorldButton("RUGIADA_ASGARD", "/images/items/item_dew.png", 655, 486, 65, 65, 3,
                 "Rugiada delle Nuvole di Asgard", "Acqua fluttuante condensata sulla polena drago.");
+    }
+
+    private HotspotButton addNpcHotspot(int room, Rectangle bounds,
+                                       String label, String dialogueResource) {
+        HotspotButton hotspot = new HotspotButton();
+        hotspot.setBounds(bounds);
+        hotspot.setToolTipText(label);
+        hotspot.getAccessibleContext().setAccessibleName(label);
+        hotspot.addActionListener(e -> startSceneDialogue(dialogueResource, DialogueKind.NPC));
+        npcHotspots.computeIfAbsent(room, ignored -> new ArrayList<>()).add(hotspot);
+        add(hotspot);
+        hotspot.setVisible(false);
+        return hotspot;
+    }
+
+    private void setNpcHotspotsVisible(boolean visible) {
+        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
+            for (HotspotButton button : entry.getValue()) {
+                boolean show = visible && entry.getKey() == currentRoom;
+                button.setVisible(show);
+                if (show) setComponentZOrder(button, 0);
+            }
+        }
+    }
+
+    /**
+     * Un unico punto di ingresso per Martino, gli NPC e il boss.
+     * La callback finale usera' il tipo di dialogo, non la stanza, per
+     * determinare se aprire la donazione, il combattimento o nulla.
+     */
+    private void startSceneDialogue(String resource, DialogueKind kind) {
+        if (dialogueBoxOverlay.isVisible()) return;
+        activeDialogueKind = kind;
+        setArrowsVisible(false);
+        setNpcHotspotsVisible(false);
+        martinoHotspot.setVisible(false);
+        cauldronHotspot.setVisible(false);
+        room7ScreenClickHotspot.setVisible(false);
+        dialogueBoxOverlay.setVisible(true);
+        setComponentZOrder(dialogueBoxOverlay, 0);
+        setComponentZOrder(characterSpriteLabel, 1);
+        dialogueSystem.loadDialogue(resource);
+        dialogueSystem.startDialogue();
+        repaint();
     }
 
     private void interactWithCauldron() {
@@ -222,9 +293,25 @@ add(characterSpriteLabel);
 
     @Override
     protected void onRoomChanged() {
-        martinoHotspot.setVisible(currentRoom == 2);
-        cauldronHotspot.setVisible(currentRoom == 4);
-        room7ScreenClickHotspot.setVisible(currentRoom == 7);
+        // Un cambio stanza (anche tramite F4 o caricamento) chiude un
+        // dialogo in corso senza attivarne la callback narrativa.
+        if (dialogueBoxOverlay != null && dialogueBoxOverlay.isVisible()) {
+            dialogueSystem.stop();
+            dialogueBoxOverlay.setVisible(false);
+            characterSpriteLabel.setVisible(false);
+            activeDialogueKind = DialogueKind.NONE;
+        }
+        showRoomInteractionHotspots();
+    }
+
+    private void showRoomInteractionHotspots() {
+        boolean idle = dialogueBoxOverlay == null || !dialogueBoxOverlay.isVisible();
+        martinoHotspot.setVisible(idle && currentRoom == 2);
+        cauldronHotspot.setVisible(idle && currentRoom == 4);
+        room7ScreenClickHotspot.setVisible(idle && currentRoom == 7);
+        if (idle && currentRoom == 7) setComponentZOrder(room7ScreenClickHotspot, 0);
+        // I nuovi NPC devono essere sopra le aree generiche della stanza 7.
+        setNpcHotspotsVisible(idle);
     }
 
     @Override
@@ -245,12 +332,7 @@ add(characterSpriteLabel);
     }
 
     private void startMartinoDialogue() {
-        setArrowsVisible(false);
-        martinoHotspot.setVisible(false);
-        dialogueBoxOverlay.setVisible(true);
-
-        dialogueSystem.loadDialogue("/dialogues/martino_dialogue.txt");
-        dialogueSystem.startDialogue();
+        startSceneDialogue("/dialogues/martino_dialogue.txt", DialogueKind.MARTINO);
     }
 
     private void updateDialogueSprite() {
@@ -267,29 +349,32 @@ add(characterSpriteLabel);
     }
 
     private void onDialogueFinished() {
-    dialogueBoxOverlay.setVisible(false);
-    characterSpriteLabel.setVisible(false);
-    updateArrowVisibility();
+        DialogueKind completed = activeDialogueKind;
+        activeDialogueKind = DialogueKind.NONE;
+        dialogueBoxOverlay.setVisible(false);
+        characterSpriteLabel.setVisible(false);
+        characterSpriteLabel.setIcon(null);
+        updateArrowVisibility();
+        showRoomInteractionHotspots();
 
-    if (currentRoom == 2) {
-        DialogueChoiceOverlay overlay = new DialogueChoiceOverlay(mainFrameRef, gaveMap -> {
-            if (gaveMap) {
-                System.out.println("Mappa consegnata! Ottenuta la Chiave del Drago.");
-            }
-            martinoHotspot.setVisible(true);
+        if (completed == DialogueKind.MARTINO && currentRoom == 2) {
+            // Il flusso della mappa resta identico a quello originale.
+            DialogueChoiceOverlay overlay = new DialogueChoiceOverlay(mainFrameRef, gaveMap -> {
+                if (gaveMap) System.out.println("Mappa consegnata! Ottenuta la Chiave del Drago.");
+                martinoHotspot.setVisible(true);
+                hudPanel.updateHUD();
+            });
+            overlay.setVisible(true);
+        } else if (opensBossAfterDialogue(completed, currentRoom,
+                GameState.getInstance().isBossDefeated())) {
+            room7ScreenClickHotspot.setVisible(false);
+            new BossFightOverlay(mainFrameRef).setVisible(true);
+            showRoomInteractionHotspots();
             hudPanel.updateHUD();
-        });
-        overlay.setVisible(true);
-    } else if (currentRoom == 7 && !GameState.getInstance().isBossDefeated()) {
-        // Avvia la Boss Fight subito dopo il dialogo!
-        BossFightOverlay bossFight = new BossFightOverlay(mainFrameRef);
-        bossFight.setVisible(true);
-        
-        // Al termine della boss fight, ripristina la visibilitÃ 
-        room7ScreenClickHotspot.setVisible(true);
-        hudPanel.updateHUD();
+        }
+        repaint();
     }
-}
+
     /** Checkpoint del boss: salta il dialogo introduttivo gia' visto. */
     public void retryBossEncounter() {
         if (GameState.getInstance().isBossDefeated()) return;
@@ -327,12 +412,8 @@ add(characterSpriteLabel);
     }
     repaint();
 
-    // Avvia dialogo introduttivo del Boss
-    setArrowsVisible(false);
-    room7ScreenClickHotspot.setVisible(false);
-    dialogueBoxOverlay.setVisible(true);
-
-    dialogueSystem.loadDialogue("/dialogues/boss_intro_dialogue.txt");
-    dialogueSystem.startDialogue();
+    // Il combattimento si avvia solo alla fine di QUESTO dialogo, non
+    // al termine della conversazione con Veðrfölnir nella stessa stanza.
+    startSceneDialogue("/dialogues/boss_intro_dialogue.txt", DialogueKind.BOSS_INTRO);
 }
 }
