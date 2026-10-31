@@ -12,6 +12,8 @@ import java.awt.*;
  */
 public final class Chapter3Panel extends AbstractChapterPanel {
     private JButton ymirHotspot;
+    private JButton gunnarHotspot;
+    private JButton steleHotspot;
 
     public Chapter3Panel(JFrame mainFrame) {
         initializeChapterBase(mainFrame,
@@ -39,8 +41,47 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 575, 480, 125, 108, 7, "Lacrima di Ymir",
                 "Una lacrima cristallina del gigante primordiale, intrisa della memoria della terra.");
 
+        createGunnarHotspot();
+        createSteleHotspot();
         createYmirHotspot();
         loadRoom(1);
+    }
+
+    private void createGunnarHotspot() {
+        gunnarHotspot = new HotspotButton();
+        gunnarHotspot.setBounds(85, 190, 285, 445);
+        gunnarHotspot.setToolTipText("Ascolta Gunnar, l'eremita delle rune");
+        java.net.URL spriteUrl = getClass().getResource("/images/characters/gunnar_realms.png");
+        if (spriteUrl != null) {
+            Image sprite = new ImageIcon(spriteUrl).getImage()
+                    .getScaledInstance(285, 445, Image.SCALE_SMOOTH);
+            gunnarHotspot.setIcon(new ImageIcon(sprite));
+        } else {
+            gunnarHotspot.setText("Gunnar");
+            gunnarHotspot.setForeground(new Color(239, 205, 129));
+        }
+        gunnarHotspot.addActionListener(e -> {
+            boolean alreadyLearned = GameState.getInstance().hasLearnedGunnarWisdom();
+            new GunnarDialogueDialog(mainFrameRef).setVisible(true);
+            if (!alreadyLearned && GameState.getInstance().hasLearnedGunnarWisdom()) {
+                ToastNotification.show(this, "Il linguaggio delle rune e' stato annotato nel Diario.");
+            }
+        });
+        add(gunnarHotspot);
+        gunnarHotspot.setVisible(false);
+    }
+
+    private void createSteleHotspot() {
+        steleHotspot = new HotspotButton();
+        steleHotspot.setBounds(140, 285, 200, 178);
+        steleHotspot.setForeground(new Color(255, 190, 83));
+        steleHotspot.setFont(new Font("Georgia", Font.BOLD, 18));
+        steleHotspot.setText("<html><center>STELE<br>RUNICA</center></html>");
+        steleHotspot.setToolTipText("Leggi i tre versi della Rupe dell'Eco");
+        steleHotspot.addActionListener(e ->
+                new RuneSteleDialog(mainFrameRef).setVisible(true));
+        add(steleHotspot);
+        steleHotspot.setVisible(false);
     }
 
     private void createYmirHotspot() {
@@ -90,6 +131,14 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
     @Override
     protected void onRoomChanged() {
+        if (gunnarHotspot != null) {
+            gunnarHotspot.setVisible(currentRoom == 2);
+            if (currentRoom == 2) setComponentZOrder(gunnarHotspot, 0);
+        }
+        if (steleHotspot != null) {
+            steleHotspot.setVisible(currentRoom == 6);
+            if (currentRoom == 6) setComponentZOrder(steleHotspot, 0);
+        }
         // Dopo la vittoria il gigante si placa e appare la sua lacrima.
         // Lo sprite compare solo nella stanza 7, senza coprire l'HUD.
         if (ymirHotspot != null) {

@@ -1,0 +1,14 @@
+# Gunnar: l'indizio si ottiene solo completando tutto il dialogo.
+GUNNAR|Ahhh... un visitatore. Una rarità. Il mondo, di solito, ha la buona educazione di aspettare che io finisca di pensare.
+ARTHUR|Non per metterti fretta, ma il pavimento ha appena fatto un battito cardiaco. Vorrei evitargli un infarto geologico.
+GUNNAR|Quello... è... il... respiro... del... mondo. Ymir dorme da tanto, tanto tempo. E chi non ascolta, inciampa.
+ARTHUR|Molto rassicurante. Mi potresti indicare la strada per l'uscita, magari prima del prossimo millennio?
+GUNNAR|Un indizio è come una pietra. Quando lo raccogli in fretta, pesa. Quando lo osservi, ti indica dove poggiare il piede.
+GUNNAR|La prima runa si chiama RADICE. La riconoscerai nel verso: «la radice trattiene il mondo». È il fondamento che non cede.
+ARTHUR|Radice, ricevuto. La natura mi sta dando lezioni di ortopedia.
+GUNNAR|La seconda si chiama BATTITO. Le parole «il cuore pulsa nel granito» indicano la pietra che vibra, viva sotto i tuoi piedi.
+GUNNAR|La terza si chiama RESPIRO. «Il vento torna al silenzio»: questo è il segno che chiude il sonno del gigante.
+ARTHUR|Quindi tre versi, tre rune e tre posizioni sicure. E il segreto è ascoltare la stele, non colpire Ymir.
+GUNNAR|Esatto. Alla Rupe dell'Eco leggerai l'ordine che vale per QUESTO viaggio. Non è uguale per ogni viandante. Resta fedele a quei versi, poi il gigante tornerà a dormire.
+GUNNAR|Ah, dimenticavo... Il muschio profuma di terra pulita. La radice nera pulsa di acido draconico. Non confonderli nel boccale di pietra.
+ARTHUR|Hai finito? Incredibile. Credo di essermi appena diplomato in pazienza applicata.

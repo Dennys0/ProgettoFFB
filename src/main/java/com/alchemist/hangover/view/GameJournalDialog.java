@@ -2,6 +2,7 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
+import com.alchemist.hangover.model.YmirRuneRitual;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -66,7 +67,17 @@ public final class GameJournalDialog extends JDialog {
 
     private String goals() {
         if (state.getChapter() >= 3) {
-            return "Una nuova tappa del viaggio mi attende. Devo osservare il mondo e capire come proseguire.";
+            if (state.isYmirOldFashionedCreated()) {
+                return "Ho preparato l'Ymir's Old Fashioned. Il dominio della Terra non trema più.";
+            }
+            if (state.isYmirPacified()) {
+                return "Ymir è tornato a dormire. Devo raccogliere la sua Lacrima "
+                        + "e preparare l'Old Fashioned nella Forgia di Caverna.";
+            }
+            return "Ascoltare Gunnar nel Cerchio delle Rune, leggere la stele "
+                    + "alla Rupe dell'Eco e riaddormentare Ymir nel Cuore di Roccia."
+                    + (!state.hasLearnedGunnarWisdom() ? "\n\nGunnar mi mette alla prova con i suoi monologhi." : "")
+                    + (!state.hasReadYmirStele() ? "\n\nMi manca ancora la sequenza custodita dalla Rupe." : "");
         }
         if (state.getChapter() == 2) {
             return state.isBossDefeated()
@@ -96,6 +107,23 @@ public final class GameJournalDialog extends JDialog {
         }
         if (!found) text.append("Non ho ancora trovato ingredienti utili.\n\n");
         text.append("Gli ingredienti reagiscono tra loro: devo fare attenzione alle proprietà descritte.");
+        if (state.getChapter() >= 3) {
+            text.append("\n\n--- DOMINIO DI YMIR ---\n");
+            if (state.hasLearnedGunnarWisdom()) {
+                text.append("Gunnar mi ha insegnato:\n")
+                        .append("RADICE = la radice trattiene il mondo\n")
+                        .append("BATTITO = il cuore pulsa nel granito\n")
+                        .append("RESPIRO = il vento torna al silenzio\n")
+                        .append("Il muschio profuma di terra pulita, la radice nera è velenosa.\n\n");
+            } else {
+                text.append("Devo ascoltare Gunnar senza interromperlo.\n\n");
+            }
+            if (state.hasReadYmirStele()) {
+                text.append(YmirRuneRitual.steleInscription(YmirRuneRitual.current(state)));
+            } else {
+                text.append("La stele della Rupe dell'Eco custodisce l'ordine dei versi.");
+            }
+        }
         return text.toString();
     }
 
@@ -112,6 +140,13 @@ public final class GameJournalDialog extends JDialog {
         }
         if (state.getChapter() >= 2 && state.isBossDefeated()) {
             text.append("\nRán è stata sconfitta; il suo dono è entrato nel mio inventario.\n");
+        }
+        if (state.getChapter() >= 3) {
+            text.append("\nCAPITOLO III — Il Dominio di Ymir\n")
+                    .append("Il suolo è la carne del gigante primordiale. Sento il suo cuore sotto i piedi.\n");
+            if (state.hasLearnedGunnarWisdom()) text.append("Gunnar mi ha finalmente insegnato il linguaggio delle rune.\n");
+            if (state.hasReadYmirStele()) text.append("Ho copiato i versi della Rupe dell'Eco.\n");
+            if (state.isYmirPacified()) text.append("Ymir è tornato al sonno. La sua Lacrima mi attende.\n");
         }
         return text.toString();
     }
