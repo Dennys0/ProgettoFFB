@@ -33,7 +33,12 @@ public final class ItemOriginCatalog {
             Map.entry("INCHIOSTRO_KRAKEN", new Origin(2, "Giardini sommersi", "/images/chapter2/room4_gardens.png")),
             Map.entry("SALE_JORMUNGANDR", new Origin(2, "Fossa degli abissi", "/images/chapter2/room5_pit.png")),
             Map.entry("ACQUA_LETE", new Origin(2, "Fossa degli abissi", "/images/chapter2/room5_pit.png")),
-            Map.entry("SCHIUMA_AEGIR", new Origin(2, "Dono di Rán dopo lo scontro", "/images/chapter2/room7_boss.png"))
+            Map.entry("SCHIUMA_AEGIR", new Origin(2, "Dono di Rán dopo lo scontro", "/images/chapter2/room7_boss.png")),
+            Map.entry("MUSCHIO_MIDGARD", new Origin(3, "Foresta Pietrificata", "/images/chapter3/room4_forest.png")),
+            Map.entry("RADICE_NIDHOGG", new Origin(3, "Foresta Pietrificata", "/images/chapter3/room4_forest.png")),
+            Map.entry("FRAMMENTO_YGGDRASIL", new Origin(3, "Miniere Basaltiche", "/images/chapter3/room5_miners.png")),
+            Map.entry("POLVERE_OSSA_GIGANTE", new Origin(3, "Miniere Basaltiche", "/images/chapter3/room5_miners.png")),
+            Map.entry("LACRIMA_YMIR", new Origin(3, "Cuore di Roccia — ricompensa di Ymir", "/images/chapter3/room7_boss.png"))
     );
 
     private ItemOriginCatalog() { }

@@ -45,6 +45,15 @@ MERGE INTO items KEY(id) VALUES
 ('ACQUA_LETE', 'Acqua del Lete', 'Una linfa trasparente e stranamente immobile.', '/images/items/item_lete.png'),
 ('SCHIUMA_AEGIR', 'Schiuma di Ægir', 'La birra sottomarina lucente estratta dalle reti della dea Rán.', '/images/items/item_foam.png');
 
+-- Oggetti del Capitolo 3. MERGE conserva gli slot preesistenti e rende
+-- riconoscibili dal DB gli oggetti raccolti durante il nuovo capitolo.
+MERGE INTO items KEY(id) VALUES
+('MUSCHIO_MIDGARD', 'Muschio di Midgard', 'Un lichene brillante che emana un profumo amarognolo di terra pulita.', '/images/items/item_moss.png'),
+('RADICE_NIDHOGG', 'Radice Nera di Nidhogg', 'Una radice nerastra e pulsante, attraversata da vene cremisi.', '/images/items/item_nidhogg.png'),
+('FRAMMENTO_YGGDRASIL', 'Frammento di Yggdrasil', 'Una scheggia di legno millenario che emette una debole luce dorata.', '/images/items/item_fragment_yggdrasil.png'),
+('POLVERE_OSSA_GIGANTE', 'Polvere di Ossa di Gigante', 'Una polvere biancastra di ossa antiche, straordinariamente pesante.', '/images/items/item_bone.png'),
+('LACRIMA_YMIR', 'Lacrima di Ymir', 'Una lacrima cristallina del gigante primordiale, intrisa della memoria della terra.', '/images/items/item_ymircry.png');
+
 -- Inventario associato a ciascun salvataggio
 CREATE TABLE IF NOT EXISTS save_inventory (
     slot_id INT NOT NULL,

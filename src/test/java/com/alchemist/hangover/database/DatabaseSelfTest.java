@@ -50,6 +50,14 @@ public class DatabaseSelfTest {
         assertEquals("Mappa del Cielo", map.getName());
         assertNotNull(ItemDAO.getItemById("DIARIO_CAPITANO"));
         assertNotNull(ItemDAO.getItemById("SCHIUMA_AEGIR"));
+        for (String itemId : java.util.List.of(
+                "MUSCHIO_MIDGARD", "RADICE_NIDHOGG",
+                "FRAMMENTO_YGGDRASIL", "POLVERE_OSSA_GIGANTE", "LACRIMA_YMIR")) {
+            Item item = ItemDAO.getItemById(itemId);
+            assertNotNull(item, "Oggetto del capitolo 3 mancante: " + itemId);
+            assertNotNull(getClass().getResource(item.getIconPath()),
+                    "Icona assente: " + item.getIconPath());
+        }
     }
 
     @Test
@@ -71,6 +79,27 @@ public class DatabaseSelfTest {
         assertEquals(2, state.getCurrentHealth());
         assertTrue(state.hasGivenMapToMartino());
         assertTrue(state.hasItem("MAPPA_CIELO"));
+    }
+
+    @Test
+    void chapter3ItemsCanBeSavedAndLoaded() {
+        GameState state = GameState.getInstance();
+        state.setChapter(3);
+        state.setCurrentRoom(5);
+        state.addItem(ItemDAO.getItemById("MUSCHIO_MIDGARD"));
+        state.addItem(ItemDAO.getItemById("RADICE_NIDHOGG"));
+        state.addItem(ItemDAO.getItemById("FRAMMENTO_YGGDRASIL"));
+        state.addItem(ItemDAO.getItemById("POLVERE_OSSA_GIGANTE"));
+
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Terra: test"));
+        state.resetState();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(3, state.getChapter());
+        assertEquals(5, state.getCurrentRoom());
+        for (String id : java.util.List.of("MUSCHIO_MIDGARD",
+                "RADICE_NIDHOGG", "FRAMMENTO_YGGDRASIL", "POLVERE_OSSA_GIGANTE")) {
+            assertTrue(state.hasItem(id), "Oggetto non ripristinato: " + id);
+        }
     }
 
     @Test

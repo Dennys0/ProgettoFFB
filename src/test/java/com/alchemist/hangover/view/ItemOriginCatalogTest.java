@@ -12,7 +12,9 @@ class ItemOriginCatalogTest {
                 "POLLINE_YGGDRASIL", "RUGIADA_ASGARD", "CHIAVE_DRAGO",
                 "SOFFIO_HRAESVELGR", "DIARIO_CAPITANO", "CORALLO_RAN",
                 "INCHIOSTRO_KRAKEN", "SALE_JORMUNGANDR", "ACQUA_LETE",
-                "SCHIUMA_AEGIR"
+                "SCHIUMA_AEGIR",
+                "MUSCHIO_MIDGARD", "RADICE_NIDHOGG", "FRAMMENTO_YGGDRASIL",
+                "POLVERE_OSSA_GIGANTE", "LACRIMA_YMIR"
         );
 
         for (String id : ids) {
