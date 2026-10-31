@@ -9,10 +9,24 @@ import java.awt.*;
 public class GameOverPanel extends JPanel {
 
     private JLabel reasonLabel;
+    private JButton btnRetry;
+    private boolean cauldronFailure;
 
+    /** Mostra la causa di una sconfitta ordinaria (boss). */
     public void showReason(String reason) {
+        cauldronFailure = false;
         if (reasonLabel != null) reasonLabel.setText(reason);
+        if (btnRetry != null) btnRetry.setText("RIPROVA LO SCONTRO");
     }
+
+    /** Il calderone non e' uno scontro: il retry deve riaprire la ricetta. */
+    public void showCauldronFailure(String reason) {
+        showReason(reason);
+        cauldronFailure = true;
+        if (btnRetry != null) btnRetry.setText("RIPROVA LA RICETTA");
+    }
+
+    boolean isCauldronFailure() { return cauldronFailure; }
 
     public GameOverPanel() {
         setLayout(null);
@@ -32,7 +46,7 @@ public class GameOverPanel extends JPanel {
         add(subLabel);
 
         // Bottone 1: RIPROVA
-        JButton btnRetry = new JButton("RIPROVA LO SCONTRO");
+        btnRetry = new JButton("RIPROVA LO SCONTRO");
         btnRetry.setFont(new Font("Georgia", Font.BOLD, 18));
         btnRetry.setForeground(Color.BLACK);
         btnRetry.setBackground(new Color(255, 215, 0));
@@ -44,14 +58,18 @@ public class GameOverPanel extends JPanel {
         btnRetry.addActionListener(e -> {
             GameState state = GameState.getInstance();
             boolean retryBoss = state.isBossRetryAvailable();
+            boolean retryForge = state.getChapter() == 3 && cauldronFailure;
             state.resetHealth();
             state.setBossRetryAvailable(false);
             SceneManager manager = SceneManager.getInstance();
             if (state.getChapter() == 3) {
+                if (retryForge) state.setCurrentRoom(3);
                 Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
                 if (chapter3 != null) chapter3.refreshFromGameState();
-                manager.showScene("CHAPTER3",
-                        retryBoss && chapter3 != null ? chapter3::retryBossEncounter : null);
+                Runnable afterTransition = chapter3 == null ? null
+                        : retryForge ? chapter3::retryCauldronAfterFailure
+                        : retryBoss ? chapter3::retryBossEncounter : null;
+                manager.showScene("CHAPTER3", afterTransition);
             } else if (state.getChapter() == 2) {
                 Chapter2Panel chapter2 = (Chapter2Panel) manager.getPanel("CHAPTER2");
                 if (chapter2 != null) chapter2.refreshFromGameState();
@@ -63,6 +81,8 @@ public class GameOverPanel extends JPanel {
                 manager.showScene("CHAPTER1",
                         retryBoss && chapter1 != null ? chapter1::retryBossEncounter : null);
             }
+            cauldronFailure = false;
+            btnRetry.setText("RIPROVA LO SCONTRO");
         });
         add(btnRetry);
 
@@ -77,6 +97,8 @@ public class GameOverPanel extends JPanel {
         btnMenu.setBounds(440, 430, 400, 50);
 
         btnMenu.addActionListener(e -> {
+            cauldronFailure = false;
+            btnRetry.setText("RIPROVA LO SCONTRO");
             GameState.getInstance().resetState();
             SceneManager.getInstance().showScene("MENU");
         });

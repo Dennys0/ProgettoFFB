@@ -23,7 +23,7 @@ public class MainFrame extends JFrame {
         manager.addPanel("TRANSITION_CH1_CH2", new ChapterTransitionPanel());
         manager.addPanel("CHAPTER2", new Chapter2Panel(this));
         manager.addPanel("CHAPTER3", new Chapter3Panel(this));
-        manager.addPanel("CHAPTER3_COMPLETE", new Chapter3CompletePanel());
+        manager.addPanel("CHAPTER3_COMPLETE", new Chapter3CompletePanel(this));
         manager.addPanel("TRANSITION_CH2_CH3", new Chapter3PreviewPanel());
         manager.addPanel("GAMEOVER", new GameOverPanel());
 

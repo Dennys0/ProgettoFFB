@@ -174,7 +174,10 @@ public class SaveLoadDialog extends JDialog {
                     Chapter3Panel chapter3 =
                             (Chapter3Panel) SceneManager.getInstance().getPanel("CHAPTER3");
                     if (chapter3 != null) chapter3.refreshFromGameState();
-                    SceneManager.getInstance().showScene("CHAPTER3");
+                    // Dopo aver completato l'Old Fashioned il giocatore deve
+                    // ritrovare l'epilogo, non una partita che sembra incompleta.
+                    SceneManager.getInstance().showScene(
+                            state.isYmirOldFashionedCreated() ? "CHAPTER3_COMPLETE" : "CHAPTER3");
                 } else if (state.getChapter() == 2) {
                     Chapter2Panel chapter2 =
                             (Chapter2Panel) SceneManager.getInstance().getPanel("CHAPTER2");

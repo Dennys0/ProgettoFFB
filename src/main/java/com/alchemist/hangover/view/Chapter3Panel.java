@@ -244,8 +244,14 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         state.setCurrentHealth(0);
         state.setBossRetryAvailable(false);
         GameOverPanel gameOver = (GameOverPanel) SceneManager.getInstance().getPanel("GAMEOVER");
-        if (gameOver != null) gameOver.showReason(message);
+        if (gameOver != null) gameOver.showCauldronFailure(message);
         SceneManager.getInstance().showScene("GAMEOVER");
+    }
+
+    /** Riprende esattamente dal boccale, senza ripetere il boss o perdere gli ingredienti. */
+    public void retryCauldronAfterFailure() {
+        loadRoom(3);
+        openForge();
     }
 
     private void finishYmirDrink() {

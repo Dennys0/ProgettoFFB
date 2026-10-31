@@ -105,7 +105,8 @@ public class DatabaseSelfTest {
         assertEquals(9345, state.getYmirRuneSeed());
         assertTrue(state.hasLearnedGunnarWisdom());
         assertTrue(state.hasReadYmirStele());
-        assertTrue(state.isYmirOldFashionedCreated());
+        assertTrue(state.isYmirOldFashionedCreated(),
+                "Il finale completato deve sopravvivere al caricamento H2");
         for (String id : java.util.List.of("MUSCHIO_MIDGARD",
                 "RADICE_NIDHOGG", "FRAMMENTO_YGGDRASIL", "POLVERE_OSSA_GIGANTE")) {
             assertTrue(state.hasItem(id), "Oggetto non ripristinato: " + id);
