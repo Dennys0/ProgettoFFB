@@ -170,7 +170,12 @@ public class SaveLoadDialog extends JDialog {
                 dispose();
 
                 GameState state = GameState.getInstance();
-                if (state.getChapter() == 2) {
+                if (state.getChapter() == 3) {
+                    Chapter3Panel chapter3 =
+                            (Chapter3Panel) SceneManager.getInstance().getPanel("CHAPTER3");
+                    if (chapter3 != null) chapter3.refreshFromGameState();
+                    SceneManager.getInstance().showScene("CHAPTER3");
+                } else if (state.getChapter() == 2) {
                     Chapter2Panel chapter2 =
                             (Chapter2Panel) SceneManager.getInstance().getPanel("CHAPTER2");
                     if (chapter2 != null) chapter2.refreshFromGameState();

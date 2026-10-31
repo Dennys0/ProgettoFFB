@@ -22,6 +22,7 @@ public class MainFrame extends JFrame {
         manager.addPanel("CHAPTER1", new Chapter1Panel(this));
         manager.addPanel("TRANSITION_CH1_CH2", new ChapterTransitionPanel());
         manager.addPanel("CHAPTER2", new Chapter2Panel(this));
+        manager.addPanel("CHAPTER3", new Chapter3Panel(this));
         manager.addPanel("TRANSITION_CH2_CH3", new Chapter3PreviewPanel());
         manager.addPanel("GAMEOVER", new GameOverPanel());
 
@@ -60,10 +61,28 @@ public class MainFrame extends JFrame {
                 System.out.println("[DEBUG] Saltato direttamente al Capitolo 2!");
             }
         });
+
+        // Accesso provvisorio al capitolo 3 per verificare le sette stanze,
+        // senza passare dal boss o dalla ricetta del capitolo 2.
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "previewChapter3");
+        getRootPane().getActionMap().put("previewChapter3", new AbstractAction() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                GameState state = GameState.getInstance();
+                state.resetState();
+                state.setChapter(3);
+                state.setCurrentRoom(1);
+                Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
+                if (chapter3 != null) chapter3.refreshFromGameState();
+                manager.showScene("CHAPTER3");
+            }
+        });
     }
 
     private boolean isPlayingChapter() {
         String scene = SceneManager.getInstance().getCurrentSceneName();
-        return "CHAPTER1".equals(scene) || "CHAPTER2".equals(scene);
+        return "CHAPTER1".equals(scene) || "CHAPTER2".equals(scene)
+                || "CHAPTER3".equals(scene);
     }
 }
