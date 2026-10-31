@@ -15,7 +15,6 @@ import java.util.Map;
 public class TavernIntroPanel extends JPanel {
 
     private Image backgroundImage;
-    private Image dialogueBoxImage;
     private JLabel characterSpriteLabel;
     private JLabel nameLabel;
     private JLabel dialogueTextLabel;
@@ -33,13 +32,6 @@ public class TavernIntroPanel extends JPanel {
             backgroundImage = new ImageIcon(getClass().getResource("/images/intro/tavern_bg.png")).getImage();
         } catch (Exception e) {
             System.err.println("Errore caricamento sfondo taverna: " + e.getMessage());
-        }
-
-        // 2. Texture Dialogue Box Custom
-        try {
-            dialogueBoxImage = new ImageIcon(getClass().getResource("/images/ui/dialogue_box.png")).getImage();
-        } catch (Exception e) {
-            System.err.println("Errore caricamento immagine dialogue_box: " + e.getMessage());
         }
 
         // 3. Sprite Personaggi
@@ -61,55 +53,15 @@ public class TavernIntroPanel extends JPanel {
         characterSpriteLabel.setHorizontalAlignment(SwingConstants.CENTER);
         layeredPane.add(characterSpriteLabel, Integer.valueOf(1));
 
-        // 2. Caricamento Texture Dialogue Box con ImageIO
-        try {
-            dialogueBoxImage = javax.imageio.ImageIO.read(getClass().getResourceAsStream("/images/ui/dialogue_box.png"));
-        } catch (Exception e) {
-            System.err.println("ERRORE: Impossibile caricare dialogue_box.png: " + e.getMessage());
-        }
-
-// LIVELLO 2: Box dei Dialoghi
-        JPanel dialogueBox = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                // Migliora la qualitÃ  dello scaling visivo
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-                if (dialogueBoxImage != null) {
-                    // Forza il disegno dell'immagine su tutta la larghezza e altezza del pannello (1200x200)
-                    g2d.drawImage(dialogueBoxImage, 0, 0, getWidth(), getHeight(), this);
-                } else {
-                    g2d.setColor(new Color(20, 20, 20, 230));
-                    g2d.fillRect(0, 0, getWidth(), getHeight());
-                }
-            }
-        };
-
-        dialogueBox.setLayout(null);
-        dialogueBox.setOpaque(false);
-// Imposta posizione e dimensione fissa lungo tutta la fascia inferiore (1200x200)
+        // La stessa cornice illustrata usata da ogni capitolo.
+        SharedDialogueBox dialogueBox = new SharedDialogueBox();
         dialogueBox.setBounds(40, 470, 1200, 200);
-
-// Nome Personaggio (Posizionato dentro la cornice)
-        nameLabel = new JLabel("");
-        nameLabel.setFont(new Font("Georgia", Font.BOLD, 24));
-        nameLabel.setForeground(new Color(255, 215, 0));
-        nameLabel.setBounds(65, 25, 500, 30);
-        dialogueBox.add(nameLabel);
-
-// Testo del Dialogo
-        dialogueTextLabel = new JLabel("");
-        dialogueTextLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        dialogueTextLabel.setForeground(Color.WHITE);
-        dialogueTextLabel.setBounds(65, 60, 1070, 95);
-        dialogueTextLabel.setVerticalAlignment(SwingConstants.TOP);
-        dialogueBox.add(dialogueTextLabel);
-
-// Prompt di avanzamento (disabilitato per non mostrare scritte sovrapposte)
-        skipPromptLabel = new JLabel("");
-        dialogueBox.add(skipPromptLabel);
+        nameLabel = dialogueBox.getSpeakerLabel();
+        dialogueTextLabel = dialogueBox.getTextLabel();
+        // Nell'introduzione MOSTRA FRASE ha un pulsante dedicato in alto;
+        // non visualizziamo due controlli identici.
+        skipPromptLabel = dialogueBox.getRevealLabel();
+        skipPromptLabel.setText("");
 
         layeredPane.add(dialogueBox, Integer.valueOf(2));
 
