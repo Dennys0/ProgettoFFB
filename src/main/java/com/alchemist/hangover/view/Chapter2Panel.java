@@ -75,7 +75,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
 
     private void initHotspots() {
         // NPC Siegfried al Bancone (Stanza 2)
-        siegfriedHotspot = new JButton();
+        siegfriedHotspot = new HotspotButton();
         siegfriedHotspot.setBounds(500, 200, 280, 400);
         siegfriedHotspot.setContentAreaFilled(false);
         siegfriedHotspot.setBorderPainted(false);
@@ -87,19 +87,19 @@ public class Chapter2Panel extends AbstractChapterPanel {
         add(siegfriedHotspot);
 
         // Calderone nella Sacrestia Corallina (Stanza 3)
-        cauldronHotspot = new JButton();
+        cauldronHotspot = new HotspotButton();
         cauldronHotspot.setBounds(500, 350, 280, 250);
         cauldronHotspot.setContentAreaFilled(false);
         cauldronHotspot.setBorderPainted(false);
         cauldronHotspot.setFocusPainted(false);
         cauldronHotspot.setFocusable(false);
         cauldronHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        cauldronHotspot.setToolTipText("Usa il calderone");
+        cauldronHotspot.setToolTipText("Interagisci con il calderone");
         cauldronHotspot.addActionListener(e -> interactWithCauldron());
         add(cauldronHotspot);
 
         // Boss Rán nel Santuario (Stanza 7 - Area ridotta per non coprire le frecce)
-        ranBossHotspot = new JButton();
+        ranBossHotspot = new HotspotButton();
         ranBossHotspot.setBounds(250, 200, 780, 380);
         ranBossHotspot.setContentAreaFilled(false);
         ranBossHotspot.setBorderPainted(false);
