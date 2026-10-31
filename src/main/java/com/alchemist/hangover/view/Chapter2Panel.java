@@ -169,9 +169,18 @@ public class Chapter2Panel extends AbstractChapterPanel {
     private void triggerRanBossEncounter() {
         GameState gs = GameState.getInstance();
         if (gs.isBossDefeated()) {
-            JOptionPane.showMessageDialog(this, "Le reti di Rán sono spezzate. Il santuario sommerso è calmo.", "Boss Già Sconfitto", JOptionPane.INFORMATION_MESSAGE);
+            StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.OCEAN,
+                    "RAN E' STATA PLACATA",
+                    "Le reti di Ran sono spezzate. Il santuario sommerso e' calmo.");
             return;
         }
+
+        if (!StoryPromptDialog.confirm(mainFrameRef,
+                StoryPromptDialog.Theme.OCEAN, "IL SANTUARIO DI RAN",
+                "La dea attende nelle profondita', circondata dalle sue reti.\n"
+                + "Potresti sfidarla con le parole del Diario del Capitano.\n\n"
+                + "Vuoi iniziare lo scontro?",
+                "AFFRONTA RAN", "NON ANCORA")) return;
 
         setArrowsVisible(false);
         ranBossHotspot.setVisible(false);
