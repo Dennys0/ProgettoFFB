@@ -1,0 +1,10 @@
+NARRATOR|Un piccolo diavoletto si aggrappa alla finestra della cabina, osservando Arthur con un ghigno inquietante.
+ARTHUR|Ma che cazzo...?! E tu da dove sbuchi?!
+DIAVOLETTO|Ahahah! Un altro ubriacone! Quanto hai bevuto, umano?
+ARTHUR|Abbastanza da non ricordare come sono finito su questa maledetta nave!
+DIAVOLETTO|Oh, ma certo... Una serata al bar, qualche bicchiere di troppo e... puff! Benvenuto dall'altra parte!
+ARTHUR|Dall'altra parte di cosa?!
+DIAVOLETTO|Eheheh... Bella domanda. Sei proprio sicuro di esserti svegliato?
+ARTHUR|Che diavolo vorresti dire?!
+DIAVOLETTO|Niente, niente! Ma fossi in te, cercherei di ricordare chi ti ha offerto l'ultimo drink...
+NARRATOR|Il diavoletto ridacchia e scompare tra le nuvole, lasciando Arthur con più domande di prima.

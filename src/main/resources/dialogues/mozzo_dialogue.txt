@@ -1,0 +1,83 @@
+NARRATOR|Sul ponte dello Skíðblaðnir, un mozzo spazza lentamente le assi di legno. Il vento scuote le vele mentre le nuvole scorrono sotto la nave. Arthur si avvicina.
+
+ARTHUR|Ehi, amico. Posso chiederti una cosa?
+
+MOZZO|Se non riguarda la paga o il motivo per cui spazzo una nave volante, certamente.
+
+ARTHUR|Veramente volevo proprio chiederti quello.
+
+MOZZO|Ah. Allora mettiti in fila. Me lo chiedo anch'io da tre settimane.
+
+ARTHUR|Ma la polvere non dovrebbe volare via?
+
+MOZZO|In teoria sì. In pratica torna sempre.
+
+ARTHUR|La polvere?
+
+MOZZO|Già... la polvere.
+
+NARRATOR|Il mozzo continua a spazzare senza alzare lo sguardo.
+
+ARTHUR|Senti, hai mai visto un falco enorme da queste parti?
+
+MOZZO|Quanto enorme?
+
+ARTHUR|Abbastanza da essere considerato un dio.
+
+MOZZO|Ah... quello. Un brutto carattere e un'insopportabile abitudine di fare vento.
+
+ARTHUR|Mi hanno detto che dovrò affrontarlo.
+
+MOZZO|Ahahah! Bella questa! Aspetta... dici sul serio?
+
+ARTHUR|Purtroppo sì.
+
+MOZZO|Oh. Beh, è stato un piacere conoscerti.
+
+ARTHUR|Molto incoraggiante. Qualche consiglio?
+
+MOZZO|Evita di farti mangiare. E magari non guardare in alto quando il vento smette di soffiare.
+
+ARTHUR|Perché?
+
+MOZZO|Perché potrebbe essere lui a guardare te.
+
+NARRATOR|Il mozzo si ferma per un istante, poi riprende a spazzare.
+
+ARTHUR|Sai qualcosa che non mi stai dicendo?
+
+MOZZO|Io? Sono soltanto quello che spazza il ponte.
+
+ARTHUR|Certo. E io sono il re di Asgard.
+
+MOZZO|Piacere, maestà. Attento a non sporcare.
+
+NARRATOR|Un'ombra immensa attraversa le nuvole sotto la nave. Il mozzo stringe la scopa.
+
+ARTHUR|Hai visto quell'ombra?!
+
+MOZZO|Sarà stata una nuvola.
+
+ARTHUR|Una nuvola con le ali?!
+
+MOZZO|Le nuvole hanno forme strane, quassù.
+
+ARTHUR|Va bene, vado a cercare quel falco.
+
+MOZZO|Buona fortuna. E ricorda: gli dèi guardano sempre dall'alto... raramente si aspettano qualcosa da sotto.
+
+ARTHUR|Sembra quasi un consiglio.
+
+MOZZO|Sembra. Ora lasciami lavorare.
+
+NARRATOR|Arthur si allontana, scuotendo la testa.
+
+MOZZO|Ehi, Arthur! Se trovi una piuma gigante, portamela!
+
+ARTHUR|Perché?!
+
+MOZZO|Devo pur cambiare questa maledetta scopa!
+
+NARRATOR|Il mozzo riprende a spazzare mentre una raffica improvvisa attraversa il ponte.
+
+NARRATOR|FINE DEL DIALOGO.

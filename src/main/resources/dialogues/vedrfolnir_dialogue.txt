@@ -1,0 +1,20 @@
+NARRATOR|Il cielo si oscura. Veðrfölnir vola accanto alla nave, mentre il vento improvvisamente si placa.
+ARTHUR|Porca puttana... Un altro uccello gigante?! Ma che cazzo avete tutti con questa nave?!
+VEDRFOLNIR|Taci, umano. Non sono qui per divorarti. Sono qui per avvertirti.
+ARTHUR|Ah, fantastico! Finalmente qualcuno che non vuole ammazzarmi!
+VEDRFOLNIR|Non festeggiare. Qualcosa di molto peggio si sta risvegliando.
+ARTHUR|Peggio di un dio incazzato?!
+VEDRFOLNIR|Hræsvelgr. Il Divoratore di Cadaveri. Il battito delle sue ali genera i venti che squarciano i nove mondi.
+ARTHUR|E immagino che questo stronzo sia diretto proprio qui.
+VEDRFOLNIR|Non è lui che viene verso di te, Arthur... sei tu che stai entrando nel suo dominio.
+NARRATOR|Un tuono lontano scuote lo scafo. Veðrfölnir osserva l'orizzonte con inquietudine.
+ARTHUR|E come cazzo faccio a sopravvivere?!
+VEDRFOLNIR|Quando il vento smetterà di soffiare, non credere che la tempesta sia finita. Sarà allora che aprirà le ali.
+ARTHUR|Quindi il silenzio è un brutto segno. Perfetto.
+VEDRFOLNIR|Ricorda, umano... persino la più grande delle tempeste deve riprendere fiato.
+ARTHUR|Aspetta! Che significa?!
+VEDRFOLNIR|Lo capirai... se vivrai abbastanza.
+NARRATOR|Veðrfölnir si allontana tra le nuvole. In lontananza, un'ombra colossale oscura per un istante il cielo.
+ARTHUR|Giuro che se esco vivo da questa storia, non berrò mai più.
+NARRATOR|Una raffica improvvisa fa tremare le vele.
+ARTHUR|...Va bene, magari solo una birra.
