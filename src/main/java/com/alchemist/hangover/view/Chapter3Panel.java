@@ -52,18 +52,14 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     }
 
     private void createGunnarHotspot() {
+        // Gunnar e' gia' raffigurato seduto a sinistra in room2_rune.png.
+        // L'area di clic e' trasparente: il ritratto va mostrato solo
+        // nella finestra di dialogo GunnarDialogueDialog.
+        // Coordinate in base alla risoluzione di gioco 1280x720.
         gunnarHotspot = new HotspotButton();
-        gunnarHotspot.setBounds(85, 190, 285, 445);
-        gunnarHotspot.setToolTipText("Ascolta Gunnar, l'eremita delle rune");
-        java.net.URL spriteUrl = getClass().getResource("/images/characters/gunnar_realms.png");
-        if (spriteUrl != null) {
-            Image sprite = new ImageIcon(spriteUrl).getImage()
-                    .getScaledInstance(285, 445, Image.SCALE_SMOOTH);
-            gunnarHotspot.setIcon(new ImageIcon(sprite));
-        } else {
-            gunnarHotspot.setText("Gunnar");
-            gunnarHotspot.setForeground(new Color(239, 205, 129));
-        }
+        gunnarHotspot.setBounds(143, 268, 139, 174);
+        gunnarHotspot.setToolTipText("Parla con Gunnar, l'eremita seduto sulla roccia");
+        gunnarHotspot.getAccessibleContext().setAccessibleName("Parla con Gunnar");
         gunnarHotspot.addActionListener(e -> {
             boolean alreadyLearned = GameState.getInstance().hasLearnedGunnarWisdom();
             new GunnarDialogueDialog(mainFrameRef).setVisible(true);
