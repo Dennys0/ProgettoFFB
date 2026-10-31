@@ -24,6 +24,18 @@ class YmirRuneRitualTest {
     }
 
     @Test
+    void validationRequiresBothTheCorrectPositionAndRune() {
+        YmirRuneRitual.Step step = new YmirRuneRitual.Step(
+                YmirRuneRitual.Rune.BATTITO, YmirRuneRitual.Zone.CENTRO);
+        assertTrue(YmirRuneRitual.isCorrectStep(step,
+                YmirRuneRitual.Rune.BATTITO, YmirRuneRitual.Zone.CENTRO));
+        assertFalse(YmirRuneRitual.isCorrectStep(step,
+                YmirRuneRitual.Rune.RESPIRO, YmirRuneRitual.Zone.CENTRO));
+        assertFalse(YmirRuneRitual.isCorrectStep(step,
+                YmirRuneRitual.Rune.BATTITO, YmirRuneRitual.Zone.DESTRA));
+    }
+
+    @Test
     void inscriptionReflectsTheExactSequenceForThatSave() {
         List<YmirRuneRitual.Step> steps = YmirRuneRitual.fromSeed(781);
         String inscription = YmirRuneRitual.steleInscription(steps);

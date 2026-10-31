@@ -8,6 +8,12 @@ import java.awt.*;
 
 public class GameOverPanel extends JPanel {
 
+    private JLabel reasonLabel;
+
+    public void showReason(String reason) {
+        if (reasonLabel != null) reasonLabel.setText(reason);
+    }
+
     public GameOverPanel() {
         setLayout(null);
         setBackground(new Color(15, 10, 15));
@@ -19,6 +25,7 @@ public class GameOverPanel extends JPanel {
         add(titleLabel);
 
         JLabel subLabel = new JLabel("La tempesta ha avuto la meglio sul tuo spirito...", SwingConstants.CENTER);
+        reasonLabel = subLabel;
         subLabel.setFont(new Font("Georgia", Font.ITALIC, 20));
         subLabel.setForeground(new Color(200, 200, 200));
         subLabel.setBounds(240, 260, 800, 40);
@@ -40,7 +47,12 @@ public class GameOverPanel extends JPanel {
             state.resetHealth();
             state.setBossRetryAvailable(false);
             SceneManager manager = SceneManager.getInstance();
-            if (state.getChapter() == 2) {
+            if (state.getChapter() == 3) {
+                Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
+                if (chapter3 != null) chapter3.refreshFromGameState();
+                manager.showScene("CHAPTER3",
+                        retryBoss && chapter3 != null ? chapter3::retryBossEncounter : null);
+            } else if (state.getChapter() == 2) {
                 Chapter2Panel chapter2 = (Chapter2Panel) manager.getPanel("CHAPTER2");
                 if (chapter2 != null) chapter2.refreshFromGameState();
                 manager.showScene("CHAPTER2",

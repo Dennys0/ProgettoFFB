@@ -1,6 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.controller.SceneManager;
 import javax.swing.*;
 import java.awt.*;
 
@@ -105,18 +106,39 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             ymirHotspot.setFont(new Font("Georgia", Font.BOLD, 40));
             System.err.println("[Chapter3Panel] Sprite Ymir non trovato.");
         }
-        ymirHotspot.addActionListener(e -> {
-            // Il rituale di rune e posizionamento verra' scritto insieme
-            // al dialogo di Gunnar. Nessun drop prima della vera vittoria.
-            JOptionPane.showMessageDialog(mainFrameRef,
-                    "La roccia pulsa al ritmo del respiro di Ymir.\n"
-                    + "Per riaddormentarlo dovrai comprendere le rune della Rupe dell'Eco"
-                    + " e ascoltare Gunnar.\n\n"
-                    + "Il rituale del boss verra' implementato nella prossima fase.",
-                    "Ymir si sta risvegliando", JOptionPane.INFORMATION_MESSAGE);
-        });
+        ymirHotspot.addActionListener(e -> triggerYmirEncounter());
         add(ymirHotspot);
         ymirHotspot.setVisible(false);
+    }
+
+    private void triggerYmirEncounter() {
+        GameState state = GameState.getInstance();
+        if (state.isYmirPacified()) return;
+        if (!state.hasLearnedGunnarWisdom() || !state.hasReadYmirStele()) {
+            JOptionPane.showMessageDialog(mainFrameRef,
+                    "Il gigante si muove e la roccia trema sotto i tuoi piedi.\n\n"
+                    + (!state.hasLearnedGunnarWisdom()
+                        ? "Devi ascoltare Gunnar fino alla fine nel Cerchio delle Rune.\n" : "")
+                    + (!state.hasReadYmirStele()
+                        ? "Devi leggere la stele della Rupe dell'Eco.\n" : "")
+                    + "\nRaccogli gli indizi prima di iniziare il rituale.",
+                    "Il sonno di Ymir non puo' essere spezzato",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        setArrowsVisible(false);
+        ymirHotspot.setVisible(false);
+        new YmirBossOverlay(mainFrameRef).setVisible(true);
+        if ("CHAPTER3".equals(SceneManager.getInstance().getCurrentSceneName())) {
+            loadRoom(7); // Mostra la Lacrima dopo la vittoria.
+        }
+    }
+
+    /** Il checkpoint ricomincia il rituale, senza rigenerare i versi della stele. */
+    public void retryBossEncounter() {
+        if (GameState.getInstance().isYmirPacified()) return;
+        loadRoom(7);
+        triggerYmirEncounter();
     }
 
     @Override

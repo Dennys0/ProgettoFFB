@@ -45,6 +45,11 @@ public final class YmirRuneRitual {
         return List.copyOf(result);
     }
 
+    public static boolean isCorrectStep(Step expected, Rune attemptedRune, Zone attemptedZone) {
+        return expected != null && expected.rune() == attemptedRune
+                && expected.safeZone() == attemptedZone;
+    }
+
     public static List<Step> current(GameState state) {
         return fromSeed(state.ensureYmirRuneSeed());
     }
