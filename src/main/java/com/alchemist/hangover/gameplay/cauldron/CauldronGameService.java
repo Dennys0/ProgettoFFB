@@ -1,4 +1,4 @@
-package com.alchemist.hangover.controller;
+package com.alchemist.hangover.gameplay.cauldron;
 
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;

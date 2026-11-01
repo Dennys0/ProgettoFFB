@@ -2,7 +2,7 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.controller.CauldronGameService;
+import com.alchemist.hangover.gameplay.cauldron.CauldronGameService;
 import com.alchemist.hangover.controller.AudioManager;
 
 import java.awt.Frame;

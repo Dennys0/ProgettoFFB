@@ -1,4 +1,6 @@
-package com.alchemist.hangover.model;
+package com.alchemist.hangover.gameplay.boss;
+
+import com.alchemist.hangover.model.Item;
 
 import java.util.Optional;
 

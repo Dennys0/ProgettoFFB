@@ -1,7 +1,7 @@
 package com.alchemist.hangover.controller;
 
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.model.BossRewardCatalog;
+import com.alchemist.hangover.gameplay.boss.BossRewardCatalog;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

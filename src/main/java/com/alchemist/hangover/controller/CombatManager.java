@@ -1,7 +1,7 @@
 package com.alchemist.hangover.controller;
 
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.model.BossRewardCatalog;
+import com.alchemist.hangover.gameplay.boss.BossRules;
 import com.alchemist.hangover.view.GameOverPanel;
 import com.alchemist.hangover.view.StoryPromptDialog;
 
@@ -17,10 +17,9 @@ public final class CombatManager {
     /** @return true when Arthur has lost all available hearts */
     public static boolean takeHit(String defeatReason) {
         GameState state = GameState.getInstance();
-        state.takeDamage();
+        boolean defeated = BossRules.takeHit(state);
         AudioManager.getInstance().playEffect(AudioManager.Effect.DAMAGE);
-        if (state.getCurrentHealth() > 0) return false;
-        state.setBossRetryAvailable(true);
+        if (!defeated) return false;
         GameOverPanel panel = (GameOverPanel) SceneManager.getInstance().getPanel("GAMEOVER");
         if (panel != null) panel.showReason(defeatReason);
         return true;
@@ -33,14 +32,7 @@ public final class CombatManager {
     }
 
     public static void victory(int chapter) {
-        GameState state = GameState.getInstance();
-        switch (chapter) {
-            case 1, 2 -> state.setBossDefeated(true);
-            case 3 -> state.setYmirPacified(true);
-            default -> throw new IllegalArgumentException("Unknown boss chapter " + chapter);
-        }
-        state.setBossRetryAvailable(false);
-        BossRewardCatalog.immediateReward(chapter).ifPresent(state::addItem);
+        BossRules.victory(GameState.getInstance(), chapter);
         AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
     }
 }
