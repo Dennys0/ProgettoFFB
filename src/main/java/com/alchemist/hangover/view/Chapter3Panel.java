@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,13 +27,13 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private int crackInspections;
     private JButton steleHotspot;
     private JButton forgeHotspot;
-    private YmirCauldronPanel brewingPanel;
     // La cornice originale e lo sprite si aprono NELLA stanza,
     // come avviene nei primi due capitoli.
     private SharedDialogueBox gunnarDialogueBox;
     private JLabel gunnarDialogueSprite;
     private DialogueSystem gunnarDialogueSystem;
     private boolean gunnarConversationActive;
+    private boolean gunnarRewardConversation;
 
     /** Hotspot invisibili: gli NPC sono gia' raffigurati nei PNG delle stanze. */
     record NpcDefinition(int room, Rectangle bounds, String action, String dialogue) { }
@@ -48,7 +47,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             new NpcDefinition(6, new Rectangle(713, 373, 365, 178),
                     "Parla con Níðhöggr", "/dialogues/ch3_nighodd_revised.txt")
     );
-    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
     private final Map<String, ImageIcon> npcPortraits = new HashMap<>();
     private SharedDialogueBox npcDialogueBox;
     private JLabel npcDialogueSprite;
@@ -56,9 +54,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private boolean npcConversationActive;
 
     public Chapter3Panel(JFrame mainFrame) {
-        initializeChapterBase(mainFrame,
-                Chapter3World.backgrounds(),
-                Chapter3World.exits());
+        initializeChapterBase(mainFrame, ChapterLayouts.forChapter(3));
         // Stanza 4: Foresta Pietrificata.
         addItemWorldButton("MUSCHIO_MIDGARD", "/images/items/item_moss.png",
                 350, 445, 132, 98, 4, "Muschio di Midgard",
@@ -212,23 +208,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         );
         gunnarDialogueSystem.setWrapWidth(995);
 
-        gunnarDialogueBox.getRevealLabel().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (gunnarConversationActive) gunnarDialogueSystem.revealCurrentLine();
-            }
-        });
-
-        MouseAdapter advance = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (gunnarConversationActive) gunnarDialogueSystem.nextLine();
-            }
-        };
-        gunnarDialogueSprite.addMouseListener(advance);
-        gunnarDialogueBox.addMouseListener(advance);
-        gunnarDialogueBox.getSpeakerLabel().addMouseListener(advance);
-        gunnarDialogueBox.getTextLabel().addMouseListener(advance);
+        DialogueManager.connect(gunnarDialogueBox, gunnarDialogueSprite,
+                gunnarDialogueSystem, () -> gunnarConversationActive);
 
         InputMap inputs = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actions = getActionMap();
@@ -252,6 +233,27 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         });
     }
 
+    /** Stage choice stays independent from visual rendering and can be tested headlessly. */
+    static String gunnarDialoguePath(GameState state) {
+        if (state.hasLearnedGunnarWisdom()) return "/dialogues/ch3_gunnar_repeat.txt";
+        return state.hasHeardGunnarIntroduction()
+                ? "/dialogues/ch3_gunnar_reward.txt" : "/dialogues/ch3_gunnar.txt";
+    }
+
+    /** Invoked only after the final line, never on ESC or a room change. */
+    static boolean completeGunnarStage(GameState state, boolean rewardConversation) {
+        if (state.hasLearnedGunnarWisdom()) return false;
+        if (!state.hasHeardGunnarIntroduction()) {
+            state.setGunnarIntroductionHeard(true);
+            return false;
+        }
+        if (rewardConversation) {
+            state.setGunnarWisdomLearned(true);
+            return true;
+        }
+        return false;
+    }
+
     private void startGunnarDialogue() {
         if (gunnarConversationActive || npcConversationActive || currentRoom != 2) return;
         gunnarConversationActive = true;
@@ -261,7 +263,11 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarDialogueBox.setVisible(true);
         setComponentZOrder(gunnarDialogueBox, 0);
         setComponentZOrder(gunnarDialogueSprite, 1);
-        gunnarDialogueSystem.loadDialogue("/dialogues/ch3_gunnar.txt");
+        GameState state = GameState.getInstance();
+        gunnarRewardConversation = !state.hasLearnedGunnarWisdom()
+                && state.hasHeardGunnarIntroduction();
+        String resource = gunnarDialoguePath(state);
+        gunnarDialogueSystem.loadDialogue(resource);
         gunnarDialogueSystem.startDialogue();
         repaint();
     }
@@ -273,11 +279,16 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarDialogueBox.setVisible(false);
         gunnarDialogueSprite.setVisible(false);
         if (completed) {
-            boolean firstTime = !GameState.getInstance().hasLearnedGunnarWisdom();
-            GameState.getInstance().setGunnarWisdomLearned(true);
-            if (firstTime) ToastNotification.show(this,
-                    "Hai compreso il linguaggio delle rune: indizi nel Diario.");
+            GameState state = GameState.getInstance();
+            boolean firstMeeting = !state.hasHeardGunnarIntroduction()
+                    && !state.hasLearnedGunnarWisdom();
+            boolean rewarded = completeGunnarStage(state, gunnarRewardConversation);
+            if (firstMeeting) ToastNotification.show(this,
+                    "Gunnar ha terminato il racconto. Torna a parlargli per la sua saggezza.");
+            else if (rewarded) ToastNotification.show(this,
+                    "Saggezza di Gunnar ottenuta: gli indizi sono nel Diario.");
         }
+        gunnarRewardConversation = false;
         gunnarHotspot.setVisible(currentRoom == 2);
         updateArrowVisibility();
         hudPanel.updateHUD();
@@ -314,22 +325,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 this::updateNpcPortrait,
                 this::closeNpcDialogue);
         npcDialogueSystem.setWrapWidth(995);
-        npcDialogueBox.getRevealLabel().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (npcConversationActive) npcDialogueSystem.revealCurrentLine();
-            }
-        });
-        MouseAdapter advance = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (npcConversationActive) npcDialogueSystem.nextLine();
-            }
-        };
-        npcDialogueBox.addMouseListener(advance);
-        npcDialogueBox.getSpeakerLabel().addMouseListener(advance);
-        npcDialogueBox.getTextLabel().addMouseListener(advance);
-        npcDialogueSprite.addMouseListener(advance);
+        DialogueManager.connect(npcDialogueBox, npcDialogueSprite,
+                npcDialogueSystem, () -> npcConversationActive);
     }
 
     private static ImageIcon loadNpcPortrait(String resource) {
@@ -367,32 +364,19 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     }
 
     private void createNpcHotspot(NpcDefinition npc) {
-        HotspotButton hotspot = new HotspotButton();
-        hotspot.setBounds(npc.bounds());
-        hotspot.setToolTipText(npc.action());
-        hotspot.getAccessibleContext().setAccessibleName(npc.action());
-        hotspot.addActionListener(e -> startNpcDialogue(npc));
-        npcHotspots.computeIfAbsent(npc.room(), ignored -> new ArrayList<>()).add(hotspot);
-        add(hotspot);
-        hotspot.setVisible(false);
+        registerNpcHotspot(npc.room(), npc.bounds(), npc.action(),
+                () -> startNpcDialogue(npc));
     }
 
     private void updateNpcHotspots() {
-        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
-            for (HotspotButton hotspot : entry.getValue()) {
-                boolean show = currentRoom == entry.getKey()
-                        && !gunnarConversationActive && !npcConversationActive
-                        && (brewingPanel == null || !brewingPanel.isVisible());
-                hotspot.setVisible(show);
-                if (show) setComponentZOrder(hotspot, 0);
-            }
-        }
+        setRegisteredNpcHotspotsVisible(
+                !gunnarConversationActive && !npcConversationActive
+                );
     }
 
     private void startNpcDialogue(NpcDefinition npc) {
         if (gunnarConversationActive || npcConversationActive
-                || currentRoom != npc.room() || (brewingPanel != null && brewingPanel.isVisible()))
-            return;
+                || currentRoom != npc.room()) return;
         npcConversationActive = true;
         setArrowsVisible(false);
         updateNpcHotspots();
@@ -443,56 +427,14 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         forgeHotspot.addActionListener(e -> openForge());
         add(forgeHotspot);
         forgeHotspot.setVisible(false);
-
-        brewingPanel = new YmirCauldronPanel(this::closeForge,
-                this::finishYmirDrink, this::onBrewingDisaster);
-        brewingPanel.setBounds(220, 90, YmirCauldronPanel.WIDTH, YmirCauldronPanel.HEIGHT);
-        add(brewingPanel);
-        brewingPanel.setVisible(false);
     }
 
+    /** I tre capitoli aprono esattamente lo stesso calderone, con la ricetta
+     * scelta da RecipeManager. Il dialogo modale impedisce click sul mondo. */
     private void openForge() {
         if (npcConversationActive || gunnarConversationActive) return;
-        brewingPanel.refreshIngredients();
-        brewingPanel.setVisible(true);
-        forgeHotspot.setVisible(false);
-        setArrowsVisible(false);
-        updateNpcHotspots();
-        setComponentZOrder(brewingPanel, 0);
-        brewingPanel.requestFocusInWindow();
-        repaint();
-    }
-
-    private void closeForge() {
-        brewingPanel.setVisible(false);
-        updateArrowVisibility();
-        forgeHotspot.setVisible(currentRoom == 3);
-        updateNpcHotspots();
-        repaint();
-    }
-
-    private void onBrewingDisaster(String message) {
-        closeForge();
-        GameState state = GameState.getInstance();
-        state.setCurrentHealth(0);
-        state.setBossRetryAvailable(false);
-        GameOverPanel gameOver = (GameOverPanel) SceneManager.getInstance().getPanel("GAMEOVER");
-        if (gameOver != null) gameOver.showCauldronFailure(message);
-        SceneManager.getInstance().showScene("GAMEOVER");
-    }
-
-    /** Riprende esattamente dal boccale, senza ripetere il boss o perdere gli ingredienti. */
-    public void retryCauldronAfterFailure() {
-        loadRoom(3);
-        openForge();
-    }
-
-    private void finishYmirDrink() {
-        closeForge();
-        GameState.getInstance().setYmirOldFashionedCreated(true);
-        com.alchemist.hangover.controller.AudioManager.getInstance()
-                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.SUCCESS);
-        SceneManager.getInstance().showScene("CHAPTER3_COMPLETE");
+        if (!CauldronController.allowOpening(mainFrameRef)) return;
+        new CauldronOverlay(mainFrameRef).setVisible(true);
     }
 
     private void createYmirHotspot() {
@@ -511,16 +453,35 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         ymirHotspot.setVisible(false);
     }
 
+    /** Indica esattamente gli indizi mancanti, senza testi incorporati nei PNG. */
+    static String missingYmirClues(boolean hasGunnarWisdom, boolean hasStele) {
+        StringBuilder message = new StringBuilder(
+                "Il gigante si muove sotto la pietra. Per placarlo devi ancora:");
+        if (!hasGunnarWisdom) message.append(
+                "\n• Comprendere la saggezza di Gunnar nel Cerchio delle Rune.");
+        if (!hasStele) message.append(
+                "\n• Leggere la stele della Rupe dell'Eco.");
+        return message.toString();
+    }
+
     private void triggerYmirEncounter(boolean askConfirmation) {
         GameState state = GameState.getInstance();
         if (state.isYmirPacified()) return;
 
-        if (askConfirmation && !YmirStoryPrompt.confirmFight(mainFrameRef)) return;
+        // Gli avvisi e la conferma usano la stessa finestra fantasy
+        // dei boss dei capitoli precedenti, con tema Terra.
         if (!state.hasLearnedGunnarWisdom() || !state.hasReadYmirStele()) {
-            YmirStoryPrompt.showMissingClues(mainFrameRef,
-                    !state.hasLearnedGunnarWisdom(), !state.hasReadYmirStele());
+            StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.EARTH,
+                    "IL SONNO DI YMIR",
+                    missingYmirClues(state.hasLearnedGunnarWisdom(),
+                            state.hasReadYmirStele()));
             return;
         }
+        if (askConfirmation && !StoryPromptDialog.confirm(mainFrameRef,
+                StoryPromptDialog.Theme.EARTH, "IL CUORE DI ROCCIA — YMIR",
+                "Il gigante dorme nel cuore della montagna. "
+                + "Vuoi tentare il rituale del sonno prima che si risvegli?",
+                "AFFRONTA YMIR", "NON ANCORA")) return;
         setArrowsVisible(false);
         ymirHotspot.setVisible(false);
         new YmirBossOverlay(mainFrameRef).setVisible(true);
@@ -568,7 +529,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             steleHotspot.setVisible(currentRoom == 6);
             if (currentRoom == 6) setComponentZOrder(steleHotspot, 0);
         }
-        if (brewingPanel != null) brewingPanel.setVisible(false);
         if (forgeHotspot != null) {
             forgeHotspot.setVisible(currentRoom == 3);
             if (currentRoom == 3) setComponentZOrder(forgeHotspot, 0);

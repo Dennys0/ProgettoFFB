@@ -1,0 +1,13 @@
+package com.alchemist.hangover.view;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CommonCauldronCompletionTest {
+    @Test void eachChapterHasExactlyOneCompletionScene() {
+        assertEquals("TRANSITION_CH1_CH2",CauldronController.completionScene(1));
+        assertEquals("TRANSITION_CH2_CH3",CauldronController.completionScene(2));
+        assertEquals("CHAPTER3_COMPLETE",CauldronController.completionScene(3));
+        assertThrows(IllegalArgumentException.class,()->CauldronController.completionScene(4));
+    }
+}

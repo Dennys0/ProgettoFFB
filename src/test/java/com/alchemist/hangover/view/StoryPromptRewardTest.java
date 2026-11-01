@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StyledEventDialogTest {
+class StoryPromptRewardTest {
     @Test
     void bothChapterThemesDisplayRealBossLootWithOneWorkingContinueButton() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
@@ -22,14 +22,14 @@ class StyledEventDialogTest {
                 Item item = new Item("ITEM_" + i, "Premio boss " + i,
                         "Descrizione ricompensa", art[i]);
                 AtomicInteger clicks = new AtomicInteger();
-                JPanel content = StyledEventDialog.buildRewardContent(
+                JPanel content = StoryPromptDialog.buildRewardContent(
                         themes[i], "VITTORIA", "Hai sconfitto il guardiano.", item,
                         clicks::incrementAndGet);
                 content.setSize(750, 445);
                 JLabel icon = find(content, "bossRewardIcon", JLabel.class);
                 assertNotNull(icon);
                 assertNotNull(icon.getIcon(), "Usare lo sprite reale dell'ingrediente.");
-                ImageIcon original = new ImageIcon(StyledEventDialogTest.class.getResource(art[i]));
+                ImageIcon original = new ImageIcon(StoryPromptRewardTest.class.getResource(art[i]));
                 assertTrue(icon.getIcon().getIconWidth() <= 150);
                 assertTrue(icon.getIcon().getIconHeight() <= 150);
                 assertEquals(original.getIconWidth() / (double) original.getIconHeight(),

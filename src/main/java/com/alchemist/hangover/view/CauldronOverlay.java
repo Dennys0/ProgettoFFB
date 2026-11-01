@@ -1,8 +1,8 @@
 package com.alchemist.hangover.view;
 
-import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
+import com.alchemist.hangover.model.RecipeManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,9 +11,9 @@ import java.util.List;
 
 public class CauldronOverlay extends JDialog {
 
-    private List<Item> selectedItems;
-    private JPanel slotsPanel;
-    private JLabel statusLabel;
+    private final List<Item> selectedItems = new ArrayList<>();
+    private final JPanel slotsPanel;
+    private final JLabel statusLabel;
 
     public CauldronOverlay(Frame parent) {
         super(parent, "CALDERONE ALCHEMICO", true);
@@ -21,8 +21,6 @@ public class CauldronOverlay extends JDialog {
         setLocationRelativeTo(parent);
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
-
-        selectedItems = new ArrayList<>();
 
         // Un unico asset visivo per tutte le postazioni alchemiche.
         // I risultati e le ricette rimangono specifici dei capitoli.
@@ -47,7 +45,8 @@ public class CauldronOverlay extends JDialog {
         inventoryGrid.setBounds(120, 290, 740, 160);
         contentPanel.add(inventoryGrid);
 
-        List<Item> inventory = GameState.getInstance().getInventory();
+        List<Item> inventory = RecipeManager.usableItems(GameState.getInstance().getChapter(),
+                GameState.getInstance().getInventory());
         for (Item item : inventory) {
             JButton btnItem = new JButton();
             btnItem.setPreferredSize(new Dimension(130, 45));
@@ -80,11 +79,6 @@ public class CauldronOverlay extends JDialog {
         JButton btnMix = new HotspotButton();
         btnMix.setToolTipText("Mescola i tre ingredienti");
         btnMix.setBounds(210, 528, 282, 60);
-        btnMix.setContentAreaFilled(false);
-        btnMix.setBorderPainted(false);
-        btnMix.setFocusPainted(false);
-        btnMix.setFocusable(false);
-        btnMix.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnMix.addActionListener(e -> processMixing());
         contentPanel.add(btnMix);
 
@@ -92,11 +86,6 @@ public class CauldronOverlay extends JDialog {
         JButton btnReset = new HotspotButton();
         btnReset.setToolTipText("Svuota gli slot del calderone");
         btnReset.setBounds(520, 528, 252, 60);
-        btnReset.setContentAreaFilled(false);
-        btnReset.setBorderPainted(false);
-        btnReset.setFocusPainted(false);
-        btnReset.setFocusable(false);
-        btnReset.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnReset.addActionListener(e -> {
             selectedItems.clear();
             refreshSlots();
@@ -107,11 +96,6 @@ public class CauldronOverlay extends JDialog {
         JButton btnClose = new HotspotButton();
         btnClose.setToolTipText("Chiudi il calderone");
         btnClose.setBounds(440, 620, 100, 30);
-        btnClose.setContentAreaFilled(false);
-        btnClose.setBorderPainted(false);
-        btnClose.setFocusPainted(false);
-        btnClose.setFocusable(false);
-        btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnClose.addActionListener(e -> dispose());
         contentPanel.add(btnClose);
 
@@ -145,84 +129,22 @@ public class CauldronOverlay extends JDialog {
         slotsPanel.revalidate();
         slotsPanel.repaint();
     }
-    /** Uses the same in-game visual prompt as Chapter I/II encounters. */
-    private void showAlchemyWarning(String title, String message) {
-        Frame owner = getOwner() instanceof Frame frame ? frame : null;
-        StoryPromptDialog.Theme theme = GameState.getInstance().getChapter() == 2
-                ? StoryPromptDialog.Theme.OCEAN
-                : StoryPromptDialog.Theme.SKY;
-        StoryPromptDialog.message(owner, theme, title, message);
-    }
-
     private void processMixing() {
-        if (selectedItems.size() != 3) {
-            statusLabel.setText("Devi selezionare esattamente 3 ingredienti!");
-            return;
+        int chapter = GameState.getInstance().getChapter();
+        java.util.List<String> selectedIds = selectedItems.stream()
+                .map(Item::getId).toList();
+        switch (RecipeManager.evaluate(chapter, selectedIds)) {
+            case INCOMPLETE -> statusLabel.setText("Devi selezionare esattamente 3 ingredienti!");
+            case WRONG_INGREDIENT -> {
+                String message = RecipeManager.failureText(chapter, selectedIds,
+                        GameState.getInstance().getInventory());
+                dispose();
+                CauldronController.fail(message);
+            }
+            case SUCCESS -> {
+                dispose();
+                CauldronController.complete(chapter);
+            }
         }
-        java.util.Set<String> ids = selectedItems.stream()
-                .map(Item::getId)
-                .collect(java.util.stream.Collectors.toSet());
-
-        if (ids.contains("NEBBIA_NIFLHEIM")) {
-            dispose();
-            showAlchemyWarning("Game Over!", "La Nebbia di Niflheim congela all'istante il calderone spaccandolo in due!\nGAME OVER!");
-            GameState.getInstance().resetState();
-            SceneManager.getInstance().showScene("MENU");
-            return;
-        }
-        if (ids.contains("POLLINE_YGGDRASIL")) {
-            dispose();
-            showAlchemyWarning("Reset Livello!", "Il Polline di Yggdrasil provoca un'allucinazione nell'allucinazione!\nTi risvegli smarrito sul ponte...");
-            SceneManager.getInstance().showScene("CHAPTER1");
-            return;
-        }
-        if (ids.contains("ACQUA_LETE")) {
-            dispose();
-            showAlchemyWarning("Amnesia Alchemica", "L'Acqua del Lete ti fa dimenticare ogni ricetta ed enigma!\nL'inventario si svuota e il livello si resetta!");
-            GameState.getInstance().getInventory().clear();
-            SceneManager.getInstance().showScene("CHAPTER2");
-            return;
-        }
-        if (ids.contains("INCHIOSTRO_KRAKEN")) {
-            dispose();
-            showAlchemyWarning("Game Over!", "L'Inchiostro di Kraken crea un buco nero liquido che risucchia il calderone stesso!\nGAME OVER!");
-            GameState.getInstance().resetState();
-            SceneManager.getInstance().showScene("MENU");
-            return;
-        }
-
-        boolean chapter1Recipe = ids.contains("SOFFIO_HRAESVELGR")
-                && ids.contains("PIUMA_FOLGORE")
-                && ids.contains("RUGIADA_ASGARD");
-        if (chapter1Recipe) {
-            dispose();
-            ItemPickupOverlay pickup = new ItemPickupOverlay(
-                    (Frame) SwingUtilities.getWindowAncestor(this),
-                    "ASGARDIAN AVIATION CREATO!"
-            );
-            pickup.setVisible(true);
-            GameState.getInstance().getInventory().clear();
-            GameState.getInstance().resetHealth();
-            SceneManager.getInstance().showScene("TRANSITION_CH1_CH2");
-            return;
-        }
-
-        boolean chapter2Recipe = ids.contains("SCHIUMA_AEGIR")
-                && ids.contains("CORALLO_RAN")
-                && ids.contains("SALE_JORMUNGANDR");
-        if (chapter2Recipe) {
-            dispose();
-            ItemPickupOverlay pickup = new ItemPickupOverlay(
-                    (Frame) SwingUtilities.getWindowAncestor(this),
-                    "MAELSTROM MARTINI CREATO!"
-            );
-            pickup.setVisible(true);
-            GameState.getInstance().resetHealth();
-            SceneManager.getInstance().showScene("TRANSITION_CH2_CH3");
-            return;
-        }
-
-        statusLabel.setText("La miscela svanisce... Non è la combinazione giusta. Riprova!");
     }
 }
-

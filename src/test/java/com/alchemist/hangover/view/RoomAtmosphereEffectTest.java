@@ -23,7 +23,7 @@ class RoomAtmosphereEffectTest {
       Graphics graphics = image.getGraphics();
       try {
         for (int room=1; room<=7; room++) {
-          effect.configure(Chapter3World.backgrounds().get(room));
+          effect.configure(ChapterLayouts.forChapter(3).backgrounds().get(room));
           assertDoesNotThrow(() -> effect.paint(graphics));
         }
       } finally { graphics.dispose(); }

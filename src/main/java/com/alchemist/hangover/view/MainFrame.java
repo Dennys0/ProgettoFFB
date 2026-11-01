@@ -18,13 +18,13 @@ public class MainFrame extends JFrame {
 
         SceneManager manager = SceneManager.getInstance();
         manager.addPanel("MENU", new MainMenuPanel());
-        manager.addPanel("INTRO", new TavernIntroPanel());
+        manager.addPanel("INTRO", new ProloguePanel());
         manager.addPanel("CHAPTER1", new Chapter1Panel(this));
-        manager.addPanel("TRANSITION_CH1_CH2", new ChapterTransitionPanel());
+        manager.addPanel("TRANSITION_CH1_CH2", new ChapterCompletionPanel(this, 1));
         manager.addPanel("CHAPTER2", new Chapter2Panel(this));
         manager.addPanel("CHAPTER3", new Chapter3Panel(this));
-        manager.addPanel("CHAPTER3_COMPLETE", new Chapter3CompletePanel(this));
-        manager.addPanel("TRANSITION_CH2_CH3", new Chapter3PreviewPanel());
+        manager.addPanel("CHAPTER3_COMPLETE", new ChapterCompletionPanel(this, 3));
+        manager.addPanel("TRANSITION_CH2_CH3", new ChapterCompletionPanel(this, 2));
         manager.addPanel("GAMEOVER", new GameOverPanel());
 
         add(manager.getMainPanel());
@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
                 if (!"CHAPTER3".equals(manager.getCurrentSceneName())) return;
                 Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
                 String[] rooms = java.util.stream.IntStream.rangeClosed(1, 7)
-                        .mapToObj(n -> n + " - " + Chapter3World.roomName(n))
+                        .mapToObj(n -> n + " - " + ChapterLayouts.roomName(3, n))
                         .toArray(String[]::new);
                 Object selection = javax.swing.JOptionPane.showInputDialog(
                         MainFrame.this, "Scegli una stanza da provare:",

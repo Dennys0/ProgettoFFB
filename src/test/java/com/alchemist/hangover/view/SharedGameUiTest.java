@@ -37,14 +37,22 @@ class SharedGameUiTest {
     }
 
     @Test
-    void thirdChapterUsesTheSameCauldronArtworkWithoutANewWindow() throws Exception {
+    void everyChapterUsesOneSharedCauldronArtwork() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
-            YmirCauldronPanel panel = new YmirCauldronPanel(
-                    () -> {}, () -> {}, message -> {});
-            assertInstanceOf(SharedCauldronArtworkPanel.class, panel);
-            assertEquals(840, panel.getPreferredSize().width);
-            assertEquals(583, panel.getPreferredSize().height);
-            assertDoesNotThrow(panel::refreshIngredients);
+            SharedCauldronArtworkPanel panel = new SharedCauldronArtworkPanel();
+            panel.setSize(980, 680);
+            BufferedImage image = new BufferedImage(980, 680,
+                    BufferedImage.TYPE_INT_ARGB);
+            Graphics graphics = image.createGraphics();
+            try {
+                assertDoesNotThrow(() -> panel.paint(graphics));
+            } finally {
+                graphics.dispose();
+            }
+            for (int chapter = 1; chapter <= 3; chapter++) {
+                assertNotNull(com.alchemist.hangover.model.RecipeManager.forChapter(chapter));
+                assertNotNull(CauldronController.completionScene(chapter));
+            }
         });
     }
 }

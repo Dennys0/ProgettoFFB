@@ -2,9 +2,13 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
+import com.alchemist.hangover.model.RecipeManager;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /** Logica grafica e interattiva condivisa da tutti i capitoli. */
@@ -18,8 +22,15 @@ public abstract class AbstractChapterPanel extends JPanel {
 
     private Map<Integer, String> roomBgPaths = Map.of();
     private Map<Integer, Map<String, Integer>> roomExits = Map.of();
+    /** Registro condiviso: nessuna sottoclasse duplica la gestione degli NPC. */
+    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
     protected final Map<String, JButton> itemButtons = new LinkedHashMap<>();
     private final Map<String, WorldItemDefinition> worldItems = new LinkedHashMap<>();
+
+    /** Evita di ripetere la configurazione delle stanze nei singoli capitoli. */
+    protected void initializeChapterBase(JFrame frame, ChapterLayouts.Layout layout) {
+        initializeChapterBase(frame, layout.backgrounds(), layout.exits());
+    }
 
     protected void initializeChapterBase(JFrame frame,
             Map<Integer, String> backgrounds,
@@ -62,11 +73,6 @@ public abstract class AbstractChapterPanel extends JPanel {
 
     private JButton createArrowButton(String path, String fallback) {
         JButton button = new HotspotButton();
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setFocusable(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         java.net.URL url = getClass().getResource(path);
         if (url != null) {
             Image img = new ImageIcon(url).getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
@@ -80,6 +86,41 @@ public abstract class AbstractChapterPanel extends JPanel {
         return button;
     }
 
+    /** Una sola creazione per gli hotspot di NPC, boss, indizi e calderoni. */
+    protected final HotspotButton registerActionHotspot(
+            Rectangle bounds, String label, Runnable action) {
+        HotspotButton hotspot = new HotspotButton();
+        hotspot.setBounds(bounds);
+        hotspot.setToolTipText(label);
+        hotspot.getAccessibleContext().setAccessibleName(label);
+        hotspot.addActionListener(e -> action.run());
+        hotspot.setVisible(false);
+        add(hotspot);
+        return hotspot;
+    }
+
+    /** Registra un NPC gia' visibile nel PNG della stanza, senza sovrapporre sprite. */
+    protected final HotspotButton registerNpcHotspot(int room, Rectangle bounds,
+            String label, Runnable action) {
+        HotspotButton hotspot = registerActionHotspot(bounds, label, action);
+        npcHotspots.computeIfAbsent(room, ignored -> new ArrayList<>()).add(hotspot);
+        return hotspot;
+    }
+
+    /**
+     * La visibilita' dipende dalla stanza e dallo stato di interazione.
+     * Gli hotspot attivi vengono portati davanti alle zone generiche.
+     */
+    protected final void setRegisteredNpcHotspotsVisible(boolean enabled) {
+        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
+            for (HotspotButton hotspot : entry.getValue()) {
+                boolean show = enabled && entry.getKey() == currentRoom;
+                hotspot.setVisible(show);
+                if (show) setComponentZOrder(hotspot, 0);
+            }
+        }
+    }
+
     /** Crea un hotspot grafico e registra i dati necessari all'oggetto. */
     protected void addItemWorldButton(String id, String iconPath, int x, int y,
             int width, int height, int roomId, String name, String description) {
@@ -87,11 +128,6 @@ public abstract class AbstractChapterPanel extends JPanel {
         // Gli oggetti raccolti hanno un bagliore circolare leggermente piu' evidente.
         button.setHoverHighlightEnabled(true);
         button.setBounds(x, y, width, height);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setFocusable(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setToolTipText("Raccogli: " + name);
         java.net.URL url = getClass().getResource(iconPath);
         if (url != null) {
@@ -136,6 +172,15 @@ public abstract class AbstractChapterPanel extends JPanel {
                     && shouldShowWorldItem(item.id, state);
             button.setVisible(visible);
             if (visible) setComponentZOrder(button, 0);
+        }
+    }
+
+    /** Checkpoint della ricetta: comune ai tre capitoli, senza consumare oggetti. */
+    public final void retryCauldronAfterFailure() {
+        int chapter = GameState.getInstance().getChapter();
+        loadRoom(RecipeManager.forChapter(chapter).cauldronRoom());
+        if (CauldronController.allowOpening(mainFrameRef)) {
+            new CauldronOverlay(mainFrameRef).setVisible(true);
         }
     }
 

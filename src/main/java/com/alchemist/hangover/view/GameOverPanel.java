@@ -2,6 +2,7 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.RecipeManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,12 +59,13 @@ public class GameOverPanel extends JPanel {
         btnRetry.addActionListener(e -> {
             GameState state = GameState.getInstance();
             boolean retryBoss = state.isBossRetryAvailable();
-            boolean retryForge = state.getChapter() == 3 && cauldronFailure;
+            boolean retryForge = cauldronFailure;
             state.resetHealth();
             state.setBossRetryAvailable(false);
+            if (retryForge) state.setCurrentRoom(
+                    RecipeManager.forChapter(state.getChapter()).cauldronRoom());
             SceneManager manager = SceneManager.getInstance();
             if (state.getChapter() == 3) {
-                if (retryForge) state.setCurrentRoom(3);
                 Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
                 if (chapter3 != null) chapter3.refreshFromGameState();
                 Runnable afterTransition = chapter3 == null ? null
@@ -73,13 +75,17 @@ public class GameOverPanel extends JPanel {
             } else if (state.getChapter() == 2) {
                 Chapter2Panel chapter2 = (Chapter2Panel) manager.getPanel("CHAPTER2");
                 if (chapter2 != null) chapter2.refreshFromGameState();
-                manager.showScene("CHAPTER2",
-                        retryBoss && chapter2 != null ? chapter2::retryBossEncounter : null);
+                Runnable next = chapter2 == null ? null : retryForge
+                        ? chapter2::retryCauldronAfterFailure
+                        : retryBoss ? chapter2::retryBossEncounter : null;
+                manager.showScene("CHAPTER2", next);
             } else {
                 Chapter1Panel chapter1 = (Chapter1Panel) manager.getPanel("CHAPTER1");
                 if (chapter1 != null) chapter1.refreshFromGameState();
-                manager.showScene("CHAPTER1",
-                        retryBoss && chapter1 != null ? chapter1::retryBossEncounter : null);
+                Runnable next = chapter1 == null ? null : retryForge
+                        ? chapter1::retryCauldronAfterFailure
+                        : retryBoss ? chapter1::retryBossEncounter : null;
+                manager.showScene("CHAPTER1", next);
             }
             cauldronFailure = false;
             btnRetry.setText("RIPROVA LO SCONTRO");

@@ -1,6 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.controller.CombatManager;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.Item;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class RanStrategyBossOverlay extends JDialog {
 
-    private final String[] RIDDLE_PHRASES = {
+    private static final String[] RIDDLE_PHRASES = {
         "Tra le correnti spezzo la rete",
         "Invoco la forza della marea",
         "Placo l'ira della dea",
@@ -21,13 +22,13 @@ public class RanStrategyBossOverlay extends JDialog {
     };
 
     private int currentTurn = 1;
-    private final int TOTAL_TURNS = 3;
+    private static final int TOTAL_TURNS = 3;
     private int targetNumber; // Numero pronunciato da Rán (1..6)
 
     private JLabel turnLabel;
     private JLabel bossDialogueLabel;
     private JPanel choicesPanel;
-    private Frame parentFrame;
+    private final Frame parentFrame;
 
     public RanStrategyBossOverlay(Frame parent) {
         super(parent, "Scontro Strategico con Rán", true);
@@ -135,22 +136,12 @@ public class RanStrategyBossOverlay extends JDialog {
         } else {
             // Errore
             GameState gs = GameState.getInstance();
-            gs.takeDamage();
-            com.alchemist.hangover.controller.AudioManager.getInstance()
-                    .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.DAMAGE);
-            if (gs.getCurrentHealth() <= 0) {
-                gs.setBossRetryAvailable(true);
+            if (CombatManager.takeHit("Le reti di Rán ti trascinano nel vortice.")) {
                 dispose();
-                GameOverPanel gameOver = (GameOverPanel)
-                        SceneManager.getInstance().getPanel("GAMEOVER");
-                if (gameOver != null) {
-                    gameOver.showReason("Le reti di Rán ti trascinano nel vortice.");
-                }
-                StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.OCEAN,
+                CombatManager.finishDefeat(parentFrame, StoryPromptDialog.Theme.OCEAN,
                         "LE PROFONDITÀ PREVALGONO",
                         "Le reti di Rán si stringono e il vortice ti trascina nell'abisso.\n"
                         + "Puoi riprovare lo scontro dal checkpoint.");
-                SceneManager.getInstance().showScene("GAMEOVER");
             } else {
                 currentTurn = 1;
                 startNewTurn();
@@ -161,21 +152,18 @@ public class RanStrategyBossOverlay extends JDialog {
 
     private void winBossFight() {
         GameState gs = GameState.getInstance();
-        gs.setBossDefeated(true);
-        gs.setBossRetryAvailable(false);
-        com.alchemist.hangover.controller.AudioManager.getInstance()
-                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.SUCCESS);
+        CombatManager.victory(2);
 
         Item foam = new Item("SCHIUMA_AEGIR", "Schiuma di Ægir",
                 "La birra sottomarina lucente estratta dalle reti della dea Rán.",
                 "/images/items/item_foam.png");
         gs.addItem(foam);
 
-        StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.OCEAN,
+        StoryPromptDialog.message(parentFrame, StoryPromptDialog.Theme.OCEAN,
                 "LE RETI DI RÁN SI SPEZZANO",
                 "Hai decifrato la mente di Rán e superato le sue prove.\n"
                 + "Le correnti rallentano e l'abisso finalmente si quieta.");
-        StyledEventDialog.reward(parentFrame, StoryPromptDialog.Theme.OCEAN,
+        StoryPromptDialog.reward(parentFrame, StoryPromptDialog.Theme.OCEAN,
                 "SCHIUMA DI ÆGIR",
                 "Tra le reti ormai spezzate emerge la ricompensa della dea.",
                 foam);

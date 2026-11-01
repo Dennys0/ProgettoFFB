@@ -83,7 +83,7 @@ public class DialogueChoiceOverlay extends JDialog {
         dispose();
         if (callback != null) callback.onChoiceMade(reward != null);
         if (reward != null) {
-            StyledEventDialog.reward((Frame) getOwner(), StoryPromptDialog.Theme.SKY,
+            StoryPromptDialog.reward((Frame) getOwner(), StoryPromptDialog.Theme.SKY,
                     "CHIAVE DEL DRAGO",
                     "Martino riceve la Mappa del Cielo e ti consegna "
                     + "una chiave incisa con un drago celeste.",
