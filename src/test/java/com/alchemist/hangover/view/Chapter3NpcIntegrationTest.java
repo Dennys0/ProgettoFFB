@@ -94,7 +94,7 @@ class Chapter3NpcIntegrationTest {
             assertNotNull(getClass().getResource(path), "Ritratto mancante: " + path);
         }
         for (int room = 3; room <= 6; room++) {
-            assertNotNull(getClass().getResource(Chapter3World.backgrounds().get(room)));
+            assertNotNull(getClass().getResource(ChapterLayouts.forChapter(3).backgrounds().get(room)));
         }
         for (String speaker : SPEAKERS.values()) {
             Rectangle box = Chapter3Panel.portraitBoundsFor(speaker);

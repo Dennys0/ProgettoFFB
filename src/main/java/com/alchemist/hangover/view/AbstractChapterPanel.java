@@ -26,6 +26,11 @@ public abstract class AbstractChapterPanel extends JPanel {
     protected final Map<String, JButton> itemButtons = new LinkedHashMap<>();
     private final Map<String, WorldItemDefinition> worldItems = new LinkedHashMap<>();
 
+    /** Evita di ripetere la configurazione delle stanze nei singoli capitoli. */
+    protected void initializeChapterBase(JFrame frame, ChapterLayouts.Layout layout) {
+        initializeChapterBase(frame, layout.backgrounds(), layout.exits());
+    }
+
     protected void initializeChapterBase(JFrame frame,
             Map<Integer, String> backgrounds,
             Map<Integer, Map<String, Integer>> exits) {

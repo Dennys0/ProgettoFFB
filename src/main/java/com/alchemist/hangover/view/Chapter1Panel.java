@@ -35,28 +35,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
     }
 
     public Chapter1Panel(JFrame mainFrame) {
-        initializeChapterBase(
-                mainFrame,
-                Map.of(
-                        1, "/images/chapter1/room1_deck.png",
-                        2, "/images/chapter1/room2_helm.png",
-                        3, "/images/chapter1/room3_prow.png",
-                        4, "/images/chapter1/room4_lab.png",
-                        5, "/images/chapter1/room5_hold.png",
-                        6, "/images/chapter1/room6_crowsnest.png",
-                        7, "/images/chapter1/room7_boss.png"
-                ),
-                Map.of(
-                        1, Map.of("LEFT", 3, "RIGHT", 2, "DOWN", 5),
-                        2, Map.of("LEFT", 1, "UP", 6),
-                        3, Map.of("RIGHT", 1, "LEFT", 7),
-                        4, Map.of("RIGHT", 5),
-                        5, Map.of("UP", 1, "LEFT", 4),
-                        6, Map.of("DOWN", 2),
-                        7, Map.of("RIGHT", 3)
-                )
-        );
-
+        initializeChapterBase(mainFrame, ChapterLayouts.forChapter(1));
         // 2. Caricamento Risorse Grafiche Dialoghi
 
         characterSprites = new HashMap<>();

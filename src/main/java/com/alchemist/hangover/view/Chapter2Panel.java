@@ -53,28 +53,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
     }
 
     public Chapter2Panel(JFrame mainFrame) {
-        initializeChapterBase(
-                mainFrame,
-                Map.of(
-                        1, "/images/chapter2/room1_hall.png",
-                        2, "/images/chapter2/room2_bar.png",
-                        3, "/images/chapter2/room3_sacristy.png",
-                        4, "/images/chapter2/room4_gardens.png",
-                        5, "/images/chapter2/room5_pit.png",
-                        6, "/images/chapter2/room6_balcony.png",
-                        7, "/images/chapter2/room7_boss.png"
-                ),
-                Map.of(
-                        1, Map.of("UP", 2, "LEFT", 3, "RIGHT", 4, "DOWN", 5),
-                        2, Map.of("DOWN", 1, "UP", 6),
-                        3, Map.of("RIGHT", 1),
-                        4, Map.of("LEFT", 1),
-                        5, Map.of("UP", 1, "DOWN", 7),
-                        6, Map.of("DOWN", 2),
-                        7, Map.of("UP", 5)
-                )
-        );
-
+        initializeChapterBase(mainFrame, ChapterLayouts.forChapter(2));
 
         characterSprites = new HashMap<>();
         loadSprite("SIEGFRIED", "/images/characters/siegfried_realms.png");

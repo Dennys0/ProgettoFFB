@@ -54,9 +54,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private boolean npcConversationActive;
 
     public Chapter3Panel(JFrame mainFrame) {
-        initializeChapterBase(mainFrame,
-                Chapter3World.backgrounds(),
-                Chapter3World.exits());
+        initializeChapterBase(mainFrame, ChapterLayouts.forChapter(3));
         // Stanza 4: Foresta Pietrificata.
         addItemWorldButton("MUSCHIO_MIDGARD", "/images/items/item_moss.png",
                 350, 445, 132, 98, 4, "Muschio di Midgard",
