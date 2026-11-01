@@ -20,11 +20,11 @@ public class MainFrame extends JFrame {
         manager.addPanel("MENU", new MainMenuPanel());
         manager.addPanel("INTRO", new ProloguePanel());
         manager.addPanel("CHAPTER1", new Chapter1Panel(this));
-        manager.addPanel("TRANSITION_CH1_CH2", new ChapterTransitionPanel());
+        manager.addPanel("TRANSITION_CH1_CH2", new ChapterCompletionPanel(this, 1));
         manager.addPanel("CHAPTER2", new Chapter2Panel(this));
         manager.addPanel("CHAPTER3", new Chapter3Panel(this));
-        manager.addPanel("CHAPTER3_COMPLETE", new Chapter3CompletePanel(this));
-        manager.addPanel("TRANSITION_CH2_CH3", new Chapter3PreviewPanel());
+        manager.addPanel("CHAPTER3_COMPLETE", new ChapterCompletionPanel(this, 3));
+        manager.addPanel("TRANSITION_CH2_CH3", new ChapterCompletionPanel(this, 2));
         manager.addPanel("GAMEOVER", new GameOverPanel());
 
         add(manager.getMainPanel());
