@@ -10,7 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Chapter2Panel extends AbstractChapterPanel {
@@ -29,6 +31,33 @@ public class Chapter2Panel extends AbstractChapterPanel {
     private JLabel characterSpriteLabel;
     private DialogueSystem dialogueSystem;
     private Map<String, ImageIcon> characterSprites;
+
+    /** The meaning of a conversation must not depend on its room number. */
+    enum DialogueKind { NONE, SIEGFRIED, NPC, BOSS_INTRO }
+    private DialogueKind activeDialogueKind = DialogueKind.NONE;
+    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
+
+    /** 1280 x 720 logical coordinates, aligned to the provided illustrations. */
+    record NpcDefinition(int room, Rectangle bounds, String tooltip, String dialogue) { }
+
+    static final List<NpcDefinition> NPC_DEFINITIONS = List.of(
+            new NpcDefinition(1, new Rectangle(815, 320, 175, 200),
+                    "Parla con Marmæl", "/dialogues/ch2_marmael_dialogue.txt"),
+            new NpcDefinition(3, new Rectangle(1090, 116, 170, 160),
+                    "Parla con lo sgherro", "/dialogues/ch2_sgherro_dialogue.txt"),
+            new NpcDefinition(4, new Rectangle(710, 110, 215, 240),
+                    "Parla con la sirena", "/dialogues/ch2_sirena_dialogue.txt"),
+            new NpcDefinition(5, new Rectangle(700, 128, 320, 242),
+                    "Parla con Jörmungandr", "/dialogues/ch2_jormungandr_dialogue.txt"),
+            new NpcDefinition(6, new Rectangle(140, 165, 300, 285),
+                    "Parla con il Capitano", "/dialogues/ch2_captain_dialogue.txt"),
+            new NpcDefinition(7, new Rectangle(940, 175, 280, 285),
+                    "Parla con Hrönn", "/dialogues/ch2_hronn_dialogue.txt")
+    );
+
+    static boolean opensRanAfterDialogue(DialogueKind kind, int room, boolean bossDefeated) {
+        return kind == DialogueKind.BOSS_INTRO && room == 7 && !bossDefeated;
+    }
 
     public Chapter2Panel(JFrame mainFrame) {
         initializeChapterBase(
@@ -57,6 +86,13 @@ public class Chapter2Panel extends AbstractChapterPanel {
         characterSprites = new HashMap<>();
         loadSprite("SIEGFRIED", "/images/characters/siegfried_realms.png");
         loadSprite("RÁN", "/images/characters/ran_boss.png");
+        loadSprite("RAN", "/images/characters/ran_boss.png");
+        loadSprite("MARMÆL", "/images/characters/ch2_marmael.png");
+        loadSprite("SGHERRO", "/images/characters/diavoletto_realms.png");
+        loadSprite("SIRENA", "/images/characters/ch2_sirena.png");
+        loadSprite("JORMUNGANDR", "/images/characters/ch2_jormungandr.png");
+        loadSprite("CAPITANO", "/images/characters/ch2_captain.png");
+        loadSprite("HRÖNN", "/images/characters/ch2_hronn.png");
 
         initHotspots();
         initDialogueUI();
@@ -76,7 +112,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
     private void initHotspots() {
         // NPC Siegfried al Bancone (Stanza 2)
         siegfriedHotspot = new HotspotButton();
-        siegfriedHotspot.setBounds(500, 200, 280, 400);
+        siegfriedHotspot.setBounds(790, 175, 235, 385);
         siegfriedHotspot.setContentAreaFilled(false);
         siegfriedHotspot.setBorderPainted(false);
         siegfriedHotspot.setFocusPainted(false);
@@ -100,7 +136,9 @@ public class Chapter2Panel extends AbstractChapterPanel {
 
         // Boss Rán nel Santuario (Stanza 7 - Area ridotta per non coprire le frecce)
         ranBossHotspot = new HotspotButton();
-        ranBossHotspot.setBounds(250, 200, 780, 380);
+        // The whirlpool is in the middle; Hrönn sits to its right.
+        // Separate clickable areas allow talking to her without fighting.
+        ranBossHotspot.setBounds(400, 300, 470, 265);
         ranBossHotspot.setContentAreaFilled(false);
         ranBossHotspot.setBorderPainted(false);
         ranBossHotspot.setFocusPainted(false);
@@ -109,6 +147,11 @@ public class Chapter2Panel extends AbstractChapterPanel {
         ranBossHotspot.setToolTipText("Affronta Rán");
         ranBossHotspot.addActionListener(e -> triggerRanBossEncounter());
         add(ranBossHotspot);
+
+        // NPCs are baked into the seven scenes: only transparent hotzones.
+        for (NpcDefinition npc : NPC_DEFINITIONS) {
+            addNpcHotspot(npc);
+        }
 
         // Oggetto Diario del Capitano (Stanza 6 - Balconata dei Relitti)
         addItemWorldButton("DIARIO_CAPITANO", "/images/items/item_journl.png", 580, 420, 70, 70, 6,
@@ -134,24 +177,72 @@ public class Chapter2Panel extends AbstractChapterPanel {
         cauldron.setVisible(true);
     }
 
+    private void addNpcHotspot(NpcDefinition npc) {
+        HotspotButton button = new HotspotButton();
+        button.setBounds(npc.bounds());
+        button.setToolTipText(npc.tooltip());
+        button.getAccessibleContext().setAccessibleName(npc.tooltip());
+        button.addActionListener(e -> startSceneDialogue(npc.dialogue(), DialogueKind.NPC));
+        npcHotspots.computeIfAbsent(npc.room(), ignored -> new ArrayList<>()).add(button);
+        add(button);
+        button.setVisible(false);
+    }
+
+    private void setNpcHotspotsVisible(boolean enabled) {
+        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
+            for (HotspotButton button : entry.getValue()) {
+                boolean show = enabled && entry.getKey() == currentRoom;
+                button.setVisible(show);
+                // Position NPCs in front of the more generic scene hotspot.
+                if (show) setComponentZOrder(button, 0);
+            }
+        }
+    }
+
     @Override
     protected void onRoomChanged() {
-        siegfriedHotspot.setVisible(currentRoom == 2);
-        cauldronHotspot.setVisible(currentRoom == 3);
-        ranBossHotspot.setVisible(currentRoom == 7
+        // Scene changes made by debug navigation or loading must not
+        // accidentally complete the previous room's story or start Rán.
+        if (dialogueBoxOverlay != null && dialogueBoxOverlay.isVisible()) {
+            dialogueSystem.stop();
+            dialogueBoxOverlay.setVisible(false);
+            characterSpriteLabel.setVisible(false);
+            activeDialogueKind = DialogueKind.NONE;
+        }
+        showRoomHotspots();
+    }
+
+    private void showRoomHotspots() {
+        boolean idle = dialogueBoxOverlay == null || !dialogueBoxOverlay.isVisible();
+        siegfriedHotspot.setVisible(idle && currentRoom == 2);
+        cauldronHotspot.setVisible(idle && currentRoom == 3);
+        ranBossHotspot.setVisible(idle && currentRoom == 7
                 && !GameState.getInstance().isBossDefeated());
+        setNpcHotspotsVisible(idle);
+    }
+
+    /** One shared entry point for Siegfried, room NPCs and Rán. */
+    private void startSceneDialogue(String resource, DialogueKind kind) {
+        if (dialogueBoxOverlay.isVisible()) return;
+        activeDialogueKind = kind;
+        setArrowsVisible(false);
+        siegfriedHotspot.setVisible(false);
+        cauldronHotspot.setVisible(false);
+        ranBossHotspot.setVisible(false);
+        setNpcHotspotsVisible(false);
+        dialogueBoxOverlay.setVisible(true);
+        setComponentZOrder(dialogueBoxOverlay, 0);
+        setComponentZOrder(characterSpriteLabel, 1);
+        dialogueSystem.loadDialogue(resource);
+        dialogueSystem.startDialogue();
     }
 
     private void startSiegfriedDialogue() {
-        setArrowsVisible(false);
-        siegfriedHotspot.setVisible(false);
-        dialogueBoxOverlay.setVisible(true);
-
         boolean hasJournal = GameState.getInstance().hasItem("DIARIO_CAPITANO");
-        String dialoguePath = hasJournal ? "/dialogues/siegfried_dialogue_2.txt" : "/dialogues/siegfried_dialogue_1.txt";
-
-        dialogueSystem.loadDialogue(dialoguePath);
-        dialogueSystem.startDialogue();
+        String dialoguePath = hasJournal
+                ? "/dialogues/siegfried_dialogue_2.txt"
+                : "/dialogues/siegfried_dialogue_1.txt";
+        startSceneDialogue(dialoguePath, DialogueKind.SIEGFRIED);
     }
 
     /** Checkpoint del boss: salta il dialogo introduttivo gia' visto. */
@@ -182,12 +273,9 @@ public class Chapter2Panel extends AbstractChapterPanel {
                 + "Vuoi iniziare lo scontro?",
                 "AFFRONTA RAN", "NON ANCORA")) return;
 
-        setArrowsVisible(false);
-        ranBossHotspot.setVisible(false);
-        dialogueBoxOverlay.setVisible(true);
-
-        dialogueSystem.loadDialogue("/dialogues/ran_boss_dialogue.txt");
-        dialogueSystem.startDialogue();
+        // Only this explicit boss-introduction dialogue starts the fight.
+        // Talking to Hrönn alone must never trigger the boss.
+        startSceneDialogue("/dialogues/ran_boss_dialogue.txt", DialogueKind.BOSS_INTRO);
     }
 
     private void initDialogueUI() {
@@ -218,6 +306,8 @@ public class Chapter2Panel extends AbstractChapterPanel {
                 this::updateDialogueSprite,
                 this::onDialogueFinished
         );
+        // Longer NPC stories must wrap within the illustrated dialogue box.
+        dialogueSystem.setWrapWidth(1000);
 
         dialogueSkipLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         dialogueSkipLabel.setToolTipText("Mostra subito il testo completo");
@@ -276,18 +366,22 @@ public class Chapter2Panel extends AbstractChapterPanel {
     }
 
     private void onDialogueFinished() {
+        DialogueKind completed = activeDialogueKind;
+        activeDialogueKind = DialogueKind.NONE;
         dialogueBoxOverlay.setVisible(false);
         characterSpriteLabel.setVisible(false);
+        characterSpriteLabel.setIcon(null);
         updateArrowVisibility();
+        showRoomHotspots();
 
-        if (currentRoom == 2) {
-            siegfriedHotspot.setVisible(true);
-        } else if (currentRoom == 7 && !GameState.getInstance().isBossDefeated()) {
-            RanStrategyBossOverlay bossFight = new RanStrategyBossOverlay(mainFrameRef);
-            bossFight.setVisible(true);
-            ranBossHotspot.setVisible(true);
-            hudPanel.updateHUD();
+        if (opensRanAfterDialogue(completed, currentRoom,
+                GameState.getInstance().isBossDefeated())) {
+            ranBossHotspot.setVisible(false);
+            new RanStrategyBossOverlay(mainFrameRef).setVisible(true);
+            showRoomHotspots();
             updateArrowVisibility();
+            hudPanel.updateHUD();
         }
+        repaint();
     }
 }
