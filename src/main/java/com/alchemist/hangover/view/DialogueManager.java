@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.BooleanSupplier;
 
@@ -58,10 +60,17 @@ public final class DialogueManager {
         private final SharedDialogueBox box = new SharedDialogueBox();
         private final DialogueSystem dialogue;
         private final Map<String, ImageIcon> portraits = new HashMap<>();
+        private final Set<String> fittedPortraits = new HashSet<>();
         private final Function<String, Rectangle> portraitBounds;
 
         public SceneSession(JPanel chapter, Function<String, Rectangle> portraitBounds,
                             Runnable onComplete) {
+            this(chapter, portraitBounds, onComplete, true);
+        }
+
+        /** bindKeys=false quando un capitolo ha gia' una gestione condivisa dei tasti. */
+        public SceneSession(JPanel chapter, Function<String, Rectangle> portraitBounds,
+                            Runnable onComplete, boolean bindKeys) {
             this.chapter = chapter;
             this.portraitBounds = portraitBounds;
             portrait.setBounds(portraitBounds.apply(null));
@@ -84,13 +93,28 @@ public final class DialogueManager {
                     if (isVisible()) dialogue.nextLine();
                 }
             });
-            bindAdvance(chapter, "advanceDialogue", this::isVisible, dialogue);
+            if (bindKeys) bindAdvance(chapter, "advanceDialogue", this::isVisible, dialogue);
         }
 
         public void addPortrait(String speaker, String path) {
             ImageIcon icon = SharedDialogueBox.scaledPortrait(path, 520);
             if (icon != null) portraits.put(speaker, icon);
             else System.err.println("Sprite non trovato per " + speaker + " in " + path);
+        }
+
+        /** Carica un'immagine senza alterarne le proporzioni originali. */
+        public void addFittedPortrait(String speaker, String path) {
+            java.net.URL resource = chapter.getClass().getResource(path);
+            if (resource == null) {
+                System.err.println("Sprite non trovato per " + speaker + " in " + path);
+                return;
+            }
+            portraits.put(speaker, new ImageIcon(resource));
+            fittedPortraits.add(speaker);
+        }
+
+        public void advance() {
+            if (isVisible()) dialogue.nextLine();
         }
 
         public boolean isVisible() {
@@ -118,8 +142,22 @@ public final class DialogueManager {
             DialogueSystem.DialogueLine line = dialogue.getCurrentLine();
             ImageIcon icon = line == null ? null : portraits.get(line.getSpeaker());
             portrait.setVisible(icon != null);
-            portrait.setIcon(icon);
-            if (icon != null) portrait.setBounds(portraitBounds.apply(line.getSpeaker()));
+            if (icon == null) {
+                portrait.setIcon(null);
+                return;
+            }
+            Rectangle bounds = portraitBounds.apply(line.getSpeaker());
+            portrait.setBounds(bounds);
+            if (fittedPortraits.contains(line.getSpeaker())) {
+                double scale = Math.min((double) bounds.width / Math.max(1, icon.getIconWidth()),
+                        (double) bounds.height / Math.max(1, icon.getIconHeight()));
+                int width = Math.max(1, (int) Math.round(icon.getIconWidth() * scale));
+                int height = Math.max(1, (int) Math.round(icon.getIconHeight() * scale));
+                portrait.setIcon(new ImageIcon(icon.getImage().getScaledInstance(
+                        width, height, java.awt.Image.SCALE_SMOOTH)));
+            } else {
+                portrait.setIcon(icon);
+            }
         }
     }
 

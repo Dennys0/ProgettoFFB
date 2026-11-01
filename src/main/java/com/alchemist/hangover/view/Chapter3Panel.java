@@ -8,9 +8,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Capitolo III - Terra: Il Dominio di Ymir.
@@ -47,10 +45,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             new NpcDefinition(6, new Rectangle(713, 373, 365, 178),
                     "Parla con Níðhöggr", "/dialogues/ch3_nighodd_revised.txt")
     );
-    private final Map<String, ImageIcon> npcPortraits = new HashMap<>();
-    private SharedDialogueBox npcDialogueBox;
-    private JLabel npcDialogueSprite;
-    private DialogueSystem npcDialogueSystem;
+    private DialogueManager.SceneSession npcDialogue;
     private boolean npcConversationActive;
 
     public Chapter3Panel(JFrame mainFrame) {
@@ -219,7 +214,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 if (gunnarConversationActive) gunnarDialogueSystem.nextLine();
-                else if (npcConversationActive) npcDialogueSystem.nextLine();
+                else if (npcConversationActive) npcDialogue.advance();
             }
         });
         inputs.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "interruptGunnar");
@@ -297,70 +292,24 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
 
     /**
-     * Condivisione della cornice cinematografica con Gunnar.
-     * Gli NPC non attivano il boss e non modificano gli indizi di Gunnar.
+     * Gli NPC del terzo capitolo usano lo stesso motore visuale di C1/C2.
+     * Mantengono ritratti senza tagli e limiti di posizione sotto l'HUD.
      */
     private void initNpcDialogues() {
-        npcPortraits.put("SGHERRO", loadNpcPortrait("/images/characters/diavoletto_realms.png"));
-        npcPortraits.put("VANIR", loadNpcPortrait("/images/chapter3/npc/visir_or_vanir.png"));
-        npcPortraits.put("BILLINGR", loadNpcPortrait("/images/chapter3/npc/billingr.png"));
-        npcPortraits.put("NIDHOGGR", loadNpcPortrait("/images/chapter3/npc/nidhoggr.png"));
-
-        npcDialogueSprite = new JLabel("", SwingConstants.CENTER);
-        npcDialogueSprite.setOpaque(false);
-        npcDialogueSprite.setBounds(220, 18, 840, 486);
-        add(npcDialogueSprite);
-        npcDialogueSprite.setVisible(false);
-
-        npcDialogueBox = new SharedDialogueBox();
-        npcDialogueBox.setBounds(40, 470, 1200, 200);
-        npcDialogueBox.setVisible(false);
-        add(npcDialogueBox);
-        setComponentZOrder(npcDialogueBox, 0);
-        setComponentZOrder(npcDialogueSprite, 1);
-
-        npcDialogueSystem = new DialogueSystem(
-                npcDialogueBox.getSpeakerLabel(),
-                npcDialogueBox.getTextLabel(),
-                this::updateNpcPortrait,
-                this::closeNpcDialogue);
-        npcDialogueSystem.setWrapWidth(995);
-        DialogueManager.connect(npcDialogueBox, npcDialogueSprite,
-                npcDialogueSystem, () -> npcConversationActive);
+        // La gestione di SPAZIO/INVIO e' gia' condivisa con Gunnar qui sopra.
+        npcDialogue = new DialogueManager.SceneSession(
+                this, Chapter3Panel::portraitBoundsFor, this::closeNpcDialogue, false);
+        npcDialogue.addFittedPortrait("SGHERRO", "/images/characters/diavoletto_realms.png");
+        npcDialogue.addFittedPortrait("VANIR", "/images/chapter3/npc/visir_or_vanir.png");
+        npcDialogue.addFittedPortrait("BILLINGR", "/images/chapter3/npc/billingr.png");
+        npcDialogue.addFittedPortrait("NIDHOGGR", "/images/chapter3/npc/nidhoggr.png");
     }
 
-    private static ImageIcon loadNpcPortrait(String resource) {
-        java.net.URL url = Chapter3Panel.class.getResource(resource);
-        return url == null ? null : new ImageIcon(url);
-    }
-
-    /**
-     * Mantiene le proporzioni e non occupa mai l'HUD. Lo sprite emerge
-     * soltanto quando il personaggio sta parlando.
-     */
+    /** Coordinate necessarie a lasciare sempre l'HUD libero. */
     static Rectangle portraitBoundsFor(String speaker) {
         if ("SGHERRO".equals(speaker)) return new Rectangle(15, 27, 570, 465);
         if ("NIDHOGGR".equals(speaker)) return new Rectangle(170, 28, 940, 457);
         return new Rectangle(265, 25, 750, 463);
-    }
-
-    private void updateNpcPortrait() {
-        DialogueSystem.DialogueLine line = npcDialogueSystem.getCurrentLine();
-        String speaker = line == null ? "" : line.getSpeaker();
-        ImageIcon original = npcPortraits.get(speaker);
-        npcDialogueSprite.setVisible(npcConversationActive && original != null);
-        if (original == null) {
-            npcDialogueSprite.setIcon(null);
-            return;
-        }
-        Rectangle bounds = portraitBoundsFor(speaker);
-        npcDialogueSprite.setBounds(bounds);
-        double scale = Math.min((double) bounds.width / Math.max(1, original.getIconWidth()),
-                (double) bounds.height / Math.max(1, original.getIconHeight()));
-        int w = Math.max(1, (int) Math.round(original.getIconWidth() * scale));
-        int h = Math.max(1, (int) Math.round(original.getIconHeight() * scale));
-        npcDialogueSprite.setIcon(new ImageIcon(original.getImage()
-                .getScaledInstance(w, h, Image.SCALE_SMOOTH)));
     }
 
     private void createNpcHotspot(NpcDefinition npc) {
@@ -382,11 +331,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         updateNpcHotspots();
         if (forgeHotspot != null) forgeHotspot.setVisible(false);
         if (steleHotspot != null) steleHotspot.setVisible(false);
-        npcDialogueBox.setVisible(true);
-        setComponentZOrder(npcDialogueBox, 0);
-        setComponentZOrder(npcDialogueSprite, 1);
-        npcDialogueSystem.loadDialogue(npc.dialogue());
-        npcDialogueSystem.startDialogue();
+        npcDialogue.start(npc.dialogue());
         com.alchemist.hangover.controller.AudioManager.getInstance()
                 .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.CLICK);
         repaint();
@@ -395,10 +340,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private void closeNpcDialogue() {
         if (!npcConversationActive) return;
         npcConversationActive = false;
-        npcDialogueSystem.stop();
-        npcDialogueBox.setVisible(false);
-        npcDialogueSprite.setVisible(false);
-        npcDialogueSprite.setIcon(null);
+        npcDialogue.stop();
         updateArrowVisibility();
         if (forgeHotspot != null) forgeHotspot.setVisible(currentRoom == 3);
         if (steleHotspot != null) steleHotspot.setVisible(currentRoom == 6);
