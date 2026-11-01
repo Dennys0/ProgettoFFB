@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /** Only one canonical recipe per chapter. UI and penalties are kept separate. */
 public final class RecipeManager {
@@ -31,7 +30,9 @@ public final class RecipeManager {
                     Set.of("SCHIUMA_AEGIR", "CORALLO_RAN", "SALE_JORMUNGANDR",
                             "ACQUA_LETE", "INCHIOSTRO_KRAKEN")),
             3, new Recipe(3, 3, "Ymir's Old Fashioned",
-                    YmirCauldronRecipe.CORRECT, YmirCauldronRecipe.ALL)
+                    Set.of("MUSCHIO_MIDGARD", "FRAMMENTO_YGGDRASIL", "LACRIMA_YMIR"),
+                    Set.of("MUSCHIO_MIDGARD", "FRAMMENTO_YGGDRASIL", "LACRIMA_YMIR",
+                            "RADICE_NIDHOGG", "POLVERE_OSSA_GIGANTE"))
     );
 
     private RecipeManager() { }
