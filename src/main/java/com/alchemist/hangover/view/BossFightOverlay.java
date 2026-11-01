@@ -3,6 +3,7 @@ package com.alchemist.hangover.view;
 import com.alchemist.hangover.controller.CombatManager;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.BossRewardCatalog;
 import com.alchemist.hangover.model.Item;
 
 import javax.swing.*;
@@ -224,12 +225,8 @@ public class BossFightOverlay extends JDialog {
 
     private void winBossFight() {
         dispose();
-        GameState gs = GameState.getInstance();
         CombatManager.victory(1);
-        Item breath = new Item("SOFFIO_HRAESVELGR", "Soffio di Hræsvelgr",
-                "L'ampolla contenente il vento celestiale puro donato dall'aquila gigante.",
-                "/images/items/item_breath.png");
-        gs.addItem(breath);
+        Item breath = BossRewardCatalog.immediateReward(1).orElseThrow();
 
         StoryPromptDialog.message(parentFrame, StoryPromptDialog.Theme.SKY,
                 "LA TEMPESTA SI PLACA",

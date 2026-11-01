@@ -65,28 +65,14 @@ public class GameOverPanel extends JPanel {
             if (retryForge) state.setCurrentRoom(
                     RecipeManager.forChapter(state.getChapter()).cauldronRoom());
             SceneManager manager = SceneManager.getInstance();
-            if (state.getChapter() == 3) {
-                Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
-                if (chapter3 != null) chapter3.refreshFromGameState();
-                Runnable afterTransition = chapter3 == null ? null
-                        : retryForge ? chapter3::retryCauldronAfterFailure
-                        : retryBoss ? chapter3::retryBossEncounter : null;
-                manager.showScene("CHAPTER3", afterTransition);
-            } else if (state.getChapter() == 2) {
-                Chapter2Panel chapter2 = (Chapter2Panel) manager.getPanel("CHAPTER2");
-                if (chapter2 != null) chapter2.refreshFromGameState();
-                Runnable next = chapter2 == null ? null : retryForge
-                        ? chapter2::retryCauldronAfterFailure
-                        : retryBoss ? chapter2::retryBossEncounter : null;
-                manager.showScene("CHAPTER2", next);
-            } else {
-                Chapter1Panel chapter1 = (Chapter1Panel) manager.getPanel("CHAPTER1");
-                if (chapter1 != null) chapter1.refreshFromGameState();
-                Runnable next = chapter1 == null ? null : retryForge
-                        ? chapter1::retryCauldronAfterFailure
-                        : retryBoss ? chapter1::retryBossEncounter : null;
-                manager.showScene("CHAPTER1", next);
-            }
+            String chapterScene = "CHAPTER" + state.getChapter();
+            AbstractChapterPanel chapter =
+                    (AbstractChapterPanel) manager.getPanel(chapterScene);
+            if (chapter != null) chapter.refreshFromGameState();
+            Runnable afterTransition = chapter == null ? null
+                    : retryForge ? chapter::retryCauldronAfterFailure
+                    : retryBoss ? chapter::retryBossEncounter : null;
+            manager.showScene(chapterScene, afterTransition);
             cauldronFailure = false;
             btnRetry.setText("RIPROVA LO SCONTRO");
         });

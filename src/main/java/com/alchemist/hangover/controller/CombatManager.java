@@ -1,6 +1,7 @@
 package com.alchemist.hangover.controller;
 
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.BossRewardCatalog;
 import com.alchemist.hangover.view.GameOverPanel;
 import com.alchemist.hangover.view.StoryPromptDialog;
 
@@ -39,6 +40,7 @@ public final class CombatManager {
             default -> throw new IllegalArgumentException("Unknown boss chapter " + chapter);
         }
         state.setBossRetryAvailable(false);
+        BossRewardCatalog.immediateReward(chapter).ifPresent(state::addItem);
         AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
     }
 }

@@ -176,6 +176,10 @@ public abstract class AbstractChapterPanel extends JPanel {
     }
 
     /** Checkpoint della ricetta: comune ai tre capitoli, senza consumare oggetti. */
+    public void retryBossEncounter() {
+        throw new UnsupportedOperationException("Boss non configurato per questo capitolo");
+    }
+
     public final void retryCauldronAfterFailure() {
         int chapter = GameState.getInstance().getChapter();
         loadRoom(RecipeManager.forChapter(chapter).cauldronRoom());

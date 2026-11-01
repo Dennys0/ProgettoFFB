@@ -1,6 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.BossRewardCatalog;
 import com.alchemist.hangover.controller.CombatManager;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.Item;
@@ -151,13 +152,8 @@ public class RanStrategyBossOverlay extends JDialog {
     }
 
     private void winBossFight() {
-        GameState gs = GameState.getInstance();
         CombatManager.victory(2);
-
-        Item foam = new Item("SCHIUMA_AEGIR", "Schiuma di Ægir",
-                "La birra sottomarina lucente estratta dalle reti della dea Rán.",
-                "/images/items/item_foam.png");
-        gs.addItem(foam);
+        Item foam = BossRewardCatalog.immediateReward(2).orElseThrow();
 
         StoryPromptDialog.message(parentFrame, StoryPromptDialog.Theme.OCEAN,
                 "LE RETI DI RÁN SI SPEZZANO",
