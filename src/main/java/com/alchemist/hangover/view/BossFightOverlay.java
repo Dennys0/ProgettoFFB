@@ -218,6 +218,15 @@ public class BossFightOverlay extends JDialog {
         if (hp <= 0) {
             GameState.getInstance().setBossRetryAvailable(true);
             dispose();
+            GameOverPanel gameOver = (GameOverPanel)
+                    SceneManager.getInstance().getPanel("GAMEOVER");
+            if (gameOver != null) {
+                gameOver.showReason("Le ali di Hræsvelgr travolgono il vascello.");
+            }
+            StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.SKY,
+                    "LA TEMPESTA HA VINTO",
+                    "L'aquila gigante spezza la tua difesa e la nave trema sotto il vento.\n"
+                    + "Puoi tornare allo scontro dal checkpoint.");
             SceneManager.getInstance().showScene("GAMEOVER");
         } else {
             // Non interrompiamo il ritmo con un JOptionPane modale.
@@ -238,7 +247,13 @@ public class BossFightOverlay extends JDialog {
                 "/images/items/item_breath.png");
         gs.addItem(breath);
 
-        ItemPickupOverlay popup = new ItemPickupOverlay(parentFrame, breath);
-        popup.setVisible(true);
+        StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.SKY,
+                "LA TEMPESTA SI PLACA",
+                "Hai superato le prove di Hræsvelgr!\n"
+                + "Il cielo si schiarisce e il guardiano riconosce il tuo coraggio.");
+        StyledEventDialog.reward(parentFrame, StoryPromptDialog.Theme.SKY,
+                "SOFFIO DI HRÆSVELGR",
+                "Il guardiano ti dona un frammento del suo vento celestiale.",
+                breath);
     }
 }

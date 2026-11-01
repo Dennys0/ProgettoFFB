@@ -141,6 +141,15 @@ public class RanStrategyBossOverlay extends JDialog {
             if (gs.getCurrentHealth() <= 0) {
                 gs.setBossRetryAvailable(true);
                 dispose();
+                GameOverPanel gameOver = (GameOverPanel)
+                        SceneManager.getInstance().getPanel("GAMEOVER");
+                if (gameOver != null) {
+                    gameOver.showReason("Le reti di Rán ti trascinano nel vortice.");
+                }
+                StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.OCEAN,
+                        "LE PROFONDITÀ PREVALGONO",
+                        "Le reti di Rán si stringono e il vortice ti trascina nell'abisso.\n"
+                        + "Puoi riprovare lo scontro dal checkpoint.");
                 SceneManager.getInstance().showScene("GAMEOVER");
             } else {
                 currentTurn = 1;
@@ -162,6 +171,13 @@ public class RanStrategyBossOverlay extends JDialog {
                 "/images/items/item_foam.png");
         gs.addItem(foam);
 
-        JOptionPane.showMessageDialog(null, "Hai decifrato la mente di Rán e spezzato le sue reti!\nHai ottenuto: Schiuma di Ægir!", "Vittoria!", JOptionPane.INFORMATION_MESSAGE);
+        StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.OCEAN,
+                "LE RETI DI RÁN SI SPEZZANO",
+                "Hai decifrato la mente di Rán e superato le sue prove.\n"
+                + "Le correnti rallentano e l'abisso finalmente si quieta.");
+        StyledEventDialog.reward(parentFrame, StoryPromptDialog.Theme.OCEAN,
+                "SCHIUMA DI ÆGIR",
+                "Tra le reti ormai spezzate emerge la ricompensa della dea.",
+                foam);
     }
 }
