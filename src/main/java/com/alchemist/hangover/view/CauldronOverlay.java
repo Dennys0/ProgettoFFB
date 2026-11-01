@@ -11,9 +11,9 @@ import java.util.List;
 
 public class CauldronOverlay extends JDialog {
 
-    private List<Item> selectedItems;
-    private JPanel slotsPanel;
-    private JLabel statusLabel;
+    private final List<Item> selectedItems = new ArrayList<>();
+    private final JPanel slotsPanel;
+    private final JLabel statusLabel;
 
     public CauldronOverlay(Frame parent) {
         super(parent, "CALDERONE ALCHEMICO", true);
@@ -21,8 +21,6 @@ public class CauldronOverlay extends JDialog {
         setLocationRelativeTo(parent);
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
-
-        selectedItems = new ArrayList<>();
 
         // Un unico asset visivo per tutte le postazioni alchemiche.
         // I risultati e le ricette rimangono specifici dei capitoli.

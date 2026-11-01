@@ -1,10 +1,10 @@
 package com.alchemist.hangover.model;
 
 public class Item {
-    private String id;
-    private String name;
-    private String description;
-    private String iconPath;
+    private final String id;
+    private final String name;
+    private final String description;
+    private final String iconPath;
 
     public Item(String id, String name, String description, String iconPath) {
         this.id = id;

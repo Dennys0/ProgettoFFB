@@ -1,15 +1,11 @@
 package com.alchemist.hangover.view;
 
-import com.alchemist.hangover.model.GameState;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class HUDPanel extends JPanel {
 
     private HealthDisplayPanel heartDisplay;
-    private JButton inventoryButton;
-
     public HUDPanel(JFrame mainFrame) {
         setLayout(null);
         setOpaque(false);
@@ -21,7 +17,7 @@ public class HUDPanel extends JPanel {
         add(heartDisplay);
 
         // 2. Icona Inventario in Alto a Destra
-        inventoryButton = new JButton();
+        JButton inventoryButton = new JButton();
         inventoryButton.setBounds(1180, 15, 50, 50);
         inventoryButton.setContentAreaFilled(false);
         inventoryButton.setBorderPainted(false);

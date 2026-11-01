@@ -11,7 +11,7 @@ import java.util.List;
 
 public class RanStrategyBossOverlay extends JDialog {
 
-    private final String[] RIDDLE_PHRASES = {
+    private static final String[] RIDDLE_PHRASES = {
         "Tra le correnti spezzo la rete",
         "Invoco la forza della marea",
         "Placo l'ira della dea",
@@ -21,13 +21,13 @@ public class RanStrategyBossOverlay extends JDialog {
     };
 
     private int currentTurn = 1;
-    private final int TOTAL_TURNS = 3;
+    private static final int TOTAL_TURNS = 3;
     private int targetNumber; // Numero pronunciato da Rán (1..6)
 
     private JLabel turnLabel;
     private JLabel bossDialogueLabel;
     private JPanel choicesPanel;
-    private Frame parentFrame;
+    private final Frame parentFrame;
 
     public RanStrategyBossOverlay(Frame parent) {
         super(parent, "Scontro Strategico con Rán", true);

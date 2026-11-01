@@ -15,7 +15,7 @@ import java.util.Random;
 public class BossFightOverlay extends JDialog {
 
     private int currentStep = 1;
-    private final int MAX_STEPS = 7;
+    private static final int MAX_STEPS = 7;
     
     private List<String> currentSequence;
     private int userIndex = 0;
@@ -24,13 +24,12 @@ public class BossFightOverlay extends JDialog {
     private JLabel sequenceDisplayLabel;
     private JLabel timerLabel;
     private JLabel statusLabel;
-    private HUDPanel hudPanel;
 
     private Timer countdownTimer;
     private int timeLeft;
-    private final String[] DIRECTIONS = {"W", "A", "S", "D"};
+    private static final String[] DIRECTIONS = {"W", "A", "S", "D"};
 
-    private Frame parentFrame;
+    private final Frame parentFrame;
 
     public BossFightOverlay(Frame parent) {
         super(parent, "BOSS FIGHT: HRÃ†SVELGR", true);
@@ -119,11 +118,7 @@ public class BossFightOverlay extends JDialog {
         });
 
         setFocusable(true);
-        startStep(1);
-    }
-
-    private void startStep(int step) {
-        this.currentRoomStep(step);
+        currentRoomStep(1);
     }
 
     private void currentRoomStep(int step) {

@@ -2,7 +2,6 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.controller.DialogueSystem;
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.model.Item;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +20,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
     private JButton siegfriedHotspot;
     private JButton cauldronHotspot;
     private JButton ranBossHotspot;
-    private JButton journalHotspot;
 
     // UI Dialoghi
     private JPanel dialogueBoxOverlay;

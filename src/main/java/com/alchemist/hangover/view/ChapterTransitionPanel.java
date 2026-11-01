@@ -8,16 +8,12 @@ import java.awt.*;
 
 public class ChapterTransitionPanel extends JPanel {
 
-    private JLabel titleLabel;
-    private JLabel storyLabel;
-    private JButton continueButton;
-
     public ChapterTransitionPanel() {
         setLayout(null);
         setBackground(new Color(15, 12, 20));
 
         // Titolo del Capitolo
-        titleLabel = new JLabel("CAPITOLO I COMPLETATO", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("CAPITOLO I COMPLETATO", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Georgia", Font.BOLD, 38));
         titleLabel.setForeground(new Color(255, 215, 0));
         titleLabel.setBounds(140, 100, 1000, 50);
@@ -32,14 +28,14 @@ public class ChapterTransitionPanel extends JPanel {
                 + "<b>IL PROSSIMO REGNO TI ATTENDE.</b>"
                 + "</center></html>";
 
-        storyLabel = new JLabel(storyText, SwingConstants.CENTER);
+        JLabel storyLabel = new JLabel(storyText, SwingConstants.CENTER);
         storyLabel.setFont(new Font("Georgia", Font.PLAIN, 18));
         storyLabel.setForeground(new Color(220, 220, 230));
         storyLabel.setBounds(190, 180, 900, 280);
         add(storyLabel);
 
         // Pulsante di Avanzamento al Capitolo 2
-        continueButton = new JButton("ENTRA NEL CAPITOLO II -> ");
+        JButton continueButton = new JButton("ENTRA NEL CAPITOLO II -> ");
         continueButton.setFont(new Font("Georgia", Font.BOLD, 18));
         continueButton.setForeground(Color.BLACK);
         continueButton.setBackground(new Color(255, 215, 0));

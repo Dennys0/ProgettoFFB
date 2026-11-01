@@ -22,13 +22,11 @@ public class SaveLoadDialog extends JDialog {
         LOAD
     }
 
-    private Mode mode;
+    private final Mode mode;
     private JPanel slotsContainer;
-    private JFrame parentFrame;
 
     public SaveLoadDialog(JFrame parent, Mode mode) {
         super(parent, mode == Mode.SAVE ? "SALVA PARTITA" : "CARICA PARTITA", true);
-        this.parentFrame = parent;
         this.mode = mode;
 
         setSize(700, 520);
