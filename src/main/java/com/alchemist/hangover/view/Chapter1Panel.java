@@ -5,22 +5,13 @@ import com.alchemist.hangover.model.GameState;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Chapter1Panel extends AbstractChapterPanel {
 
     private JButton room7ScreenClickHotspot;
 
     // Elementi UI per il sistema di dialogo in-game
-    private JPanel dialogueBoxOverlay;
-    private JLabel characterSpriteLabel;
-    private DialogueSystem dialogueSystem;
-    private Map<String, ImageIcon> characterSprites;
+    private final DialogueManager.SceneSession dialogue;
 
     // Hotspots
     private JButton martinoHotspot;
@@ -38,28 +29,23 @@ public class Chapter1Panel extends AbstractChapterPanel {
         initializeChapterBase(mainFrame, ChapterLayouts.forChapter(1));
         // 2. Caricamento Risorse Grafiche Dialoghi
 
-        characterSprites = new HashMap<>();
-        loadSprite("MARTINO", "/images/characters/martino_realms.png");
-        loadSprite("HELA", "/images/characters/hela_realms.png");
-        loadSprite("SIEGFRIED", "/images/characters/siegfried_realms.png");
-        loadSprite("GUNNAR", "/images/characters/gunnar_realms.png");
-        loadSprite("MOZZO", "/images/characters/mozzo_realms.png");
-        loadSprite("DIAVOLETTO", "/images/characters/diavoletto_realms.png");
-        loadSprite("GRIFONE", "/images/characters/grifone_realms.png");
+        dialogue = new DialogueManager.SceneSession(this,
+                speaker -> new Rectangle(340, 30, 600, 620),
+                this::onDialogueFinished);
+        dialogue.addPortrait("MARTINO", "/images/characters/martino_realms.png");
+        dialogue.addPortrait("HELA", "/images/characters/hela_realms.png");
+        dialogue.addPortrait("SIEGFRIED", "/images/characters/siegfried_realms.png");
+        dialogue.addPortrait("GUNNAR", "/images/characters/gunnar_realms.png");
+        dialogue.addPortrait("MOZZO", "/images/characters/mozzo_realms.png");
+        dialogue.addPortrait("DIAVOLETTO", "/images/characters/diavoletto_realms.png");
+        dialogue.addPortrait("GRIFONE", "/images/characters/grifone_realms.png");
 
         // 4. Inizializzazione Hotspots & Oggetti
         initHotspots();
 
         // 5. Inizializzazione UI Dialoghi
-        initDialogueUI();
 
         loadRoom(1);
-    }
-
-    private void loadSprite(String name, String path) {
-        ImageIcon icon = SharedDialogueBox.scaledPortrait(path, 520);
-        if (icon != null) characterSprites.put(name, icon);
-        else System.err.println("Sprite non trovato per " + name + " in " + path);
     }
 
     private void initHotspots() {
@@ -70,7 +56,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
         add(room7ScreenClickHotspot);
 
 // Carica lo sprite di HrÃ¦svelgr
-        loadSprite("HRAESVELGR", "/images/characters/hraesvelgr.png");
+        dialogue.addPortrait("HRAESVELGR", "/images/characters/hraesvelgr.png");
         // Hotspot Martino al Timone (Stanza 2)
         martinoHotspot = new HotspotButton();
         martinoHotspot.setBounds(500, 200, 280, 400);
@@ -127,18 +113,14 @@ public class Chapter1Panel extends AbstractChapterPanel {
      * determinare se aprire la donazione, il combattimento o nulla.
      */
     private void startSceneDialogue(String resource, DialogueKind kind) {
-        if (dialogueBoxOverlay.isVisible()) return;
+        if (dialogue.isVisible()) return;
         activeDialogueKind = kind;
         setArrowsVisible(false);
         setRegisteredNpcHotspotsVisible(false);
         martinoHotspot.setVisible(false);
         cauldronHotspot.setVisible(false);
         room7ScreenClickHotspot.setVisible(false);
-        dialogueBoxOverlay.setVisible(true);
-        setComponentZOrder(dialogueBoxOverlay, 0);
-        setComponentZOrder(characterSpriteLabel, 1);
-        dialogueSystem.loadDialogue(resource);
-        dialogueSystem.startDialogue();
+        dialogue.start(resource);
         repaint();
     }
 
@@ -155,69 +137,19 @@ public class Chapter1Panel extends AbstractChapterPanel {
         }
     }
 
-    private void initDialogueUI() {
-        characterSpriteLabel = new JLabel();
-characterSpriteLabel.setBounds(340, 30, 600, 620); // PiÃ¹ ampia per contenere le ali del boss
-characterSpriteLabel.setHorizontalAlignment(SwingConstants.CENTER);
-characterSpriteLabel.setVerticalAlignment(SwingConstants.CENTER);
-characterSpriteLabel.setVisible(false);
-add(characterSpriteLabel);
-
-        SharedDialogueBox sharedDialogueBox = new SharedDialogueBox();
-        dialogueBoxOverlay = sharedDialogueBox;
-        dialogueBoxOverlay.setBounds(40, 470, 1200, 200);
-        dialogueBoxOverlay.setVisible(false);
-        JLabel dialogueNameLabel = sharedDialogueBox.getSpeakerLabel();
-        JLabel dialogueTextLabel = sharedDialogueBox.getTextLabel();
-        JLabel dialogueSkipLabel = sharedDialogueBox.getRevealLabel();
-
-        add(dialogueBoxOverlay);
-        // In Swing l'indice zero e' davanti: la cornice deve coprire
-        // la parte inferiore dello sprite, non essere coperta dal personaggio.
-        setComponentZOrder(dialogueBoxOverlay, 0);
-        setComponentZOrder(characterSpriteLabel, 1);
-
-        dialogueSystem = new DialogueSystem(
-                dialogueNameLabel,
-                dialogueTextLabel,
-                this::updateDialogueSprite,
-                this::onDialogueFinished
-        );
-        // I nuovi dialoghi includono frasi lunghe: manteniamo il testo
-        // entro la cornice illustrata anche durante l'effetto macchina da scrivere.
-        dialogueSystem.setWrapWidth(1000);
-
-        DialogueManager.connect(sharedDialogueBox, characterSpriteLabel,
-                dialogueSystem, () -> dialogueBoxOverlay.isVisible());
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (dialogueBoxOverlay.isVisible()) {
-                    dialogueSystem.nextLine();
-                }
-            }
-        });
-
-        DialogueManager.bindAdvance(this, "advanceDialogue",
-                () -> dialogueBoxOverlay.isVisible(), dialogueSystem);
-    }
-
     @Override
     protected void onRoomChanged() {
         // Un cambio stanza (anche tramite F4 o caricamento) chiude un
         // dialogo in corso senza attivarne la callback narrativa.
-        if (dialogueBoxOverlay != null && dialogueBoxOverlay.isVisible()) {
-            dialogueSystem.stop();
-            dialogueBoxOverlay.setVisible(false);
-            characterSpriteLabel.setVisible(false);
+        if (dialogue.isVisible()) {
+            dialogue.stop();
             activeDialogueKind = DialogueKind.NONE;
         }
         showRoomInteractionHotspots();
     }
 
     private void showRoomInteractionHotspots() {
-        boolean idle = dialogueBoxOverlay == null || !dialogueBoxOverlay.isVisible();
+        boolean idle = !dialogue.isVisible();
         martinoHotspot.setVisible(idle && currentRoom == 2);
         cauldronHotspot.setVisible(idle && currentRoom == 4);
         room7ScreenClickHotspot.setVisible(idle && currentRoom == 7);
@@ -247,25 +179,10 @@ add(characterSpriteLabel);
         startSceneDialogue("/dialogues/martino_dialogue.txt", DialogueKind.MARTINO);
     }
 
-    private void updateDialogueSprite() {
-        DialogueSystem.DialogueLine current = dialogueSystem.getCurrentLine();
-        if (current != null) {
-            String speaker = current.getSpeaker();
-            if (characterSprites.containsKey(speaker)) {
-                characterSpriteLabel.setIcon(characterSprites.get(speaker));
-                characterSpriteLabel.setVisible(true);
-            } else {
-                characterSpriteLabel.setVisible(false);
-            }
-        }
-    }
-
     private void onDialogueFinished() {
         DialogueKind completed = activeDialogueKind;
         activeDialogueKind = DialogueKind.NONE;
-        dialogueBoxOverlay.setVisible(false);
-        characterSpriteLabel.setVisible(false);
-        characterSpriteLabel.setIcon(null);
+        dialogue.stop();
         updateArrowVisibility();
         showRoomInteractionHotspots();
 

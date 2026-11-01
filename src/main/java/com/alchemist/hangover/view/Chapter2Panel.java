@@ -5,13 +5,7 @@ import com.alchemist.hangover.model.GameState;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Chapter2Panel extends AbstractChapterPanel {
 
@@ -21,10 +15,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
     private JButton ranBossHotspot;
 
     // UI Dialoghi
-    private JPanel dialogueBoxOverlay;
-    private JLabel characterSpriteLabel;
-    private DialogueSystem dialogueSystem;
-    private Map<String, ImageIcon> characterSprites;
+    private final DialogueManager.SceneSession dialogue;
 
     /** The meaning of a conversation must not depend on its room number. */
     enum DialogueKind { NONE, SIEGFRIED, NPC, BOSS_INTRO }
@@ -55,26 +46,21 @@ public class Chapter2Panel extends AbstractChapterPanel {
     public Chapter2Panel(JFrame mainFrame) {
         initializeChapterBase(mainFrame, ChapterLayouts.forChapter(2));
 
-        characterSprites = new HashMap<>();
-        loadSprite("SIEGFRIED", "/images/characters/siegfried_realms.png");
-        loadSprite("RÁN", "/images/characters/ran_boss.png");
-        loadSprite("RAN", "/images/characters/ran_boss.png");
-        loadSprite("MARMÆL", "/images/characters/ch2_marmael.png");
-        loadSprite("SGHERRO", "/images/characters/diavoletto_realms.png");
-        loadSprite("SIRENA", "/images/characters/ch2_sirena.png");
-        loadSprite("JORMUNGANDR", "/images/characters/ch2_jormungandr.png");
-        loadSprite("CAPITANO", "/images/characters/ch2_captain.png");
-        loadSprite("HRÖNN", "/images/characters/ch2_hronn.png");
+        dialogue = new DialogueManager.SceneSession(this,
+                Chapter2Panel::portraitBoundsFor,
+                this::onDialogueFinished);
+        dialogue.addPortrait("SIEGFRIED", "/images/characters/siegfried_realms.png");
+        dialogue.addPortrait("RÁN", "/images/characters/ran_boss.png");
+        dialogue.addPortrait("RAN", "/images/characters/ran_boss.png");
+        dialogue.addPortrait("MARMÆL", "/images/characters/ch2_marmael.png");
+        dialogue.addPortrait("SGHERRO", "/images/characters/diavoletto_realms.png");
+        dialogue.addPortrait("SIRENA", "/images/characters/ch2_sirena.png");
+        dialogue.addPortrait("JORMUNGANDR", "/images/characters/ch2_jormungandr.png");
+        dialogue.addPortrait("CAPITANO", "/images/characters/ch2_captain.png");
+        dialogue.addPortrait("HRÖNN", "/images/characters/ch2_hronn.png");
 
         initHotspots();
-        initDialogueUI();
         loadRoom(1);
-    }
-
-    private void loadSprite(String name, String path) {
-        ImageIcon icon = SharedDialogueBox.scaledPortrait(path, 520);
-        if (icon != null) characterSprites.put(name, icon);
-        else System.err.println("Sprite non trovato per " + name + " in " + path);
     }
 
     private void initHotspots() {
@@ -140,17 +126,15 @@ public class Chapter2Panel extends AbstractChapterPanel {
     protected void onRoomChanged() {
         // Scene changes made by debug navigation or loading must not
         // accidentally complete the previous room's story or start Rán.
-        if (dialogueBoxOverlay != null && dialogueBoxOverlay.isVisible()) {
-            dialogueSystem.stop();
-            dialogueBoxOverlay.setVisible(false);
-            characterSpriteLabel.setVisible(false);
+        if (dialogue.isVisible()) {
+            dialogue.stop();
             activeDialogueKind = DialogueKind.NONE;
         }
         showRoomHotspots();
     }
 
     private void showRoomHotspots() {
-        boolean idle = dialogueBoxOverlay == null || !dialogueBoxOverlay.isVisible();
+        boolean idle = !dialogue.isVisible();
         siegfriedHotspot.setVisible(idle && currentRoom == 2);
         cauldronHotspot.setVisible(idle && currentRoom == 3);
         ranBossHotspot.setVisible(idle && currentRoom == 7
@@ -160,18 +144,14 @@ public class Chapter2Panel extends AbstractChapterPanel {
 
     /** One shared entry point for Siegfried, room NPCs and Rán. */
     private void startSceneDialogue(String resource, DialogueKind kind) {
-        if (dialogueBoxOverlay.isVisible()) return;
+        if (dialogue.isVisible()) return;
         activeDialogueKind = kind;
         setArrowsVisible(false);
         siegfriedHotspot.setVisible(false);
         cauldronHotspot.setVisible(false);
         ranBossHotspot.setVisible(false);
         setRegisteredNpcHotspotsVisible(false);
-        dialogueBoxOverlay.setVisible(true);
-        setComponentZOrder(dialogueBoxOverlay, 0);
-        setComponentZOrder(characterSpriteLabel, 1);
-        dialogueSystem.loadDialogue(resource);
-        dialogueSystem.startDialogue();
+        dialogue.start(resource);
     }
 
     private void startSiegfriedDialogue() {
@@ -235,73 +215,10 @@ public class Chapter2Panel extends AbstractChapterPanel {
         };
     }
 
-    private void initDialogueUI() {
-        characterSpriteLabel = new JLabel();
-        characterSpriteLabel.setBounds(portraitBoundsFor(null));
-        characterSpriteLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        characterSpriteLabel.setVerticalAlignment(SwingConstants.CENTER);
-        characterSpriteLabel.setVisible(false);
-        add(characterSpriteLabel);
-
-        SharedDialogueBox sharedDialogueBox = new SharedDialogueBox();
-        dialogueBoxOverlay = sharedDialogueBox;
-        dialogueBoxOverlay.setBounds(40, 470, 1200, 200);
-        dialogueBoxOverlay.setVisible(false);
-        JLabel dialogueNameLabel = sharedDialogueBox.getSpeakerLabel();
-        JLabel dialogueTextLabel = sharedDialogueBox.getTextLabel();
-        JLabel dialogueSkipLabel = sharedDialogueBox.getRevealLabel();
-
-        add(dialogueBoxOverlay);
-        // In Swing l'indice zero e' davanti: la cornice deve coprire
-        // la parte inferiore dello sprite, non essere coperta dal personaggio.
-        setComponentZOrder(dialogueBoxOverlay, 0);
-        setComponentZOrder(characterSpriteLabel, 1);
-
-        dialogueSystem = new DialogueSystem(
-                dialogueNameLabel,
-                dialogueTextLabel,
-                this::updateDialogueSprite,
-                this::onDialogueFinished
-        );
-        // Longer NPC stories must wrap within the illustrated dialogue box.
-        dialogueSystem.setWrapWidth(1000);
-
-        DialogueManager.connect(sharedDialogueBox, characterSpriteLabel,
-                dialogueSystem, () -> dialogueBoxOverlay.isVisible());
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (dialogueBoxOverlay.isVisible()) {
-                    dialogueSystem.nextLine();
-                }
-            }
-        });
-
-        DialogueManager.bindAdvance(this, "advanceDialogue",
-                () -> dialogueBoxOverlay.isVisible(), dialogueSystem);
-    }
-
-    private void updateDialogueSprite() {
-        DialogueSystem.DialogueLine current = dialogueSystem.getCurrentLine();
-        if (current != null) {
-            String speaker = current.getSpeaker();
-            if (characterSprites.containsKey(speaker)) {
-                characterSpriteLabel.setBounds(portraitBoundsFor(speaker));
-                characterSpriteLabel.setIcon(characterSprites.get(speaker));
-                characterSpriteLabel.setVisible(true);
-            } else {
-                characterSpriteLabel.setVisible(false);
-            }
-        }
-    }
-
     private void onDialogueFinished() {
         DialogueKind completed = activeDialogueKind;
         activeDialogueKind = DialogueKind.NONE;
-        dialogueBoxOverlay.setVisible(false);
-        characterSpriteLabel.setVisible(false);
-        characterSpriteLabel.setIcon(null);
+        dialogue.stop();
         updateArrowVisibility();
         showRoomHotspots();
 
