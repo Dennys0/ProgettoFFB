@@ -1,6 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.controller.AudioManager;
+import com.alchemist.hangover.controller.CombatManager;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.YmirRuneRitual;
@@ -184,17 +185,12 @@ public final class YmirBossOverlay extends JDialog {
         if (selectedZone == null || phase >= ritual.size()) return;
         YmirRuneRitual.Step current = ritual.get(phase);
         if (!YmirRuneRitual.isCorrectStep(current, rune, selectedZone)) {
-            state.takeDamage();
-            AudioManager.getInstance().playEffect(AudioManager.Effect.DAMAGE);
-            if (state.getCurrentHealth() <= 0) {
-                state.setBossRetryAvailable(true);
+            if (CombatManager.takeHit("Ymir si è svegliato. La terra ha travolto Arthur.")) {
                 dispose();
-                SceneManager manager = SceneManager.getInstance();
-                GameOverPanel gameOver = (GameOverPanel) manager.getPanel("GAMEOVER");
-                if (gameOver != null) {
-                    gameOver.showReason("Ymir si è svegliato. La terra ha travolto Arthur.");
-                }
-                manager.showScene("GAMEOVER");
+                CombatManager.finishDefeat((Frame) getOwner(), StoryPromptDialog.Theme.EARTH,
+                        "IL GIGANTE SI RISVEGLIA",
+                        "Le rune perdono la loro luce e Ymir scuote il mondo.\n"
+                        + "Potrai riprovare il rituale dal checkpoint.");
             } else {
                 refreshPhase("La roccia si solleva! Combinazione errata: un cuore perduto.");
             }
@@ -203,15 +199,13 @@ public final class YmirBossOverlay extends JDialog {
         phase++;
         AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
         if (phase == ritual.size()) {
-            state.setYmirPacified(true);
-            state.setBossRetryAvailable(false);
+            CombatManager.victory(3);
             dispose();
-            JOptionPane.showMessageDialog(getOwner(),
-                    "Arthur traccia l'ultima runa.\n"
-                    + "Le stalattiti si fermano. Ymir inspira lentamente e torna a dormire.\n"
-                    + "Una Lacrima cristallina si deposita nella cavità del Cuore di Roccia.\n\n"
-                    + "Raccoglila e completa l'Ymir's Old Fashioned nella Forgia!",
-                    "Il gigante dorme ancora", JOptionPane.INFORMATION_MESSAGE);
+            StoryPromptDialog.message((Frame) getOwner(), StoryPromptDialog.Theme.EARTH,
+                    "IL GIGANTE DORME ANCORA",
+                    "Arthur traccia l'ultima runa. Ymir inspira e torna a dormire.\n"
+                    + "La Lacrima cristallina appare nel Cuore di Roccia.\n"
+                    + "Raccoglila e completa l'Ymir's Old Fashioned nella Forgia!");
             return;
         }
         refreshPhase("La runa risuona nella pietra. Il prossimo verso è pronto.");

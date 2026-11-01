@@ -16,7 +16,8 @@ import java.util.function.Consumer;
 public final class StoryPromptDialog {
     public enum Theme {
         SKY("IL CIELO DI ASGARD", new Color(210, 159, 84), new Color(41, 42, 54)),
-        OCEAN("LE PROFONDITA' DI RAN", new Color(103, 200, 215), new Color(24, 50, 61));
+        OCEAN("LE PROFONDITA' DI RAN", new Color(103, 200, 215), new Color(24, 50, 61)),
+        EARTH("IL DOMINIO DI YMIR", new Color(214, 153, 89), new Color(55, 39, 38));
 
         final String subtitle;
         final Color accent;

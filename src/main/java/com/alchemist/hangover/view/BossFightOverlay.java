@@ -1,5 +1,6 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.controller.CombatManager;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
@@ -205,24 +206,15 @@ public class BossFightOverlay extends JDialog {
     }
 
     private void failStep(String reason) {
-        GameState.getInstance().takeDamage();
-        com.alchemist.hangover.controller.AudioManager.getInstance()
-                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.DAMAGE);
+        boolean defeated = CombatManager.takeHit(
+                "Le ali di Hræsvelgr travolgono il vascello.");
         int hp = GameState.getInstance().getCurrentHealth();
-
-        if (hp <= 0) {
-            GameState.getInstance().setBossRetryAvailable(true);
+        if (defeated) {
             dispose();
-            GameOverPanel gameOver = (GameOverPanel)
-                    SceneManager.getInstance().getPanel("GAMEOVER");
-            if (gameOver != null) {
-                gameOver.showReason("Le ali di Hræsvelgr travolgono il vascello.");
-            }
-            StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.SKY,
+            CombatManager.finishDefeat(parentFrame, StoryPromptDialog.Theme.SKY,
                     "LA TEMPESTA HA VINTO",
                     "L'aquila gigante spezza la tua difesa e la nave trema sotto il vento.\n"
                     + "Puoi tornare allo scontro dal checkpoint.");
-            SceneManager.getInstance().showScene("GAMEOVER");
         } else {
             // Non interrompiamo il ritmo con un JOptionPane modale.
             currentRoomStep(1);
@@ -233,10 +225,7 @@ public class BossFightOverlay extends JDialog {
     private void winBossFight() {
         dispose();
         GameState gs = GameState.getInstance();
-        gs.setBossDefeated(true);
-        gs.setBossRetryAvailable(false);
-        com.alchemist.hangover.controller.AudioManager.getInstance()
-                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.SUCCESS);
+        CombatManager.victory(1);
         Item breath = new Item("SOFFIO_HRAESVELGR", "Soffio di Hræsvelgr",
                 "L'ampolla contenente il vento celestiale puro donato dall'aquila gigante.",
                 "/images/items/item_breath.png");

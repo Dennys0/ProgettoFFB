@@ -1,6 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.controller.CombatManager;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.Item;
 
@@ -135,22 +136,12 @@ public class RanStrategyBossOverlay extends JDialog {
         } else {
             // Errore
             GameState gs = GameState.getInstance();
-            gs.takeDamage();
-            com.alchemist.hangover.controller.AudioManager.getInstance()
-                    .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.DAMAGE);
-            if (gs.getCurrentHealth() <= 0) {
-                gs.setBossRetryAvailable(true);
+            if (CombatManager.takeHit("Le reti di Rán ti trascinano nel vortice.")) {
                 dispose();
-                GameOverPanel gameOver = (GameOverPanel)
-                        SceneManager.getInstance().getPanel("GAMEOVER");
-                if (gameOver != null) {
-                    gameOver.showReason("Le reti di Rán ti trascinano nel vortice.");
-                }
-                StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.OCEAN,
+                CombatManager.finishDefeat(parentFrame, StoryPromptDialog.Theme.OCEAN,
                         "LE PROFONDITÀ PREVALGONO",
                         "Le reti di Rán si stringono e il vortice ti trascina nell'abisso.\n"
                         + "Puoi riprovare lo scontro dal checkpoint.");
-                SceneManager.getInstance().showScene("GAMEOVER");
             } else {
                 currentTurn = 1;
                 startNewTurn();
@@ -161,10 +152,7 @@ public class RanStrategyBossOverlay extends JDialog {
 
     private void winBossFight() {
         GameState gs = GameState.getInstance();
-        gs.setBossDefeated(true);
-        gs.setBossRetryAvailable(false);
-        com.alchemist.hangover.controller.AudioManager.getInstance()
-                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.SUCCESS);
+        CombatManager.victory(2);
 
         Item foam = new Item("SCHIUMA_AEGIR", "Schiuma di Ægir",
                 "La birra sottomarina lucente estratta dalle reti della dea Rán.",
