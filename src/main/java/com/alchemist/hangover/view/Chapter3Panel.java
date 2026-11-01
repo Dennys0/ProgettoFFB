@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Capitolo III - Terra: Il Dominio di Ymir.
@@ -31,6 +35,25 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private JLabel gunnarDialogueSprite;
     private DialogueSystem gunnarDialogueSystem;
     private boolean gunnarConversationActive;
+
+    /** Hotspot invisibili: gli NPC sono gia' raffigurati nei PNG delle stanze. */
+    record NpcDefinition(int room, Rectangle bounds, String action, String dialogue) { }
+    static final List<NpcDefinition> NPC_DEFINITIONS = List.of(
+            new NpcDefinition(3, new Rectangle(987, 363, 270, 205),
+                    "Parla con lo sgherro", "/dialogues/ch3_caldron_revised.txt"),
+            new NpcDefinition(4, new Rectangle(737, 293, 225, 175),
+                    "Parla con il Vanir", "/dialogues/ch3_vanir_revised.txt"),
+            new NpcDefinition(5, new Rectangle(389, 289, 185, 182),
+                    "Parla con Billingr", "/dialogues/ch3_mining_revised.txt"),
+            new NpcDefinition(6, new Rectangle(713, 373, 365, 178),
+                    "Parla con Níðhöggr", "/dialogues/ch3_nighodd_revised.txt")
+    );
+    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
+    private final Map<String, ImageIcon> npcPortraits = new HashMap<>();
+    private SharedDialogueBox npcDialogueBox;
+    private JLabel npcDialogueSprite;
+    private DialogueSystem npcDialogueSystem;
+    private boolean npcConversationActive;
 
     public Chapter3Panel(JFrame mainFrame) {
         initializeChapterBase(mainFrame,
@@ -61,6 +84,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         createBreathingCrackHotspot();
         createGunnarHotspot();
         initGunnarDialogue();
+        initNpcDialogues();
+        for (NpcDefinition npc : NPC_DEFINITIONS) createNpcHotspot(npc);
         createSteleHotspot();
         createForgeHotspot();
         createYmirHotspot();
@@ -213,6 +238,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 if (gunnarConversationActive) gunnarDialogueSystem.nextLine();
+                else if (npcConversationActive) npcDialogueSystem.nextLine();
             }
         });
         inputs.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "interruptGunnar");
@@ -220,13 +246,14 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 if (gunnarConversationActive) closeGunnarDialogue(false);
+                else if (npcConversationActive) closeNpcDialogue();
                 else new PauseMenuDialog(mainFrameRef).setVisible(true);
             }
         });
     }
 
     private void startGunnarDialogue() {
-        if (gunnarConversationActive || currentRoom != 2) return;
+        if (gunnarConversationActive || npcConversationActive || currentRoom != 2) return;
         gunnarConversationActive = true;
         setArrowsVisible(false);
         gunnarHotspot.setVisible(false);
@@ -254,6 +281,144 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarHotspot.setVisible(currentRoom == 2);
         updateArrowVisibility();
         hudPanel.updateHUD();
+        repaint();
+    }
+
+
+    /**
+     * Condivisione della cornice cinematografica con Gunnar.
+     * Gli NPC non attivano il boss e non modificano gli indizi di Gunnar.
+     */
+    private void initNpcDialogues() {
+        npcPortraits.put("SGHERRO", loadNpcPortrait("/images/characters/diavoletto_realms.png"));
+        npcPortraits.put("VANIR", loadNpcPortrait("/images/chapter3/npc/visir_or_vanir.png"));
+        npcPortraits.put("BILLINGR", loadNpcPortrait("/images/chapter3/npc/billingr.png"));
+        npcPortraits.put("NIDHOGGR", loadNpcPortrait("/images/chapter3/npc/nidhoggr.png"));
+
+        npcDialogueSprite = new JLabel("", SwingConstants.CENTER);
+        npcDialogueSprite.setOpaque(false);
+        npcDialogueSprite.setBounds(220, 18, 840, 486);
+        add(npcDialogueSprite);
+        npcDialogueSprite.setVisible(false);
+
+        npcDialogueBox = new SharedDialogueBox();
+        npcDialogueBox.setBounds(40, 470, 1200, 200);
+        npcDialogueBox.setVisible(false);
+        add(npcDialogueBox);
+        setComponentZOrder(npcDialogueBox, 0);
+        setComponentZOrder(npcDialogueSprite, 1);
+
+        npcDialogueSystem = new DialogueSystem(
+                npcDialogueBox.getSpeakerLabel(),
+                npcDialogueBox.getTextLabel(),
+                this::updateNpcPortrait,
+                this::closeNpcDialogue);
+        npcDialogueSystem.setWrapWidth(995);
+        npcDialogueBox.getRevealLabel().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (npcConversationActive) npcDialogueSystem.revealCurrentLine();
+            }
+        });
+        MouseAdapter advance = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (npcConversationActive) npcDialogueSystem.nextLine();
+            }
+        };
+        npcDialogueBox.addMouseListener(advance);
+        npcDialogueBox.getSpeakerLabel().addMouseListener(advance);
+        npcDialogueBox.getTextLabel().addMouseListener(advance);
+        npcDialogueSprite.addMouseListener(advance);
+    }
+
+    private static ImageIcon loadNpcPortrait(String resource) {
+        java.net.URL url = Chapter3Panel.class.getResource(resource);
+        return url == null ? null : new ImageIcon(url);
+    }
+
+    /**
+     * Mantiene le proporzioni e non occupa mai l'HUD. Lo sprite emerge
+     * soltanto quando il personaggio sta parlando.
+     */
+    static Rectangle portraitBoundsFor(String speaker) {
+        if ("SGHERRO".equals(speaker)) return new Rectangle(15, 27, 570, 465);
+        if ("NIDHOGGR".equals(speaker)) return new Rectangle(170, 28, 940, 457);
+        return new Rectangle(265, 25, 750, 463);
+    }
+
+    private void updateNpcPortrait() {
+        DialogueSystem.DialogueLine line = npcDialogueSystem.getCurrentLine();
+        String speaker = line == null ? "" : line.getSpeaker();
+        ImageIcon original = npcPortraits.get(speaker);
+        npcDialogueSprite.setVisible(npcConversationActive && original != null);
+        if (original == null) {
+            npcDialogueSprite.setIcon(null);
+            return;
+        }
+        Rectangle bounds = portraitBoundsFor(speaker);
+        npcDialogueSprite.setBounds(bounds);
+        double scale = Math.min((double) bounds.width / Math.max(1, original.getIconWidth()),
+                (double) bounds.height / Math.max(1, original.getIconHeight()));
+        int w = Math.max(1, (int) Math.round(original.getIconWidth() * scale));
+        int h = Math.max(1, (int) Math.round(original.getIconHeight() * scale));
+        npcDialogueSprite.setIcon(new ImageIcon(original.getImage()
+                .getScaledInstance(w, h, Image.SCALE_SMOOTH)));
+    }
+
+    private void createNpcHotspot(NpcDefinition npc) {
+        HotspotButton hotspot = new HotspotButton();
+        hotspot.setBounds(npc.bounds());
+        hotspot.setToolTipText(npc.action());
+        hotspot.getAccessibleContext().setAccessibleName(npc.action());
+        hotspot.addActionListener(e -> startNpcDialogue(npc));
+        npcHotspots.computeIfAbsent(npc.room(), ignored -> new ArrayList<>()).add(hotspot);
+        add(hotspot);
+        hotspot.setVisible(false);
+    }
+
+    private void updateNpcHotspots() {
+        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
+            for (HotspotButton hotspot : entry.getValue()) {
+                boolean show = currentRoom == entry.getKey()
+                        && !gunnarConversationActive && !npcConversationActive
+                        && (brewingPanel == null || !brewingPanel.isVisible());
+                hotspot.setVisible(show);
+                if (show) setComponentZOrder(hotspot, 0);
+            }
+        }
+    }
+
+    private void startNpcDialogue(NpcDefinition npc) {
+        if (gunnarConversationActive || npcConversationActive
+                || currentRoom != npc.room() || (brewingPanel != null && brewingPanel.isVisible()))
+            return;
+        npcConversationActive = true;
+        setArrowsVisible(false);
+        updateNpcHotspots();
+        if (forgeHotspot != null) forgeHotspot.setVisible(false);
+        if (steleHotspot != null) steleHotspot.setVisible(false);
+        npcDialogueBox.setVisible(true);
+        setComponentZOrder(npcDialogueBox, 0);
+        setComponentZOrder(npcDialogueSprite, 1);
+        npcDialogueSystem.loadDialogue(npc.dialogue());
+        npcDialogueSystem.startDialogue();
+        com.alchemist.hangover.controller.AudioManager.getInstance()
+                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.CLICK);
+        repaint();
+    }
+
+    private void closeNpcDialogue() {
+        if (!npcConversationActive) return;
+        npcConversationActive = false;
+        npcDialogueSystem.stop();
+        npcDialogueBox.setVisible(false);
+        npcDialogueSprite.setVisible(false);
+        npcDialogueSprite.setIcon(null);
+        updateArrowVisibility();
+        if (forgeHotspot != null) forgeHotspot.setVisible(currentRoom == 3);
+        if (steleHotspot != null) steleHotspot.setVisible(currentRoom == 6);
+        updateNpcHotspots();
         repaint();
     }
 
@@ -287,10 +452,12 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     }
 
     private void openForge() {
+        if (npcConversationActive || gunnarConversationActive) return;
         brewingPanel.refreshIngredients();
         brewingPanel.setVisible(true);
         forgeHotspot.setVisible(false);
         setArrowsVisible(false);
+        updateNpcHotspots();
         setComponentZOrder(brewingPanel, 0);
         brewingPanel.requestFocusInWindow();
         repaint();
@@ -300,6 +467,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         brewingPanel.setVisible(false);
         updateArrowVisibility();
         forgeHotspot.setVisible(currentRoom == 3);
+        updateNpcHotspots();
         repaint();
     }
 
@@ -382,6 +550,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     @Override
     protected void onRoomChanged() {
         if (gunnarConversationActive) closeGunnarDialogue(false);
+        if (npcConversationActive) closeNpcDialogue();
         if (breathingEffect != null && currentRoom != 1) breathingEffect.stopEffect();
         if (crackArtwork != null) {
             crackArtwork.setVisible(currentRoom == 1);
@@ -411,5 +580,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             ymirHotspot.setVisible(visible);
             if (visible) setComponentZOrder(ymirHotspot, 0);
         }
+        updateNpcHotspots();
     }
 }
