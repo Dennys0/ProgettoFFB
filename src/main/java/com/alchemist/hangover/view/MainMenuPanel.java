@@ -65,7 +65,7 @@ public class MainMenuPanel extends JPanel {
             switch (text) {
                 case "START GAME":
                     com.alchemist.hangover.model.GameState.getInstance().resetState();
-                    TavernIntroPanel intro = (TavernIntroPanel)
+                    ProloguePanel intro = (ProloguePanel)
                             SceneManager.getInstance().getPanel("INTRO");
                     if (intro != null) intro.restartDialogue();
                     SceneManager.getInstance().showScene("INTRO");

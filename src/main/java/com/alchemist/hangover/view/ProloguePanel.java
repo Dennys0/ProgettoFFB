@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TavernIntroPanel extends JPanel {
+public class ProloguePanel extends JPanel {
 
     private Image backgroundImage;
     private JLabel characterSpriteLabel;
@@ -20,7 +20,7 @@ public class TavernIntroPanel extends JPanel {
 
     private Map<String, ImageIcon> characterSprites;
 
-    public TavernIntroPanel() {
+    public ProloguePanel() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(1280, 720));
 

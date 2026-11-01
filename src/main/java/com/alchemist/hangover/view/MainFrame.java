@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
 
         SceneManager manager = SceneManager.getInstance();
         manager.addPanel("MENU", new MainMenuPanel());
-        manager.addPanel("INTRO", new TavernIntroPanel());
+        manager.addPanel("INTRO", new ProloguePanel());
         manager.addPanel("CHAPTER1", new Chapter1Panel(this));
         manager.addPanel("TRANSITION_CH1_CH2", new ChapterTransitionPanel());
         manager.addPanel("CHAPTER2", new Chapter2Panel(this));

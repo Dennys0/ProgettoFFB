@@ -236,6 +236,27 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         });
     }
 
+    /** Stage choice stays independent from visual rendering and can be tested headlessly. */
+    static String gunnarDialoguePath(GameState state) {
+        if (state.hasLearnedGunnarWisdom()) return "/dialogues/ch3_gunnar_repeat.txt";
+        return state.hasHeardGunnarIntroduction()
+                ? "/dialogues/ch3_gunnar_reward.txt" : "/dialogues/ch3_gunnar.txt";
+    }
+
+    /** Invoked only after the final line, never on ESC or a room change. */
+    static boolean completeGunnarStage(GameState state, boolean rewardConversation) {
+        if (state.hasLearnedGunnarWisdom()) return false;
+        if (!state.hasHeardGunnarIntroduction()) {
+            state.setGunnarIntroductionHeard(true);
+            return false;
+        }
+        if (rewardConversation) {
+            state.setGunnarWisdomLearned(true);
+            return true;
+        }
+        return false;
+    }
+
     private void startGunnarDialogue() {
         if (gunnarConversationActive || npcConversationActive || currentRoom != 2) return;
         gunnarConversationActive = true;
@@ -248,10 +269,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         GameState state = GameState.getInstance();
         gunnarRewardConversation = !state.hasLearnedGunnarWisdom()
                 && state.hasHeardGunnarIntroduction();
-        String resource = state.hasLearnedGunnarWisdom()
-                ? "/dialogues/ch3_gunnar_repeat.txt"
-                : gunnarRewardConversation
-                    ? "/dialogues/ch3_gunnar_reward.txt" : "/dialogues/ch3_gunnar.txt";
+        String resource = gunnarDialoguePath(state);
         gunnarDialogueSystem.loadDialogue(resource);
         gunnarDialogueSystem.startDialogue();
         repaint();
@@ -265,15 +283,13 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarDialogueSprite.setVisible(false);
         if (completed) {
             GameState state = GameState.getInstance();
-            if (!state.hasHeardGunnarIntroduction()) {
-                state.setGunnarIntroductionHeard(true);
-                ToastNotification.show(this,
-                        "Gunnar ha terminato il racconto. Torna a parlargli per la sua saggezza.");
-            } else if (gunnarRewardConversation && !state.hasLearnedGunnarWisdom()) {
-                state.setGunnarWisdomLearned(true);
-                ToastNotification.show(this,
-                        "Saggezza di Gunnar ottenuta: gli indizi sono nel Diario.");
-            }
+            boolean firstMeeting = !state.hasHeardGunnarIntroduction()
+                    && !state.hasLearnedGunnarWisdom();
+            boolean rewarded = completeGunnarStage(state, gunnarRewardConversation);
+            if (firstMeeting) ToastNotification.show(this,
+                    "Gunnar ha terminato il racconto. Torna a parlargli per la sua saggezza.");
+            else if (rewarded) ToastNotification.show(this,
+                    "Saggezza di Gunnar ottenuta: gli indizi sono nel Diario.");
         }
         gunnarRewardConversation = false;
         gunnarHotspot.setVisible(currentRoom == 2);
