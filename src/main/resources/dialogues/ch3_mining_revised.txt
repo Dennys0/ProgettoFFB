@@ -1,0 +1,26 @@
+NARRATOR|IL MINATORE DEGLI ABISSI. Arthur attraversa un'immensa miniera sotterranea. Il rumore di un piccone riecheggia tra le rocce. Su una piattaforma, un nano dalla folta barba colpisce una vena di cristalli azzurri.
+ARTHUR|Per tutti gli dei... Ma quanto è grande 'sto posto?! E quello è un nano che lavora?!
+BILLINGR|EHI! Se sei qui per guardare, levati di mezzo! Ho del lavoro da finire!
+ARTHUR|Oh, fantastico! Finalmente qualcuno più nervoso di me!
+BILLINGR|Sono Billingr, maestro minatore. E tu hai tutta l'aria di uno che non ha mai lavorato in vita sua!
+ARTHUR|Senti, Mastro Gimli, io fino a poco fa stavo bevendo al bar! Non ho chiesto di finire in questo assurdo mondo!
+BILLINGR|Ahahah! Un ubriacone perduto tra i nove mondi! Questa mi mancava!
+ARTHUR|Già che ridi, non è che sai come tornare a casa?!
+BILLINGR|Sei arrivato fin qui e vuoi già andartene? Nemmeno sai cosa nascondono queste montagne!
+ARTHUR|Guarda, dopo serpenti giganti e demoni volanti, preferirei non scoprirlo!
+NARRATOR|Billingr colpisce la roccia. Una scintilla azzurra illumina un cristallo incastonato nella parete.
+BILLINGR|Vedi questo? Non è un cristallo qualunque. Il suo fuoco non brucia... ma può risvegliare ciò che dorme.
+ARTHUR|Aspetta... Fuoco, cristalli... Non dirmi che c'entra quel benedetto calderone!
+BILLINGR|Ah! Dunque conosci la fucina! Attento, ragazzo. Non ogni ingrediente è fatto per essere bevuto.
+ARTHUR|MA PERCHÉ NESSUNO ME LO DICE PRIMA?!
+BILLINGR|Ahahah! Se vuoi un consiglio, quando il calderone cambierà colore, pensa bene a cosa ci hai versato.
+ARTHUR|Perfetto. Un altro indovinello. Ma voi non avete un manuale di istruzioni?!
+BILLINGR|Le cose migliori si forgiano sbagliando, umano. Purché tu sopravviva all'errore!
+NARRATOR|Billingr riprende a picconare, mentre piccoli frammenti luminosi cadono ai suoi piedi.
+ARTHUR|Sì, grazie, molto rassicurante. Buon lavoro, Mastro Gimli!
+BILLINGR|Ehi, Arthur! Un'ultima cosa... Se incontri un diavoletto rosso, tienilo lontano dai miei cristalli!
+ARTHUR|...MA SUL SERIO? LO CONOSCI PURE TU?!
+BILLINGR|Quel piccolo bastardo mi ha rubato una gemma! Se lo rivedi, digli che Billingr gli spezzerà le corna!
+ARTHUR|Finalmente qualcuno con cui sono d'accordo!
+NARRATOR|Il rumore del piccone riprende a riecheggiare nella miniera.
+ARTHUR|...Quasi quasi gli chiedo in prestito il piccone.
