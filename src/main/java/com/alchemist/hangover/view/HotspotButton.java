@@ -51,6 +51,16 @@ public final class HotspotButton extends JButton {
         return collectibleEmphasis;
     }
 
+    /**
+     * The hint is already painted inside the hotspot. Returning null here
+     * prevents Swing from displaying a SECOND floating tooltip with the
+     * identical "Parla con..." text.
+     */
+    @Override
+    public String getToolTipText(MouseEvent event) {
+        return null;
+    }
+
     @Override
     public JToolTip createToolTip() {
         JToolTip tooltip = super.createToolTip();
@@ -97,8 +107,9 @@ public final class HotspotButton extends JButton {
             String visible = fitText(label, fm, allowed);
             int width = Math.min(getWidth() - 8, fm.stringWidth(visible) + 17);
             int height = Math.min(25, getHeight() - 3);
-            int left = Math.max(4, Math.min(getWidth() - width - 4,
-                    x - width / 2));
+            // Center the label over the whole NPC interaction region rather
+            // than chasing the pointer into a cropped corner of the button.
+            int left = Math.max(4, (getWidth() - width) / 2);
             int top = Math.max(2, Math.min(getHeight() - height - 2,
                     y - radius - height / 2));
             g.setColor(new Color(21, 21, 28, 218));

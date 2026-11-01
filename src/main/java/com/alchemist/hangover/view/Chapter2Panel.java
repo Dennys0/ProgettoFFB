@@ -41,13 +41,13 @@ public class Chapter2Panel extends AbstractChapterPanel {
     record NpcDefinition(int room, Rectangle bounds, String tooltip, String dialogue) { }
 
     static final List<NpcDefinition> NPC_DEFINITIONS = List.of(
-            new NpcDefinition(1, new Rectangle(815, 320, 175, 200),
+            new NpcDefinition(1, new Rectangle(765, 287, 285, 274),
                     "Parla con Marmæl", "/dialogues/ch2_marmael_dialogue.txt"),
-            new NpcDefinition(3, new Rectangle(1090, 116, 170, 160),
+            new NpcDefinition(3, new Rectangle(1002, 102, 265, 225),
                     "Parla con lo sgherro", "/dialogues/ch2_sgherro_dialogue.txt"),
             new NpcDefinition(4, new Rectangle(710, 110, 215, 240),
                     "Parla con la sirena", "/dialogues/ch2_sirena_dialogue.txt"),
-            new NpcDefinition(5, new Rectangle(700, 128, 320, 242),
+            new NpcDefinition(5, new Rectangle(365, 135, 540, 345),
                     "Parla con Jörmungandr", "/dialogues/ch2_jormungandr_dialogue.txt"),
             new NpcDefinition(6, new Rectangle(140, 165, 300, 285),
                     "Parla con il Capitano", "/dialogues/ch2_captain_dialogue.txt"),

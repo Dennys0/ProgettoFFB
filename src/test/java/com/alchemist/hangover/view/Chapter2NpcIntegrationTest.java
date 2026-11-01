@@ -83,6 +83,24 @@ class Chapter2NpcIntegrationTest {
     }
 
     @Test
+    void interactionAreasCoverCharactersAndCenterTheSeaSerpent() {
+        Map<Integer, Rectangle> byRoom = Chapter2Panel.NPC_DEFINITIONS.stream()
+                .collect(Collectors.toMap(Chapter2Panel.NpcDefinition::room,
+                        Chapter2Panel.NpcDefinition::bounds));
+        Rectangle marmael = byRoom.get(1);
+        assertTrue(marmael.width >= 250 && marmael.height >= 250,
+                "Marmæl deve avere spazio per personaggio e didascalia");
+        assertTrue(marmael.contains(895, 420));
+        Rectangle imp = byRoom.get(3);
+        assertTrue(imp.width >= 250, "Lo sgherro non deve tagliare il testo");
+        assertTrue(imp.contains(1150, 200));
+        Rectangle serpent = byRoom.get(5);
+        assertEquals(635, serpent.getCenterX(), 25,
+                "Jörmungandr deve essere selezionabile al centro della scena");
+        assertTrue(serpent.width >= 500 && serpent.height >= 300);
+    }
+
+    @Test
     void talkingToHronnCannotLaunchRanBoss() {
         assertTrue(Chapter2Panel.opensRanAfterDialogue(
                 Chapter2Panel.DialogueKind.BOSS_INTRO, 7, false));
