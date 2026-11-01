@@ -66,7 +66,6 @@ public class GameOverPanel extends JPanel {
                     RecipeManager.forChapter(state.getChapter()).cauldronRoom());
             SceneManager manager = SceneManager.getInstance();
             if (state.getChapter() == 3) {
-                if (retryForge) state.setCurrentRoom(3);
                 Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
                 if (chapter3 != null) chapter3.refreshFromGameState();
                 Runnable afterTransition = chapter3 == null ? null

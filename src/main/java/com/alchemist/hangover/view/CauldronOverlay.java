@@ -1,6 +1,5 @@
 package com.alchemist.hangover.view;
 
-import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
 import com.alchemist.hangover.model.RecipeManager;
@@ -144,14 +143,7 @@ public class CauldronOverlay extends JDialog {
             }
             case SUCCESS -> {
                 dispose();
-                String drink = RecipeManager.forChapter(chapter).drinkName();
-                Frame owner = (Frame) getOwner();
-                new ItemPickupOverlay(owner, drink.toUpperCase() + " CREATO!").setVisible(true);
-                GameState state = GameState.getInstance();
-                if (chapter == 1) state.getInventory().clear();
-                state.resetHealth();
-                SceneManager.getInstance().showScene(chapter == 1
-                        ? "TRANSITION_CH1_CH2" : "TRANSITION_CH2_CH3");
+                CauldronController.complete(chapter);
             }
         }
     }

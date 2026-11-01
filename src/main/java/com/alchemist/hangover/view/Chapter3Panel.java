@@ -27,7 +27,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private int crackInspections;
     private JButton steleHotspot;
     private JButton forgeHotspot;
-    private YmirCauldronPanel brewingPanel;
     // La cornice originale e lo sprite si aprono NELLA stanza,
     // come avviene nei primi due capitoli.
     private SharedDialogueBox gunnarDialogueBox;
@@ -374,13 +373,12 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private void updateNpcHotspots() {
         setRegisteredNpcHotspotsVisible(
                 !gunnarConversationActive && !npcConversationActive
-                && (brewingPanel == null || !brewingPanel.isVisible()));
+                );
     }
 
     private void startNpcDialogue(NpcDefinition npc) {
         if (gunnarConversationActive || npcConversationActive
-                || currentRoom != npc.room() || (brewingPanel != null && brewingPanel.isVisible()))
-            return;
+                || currentRoom != npc.room()) return;
         npcConversationActive = true;
         setArrowsVisible(false);
         updateNpcHotspots();
@@ -431,52 +429,20 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         forgeHotspot.addActionListener(e -> openForge());
         add(forgeHotspot);
         forgeHotspot.setVisible(false);
-
-        brewingPanel = new YmirCauldronPanel(this::closeForge,
-                this::finishYmirDrink, this::onBrewingDisaster);
-        brewingPanel.setBounds(220, 90, YmirCauldronPanel.WIDTH, YmirCauldronPanel.HEIGHT);
-        add(brewingPanel);
-        brewingPanel.setVisible(false);
     }
 
+    /** I tre capitoli aprono esattamente lo stesso calderone, con la ricetta
+     * scelta da RecipeManager. Il dialogo modale impedisce click sul mondo. */
     private void openForge() {
         if (npcConversationActive || gunnarConversationActive) return;
         if (!CauldronController.allowOpening(mainFrameRef)) return;
-        brewingPanel.refreshIngredients();
-        brewingPanel.setVisible(true);
-        forgeHotspot.setVisible(false);
-        setArrowsVisible(false);
-        updateNpcHotspots();
-        setComponentZOrder(brewingPanel, 0);
-        brewingPanel.requestFocusInWindow();
-        repaint();
+        new CauldronOverlay(mainFrameRef).setVisible(true);
     }
 
-    private void closeForge() {
-        brewingPanel.setVisible(false);
-        updateArrowVisibility();
-        forgeHotspot.setVisible(currentRoom == 3);
-        updateNpcHotspots();
-        repaint();
-    }
-
-    private void onBrewingDisaster(String message) {
-        closeForge();
-        CauldronController.fail(message);
-    }
-
-    /** Riprende esattamente dal boccale, senza ripetere il boss o perdere gli ingredienti. */
+    /** Checkpoint: non consuma oggetti, rientra nella stanza e riapre la ricetta. */
     public void retryCauldronAfterFailure() {
         loadRoom(3);
         openForge();
-    }
-
-    private void finishYmirDrink() {
-        closeForge();
-        GameState.getInstance().setYmirOldFashionedCreated(true);
-        com.alchemist.hangover.controller.AudioManager.getInstance()
-                .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.SUCCESS);
-        SceneManager.getInstance().showScene("CHAPTER3_COMPLETE");
     }
 
     private void createYmirHotspot() {
@@ -552,7 +518,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             steleHotspot.setVisible(currentRoom == 6);
             if (currentRoom == 6) setComponentZOrder(steleHotspot, 0);
         }
-        if (brewingPanel != null) brewingPanel.setVisible(false);
         if (forgeHotspot != null) {
             forgeHotspot.setVisible(currentRoom == 3);
             if (currentRoom == 3) setComponentZOrder(forgeHotspot, 0);
