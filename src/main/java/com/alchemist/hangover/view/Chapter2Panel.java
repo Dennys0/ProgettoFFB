@@ -280,25 +280,8 @@ public class Chapter2Panel extends AbstractChapterPanel {
         // Longer NPC stories must wrap within the illustrated dialogue box.
         dialogueSystem.setWrapWidth(1000);
 
-        dialogueSkipLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        dialogueSkipLabel.setToolTipText("Mostra subito il testo completo");
-        dialogueSkipLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                dialogueSystem.revealCurrentLine();
-            }
-        });
-
-        MouseAdapter advanceOnClick = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (dialogueBoxOverlay.isVisible()) dialogueSystem.nextLine();
-            }
-        };
-        dialogueBoxOverlay.addMouseListener(advanceOnClick);
-        dialogueNameLabel.addMouseListener(advanceOnClick);
-        dialogueTextLabel.addMouseListener(advanceOnClick);
-        characterSpriteLabel.addMouseListener(advanceOnClick);
+        DialogueManager.connect(sharedDialogueBox, characterSpriteLabel,
+                dialogueSystem, () -> dialogueBoxOverlay.isVisible());
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -309,18 +292,8 @@ public class Chapter2Panel extends AbstractChapterPanel {
             }
         });
 
-        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = getActionMap();
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "advanceDialogue2");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "advanceDialogue2");
-        actionMap.put("advanceDialogue2", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (dialogueBoxOverlay.isVisible()) {
-                    dialogueSystem.nextLine();
-                }
-            }
-        });
+        DialogueManager.bindAdvance(this, "advanceDialogue",
+                () -> dialogueBoxOverlay.isVisible(), dialogueSystem);
     }
 
     private void updateDialogueSprite() {

@@ -34,6 +34,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private JLabel gunnarDialogueSprite;
     private DialogueSystem gunnarDialogueSystem;
     private boolean gunnarConversationActive;
+    private boolean gunnarRewardConversation;
 
     /** Hotspot invisibili: gli NPC sono gia' raffigurati nei PNG delle stanze. */
     record NpcDefinition(int room, Rectangle bounds, String action, String dialogue) { }
@@ -210,23 +211,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         );
         gunnarDialogueSystem.setWrapWidth(995);
 
-        gunnarDialogueBox.getRevealLabel().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (gunnarConversationActive) gunnarDialogueSystem.revealCurrentLine();
-            }
-        });
-
-        MouseAdapter advance = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (gunnarConversationActive) gunnarDialogueSystem.nextLine();
-            }
-        };
-        gunnarDialogueSprite.addMouseListener(advance);
-        gunnarDialogueBox.addMouseListener(advance);
-        gunnarDialogueBox.getSpeakerLabel().addMouseListener(advance);
-        gunnarDialogueBox.getTextLabel().addMouseListener(advance);
+        DialogueManager.connect(gunnarDialogueBox, gunnarDialogueSprite,
+                gunnarDialogueSystem, () -> gunnarConversationActive);
 
         InputMap inputs = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actions = getActionMap();
@@ -259,7 +245,14 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarDialogueBox.setVisible(true);
         setComponentZOrder(gunnarDialogueBox, 0);
         setComponentZOrder(gunnarDialogueSprite, 1);
-        gunnarDialogueSystem.loadDialogue("/dialogues/ch3_gunnar.txt");
+        GameState state = GameState.getInstance();
+        gunnarRewardConversation = !state.hasLearnedGunnarWisdom()
+                && state.hasHeardGunnarIntroduction();
+        String resource = state.hasLearnedGunnarWisdom()
+                ? "/dialogues/ch3_gunnar_repeat.txt"
+                : gunnarRewardConversation
+                    ? "/dialogues/ch3_gunnar_reward.txt" : "/dialogues/ch3_gunnar.txt";
+        gunnarDialogueSystem.loadDialogue(resource);
         gunnarDialogueSystem.startDialogue();
         repaint();
     }
@@ -271,11 +264,18 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarDialogueBox.setVisible(false);
         gunnarDialogueSprite.setVisible(false);
         if (completed) {
-            boolean firstTime = !GameState.getInstance().hasLearnedGunnarWisdom();
-            GameState.getInstance().setGunnarWisdomLearned(true);
-            if (firstTime) ToastNotification.show(this,
-                    "Hai compreso il linguaggio delle rune: indizi nel Diario.");
+            GameState state = GameState.getInstance();
+            if (!state.hasHeardGunnarIntroduction()) {
+                state.setGunnarIntroductionHeard(true);
+                ToastNotification.show(this,
+                        "Gunnar ha terminato il racconto. Torna a parlargli per la sua saggezza.");
+            } else if (gunnarRewardConversation && !state.hasLearnedGunnarWisdom()) {
+                state.setGunnarWisdomLearned(true);
+                ToastNotification.show(this,
+                        "Saggezza di Gunnar ottenuta: gli indizi sono nel Diario.");
+            }
         }
+        gunnarRewardConversation = false;
         gunnarHotspot.setVisible(currentRoom == 2);
         updateArrowVisibility();
         hudPanel.updateHUD();
@@ -312,22 +312,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 this::updateNpcPortrait,
                 this::closeNpcDialogue);
         npcDialogueSystem.setWrapWidth(995);
-        npcDialogueBox.getRevealLabel().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (npcConversationActive) npcDialogueSystem.revealCurrentLine();
-            }
-        });
-        MouseAdapter advance = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (npcConversationActive) npcDialogueSystem.nextLine();
-            }
-        };
-        npcDialogueBox.addMouseListener(advance);
-        npcDialogueBox.getSpeakerLabel().addMouseListener(advance);
-        npcDialogueBox.getTextLabel().addMouseListener(advance);
-        npcDialogueSprite.addMouseListener(advance);
+        DialogueManager.connect(npcDialogueBox, npcDialogueSprite,
+                npcDialogueSystem, () -> npcConversationActive);
     }
 
     private static ImageIcon loadNpcPortrait(String resource) {

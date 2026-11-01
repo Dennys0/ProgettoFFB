@@ -25,6 +25,8 @@ public class GameState {
     private boolean ymirPacified = false;
     private int ymirRuneSeed = 0;
     private boolean gunnarWisdomLearned = false;
+    // Tappa intermedia della conversazione: solo sessione, senza cambiare schema H2.
+    private boolean gunnarFirstDialogueHeard = false;
     private boolean ymirSteleRead = false;
     private boolean ymirOldFashionedCreated = false;
     // Checkpoint di sessione: non viene serializzato nei salvataggi H2.
@@ -159,6 +161,9 @@ public class GameState {
     public int getYmirRuneSeed() { return ymirRuneSeed; }
     public void setYmirRuneSeed(int seed) { this.ymirRuneSeed = seed; }
 
+    public boolean hasHeardGunnarIntroduction() { return gunnarFirstDialogueHeard; }
+    public void setGunnarIntroductionHeard(boolean heard) { gunnarFirstDialogueHeard = heard; }
+
     public boolean hasLearnedGunnarWisdom() { return gunnarWisdomLearned; }
     public void setGunnarWisdomLearned(boolean value) { gunnarWisdomLearned = value; }
 
@@ -193,6 +198,7 @@ public class GameState {
         this.ymirPacified = false;
         this.ymirRuneSeed = 0;
         this.gunnarWisdomLearned = false;
+        this.gunnarFirstDialogueHeard = false;
         this.ymirSteleRead = false;
         this.ymirOldFashionedCreated = false;
         this.bossRetryAvailable = false;

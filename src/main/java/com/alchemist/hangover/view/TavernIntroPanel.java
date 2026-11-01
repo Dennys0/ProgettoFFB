@@ -76,34 +76,9 @@ public class TavernIntroPanel extends JPanel {
 
         restartDialogue();
 
-        // I click sui componenti figli non risalgono automaticamente al JPanel.
-        // Colleghiamo l'avanzamento anche ai singoli elementi visibili.
-        MouseAdapter advanceOnClick = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                dialogueSystem.nextLine();
-            }
-        };
-        addMouseListener(advanceOnClick);
-        layeredPane.addMouseListener(advanceOnClick);
-        dialogueBox.addMouseListener(advanceOnClick);
-        nameLabel.addMouseListener(advanceOnClick);
-        dialogueTextLabel.addMouseListener(advanceOnClick);
-        characterSpriteLabel.addMouseListener(advanceOnClick);
-
-        // KeyBindings per SPAZIO e INVIO
-        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = getActionMap();
-
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "advanceDialogue");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "advanceDialogue");
-
-        actionMap.put("advanceDialogue", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialogueSystem.nextLine();
-            }
-        });
+        DialogueManager.connect(dialogueBox, characterSpriteLabel,
+                dialogueSystem, () -> true);
+        DialogueManager.bindAdvance(this, "advanceDialogue", () -> true, dialogueSystem);
 
         JButton revealButton = new JButton("MOSTRA FRASE");
         revealButton.setFont(new Font("SansSerif", Font.BOLD, 12));
