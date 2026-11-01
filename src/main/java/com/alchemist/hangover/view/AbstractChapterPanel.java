@@ -2,6 +2,7 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
+import com.alchemist.hangover.model.RecipeManager;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -85,17 +86,24 @@ public abstract class AbstractChapterPanel extends JPanel {
         return button;
     }
 
-    /** Registra un NPC gia' visibile nel PNG della stanza, senza sovrapporre sprite. */
-    protected final HotspotButton registerNpcHotspot(int room, Rectangle bounds,
-            String label, Runnable action) {
+    /** Una sola creazione per gli hotspot di NPC, boss, indizi e calderoni. */
+    protected final HotspotButton registerActionHotspot(
+            Rectangle bounds, String label, Runnable action) {
         HotspotButton hotspot = new HotspotButton();
         hotspot.setBounds(bounds);
         hotspot.setToolTipText(label);
         hotspot.getAccessibleContext().setAccessibleName(label);
         hotspot.addActionListener(e -> action.run());
-        npcHotspots.computeIfAbsent(room, ignored -> new ArrayList<>()).add(hotspot);
-        add(hotspot);
         hotspot.setVisible(false);
+        add(hotspot);
+        return hotspot;
+    }
+
+    /** Registra un NPC gia' visibile nel PNG della stanza, senza sovrapporre sprite. */
+    protected final HotspotButton registerNpcHotspot(int room, Rectangle bounds,
+            String label, Runnable action) {
+        HotspotButton hotspot = registerActionHotspot(bounds, label, action);
+        npcHotspots.computeIfAbsent(room, ignored -> new ArrayList<>()).add(hotspot);
         return hotspot;
     }
 
@@ -164,6 +172,15 @@ public abstract class AbstractChapterPanel extends JPanel {
                     && shouldShowWorldItem(item.id, state);
             button.setVisible(visible);
             if (visible) setComponentZOrder(button, 0);
+        }
+    }
+
+    /** Checkpoint della ricetta: comune ai tre capitoli, senza consumare oggetti. */
+    public final void retryCauldronAfterFailure() {
+        int chapter = GameState.getInstance().getChapter();
+        loadRoom(RecipeManager.forChapter(chapter).cauldronRoom());
+        if (CauldronController.allowOpening(mainFrameRef)) {
+            new CauldronOverlay(mainFrameRef).setVisible(true);
         }
     }
 

@@ -437,12 +437,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         new CauldronOverlay(mainFrameRef).setVisible(true);
     }
 
-    /** Checkpoint: non consuma oggetti, rientra nella stanza e riapre la ricetta. */
-    public void retryCauldronAfterFailure() {
-        loadRoom(3);
-        openForge();
-    }
-
     private void createYmirHotspot() {
         // Nella nuova room7_boss.png la sagoma scura e' gia' parte
         // del fondale: NON sovrapporre il PNG del boss a questa stanza.

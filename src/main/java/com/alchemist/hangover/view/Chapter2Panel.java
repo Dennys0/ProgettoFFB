@@ -65,27 +65,20 @@ public class Chapter2Panel extends AbstractChapterPanel {
 
     private void initHotspots() {
         // NPC Siegfried al Bancone (Stanza 2)
-        siegfriedHotspot = new HotspotButton();
-        siegfriedHotspot.setBounds(790, 175, 235, 385);
-        siegfriedHotspot.setToolTipText("Parla con Siegfried");
-        siegfriedHotspot.addActionListener(e -> startSiegfriedDialogue());
-        add(siegfriedHotspot);
+        siegfriedHotspot = registerActionHotspot(
+                new Rectangle(790, 175, 235, 385),
+                "Parla con Siegfried", this::startSiegfriedDialogue);
 
         // Calderone nella Sacrestia Corallina (Stanza 3)
-        cauldronHotspot = new HotspotButton();
-        cauldronHotspot.setBounds(500, 350, 280, 250);
-        cauldronHotspot.setToolTipText("Interagisci con il calderone");
-        cauldronHotspot.addActionListener(e -> interactWithCauldron());
-        add(cauldronHotspot);
+        cauldronHotspot = registerActionHotspot(
+                new Rectangle(500, 350, 280, 250),
+                "Interagisci con il calderone", this::interactWithCauldron);
 
         // Boss Rán nel Santuario (Stanza 7 - Area ridotta per non coprire le frecce)
-        ranBossHotspot = new HotspotButton();
-        // The whirlpool is in the middle; Hrönn sits to its right.
-        // Separate clickable areas allow talking to her without fighting.
-        ranBossHotspot.setBounds(400, 300, 470, 265);
-        ranBossHotspot.setToolTipText("Affronta Rán");
-        ranBossHotspot.addActionListener(e -> triggerRanBossEncounter());
-        add(ranBossHotspot);
+        // Il vortice e' al centro; il pulsante non deve coprire Hrönn.
+        ranBossHotspot = registerActionHotspot(
+                new Rectangle(400, 300, 470, 265),
+                "Affronta Rán", this::triggerRanBossEncounter);
 
         // NPCs are baked into the seven scenes: only transparent hotzones.
         for (NpcDefinition npc : NPC_DEFINITIONS) {
@@ -160,12 +153,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
                 ? "/dialogues/siegfried_dialogue_2.txt"
                 : "/dialogues/siegfried_dialogue_1.txt";
         startSceneDialogue(dialoguePath, DialogueKind.SIEGFRIED);
-    }
-
-    /** Checkpoint della ricetta: riapre il calderone con gli stessi oggetti. */
-    public void retryCauldronAfterFailure() {
-        loadRoom(3);
-        new CauldronOverlay(mainFrameRef).setVisible(true);
     }
 
     /** Checkpoint del boss: salta il dialogo introduttivo gia' visto. */

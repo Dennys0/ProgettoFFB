@@ -49,27 +49,21 @@ public class Chapter1Panel extends AbstractChapterPanel {
     }
 
     private void initHotspots() {
-        room7ScreenClickHotspot = new HotspotButton();
-        room7ScreenClickHotspot.setBounds(150, 100, 980, 500); // Copre l'area centrale della Stanza 7
-        room7ScreenClickHotspot.setToolTipText("Esamina il guardiano delle tempeste");
-        room7ScreenClickHotspot.addActionListener(e -> triggerBossEncounter());
-        add(room7ScreenClickHotspot);
+        room7ScreenClickHotspot = registerActionHotspot(
+                new Rectangle(150, 100, 980, 500),
+                "Esamina il guardiano delle tempeste", this::triggerBossEncounter);
 
 // Carica lo sprite di HrÃ¦svelgr
         dialogue.addPortrait("HRAESVELGR", "/images/characters/hraesvelgr.png");
         // Hotspot Martino al Timone (Stanza 2)
-        martinoHotspot = new HotspotButton();
-        martinoHotspot.setBounds(500, 200, 280, 400);
-        martinoHotspot.setToolTipText("Parla con Martino");
-        martinoHotspot.addActionListener(e -> startMartinoDialogue());
-        add(martinoHotspot);
+        martinoHotspot = registerActionHotspot(
+                new Rectangle(500, 200, 280, 400),
+                "Parla con Martino", this::startMartinoDialogue);
 
         // Hotspot invisibile per il Calderone nella Cabina Alchimista (Stanza 4)
-        cauldronHotspot = new HotspotButton();
-        cauldronHotspot.setBounds(500, 350, 280, 250);
-        cauldronHotspot.setToolTipText("Interagisci con il calderone d'ottone");
-        cauldronHotspot.addActionListener(e -> interactWithCauldron());
-        add(cauldronHotspot);
+        cauldronHotspot = registerActionHotspot(
+                new Rectangle(500, 350, 280, 250),
+                "Interagisci con il calderone d'ottone", this::interactWithCauldron);
 
         // Gli NPC sono gia' disegnati nelle cinque nuove immagini delle stanze.
         // Usiamo quindi soltanto aree invisibili e lo sprite nei dialoghi.
@@ -202,12 +196,6 @@ public class Chapter1Panel extends AbstractChapterPanel {
             hudPanel.updateHUD();
         }
         repaint();
-    }
-
-    /** Checkpoint della ricetta: torna alla cabina mantenendo l'inventario. */
-    public void retryCauldronAfterFailure() {
-        loadRoom(4);
-        new CauldronOverlay(mainFrameRef).setVisible(true);
     }
 
     /** Checkpoint del boss: salta il dialogo introduttivo gia' visto. */
