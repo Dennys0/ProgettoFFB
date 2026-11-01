@@ -5,149 +5,108 @@ import com.alchemist.hangover.controller.SceneManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProloguePanel extends JPanel {
+/** Prologo: sfondo della taverna, ritratti e una sola conversazione skippabile. */
+public final class ProloguePanel extends JPanel {
+    private static final String INTRO_DIALOGUE = "/dialogues/intro_dialogue.txt";
+    private static final String TAVERN_BACKGROUND = "/images/intro/tavern_bg.png";
+    private static final Map<String, String> PORTRAIT_PATHS = Map.of(
+            "ARTHUR", "/images/characters/arthur_silhouette.png",
+            "MARTINO", "/images/characters/martino.png",
+            "HELA", "/images/characters/hela.png",
+            "SIEGFRIED", "/images/characters/siegfried.png",
+            "GUNNAR", "/images/characters/gunnar.png"
+    );
 
-    private Image backgroundImage;
-    private JLabel characterSpriteLabel;
-    private DialogueSystem dialogueSystem;
-
-    private Map<String, ImageIcon> characterSprites;
+    private final Image backgroundImage;
+    private final JLabel portrait = new JLabel("", SwingConstants.CENTER);
+    private final Map<String, ImageIcon> portraits = new HashMap<>();
+    private final DialogueSystem dialogue;
 
     public ProloguePanel() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(1280, 720));
+        URL tavern = getClass().getResource(TAVERN_BACKGROUND);
+        backgroundImage = tavern == null ? null : new ImageIcon(tavern).getImage();
 
-        // 1. Sfondo Taverna
-        try {
-            backgroundImage = new ImageIcon(getClass().getResource("/images/intro/tavern_bg.png")).getImage();
-        } catch (Exception e) {
-            System.err.println("Errore caricamento sfondo taverna: " + e.getMessage());
-        }
-
-        // 3. Sprite Personaggi
-        characterSprites = new HashMap<>();
-        loadSprite("ARTHUR", "/images/characters/arthur_silhouette.png");
-        loadSprite("MARTINO", "/images/characters/martino.png");
-        loadSprite("HELA", "/images/characters/hela.png");
-        loadSprite("SIEGFRIED", "/images/characters/siegfried.png");
-        loadSprite("GUNNAR", "/images/characters/gunnar.png");
-
-        // JLayeredPane con layout NULLO per rispettare le coordinate assolute
-        JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setLayout(null);
-        layeredPane.setBounds(0, 0, 1280, 720);
-
-        // LIVELLO 1: Sprite Personaggio
-        characterSpriteLabel = new JLabel();
-        characterSpriteLabel.setBounds(390, 40, 500, 600);
-        characterSpriteLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        layeredPane.add(characterSpriteLabel, Integer.valueOf(1));
-
-        // La stessa cornice illustrata usata da ogni capitolo.
-        SharedDialogueBox dialogueBox = new SharedDialogueBox();
-        dialogueBox.setBounds(40, 470, 1200, 200);
-        JLabel nameLabel = dialogueBox.getSpeakerLabel();
-        JLabel dialogueTextLabel = dialogueBox.getTextLabel();
-        // Nell'introduzione MOSTRA FRASE ha un pulsante dedicato in alto;
-        // non visualizziamo due controlli identici.
-        dialogueBox.getRevealLabel().setText("");
-
-        layeredPane.add(dialogueBox, Integer.valueOf(2));
-
-        add(layeredPane, BorderLayout.CENTER);
-
-        // Inizializzazione DialogueSystem
-        dialogueSystem = new DialogueSystem(
-                nameLabel,
-                dialogueTextLabel,
-                this::updateCharacterSprite,
-                () -> {
-                    System.out.println("Introduzione completata! Passaggio al Capitolo 1...");
-                    SceneManager.getInstance().showScene("CHAPTER1");
-                }
-        );
-
-        restartDialogue();
-
-        DialogueManager.connect(dialogueBox, characterSpriteLabel,
-                dialogueSystem, () -> true);
-        DialogueManager.bindAdvance(this, "advanceDialogue", () -> true, dialogueSystem);
-
-        JButton revealButton = new JButton("MOSTRA FRASE");
-        revealButton.setFont(new Font("SansSerif", Font.BOLD, 12));
-        revealButton.setForeground(new Color(255, 225, 160));
-        revealButton.setBackground(new Color(30, 30, 30));
-        revealButton.setOpaque(true);
-        revealButton.setFocusPainted(false);
-        revealButton.setFocusable(false);
-        revealButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        revealButton.setBounds(985, 20, 145, 35);
-        revealButton.addActionListener(e -> dialogueSystem.revealCurrentLine());
-        layeredPane.add(revealButton, Integer.valueOf(3));
-
-        JButton skipButton = new JButton("SKIP");
-        skipButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-        skipButton.setForeground(new Color(255, 215, 0));
-        // Sfondo pienamente opaco: evita artefatti del testo della dialogue box
-        // durante il repaint e il passaggio del mouse sul pulsante.
-        skipButton.setBackground(new Color(30, 30, 30));
-        skipButton.setOpaque(true);
-        skipButton.setContentAreaFilled(true);
-        skipButton.setFocusPainted(false);
-        skipButton.setFocusable(false); // Impedisce al focus di evidenziare o mostrare testo di background
-        skipButton.setBorder(BorderFactory.createLineBorder(new Color(200, 160, 80), 1));
-        skipButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        skipButton.setBounds(1140, 20, 100, 35);
-
-        skipButton.addActionListener(e -> {
-            if (dialogueSystem != null) {
-                dialogueSystem.stop(); // Interrompe il timer del testo
-            }
-            SceneManager.getInstance().showScene("CHAPTER1");
+        PORTRAIT_PATHS.forEach((speaker, path) -> {
+            ImageIcon icon = SharedDialogueBox.scaledPortrait(path, 550);
+            if (icon != null) portraits.put(speaker, icon);
+            else System.err.println("[ProloguePanel] Ritratto mancante: " + path);
         });
 
-// Livello dedicato ai controlli, sopra sprite e dialogue box.
-        layeredPane.add(skipButton, Integer.valueOf(3));
+        JLayeredPane layers = new JLayeredPane();
+        layers.setLayout(null);
+        layers.setBounds(0, 0, 1280, 720);
+        add(layers, BorderLayout.CENTER);
 
+        portrait.setBounds(390, 40, 500, 600);
+        layers.add(portrait, Integer.valueOf(1));
+
+        SharedDialogueBox frame = new SharedDialogueBox();
+        frame.setBounds(40, 470, 1200, 200);
+        frame.getRevealLabel().setText(""); // Il comando di rivelazione e' in alto.
+        layers.add(frame, Integer.valueOf(2));
+
+        dialogue = new DialogueSystem(frame.getSpeakerLabel(), frame.getTextLabel(),
+                this::updatePortrait, this::finishPrologue);
+        DialogueManager.connect(frame, portrait, dialogue, () -> true);
+        DialogueManager.bindAdvance(this, "advanceDialogue", () -> true, dialogue);
+
+        layers.add(controlButton("MOSTRA FRASE", 985, 145, 12, false,
+                () -> dialogue.revealCurrentLine()), Integer.valueOf(3));
+        layers.add(controlButton("SKIP", 1140, 100, 14, true,
+                this::finishPrologue), Integer.valueOf(3));
+
+        restartDialogue();
     }
 
-    /** Il pannello intro rimane in memoria: ogni nuova partita deve ricominciare da zero. */
+    /** I pannelli sono riutilizzati: Nuova partita ricomincia il testo da capo. */
     public void restartDialogue() {
-        dialogueSystem.loadDialogue("/dialogues/intro_dialogue.txt");
-        dialogueSystem.startDialogue();
+        dialogue.stop();
+        dialogue.loadDialogue(INTRO_DIALOGUE);
+        dialogue.startDialogue();
     }
 
-    private void loadSprite(String name, String path) {
-        ImageIcon icon = SharedDialogueBox.scaledPortrait(path, 550);
-        if (icon != null) characterSprites.put(name, icon);
-        else System.err.println("Sprite non trovato per " + name + " in " + path);
+    private void finishPrologue() {
+        dialogue.stop();
+        SceneManager.getInstance().showScene("CHAPTER1");
     }
 
-    private void updateCharacterSprite() {
-        DialogueSystem.DialogueLine current = dialogueSystem.getCurrentLine();
-        if (current != null) {
-            String speaker = current.getSpeaker();
-            if (characterSprites.containsKey(speaker)) {
-                characterSpriteLabel.setIcon(characterSprites.get(speaker));
-                characterSpriteLabel.setVisible(true);
-            } else {
-                characterSpriteLabel.setVisible(false);
-            }
+    private void updatePortrait() {
+        DialogueSystem.DialogueLine line = dialogue.getCurrentLine();
+        ImageIcon icon = line == null ? null : portraits.get(line.getSpeaker());
+        portrait.setIcon(icon);
+        portrait.setVisible(icon != null);
+    }
+
+    private static JButton controlButton(String text, int x, int width,
+                                         int fontSize, boolean outlined, Runnable action) {
+        JButton button = new JButton(text);
+        button.setBounds(x, 20, width, 35);
+        button.setFont(new Font("SansSerif", Font.BOLD, fontSize));
+        button.setForeground(new Color(255, outlined ? 215 : 225, outlined ? 0 : 160));
+        button.setBackground(new Color(30, 30, 30));
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
+        button.setFocusable(false);
+        button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        if (outlined) {
+            button.setBorder(BorderFactory.createLineBorder(new Color(200, 160, 80)));
         }
+        button.addActionListener(e -> action.run());
+        return button;
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
         if (backgroundImage != null) {
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            graphics.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
 }
