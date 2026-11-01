@@ -2,7 +2,7 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
-import com.alchemist.hangover.model.YmirCauldronRecipe;
+import com.alchemist.hangover.model.RecipeManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -96,7 +96,7 @@ public final class YmirCauldronPanel extends SharedCauldronArtworkPanel {
         inventoryGrid.removeAll();
         List<Item> available = new ArrayList<>();
         for (Item item : GameState.getInstance().getInventory()) {
-            if (YmirCauldronRecipe.ALL.contains(item.getId())) available.add(item);
+            if (RecipeManager.forChapter(3).available().contains(item.getId())) available.add(item);
         }
 
         for (Item item : available) {
@@ -178,13 +178,10 @@ public final class YmirCauldronPanel extends SharedCauldronArtworkPanel {
     }
 
     private void mix() {
-        switch (YmirCauldronRecipe.evaluate(selected)) {
+        switch (RecipeManager.evaluate(3, selected)) {
             case INCOMPLETE -> statusLabel.setText("Servono esattamente tre ingredienti.");
-            case WRONG_MIX -> statusLabel.setText("La miscela non reagisce. Cambia combinazione.");
-            case NIDHOGG_ACID -> onDisaster.accept(
-                    "La Radice di Nidhogg scioglie il boccale con acido draconico.");
-            case GIANT_BONE_STONE -> onDisaster.accept(
-                    "La Polvere d'Ossa trasforma il drink in un blocco di pietra.");
+            case WRONG_INGREDIENT -> onDisaster.accept(RecipeManager.failureText(
+                    3, selected, GameState.getInstance().getInventory()));
             case SUCCESS -> onSuccess.run();
         }
     }

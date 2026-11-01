@@ -164,6 +164,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
     }
 
     private void interactWithCauldron() {
+        if (!CauldronController.allowOpening(mainFrameRef)) return;
         boolean confirm = StoryPromptDialog.confirm(mainFrameRef,
                 StoryPromptDialog.Theme.SKY, "CALDERONE D'OTTONE",
                 "Il calderone e' pronto a raccogliere tre ingredienti.\n"
@@ -305,6 +306,12 @@ add(characterSpriteLabel);
             hudPanel.updateHUD();
         }
         repaint();
+    }
+
+    /** Checkpoint della ricetta: torna alla cabina mantenendo l'inventario. */
+    public void retryCauldronAfterFailure() {
+        loadRoom(4);
+        new CauldronOverlay(mainFrameRef).setVisible(true);
     }
 
     /** Checkpoint del boss: salta il dialogo introduttivo gia' visto. */

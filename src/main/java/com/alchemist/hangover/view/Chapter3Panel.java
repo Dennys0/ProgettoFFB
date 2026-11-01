@@ -425,6 +425,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
     private void openForge() {
         if (npcConversationActive || gunnarConversationActive) return;
+        if (!CauldronController.allowOpening(mainFrameRef)) return;
         brewingPanel.refreshIngredients();
         brewingPanel.setVisible(true);
         forgeHotspot.setVisible(false);
@@ -445,12 +446,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
     private void onBrewingDisaster(String message) {
         closeForge();
-        GameState state = GameState.getInstance();
-        state.setCurrentHealth(0);
-        state.setBossRetryAvailable(false);
-        GameOverPanel gameOver = (GameOverPanel) SceneManager.getInstance().getPanel("GAMEOVER");
-        if (gameOver != null) gameOver.showCauldronFailure(message);
-        SceneManager.getInstance().showScene("GAMEOVER");
+        CauldronController.fail(message);
     }
 
     /** Riprende esattamente dal boccale, senza ripetere il boss o perdere gli ingredienti. */

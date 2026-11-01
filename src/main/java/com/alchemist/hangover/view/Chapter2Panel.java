@@ -147,6 +147,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
     }
 
     private void interactWithCauldron() {
+        if (!CauldronController.allowOpening(mainFrameRef)) return;
         CauldronOverlay cauldron = new CauldronOverlay(mainFrameRef);
         cauldron.setVisible(true);
     }
@@ -200,6 +201,12 @@ public class Chapter2Panel extends AbstractChapterPanel {
                 ? "/dialogues/siegfried_dialogue_2.txt"
                 : "/dialogues/siegfried_dialogue_1.txt";
         startSceneDialogue(dialoguePath, DialogueKind.SIEGFRIED);
+    }
+
+    /** Checkpoint della ricetta: riapre il calderone con gli stessi oggetti. */
+    public void retryCauldronAfterFailure() {
+        loadRoom(3);
+        new CauldronOverlay(mainFrameRef).setVisible(true);
     }
 
     /** Checkpoint del boss: salta il dialogo introduttivo gia' visto. */
