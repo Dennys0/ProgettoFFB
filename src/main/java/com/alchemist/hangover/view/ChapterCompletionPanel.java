@@ -45,10 +45,10 @@ public final class ChapterCompletionPanel extends JPanel {
         };
     }
 
-    private final Frame owner;
+    private final JFrame owner;
     private final Details details;
 
-    public ChapterCompletionPanel(Frame owner, int chapter) {
+    public ChapterCompletionPanel(JFrame owner, int chapter) {
         this.owner = owner;
         this.details = detailsFor(chapter);
         setLayout(null);
