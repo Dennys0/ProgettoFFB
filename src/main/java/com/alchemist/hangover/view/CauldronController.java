@@ -2,7 +2,7 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.model.RecipeManager;
+import com.alchemist.hangover.controller.CauldronGameService;
 import com.alchemist.hangover.controller.AudioManager;
 
 import java.awt.Frame;
@@ -23,7 +23,7 @@ public final class CauldronController {
 
     public static boolean allowOpening(Frame frame) {
         GameState state = GameState.getInstance();
-        if (RecipeManager.canOpen(state.getChapter(), state.getInventory())) return true;
+        if (CauldronGameService.canOpen(state)) return true;
         StoryPromptDialog.Theme theme = themeForChapter(state.getChapter());
         StoryPromptDialog.message(frame, theme, "INGREDIENTI INSUFFICIENTI",
                 "Prima di usare il calderone raccogli almeno tre ingredienti "
@@ -34,32 +34,19 @@ public final class CauldronController {
     /** A common outcome for all three cauldrons; no pickup popup is shown.
      * Completion scenes are responsible for the illustrated drink and actions. */
     static String completionScene(int chapter) {
-        return switch (chapter) {
-            case 1 -> "TRANSITION_CH1_CH2";
-            case 2 -> "TRANSITION_CH2_CH3";
-            case 3 -> "CHAPTER3_COMPLETE";
-            default -> throw new IllegalArgumentException("Capitolo senza calderone: " + chapter);
-        };
+        return CauldronGameService.completionScene(chapter);
     }
 
     public static void complete(int chapter) {
         String scene = completionScene(chapter);
-        GameState state = GameState.getInstance();
-        if (chapter == 3) {
-            state.setYmirOldFashionedCreated(true);
-        } else if (chapter == 1) {
-            // Preserve the original chapter-one transition behavior.
-            state.clearInventory();
-        }
-        state.resetHealth();
+        CauldronGameService.registerSuccess(GameState.getInstance(), chapter);
         AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
         SceneManager.getInstance().showScene(scene);
     }
 
     public static void fail(String reason) {
         GameState state = GameState.getInstance();
-        state.setCurrentHealth(0);
-        state.setBossRetryAvailable(false);
+        CauldronGameService.registerFailure(state);
         GameOverPanel panel = (GameOverPanel) SceneManager.getInstance().getPanel("GAMEOVER");
         if (panel != null) panel.showCauldronFailure(reason);
         // Prima la notifica fantasy, poi la schermata Game Over.
