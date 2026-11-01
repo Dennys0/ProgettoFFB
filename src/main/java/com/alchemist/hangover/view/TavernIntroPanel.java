@@ -16,9 +16,6 @@ public class TavernIntroPanel extends JPanel {
 
     private Image backgroundImage;
     private JLabel characterSpriteLabel;
-    private JLabel nameLabel;
-    private JLabel dialogueTextLabel;
-    private JLabel skipPromptLabel;
     private DialogueSystem dialogueSystem;
 
     private Map<String, ImageIcon> characterSprites;
@@ -56,12 +53,11 @@ public class TavernIntroPanel extends JPanel {
         // La stessa cornice illustrata usata da ogni capitolo.
         SharedDialogueBox dialogueBox = new SharedDialogueBox();
         dialogueBox.setBounds(40, 470, 1200, 200);
-        nameLabel = dialogueBox.getSpeakerLabel();
-        dialogueTextLabel = dialogueBox.getTextLabel();
+        JLabel nameLabel = dialogueBox.getSpeakerLabel();
+        JLabel dialogueTextLabel = dialogueBox.getTextLabel();
         // Nell'introduzione MOSTRA FRASE ha un pulsante dedicato in alto;
         // non visualizziamo due controlli identici.
-        skipPromptLabel = dialogueBox.getRevealLabel();
-        skipPromptLabel.setText("");
+        dialogueBox.getRevealLabel().setText("");
 
         layeredPane.add(dialogueBox, Integer.valueOf(2));
 
@@ -154,13 +150,9 @@ public class TavernIntroPanel extends JPanel {
     }
 
     private void loadSprite(String name, String path) {
-        try {
-            ImageIcon icon = new ImageIcon(getClass().getResource(path));
-            Image img = icon.getImage().getScaledInstance(-1, 550, Image.SCALE_SMOOTH);
-            characterSprites.put(name, new ImageIcon(img));
-        } catch (Exception e) {
-            System.err.println("Sprite non trovato per " + name + " in " + path);
-        }
+        ImageIcon icon = SharedDialogueBox.scaledPortrait(path, 550);
+        if (icon != null) characterSprites.put(name, icon);
+        else System.err.println("Sprite non trovato per " + name + " in " + path);
     }
 
     private void updateCharacterSprite() {

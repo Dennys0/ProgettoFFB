@@ -65,6 +65,18 @@ public final class SharedDialogueBox extends JPanel {
         }
     }
 
+    /**
+     * Un solo punto per caricare i ritratti, mantenendo il rapporto d'aspetto
+     * gia' utilizzato dall'intro e dai primi due capitoli.
+     */
+    static ImageIcon scaledPortrait(String resource, int height) {
+        URL url = SharedDialogueBox.class.getResource(resource);
+        if (url == null) return null;
+        Image image = new ImageIcon(url).getImage()
+                .getScaledInstance(-1, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(image);
+    }
+
     private static Image loadArtwork() {
         URL url = SharedDialogueBox.class.getResource(ART_PATH);
         return url == null ? null : new ImageIcon(url).getImage();

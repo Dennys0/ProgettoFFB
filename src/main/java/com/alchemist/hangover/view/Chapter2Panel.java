@@ -22,9 +22,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
 
     // UI Dialoghi
     private JPanel dialogueBoxOverlay;
-    private JLabel dialogueNameLabel;
-    private JLabel dialogueTextLabel;
-    private JLabel dialogueSkipLabel;
     private JLabel characterSpriteLabel;
     private DialogueSystem dialogueSystem;
     private Map<String, ImageIcon> characterSprites;
@@ -96,13 +93,9 @@ public class Chapter2Panel extends AbstractChapterPanel {
     }
 
     private void loadSprite(String name, String path) {
-        try {
-            ImageIcon icon = new ImageIcon(getClass().getResource(path));
-            Image img = icon.getImage().getScaledInstance(-1, 520, Image.SCALE_SMOOTH);
-            characterSprites.put(name, new ImageIcon(img));
-        } catch (Exception e) {
-            System.err.println("Sprite non trovato per " + name + " in " + path);
-        }
+        ImageIcon icon = SharedDialogueBox.scaledPortrait(path, 520);
+        if (icon != null) characterSprites.put(name, icon);
+        else System.err.println("Sprite non trovato per " + name + " in " + path);
     }
 
     private void initHotspots() {
@@ -283,9 +276,9 @@ public class Chapter2Panel extends AbstractChapterPanel {
         dialogueBoxOverlay = sharedDialogueBox;
         dialogueBoxOverlay.setBounds(40, 470, 1200, 200);
         dialogueBoxOverlay.setVisible(false);
-        dialogueNameLabel = sharedDialogueBox.getSpeakerLabel();
-        dialogueTextLabel = sharedDialogueBox.getTextLabel();
-        dialogueSkipLabel = sharedDialogueBox.getRevealLabel();
+        JLabel dialogueNameLabel = sharedDialogueBox.getSpeakerLabel();
+        JLabel dialogueTextLabel = sharedDialogueBox.getTextLabel();
+        JLabel dialogueSkipLabel = sharedDialogueBox.getRevealLabel();
 
         add(dialogueBoxOverlay);
         // In Swing l'indice zero e' davanti: la cornice deve coprire
