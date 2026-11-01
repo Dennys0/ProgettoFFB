@@ -1,5 +1,16 @@
 # Revisione completa dei package view e model
 
+> **Nota di aggiornamento:** questo rapporto fotografa l'analisi iniziale dei 41 file
+> prima dei refactoring successivi. Nella versione attuale del branch
+> `refactor/view-model-cleanup`, i componenti specifici
+> `YmirCauldronPanel`, `YmirCauldronRecipe`, `YmirStoryPrompt`,
+> `ItemPickupOverlay`, `StyledEventDialog`,
+> `ChapterTransitionPanel`, `Chapter3PreviewPanel`,
+> `Chapter3CompletePanel` e `TavernIntroPanel` sono stati
+> sostituiti da componenti comuni; vedere
+> [architettura finale](chapter-completions-unified.md).
+>
+
 **Base verificata**: commit `d26c71927094eee0a6d357e405e81c74e80db1f5` del branch `feat/chapter3`.
 **Branch di lavoro**: `refactor/view-model-cleanup`.
 **Ambito**: 37 classi view + 4 model = **41 file Java**. La verifica di riferimenti e conseguenze
