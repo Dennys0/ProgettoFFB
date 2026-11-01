@@ -1,6 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.gameplay.chapter.ChapterProgression;
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import java.awt.*;
@@ -40,17 +41,17 @@ class ChapterCompletionPanelTest {
             state.setChapter(1);
             state.setCurrentRoom(4);
             state.setBossDefeated(true);
-            ChapterCompletionPanel.prepareNextChapterState(1,state);
+            ChapterProgression.advanceToNextChapter(1,state);
             assertEquals(2,state.getChapter());
             assertEquals(1,state.getCurrentRoom());
             assertFalse(state.isBossDefeated());
-            ChapterCompletionPanel.prepareNextChapterState(2,state);
+            ChapterProgression.advanceToNextChapter(2,state);
             assertEquals(3,state.getChapter());
             assertEquals(1,state.getCurrentRoom());
             assertTrue(state.getYmirRuneSeed()>0);
             state.setCurrentRoom(3);
             state.setYmirOldFashionedCreated(true);
-            ChapterCompletionPanel.prepareNextChapterState(3,state);
+            ChapterProgression.advanceToNextChapter(3,state);
             assertEquals(3,state.getChapter());
             assertEquals(3,state.getCurrentRoom());
             assertTrue(state.isYmirOldFashionedCreated());
@@ -65,8 +66,8 @@ class ChapterCompletionPanelTest {
             state.setCurrentRoom(4);
             state.setCurrentHealth(1);
             state.setBossDefeated(true);
-            var snapshot = com.alchemist.hangover.model.GameSaveSnapshot
-                    .afterCompletedChapter(state, 1);
+            var snapshot = ChapterProgression
+                    .saveAfterCompletion(state, 1);
             assertEquals(1, state.getChapter());
             assertEquals(4, state.getCurrentRoom());
             assertEquals(1, state.getCurrentHealth());
@@ -79,8 +80,8 @@ class ChapterCompletionPanelTest {
             state.setChapter(2);
             state.setCurrentRoom(3);
             state.setYmirRuneSeed(0);
-            var next = com.alchemist.hangover.model.GameSaveSnapshot
-                    .afterCompletedChapter(state, 2);
+            var next = ChapterProgression
+                    .saveAfterCompletion(state, 2);
             assertEquals(2, state.getChapter());
             assertEquals(3, state.getCurrentRoom());
             assertEquals(0, state.getYmirRuneSeed());

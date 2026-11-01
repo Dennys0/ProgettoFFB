@@ -31,26 +31,6 @@ public record GameSaveSnapshot(
                 state.getInventory());
     }
 
-    /** La partita in memoria resta alla schermata di completamento fino a PROSEGUI. */
-    public static GameSaveSnapshot afterCompletedChapter(GameState state, int completedChapter) {
-        GameSaveSnapshot s = capture(state);
-        return switch (completedChapter) {
-            case 1 -> new GameSaveSnapshot(2, 1, s.maxHealth(), s.maxHealth(),
-                    s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
-                    false, s.ymirPacified(), s.ymirRuneSeed(),
-                    s.gunnarWisdomLearned(), s.gunnarIntroductionHeard(),
-                    s.ymirSteleRead(), s.ymirOldFashionedCreated(), s.inventory());
-            case 2 -> new GameSaveSnapshot(3, 1, s.maxHealth(), s.maxHealth(),
-                    s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
-                    s.bossDefeated(), s.ymirPacified(),
-                    s.ymirRuneSeed() == 0 ? nextRuneSeed() : s.ymirRuneSeed(),
-                    s.gunnarWisdomLearned(), s.gunnarIntroductionHeard(),
-                    s.ymirSteleRead(), s.ymirOldFashionedCreated(), s.inventory());
-            case 3 -> s;
-            default -> throw new IllegalArgumentException("Capitolo non previsto: " + completedChapter);
-        };
-    }
-
     /** Non scrivere in H2 un capitolo 3 privo di seed, senza mutare GameState. */
     public GameSaveSnapshot withPersistentRuneSeed() {
         if (chapter != 3 || ymirRuneSeed != 0) return this;

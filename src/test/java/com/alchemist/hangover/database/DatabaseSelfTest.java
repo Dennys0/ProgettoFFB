@@ -146,8 +146,8 @@ public class DatabaseSelfTest {
         state.setCurrentRoom(4);
         state.setCurrentHealth(2);
         state.setBossDefeated(true);
-        var snapshot = com.alchemist.hangover.model.GameSaveSnapshot
-                .afterCompletedChapter(state, 1);
+        var snapshot = com.alchemist.hangover.gameplay.chapter.ChapterProgression
+                .saveAfterCompletion(state, 1);
         assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Fine capitolo 1", snapshot));
         assertEquals(1, state.getChapter(), "SALVA non deve avanzare la partita");
         assertEquals(4, state.getCurrentRoom());

@@ -1,0 +1,56 @@
+package com.alchemist.hangover.gameplay.chapter;
+
+import com.alchemist.hangover.model.GameSaveSnapshot;
+import com.alchemist.hangover.model.GameState;
+import java.util.Objects;
+
+/**
+ * Regole di progressione dei capitoli, senza finestre Swing o accessi H2.
+ * SALVA prepara solo una fotografia; CONTINUA avanza la partita attiva.
+ */
+public final class ChapterProgression {
+    private ChapterProgression() { }
+
+    public static GameSaveSnapshot saveAfterCompletion(GameState state, int completedChapter) {
+        GameSaveSnapshot s = GameSaveSnapshot.capture(Objects.requireNonNull(state, "state"));
+        return switch (completedChapter) {
+            case 1 -> new GameSaveSnapshot(
+                    2, 1, s.maxHealth(), s.maxHealth(),
+                    s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
+                    false, s.ymirPacified(), s.ymirRuneSeed(),
+                    s.gunnarWisdomLearned(), s.gunnarIntroductionHeard(),
+                    s.ymirSteleRead(), s.ymirOldFashionedCreated(), s.inventory());
+            case 2 -> new GameSaveSnapshot(
+                    3, 1, s.maxHealth(), s.maxHealth(),
+                    s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
+                    s.bossDefeated(), s.ymirPacified(), s.ymirRuneSeed(),
+                    s.gunnarWisdomLearned(), s.gunnarIntroductionHeard(),
+                    s.ymirSteleRead(), s.ymirOldFashionedCreated(),
+                    s.inventory()).withPersistentRuneSeed();
+            case 3 -> s;
+            default -> throw new IllegalArgumentException("Capitolo non previsto: " + completedChapter);
+        };
+    }
+
+    public static void advanceToNextChapter(GameState state, int completedChapter) {
+        Objects.requireNonNull(state, "state");
+        switch (completedChapter) {
+            case 1 -> {
+                state.setChapter(2);
+                state.setCurrentRoom(1);
+                state.setBossDefeated(false);
+                state.setBossRetryAvailable(false);
+                state.resetHealth();
+            }
+            case 2 -> {
+                state.setChapter(3);
+                state.setCurrentRoom(1);
+                state.setBossRetryAvailable(false);
+                state.ensureYmirRuneSeed();
+                state.resetHealth();
+            }
+            case 3 -> { /* Il Capitolo III resta completato. */ }
+            default -> throw new IllegalArgumentException("Capitolo non previsto: " + completedChapter);
+        }
+    }
+}

@@ -3,6 +3,7 @@ package com.alchemist.hangover.view;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.GameSaveSnapshot;
+import com.alchemist.hangover.gameplay.chapter.ChapterProgression;
 
 import javax.swing.*;
 import java.awt.*;
@@ -100,7 +101,7 @@ public final class ChapterCompletionPanel extends JPanel {
         JButton save = button("SALVA PARTITA", "chapterCompletionSave", 128);
         save.addActionListener(e -> {
             // Fotografiamo il prossimo capitolo, senza anticipare la transizione.
-            GameSaveSnapshot snapshot = GameSaveSnapshot.afterCompletedChapter(
+            GameSaveSnapshot snapshot = ChapterProgression.saveAfterCompletion(
                     GameState.getInstance(), details.chapter());
             new SaveLoadDialog(owner, SaveLoadDialog.Mode.SAVE, snapshot).setVisible(true);
         });
@@ -144,28 +145,6 @@ public final class ChapterCompletionPanel extends JPanel {
         return button;
     }
 
-    /** Used by SAVE and CONTINUE; never mutates DB directly. */
-    static void prepareNextChapterState(int completedChapter, GameState state) {
-        switch (completedChapter) {
-            case 1 -> {
-                state.setChapter(2);
-                state.setCurrentRoom(1);
-                state.setBossDefeated(false);
-                state.setBossRetryAvailable(false);
-                state.resetHealth();
-            }
-            case 2 -> {
-                state.setChapter(3);
-                state.setCurrentRoom(1);
-                state.setBossRetryAvailable(false);
-                state.ensureYmirRuneSeed();
-                state.resetHealth();
-            }
-            case 3 -> { /* Chapter 3 remains completed for saving. */ }
-            default -> throw new IllegalArgumentException("Capitolo non previsto");
-        }
-    }
-
     private void advance() {
         GameState state = GameState.getInstance();
         SceneManager manager = SceneManager.getInstance();
@@ -177,7 +156,7 @@ public final class ChapterCompletionPanel extends JPanel {
             manager.showScene("CHAPTER3");
             return;
         }
-        prepareNextChapterState(chapter, state);
+        ChapterProgression.advanceToNextChapter(state, chapter);
         String nextScene = chapter == 1 ? "CHAPTER2" : "CHAPTER3";
         AbstractChapterPanel nextPanel = (AbstractChapterPanel) manager.getPanel(nextScene);
         if (nextPanel != null) nextPanel.refreshFromGameState();
