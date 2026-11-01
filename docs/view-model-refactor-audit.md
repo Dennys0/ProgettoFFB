@@ -1,5 +1,13 @@
 # Revisione completa dei package view e model
 
+> **Aggiornamento 1 novembre 2026:** ulteriore refactoring su `GameState`,
+> `ProloguePanel`, `Chapter1Panel`, `Chapter2Panel` e sui layout di tutte le
+> stanze. Il vecchio `Chapter3World` è stato eliminato a favore di
+> `ChapterLayouts`, comune a C1/C2/C3. La scheda che segue resta una
+> fotografia dell'analisi storica: le modifiche nuove sono nel
+> [rapporto per la revisione universitaria](university-code-cleanup.md).
+>
+
 > **Nota di aggiornamento:** questo rapporto fotografa l'analisi iniziale dei 41 file
 > prima dei refactoring successivi. Nella versione attuale del branch
 > `refactor/view-model-cleanup`, i componenti specifici
