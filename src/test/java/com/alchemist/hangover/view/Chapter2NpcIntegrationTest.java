@@ -40,6 +40,21 @@ class Chapter2NpcIntegrationTest {
     );
 
     @Test
+    void chapterTwoDialoguePortraitsUseSpeakerSpecificPositions() {
+        Rectangle normal = Chapter2Panel.portraitBoundsFor("SIEGFRIED");
+        Rectangle marm = Chapter2Panel.portraitBoundsFor("MARMÆL");
+        Rectangle imp = Chapter2Panel.portraitBoundsFor("SGHERRO");
+        Rectangle serpent = Chapter2Panel.portraitBoundsFor("JORMUNGANDR");
+        assertTrue(marm.x < normal.x, "Marmæl deve comparire a sinistra.");
+        assertTrue(imp.x < normal.x, "Lo sgherro deve comparire a sinistra.");
+        assertEquals(640, serpent.getCenterX(), 1,
+                "Jörmungandr deve essere centrato nella finestra 1280x720.");
+        assertTrue(serpent.width > normal.width,
+                "Il serpente necessita di spazio per la testa e le squame.");
+        assertEquals(normal, Chapter2Panel.portraitBoundsFor("HRÖNN"));
+    }
+
+    @Test
     void sixNpcsHaveDistinctRoomAndDialogueBindings() {
         List<Chapter2Panel.NpcDefinition> npcs = Chapter2Panel.NPC_DEFINITIONS;
         assertEquals(6, npcs.size());

@@ -278,9 +278,23 @@ public class Chapter2Panel extends AbstractChapterPanel {
         startSceneDialogue("/dialogues/ran_boss_dialogue.txt", DialogueKind.BOSS_INTRO);
     }
 
+    /**
+     * Posizione del ritratto durante la conversazione (NON dell'hotspot
+     * nel fondale). Gli altri NPC mantengono l'impaginazione precedente.
+     */
+    static Rectangle portraitBoundsFor(String speaker) {
+        if (speaker == null) return new Rectangle(340, 30, 600, 620);
+        return switch (speaker) {
+            case "SGHERRO" -> new Rectangle(55, 30, 540, 620);
+            case "MARMÆL" -> new Rectangle(45, 30, 550, 620);
+            case "JORMUNGANDR" -> new Rectangle(200, 30, 880, 620);
+            default -> new Rectangle(340, 30, 600, 620);
+        };
+    }
+
     private void initDialogueUI() {
         characterSpriteLabel = new JLabel();
-        characterSpriteLabel.setBounds(340, 30, 600, 620);
+        characterSpriteLabel.setBounds(portraitBoundsFor(null));
         characterSpriteLabel.setHorizontalAlignment(SwingConstants.CENTER);
         characterSpriteLabel.setVerticalAlignment(SwingConstants.CENTER);
         characterSpriteLabel.setVisible(false);
@@ -357,6 +371,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
         if (current != null) {
             String speaker = current.getSpeaker();
             if (characterSprites.containsKey(speaker)) {
+                characterSpriteLabel.setBounds(portraitBoundsFor(speaker));
                 characterSpriteLabel.setIcon(characterSprites.get(speaker));
                 characterSpriteLabel.setVisible(true);
             } else {
