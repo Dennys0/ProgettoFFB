@@ -1,11 +1,11 @@
 NARRATOR|Un corvo nero osserva Arthur dalla balconata. I suoi occhi sembrano conoscere ogni suo segreto.
 ARTHUR|Un altro uccello... Almeno tu non cercherai di ammazzarmi, vero?
 HUGINN|CRA! Dipende da quanto sei stupido, umano.
-ARTHUR|Ma porca puttana! Parli anche tu?!
+ARTHUR|Ma per tutti i fulmini! Parli anche tu?!
 HUGINN|E tu bevi fino a dimenticare chi sei. Ognuno ha i propri talenti.
 ARTHUR|Aspetta... come fai a sapere che ho bevuto?
 HUGINN|Io sono Huginn, il Pensiero di Odino. Vedo ciò che gli uomini dimenticano.
-ARTHUR|Fantastico. Allora dimmi come cazzo sono finito qui!
+ARTHUR|Fantastico. Allora dimmi come accidenti sono finito qui!
 HUGINN|Ahahah! Ricordi l'ultimo bicchiere? Quello che non avevi ordinato?
 ARTHUR|Io... no. Aspetta, cosa c'era dentro?!
 HUGINN|Una domanda per un'altra volta. Prima dovrai sopravvivere al signore delle tempeste.

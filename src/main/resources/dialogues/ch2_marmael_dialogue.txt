@@ -1,13 +1,13 @@
-NARRATOR|SCENA 8 — IL PROFETA DEGLI ABISSI. Arthur attraversa un'immensa sala sommersa, illuminata da candele e circondata da enormi vetrate oltre le quali nuotano creature marine. Seduto a un lungo tavolo, un misterioso tritone osserva una sfera di cristallo.
-ARTHUR|Ma che cazzo... Prima una nave volante, ora Atlantide?! Ma dove diamine sono finito?!
+NARRATOR|Arthur attraversa un'immensa sala sommersa, illuminata da candele e circondata da enormi vetrate oltre le quali nuotano creature marine. Seduto a un lungo tavolo, un misterioso tritone osserva una sfera di cristallo.
+ARTHUR|Ma che diamine... Prima una nave volante, ora Atlantide?! Ma dove diamine sono finito?!
 MARMÆL|Finalmente sei arrivato, Arthur. Le correnti mi avevano annunciato la tua venuta.
-ARTHUR|Aspetta un attimo... Come cazzo fai a sapere il mio nome?!
+ARTHUR|Aspetta un attimo... Come accidenti fai a sapere il mio nome?!
 MARMÆL|Io sono Marmæl. Conosco ciò che è stato, ciò che è... e ciò che ancora deve accadere.
 ARTHUR|Ah, perfetto! Un pesce che legge gli oroscopi. Mancava solo questo.
 MARMÆL|Ridi pure, umano. Ma il destino che ti attende non ha nulla di divertente.
 ARTHUR|Senti, Nostradamus con le pinne, io voglio solo tornare a casa. Puoi aiutarmi oppure no?!
 MARMÆL|Ho scrutato il tuo futuro, Arthur. Ho visto nove mondi tremare... e un calderone capace di cambiare ogni cosa.
-ARTHUR|Il calderone?! Ancora con 'sto cazzo di calderone?!
+ARTHUR|Il calderone?! Ancora con 'sto benedetto calderone?!
 MARMÆL|Non è un semplice recipiente. Ciò che vi verrà versato potrebbe spezzare le catene del destino... oppure stringerle per l'eternità.
 ARTHUR|Fantastico. Quindi devo preparare un cocktail e sperare di non distruggere l'universo.
 MARMÆL|Il tuo viaggio non è frutto del caso. Qualcuno ha voluto che tu arrivassi fin qui.
@@ -18,7 +18,7 @@ NARRATOR|Marmæl immerge lentamente una mano nella sfera di cristallo. Al suo in
 MARMÆL|Ascolta bene, Arthur. Quando ogni strada sembrerà chiusa, ricorda: non tutto ciò che è perduto deve essere ritrovato.
 ARTHUR|Ma voi creature mitologiche non sapete parlare normalmente?! Un indirizzo, una mappa, qualcosa?!
 MARMÆL|Le risposte più importanti si nascondono spesso dove nessuno penserebbe di cercarle.
-ARTHUR|Ecco, appunto. Un altro indovinello del cazzo.
+ARTHUR|Ecco, appunto. Un altro maledetto indovinello.
 MARMÆL|Un'ultima cosa, umano. Nel futuro che ho visto... tu eri l'unico a ridere.
 ARTHUR|Beh, almeno significa che sopravvivo, no?
 MARMÆL|Non necessariamente.
@@ -28,4 +28,4 @@ MARMÆL|Il futuro non è scritto nella pietra, Arthur. Nemmeno per coloro che po
 ARTHUR|Sai che c'è? Preferivo quando il mio problema più grande era la sbronza del sabato sera.
 NARRATOR|Marmæl accenna un sorriso enigmatico e torna a contemplare la sfera.
 MARMÆL|Eppure, Arthur... è proprio da una sbronza che tutto ha avuto inizio.
-ARTHUR|...Ma vaffanculo.
+ARTHUR|...Ma vai a quel paese.

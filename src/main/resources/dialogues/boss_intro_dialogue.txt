@@ -1,4 +1,4 @@
-NARRATOR|SCENA 7 — L'ORIZZONTE DELLA TEMPESTA. Il vento qui soffia con una violenza inaudita. Le nuvole si tingono di viola ed elettricità.
+NARRATOR|Il vento qui soffia con una violenza inaudita. Le nuvole si tingono di viola ed elettricità.
 ARTHUR|L'aria è diventata pesantissima... Sembra quasi gelata.
 NARRATOR|Dalla nebbia temporalesca emerge una figura titanica. Un'aquila colossale dalle piume di ghiaccio e rugiada astrale fissa la nave con occhi di fulmine.
 HRAESVELGR|CHI OSA INTERROMPERE IL RESPIRO DEI CIELI? VOI MORTALI SFIADATE IL VENTO CON IL VOSTRO LEGNO BAGNATO.

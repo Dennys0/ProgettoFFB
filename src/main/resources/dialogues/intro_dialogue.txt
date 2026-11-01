@@ -38,7 +38,7 @@ HELA|No, Gunnar. Quello non è un gioco. È una tragedia economica.
 MARTINO|Accetto! Un ultimo giro. L'ultimo davvero.
 NARRATOR|La musica si interrompe per una frazione di secondo.
 HELA|Hai appena detto la frase più pericolosa della lingua italiana.
-NARRATOR|SCENA 2 — LE RICETTE IMPOSSIBILI. Arthur prende un tovagliolo e una penna. Gli amici cominciano a inventare i loro cocktail, scherzando.
+NARRATOR|Arthur prende un tovagliolo e una penna. Gli amici cominciano a inventare i loro cocktail, scherzando.
 ARTHUR|Bene. Sentiamo. Martino, comincia tu. Cerca di non avvelenarci.
 MARTINO|Facile. Voglio un drink azzurro. Ma non azzurro come l'acqua. Azzurro come il cielo visto da un posto in cui nessuno dovrebbe trovarsi.
 HELA|È un colore o una confessione?
@@ -97,7 +97,7 @@ ARTHUR|Bene. Direi che abbiamo raggiunto il livello massimo di assurdità per un
 SIEGFRIED|Non pronunciare mai una frase del genere, Arthur.
 ARTHUR|Perché?
 SIEGFRIED|Perché il mondo ha un pessimo senso dell'umorismo.
-NARRATOR|SCENA 3 — QUALCOSA NEL BICCHIERE. La taverna riprende vita, ma qualcosa è cambiato. Il musicista ricomincia il ritornello. La melodia è identica a quella di prima, nota per nota. Un avventore ride allo stesso modo, nello stesso punto. Sul bancone, un bicchiere cade e si rompe. Un secondo dopo, il bicchiere cade di nuovo. Arthur si volta.
+NARRATOR|La taverna riprende vita, ma qualcosa è cambiato. Il musicista ricomincia il ritornello. La melodia è identica a quella di prima, nota per nota. Un avventore ride allo stesso modo, nello stesso punto. Sul bancone, un bicchiere cade e si rompe. Un secondo dopo, il bicchiere cade di nuovo. Arthur si volta.
 ARTHUR|Avete visto?
 MARTINO|Cosa?
 ARTHUR|Quel bicchiere.
@@ -160,7 +160,7 @@ NARRATOR|La sua presa si stringe.
 HELA|E quando arriverà il momento di scegliere… ricordati di chi ti ha detto di non fidarti.
 ARTHUR|Ma tu chi sei?
 NARRATOR|Hela apre la bocca per rispondere. Non esce alcun suono. La sua figura si allontana, come vista attraverso un vetro bagnato. Le pareti della taverna si piegano. I tavoli si allungano in assi di legno scuro. Le bottiglie si trasformano in lanterne sospese. Il pavimento si inclina sotto i piedi di Arthur. E poi arriva il rumore. Un battito gigantesco. Lento. Profondo. Come il cuore di qualcosa che ha dormito per migliaia di anni.
-NARRATOR|SCENA 4 — L'ULTIMO SORSO. Buio completo. Si sentono soltanto il respiro di Arthur e il tintinnio lontano di un bicchiere. Una voce parla nell'oscurità. È difficile capire a chi appartenga.
+NARRATOR|Buio completo. Si sentono soltanto il respiro di Arthur e il tintinnio lontano di un bicchiere. Una voce parla nell'oscurità. È difficile capire a chi appartenga.
 VOCE|Il primo bicchiere apre la porta.
 NARRATOR|Un secondo tintinnio.
 VOCE|Il secondo ti mostra cosa c'è dall'altra parte.
@@ -179,7 +179,7 @@ ARTHUR|Ragazzi!
 NARRATOR|Un'ultima voce, quella di Martino, arriva da lontano.
 MARTINO|TUTTI AI POSTI! SI PARTE!
 NARRATOR|Un fragore di vele gonfiate dal vento. Il rumore di una nave che scricchiola. E il mondo diventa bianco.
-NARRATOR|SCENA 5 — IL VASCELLO MAGICO. Transizione visiva: il bianco lascia lentamente spazio alla pixel art. Il suono della pioggia si trasforma in un vento impetuoso. Il legno della taverna diventa il ponte di un veliero antico. Il vociare degli avventori si perde tra le raffiche. Arthur apre gli occhi. È disteso su un ponte di legno, sotto un cielo sconfinato. Nuvole azzurre e luminose scorrono sotto il bordo della nave. Le vele dorate si gonfiano da sole. Fulmini lontani attraversano le nubi. Arthur si mette a sedere, massaggiandosi le tempie.
+NARRATOR|Transizione visiva: il bianco lascia lentamente spazio alla pixel art. Il suono della pioggia si trasforma in un vento impetuoso. Il legno della taverna diventa il ponte di un veliero antico. Il vociare degli avventori si perde tra le raffiche. Arthur apre gli occhi. È disteso su un ponte di legno, sotto un cielo sconfinato. Nuvole azzurre e luminose scorrono sotto il bordo della nave. Le vele dorate si gonfiano da sole. Fulmini lontani attraversano le nubi. Arthur si mette a sedere, massaggiandosi le tempie.
 ARTHUR|…Mai più.
 NARRATOR|Si guarda intorno.
 ARTHUR|Mai più rum. Mai più idromele. Mai più qualsiasi cosa contenga una gradazione alcolica.

@@ -1,4 +1,4 @@
-NARRATOR|SCENA 5 — IL VASCELLO MAGICO. Il vento scuote le vele dello Skíðblaðnir. Martino stringe il timone d'ottone con una mano e un boccale di grog con l'altra.
+NARRATOR|Il vento scuote le vele dello Skíðblaðnir. Martino stringe il timone d'ottone con una mano e un boccale di grog con l'altra.
 ARTHUR|Martino! Ieri eravamo in una taverna e ora siamo su una maledetta nave volante! Che diavolo succede?!
 MARTINO|Ahahah! Benvenuto a bordo, pivello! Qui il mare sta sotto le nuvole e le spiegazioni non valgono un cazzo!
 ARTHUR|Voglio tornare a casa!
