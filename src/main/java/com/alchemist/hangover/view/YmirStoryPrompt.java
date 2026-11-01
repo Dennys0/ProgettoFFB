@@ -2,7 +2,6 @@ package com.alchemist.hangover.view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -85,64 +84,10 @@ public final class YmirStoryPrompt {
     }
 
     private static void showDynamicWarning(Frame owner, String missingClue) {
-        JDialog dialog = new JDialog(owner, "Il sonno di Ymir", true);
-        dialog.setUndecorated(true);
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        JPanel content = new JPanel(new BorderLayout(14, 20)) {
-            @Override
-            protected void paintComponent(Graphics graphics) {
-                super.paintComponent(graphics);
-                Graphics2D g = (Graphics2D) graphics.create();
-                try {
-                    g.setPaint(new GradientPaint(0, 0, new Color(55, 39, 33),
-                            getWidth(), getHeight(), new Color(20, 19, 25)));
-                    g.fillRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 18, 18);
-                    g.setColor(new Color(213, 134, 65));
-                    g.setStroke(new BasicStroke(3));
-                    g.drawRoundRect(2, 2, getWidth() - 5, getHeight() - 5, 18, 18);
-                } finally {
-                    g.dispose();
-                }
-            }
-        };
-        content.setOpaque(false);
-        content.setBorder(new EmptyBorder(31, 43, 25, 43));
-        JLabel title = new JLabel("IL SONNO DI YMIR NON PUO' ESSERE SPEZZATO",
-                SwingConstants.CENTER);
-        title.setForeground(new Color(255, 205, 138));
-        title.setFont(new Font("Georgia", Font.BOLD, 23));
-        content.add(title, BorderLayout.NORTH);
-
-        JLabel clue = new JLabel("<html><center>"
-                + "Il gigante si muove e la roccia trema sotto i tuoi piedi.<br><br>"
-                + escapeHtml(missingClue) + "<br><br>"
-                + "Raccogli l'indizio prima di iniziare il rituale."
-                + "</center></html>", SwingConstants.CENTER);
-        clue.setForeground(new Color(244, 223, 193));
-        clue.setFont(new Font("Georgia", Font.PLAIN, 20));
-        content.add(clue, BorderLayout.CENTER);
-
-        JButton close = new JButton("HO CAPITO");
-        close.setFont(new Font("Georgia", Font.BOLD, 18));
-        close.setForeground(new Color(255, 224, 172));
-        close.setBackground(new Color(104, 64, 44));
-        close.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(210, 141, 70), 2),
-                new EmptyBorder(12, 22, 12, 22)));
-        close.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        close.addActionListener(e -> dialog.dispose());
-        JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        footer.setOpaque(false);
-        footer.add(close);
-        content.add(footer, BorderLayout.SOUTH);
-        bind(content, "ENTER", "close", () -> close.doClick());
-        bind(content, "ESCAPE", "cancel", () -> dialog.dispose());
-
-        content.setPreferredSize(new Dimension(860, 360));
-        dialog.setContentPane(content);
-        dialog.pack();
-        dialog.setLocationRelativeTo(owner);
-        dialog.setVisible(true);
+        StoryPromptDialog.message(owner, StoryPromptDialog.Theme.EARTH,
+                "IL SONNO DI YMIR NON PUÒ ESSERE SPEZZATO",
+                "Il gigante si muove e la roccia trema sotto i tuoi piedi.\n\n"
+                + missingClue + "\n\nRaccogli l'indizio prima di iniziare il rituale.");
     }
 
     static Rectangle hotspot(int sourceX, int sourceY, int sourceWidth, int sourceHeight,

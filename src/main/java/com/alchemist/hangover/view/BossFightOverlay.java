@@ -231,11 +231,11 @@ public class BossFightOverlay extends JDialog {
                 "/images/items/item_breath.png");
         gs.addItem(breath);
 
-        StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.SKY,
+        StoryPromptDialog.message(parentFrame, StoryPromptDialog.Theme.SKY,
                 "LA TEMPESTA SI PLACA",
                 "Hai superato le prove di Hræsvelgr!\n"
                 + "Il cielo si schiarisce e il guardiano riconosce il tuo coraggio.");
-        StyledEventDialog.reward(parentFrame, StoryPromptDialog.Theme.SKY,
+        StoryPromptDialog.reward(parentFrame, StoryPromptDialog.Theme.SKY,
                 "SOFFIO DI HRÆSVELGR",
                 "Il guardiano ti dona un frammento del suo vento celestiale.",
                 breath);

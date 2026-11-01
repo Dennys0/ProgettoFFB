@@ -159,11 +159,11 @@ public class RanStrategyBossOverlay extends JDialog {
                 "/images/items/item_foam.png");
         gs.addItem(foam);
 
-        StyledEventDialog.info(parentFrame, StoryPromptDialog.Theme.OCEAN,
+        StoryPromptDialog.message(parentFrame, StoryPromptDialog.Theme.OCEAN,
                 "LE RETI DI RÁN SI SPEZZANO",
                 "Hai decifrato la mente di Rán e superato le sue prove.\n"
                 + "Le correnti rallentano e l'abisso finalmente si quieta.");
-        StyledEventDialog.reward(parentFrame, StoryPromptDialog.Theme.OCEAN,
+        StoryPromptDialog.reward(parentFrame, StoryPromptDialog.Theme.OCEAN,
                 "SCHIUMA DI ÆGIR",
                 "Tra le reti ormai spezzate emerge la ricompensa della dea.",
                 foam);
