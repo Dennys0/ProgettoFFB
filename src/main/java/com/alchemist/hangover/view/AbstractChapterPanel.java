@@ -67,11 +67,6 @@ public abstract class AbstractChapterPanel extends JPanel {
 
     private JButton createArrowButton(String path, String fallback) {
         JButton button = new HotspotButton();
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setFocusable(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         java.net.URL url = getClass().getResource(path);
         if (url != null) {
             Image img = new ImageIcon(url).getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
@@ -120,11 +115,6 @@ public abstract class AbstractChapterPanel extends JPanel {
         // Gli oggetti raccolti hanno un bagliore circolare leggermente piu' evidente.
         button.setHoverHighlightEnabled(true);
         button.setBounds(x, y, width, height);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setFocusable(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setToolTipText("Raccogli: " + name);
         java.net.URL url = getClass().getResource(iconPath);
         if (url != null) {

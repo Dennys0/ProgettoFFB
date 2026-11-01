@@ -83,11 +83,6 @@ public final class YmirCauldronPanel extends SharedCauldronArtworkPanel {
         button.setBounds(x, y, w, h);
         button.setToolTipText(label);
         button.getAccessibleContext().setAccessibleName(label);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setFocusable(false);
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return button;
     }
 

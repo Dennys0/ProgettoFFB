@@ -78,11 +78,6 @@ public class CauldronOverlay extends JDialog {
         JButton btnMix = new HotspotButton();
         btnMix.setToolTipText("Mescola i tre ingredienti");
         btnMix.setBounds(210, 528, 282, 60);
-        btnMix.setContentAreaFilled(false);
-        btnMix.setBorderPainted(false);
-        btnMix.setFocusPainted(false);
-        btnMix.setFocusable(false);
-        btnMix.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnMix.addActionListener(e -> processMixing());
         contentPanel.add(btnMix);
 
@@ -90,11 +85,6 @@ public class CauldronOverlay extends JDialog {
         JButton btnReset = new HotspotButton();
         btnReset.setToolTipText("Svuota gli slot del calderone");
         btnReset.setBounds(520, 528, 252, 60);
-        btnReset.setContentAreaFilled(false);
-        btnReset.setBorderPainted(false);
-        btnReset.setFocusPainted(false);
-        btnReset.setFocusable(false);
-        btnReset.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnReset.addActionListener(e -> {
             selectedItems.clear();
             refreshSlots();
@@ -105,11 +95,6 @@ public class CauldronOverlay extends JDialog {
         JButton btnClose = new HotspotButton();
         btnClose.setToolTipText("Chiudi il calderone");
         btnClose.setBounds(440, 620, 100, 30);
-        btnClose.setContentAreaFilled(false);
-        btnClose.setBorderPainted(false);
-        btnClose.setFocusPainted(false);
-        btnClose.setFocusable(false);
-        btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnClose.addActionListener(e -> dispose());
         contentPanel.add(btnClose);
 

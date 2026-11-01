@@ -86,11 +86,6 @@ public class Chapter1Panel extends AbstractChapterPanel {
     private void initHotspots() {
         room7ScreenClickHotspot = new HotspotButton();
         room7ScreenClickHotspot.setBounds(150, 100, 980, 500); // Copre l'area centrale della Stanza 7
-        room7ScreenClickHotspot.setContentAreaFilled(false);
-        room7ScreenClickHotspot.setBorderPainted(false);
-        room7ScreenClickHotspot.setFocusPainted(false);
-        room7ScreenClickHotspot.setFocusable(false);
-        room7ScreenClickHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
         room7ScreenClickHotspot.setToolTipText("Esamina il guardiano delle tempeste");
         room7ScreenClickHotspot.addActionListener(e -> triggerBossEncounter());
         add(room7ScreenClickHotspot);
@@ -100,11 +95,6 @@ public class Chapter1Panel extends AbstractChapterPanel {
         // Hotspot Martino al Timone (Stanza 2)
         martinoHotspot = new HotspotButton();
         martinoHotspot.setBounds(500, 200, 280, 400);
-        martinoHotspot.setContentAreaFilled(false);
-        martinoHotspot.setBorderPainted(false);
-        martinoHotspot.setFocusPainted(false);
-        martinoHotspot.setFocusable(false);
-        martinoHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
         martinoHotspot.setToolTipText("Parla con Martino");
         martinoHotspot.addActionListener(e -> startMartinoDialogue());
         add(martinoHotspot);
@@ -112,11 +102,6 @@ public class Chapter1Panel extends AbstractChapterPanel {
         // Hotspot invisibile per il Calderone nella Cabina Alchimista (Stanza 4)
         cauldronHotspot = new HotspotButton();
         cauldronHotspot.setBounds(500, 350, 280, 250);
-        cauldronHotspot.setContentAreaFilled(false);
-        cauldronHotspot.setBorderPainted(false);
-        cauldronHotspot.setFocusPainted(false);
-        cauldronHotspot.setFocusable(false);
-        cauldronHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cauldronHotspot.setToolTipText("Interagisci con il calderone d'ottone");
         cauldronHotspot.addActionListener(e -> interactWithCauldron());
         add(cauldronHotspot);

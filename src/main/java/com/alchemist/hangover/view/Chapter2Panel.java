@@ -102,11 +102,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
         // NPC Siegfried al Bancone (Stanza 2)
         siegfriedHotspot = new HotspotButton();
         siegfriedHotspot.setBounds(790, 175, 235, 385);
-        siegfriedHotspot.setContentAreaFilled(false);
-        siegfriedHotspot.setBorderPainted(false);
-        siegfriedHotspot.setFocusPainted(false);
-        siegfriedHotspot.setFocusable(false);
-        siegfriedHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
         siegfriedHotspot.setToolTipText("Parla con Siegfried");
         siegfriedHotspot.addActionListener(e -> startSiegfriedDialogue());
         add(siegfriedHotspot);
@@ -114,11 +109,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
         // Calderone nella Sacrestia Corallina (Stanza 3)
         cauldronHotspot = new HotspotButton();
         cauldronHotspot.setBounds(500, 350, 280, 250);
-        cauldronHotspot.setContentAreaFilled(false);
-        cauldronHotspot.setBorderPainted(false);
-        cauldronHotspot.setFocusPainted(false);
-        cauldronHotspot.setFocusable(false);
-        cauldronHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cauldronHotspot.setToolTipText("Interagisci con il calderone");
         cauldronHotspot.addActionListener(e -> interactWithCauldron());
         add(cauldronHotspot);
@@ -128,11 +118,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
         // The whirlpool is in the middle; Hrönn sits to its right.
         // Separate clickable areas allow talking to her without fighting.
         ranBossHotspot.setBounds(400, 300, 470, 265);
-        ranBossHotspot.setContentAreaFilled(false);
-        ranBossHotspot.setBorderPainted(false);
-        ranBossHotspot.setFocusPainted(false);
-        ranBossHotspot.setFocusable(false);
-        ranBossHotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
         ranBossHotspot.setToolTipText("Affronta Rán");
         ranBossHotspot.addActionListener(e -> triggerRanBossEncounter());
         add(ranBossHotspot);
