@@ -8,7 +8,10 @@ import java.util.Random;
  * Se il computer non offre un'uscita audio compatibile, il gioco rimane utilizzabile.
  */
 public final class AudioManager {
-    public enum Effect { CLICK, PICKUP, DAMAGE, SUCCESS, EARTH_BREATH }
+    public enum Effect {
+        CLICK, PICKUP, DAMAGE, SUCCESS, EARTH_BREATH,
+        WIND_GUST, WATER_DROP, FORGE_SPARK, STONE_RUMBLE, RUNE_CHIME
+    }
 
     private static final AudioManager INSTANCE = new AudioManager();
     private static final int SAMPLE_RATE = 8000;
@@ -59,6 +62,37 @@ public final class AudioManager {
             ambience.close();
             ambience = null;
         }
+    }
+
+    /**
+     * Piccoli effetti d'ambiente per una selezione di stanze importanti,
+     * senza introdurre file WAV o sovrapporre loop alla musica di capitolo.
+     */
+    static Effect cueForRoom(String resourcePath) {
+        if (resourcePath == null) return null;
+        if (resourcePath.contains("/chapter1/")) {
+            if (resourcePath.contains("room4_lab")) return Effect.FORGE_SPARK;
+            if (resourcePath.contains("room1_deck")
+                    || resourcePath.contains("room3_prow")
+                    || resourcePath.contains("room7_boss")) return Effect.WIND_GUST;
+        } else if (resourcePath.contains("/chapter2/")) {
+            if (resourcePath.contains("room5_pit")) return Effect.STONE_RUMBLE;
+            if (resourcePath.contains("room1_hall")
+                    || resourcePath.contains("room4_gardens")
+                    || resourcePath.contains("room7_boss")) return Effect.WATER_DROP;
+        } else if (resourcePath.contains("/chapter3/")) {
+            if (resourcePath.contains("room2_rune")) return Effect.RUNE_CHIME;
+            if (resourcePath.contains("room3_forge")) return Effect.FORGE_SPARK;
+            if (resourcePath.contains("room5_miners")
+                    || resourcePath.contains("room7_boss")) return Effect.STONE_RUMBLE;
+            if (resourcePath.contains("room6_eco")) return Effect.WIND_GUST;
+        }
+        return null;
+    }
+
+    public void playRoomCue(String resourcePath) {
+        Effect cue = cueForRoom(resourcePath);
+        if (cue != null) playEffect(cue);
     }
 
     public void playEffect(Effect effect) {
@@ -119,6 +153,9 @@ public final class AudioManager {
 
     private static byte[] makeEffect(Effect effect) {
         if (effect == Effect.EARTH_BREATH) return makeEarthBreath();
+        if (effect == Effect.WIND_GUST || effect == Effect.WATER_DROP
+                || effect == Effect.FORGE_SPARK || effect == Effect.STONE_RUMBLE
+                || effect == Effect.RUNE_CHIME) return makeRoomEffect(effect);
         double seconds = effect == Effect.DAMAGE ? 0.38 : 0.27;
         int length = (int) (SAMPLE_RATE * seconds);
         byte[] pcm = new byte[length * 2];
@@ -131,12 +168,57 @@ public final class AudioManager {
                 case SUCCESS -> 420 + 600 * progress;
                 case CLICK -> 550;
                 case EARTH_BREATH -> 55; // gestito separatamente sopra
+                case WIND_GUST, WATER_DROP, FORGE_SPARK, STONE_RUMBLE, RUNE_CHIME -> 220;
             };
             double envelope = Math.pow(1 - progress, 2) * Math.min(1, progress * 35);
             writeSample(pcm, i, 0.24 * envelope
                     * Math.sin(2 * Math.PI * frequency * t));
         }
         return pcm;
+    }
+
+
+    /** Brevi campioni originali: aria, gocce, scintille, pietra e rune. */
+    private static byte[] makeRoomEffect(Effect effect) {
+        double seconds = effect == Effect.STONE_RUMBLE ? 0.66 : 0.46;
+        int count = (int) (SAMPLE_RATE * seconds);
+        byte[] data = new byte[count * 2];
+        Random noise = new Random(effect.ordinal() * 1741L);
+        double filtered = 0;
+        for (int i = 0; i < count; i++) {
+            double t = (double) i / SAMPLE_RATE;
+            double p = t / seconds;
+            double fade = Math.sin(Math.PI * p);
+            double sample;
+            switch (effect) {
+                case WIND_GUST -> {
+                    filtered = 0.94 * filtered + 0.06 * (noise.nextDouble() * 2 - 1);
+                    sample = 0.26 * filtered * fade * fade;
+                }
+                case WATER_DROP -> {
+                    double frequency = 520.0 - 330.0 * p;
+                    sample = 0.21 * Math.sin(2 * Math.PI * frequency * t)
+                            * Math.exp(-7 * p) * Math.min(1, p * 35);
+                }
+                case FORGE_SPARK -> {
+                    double frequency = 620 + 980 * p;
+                    sample = 0.16 * Math.sin(2 * Math.PI * frequency * t)
+                            * Math.exp(-9 * p);
+                }
+                case STONE_RUMBLE -> {
+                    filtered = 0.96 * filtered + 0.04 * (noise.nextDouble() * 2 - 1);
+                    sample = 0.20 * (Math.sin(2 * Math.PI * 60 * t)
+                            + filtered * 0.3) * fade;
+                }
+                case RUNE_CHIME -> sample = 0.14 *
+                        (Math.sin(2 * Math.PI * 392 * t)
+                        + 0.45 * Math.sin(2 * Math.PI * 588 * t))
+                        * Math.exp(-5 * p) * Math.min(1, p * 25);
+                default -> sample = 0;
+            }
+            writeSample(data, i, sample);
+        }
+        return data;
     }
 
     /** Due battiti profondi e un respiro lento, generati senza file WAV. */
