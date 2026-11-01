@@ -1,4 +1,8 @@
-package com.alchemist.hangover.view;
+package com.alchemist.hangover.view.boss;
+
+import com.alchemist.hangover.view.HealthDisplayPanel;
+import com.alchemist.hangover.view.StoryPromptDialog;
+import com.alchemist.hangover.view.ToastNotification;
 
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.gameplay.boss.BossRewardCatalog;

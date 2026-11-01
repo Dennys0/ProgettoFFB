@@ -1,5 +1,7 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.view.boss.RanStrategyBossOverlay;
+
 import com.alchemist.hangover.controller.DialogueSystem;
 import com.alchemist.hangover.model.GameState;
 

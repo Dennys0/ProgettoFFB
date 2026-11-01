@@ -1,5 +1,7 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.view.boss.YmirBossOverlay;
+
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.controller.DialogueSystem;

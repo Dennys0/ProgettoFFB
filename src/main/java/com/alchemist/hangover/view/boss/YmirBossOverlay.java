@@ -1,4 +1,7 @@
-package com.alchemist.hangover.view;
+package com.alchemist.hangover.view.boss;
+
+import com.alchemist.hangover.view.HealthDisplayPanel;
+import com.alchemist.hangover.view.StoryPromptDialog;
 
 import com.alchemist.hangover.controller.AudioManager;
 import com.alchemist.hangover.controller.CombatManager;
