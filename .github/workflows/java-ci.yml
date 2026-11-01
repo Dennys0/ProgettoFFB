@@ -5,6 +5,7 @@ on:
     branches:
       - fix/ui-chapter1-polish
       - feat/chapter3
+      - refactor/view-model-cleanup
   pull_request:
 
 jobs:
