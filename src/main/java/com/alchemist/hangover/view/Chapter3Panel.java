@@ -25,11 +25,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private int crackInspections;
     private JButton steleHotspot;
     private JButton forgeHotspot;
-    // La cornice originale e lo sprite si aprono NELLA stanza,
-    // come avviene nei primi due capitoli.
-    private SharedDialogueBox gunnarDialogueBox;
-    private JLabel gunnarDialogueSprite;
-    private DialogueSystem gunnarDialogueSystem;
+    // Gunnar condivide la stessa sessione grafica degli altri dialoghi.
+    private DialogueManager.SceneSession gunnarDialogue;
     private boolean gunnarConversationActive;
     private boolean gunnarRewardConversation;
 
@@ -158,30 +155,13 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     }
 
     private void initGunnarDialogue() {
-        gunnarDialogueSprite = new JLabel("", SwingConstants.CENTER);
-        gunnarDialogueSprite.setBounds(340, 30, 600, 620);
-        gunnarDialogueSprite.setOpaque(false);
-        java.net.URL spriteUrl = getClass().getResource("/images/characters/gunnar_realms.png");
-        if (spriteUrl != null) {
-            Image sprite = new ImageIcon(spriteUrl).getImage()
-                    .getScaledInstance(-1, 520, Image.SCALE_SMOOTH);
-            gunnarDialogueSprite.setIcon(new ImageIcon(sprite));
-        } else {
-            gunnarDialogueSprite.setText("GUNNAR");
-            gunnarDialogueSprite.setFont(new Font("Georgia", Font.BOLD, 32));
-            gunnarDialogueSprite.setForeground(new Color(255, 215, 160));
-        }
-        add(gunnarDialogueSprite);
-        gunnarDialogueSprite.setVisible(false);
-
-        gunnarDialogueBox = new SharedDialogueBox();
-        gunnarDialogueBox.setBounds(40, 470, 1200, 200);
-        gunnarDialogueBox.setVisible(false);
-        add(gunnarDialogueBox);
-        // Zero significa davanti in Swing; il testo copre la parte
-        // inferiore dello sprite, come nei capitoli precedenti.
-        setComponentZOrder(gunnarDialogueBox, 0);
-        setComponentZOrder(gunnarDialogueSprite, 1);
+        gunnarDialogue = new DialogueManager.SceneSession(
+                this, speaker -> new Rectangle(340, 30, 600, 620),
+                () -> closeGunnarDialogue(true), false);
+        gunnarDialogue.addPortrait("GUNNAR", "/images/characters/gunnar_realms.png");
+        // Come prima, Gunnar resta in primo piano durante l'intera conversazione.
+        gunnarDialogue.setFixedPortrait("GUNNAR");
+        gunnarDialogue.setWrapWidth(995);
 
         JButton interrupt = new JButton("INTERROMPI");
         interrupt.setBounds(980, 18, 160, 34);
@@ -193,34 +173,21 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         interrupt.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         interrupt.setToolTipText("Interrompe Gunnar senza concedere gli indizi");
         interrupt.addActionListener(e -> closeGunnarDialogue(false));
-        gunnarDialogueBox.add(interrupt);
-
-        gunnarDialogueSystem = new DialogueSystem(
-                gunnarDialogueBox.getSpeakerLabel(),
-                gunnarDialogueBox.getTextLabel(),
-                null,
-                () -> closeGunnarDialogue(true)
-        );
-        gunnarDialogueSystem.setWrapWidth(995);
-
-        DialogueManager.connect(gunnarDialogueBox, gunnarDialogueSprite,
-                gunnarDialogueSystem, () -> gunnarConversationActive);
+        gunnarDialogue.dialogueBox().add(interrupt);
 
         InputMap inputs = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actions = getActionMap();
         inputs.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "continueGunnar");
         inputs.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "continueGunnar");
         actions.put("continueGunnar", new AbstractAction() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                if (gunnarConversationActive) gunnarDialogueSystem.nextLine();
+            @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (gunnarConversationActive) gunnarDialogue.advance();
                 else if (npcConversationActive) npcDialogue.advance();
             }
         });
         inputs.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "interruptGunnar");
         actions.put("interruptGunnar", new AbstractAction() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
+            @Override public void actionPerformed(java.awt.event.ActionEvent e) {
                 if (gunnarConversationActive) closeGunnarDialogue(false);
                 else if (npcConversationActive) closeNpcDialogue();
                 else new PauseMenuDialog(mainFrameRef).setVisible(true);
@@ -254,25 +221,18 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarConversationActive = true;
         setArrowsVisible(false);
         gunnarHotspot.setVisible(false);
-        gunnarDialogueSprite.setVisible(true);
-        gunnarDialogueBox.setVisible(true);
-        setComponentZOrder(gunnarDialogueBox, 0);
-        setComponentZOrder(gunnarDialogueSprite, 1);
         GameState state = GameState.getInstance();
         gunnarRewardConversation = !state.hasLearnedGunnarWisdom()
                 && state.hasHeardGunnarIntroduction();
         String resource = gunnarDialoguePath(state);
-        gunnarDialogueSystem.loadDialogue(resource);
-        gunnarDialogueSystem.startDialogue();
+        gunnarDialogue.start(resource);
         repaint();
     }
 
     private void closeGunnarDialogue(boolean completed) {
         if (!gunnarConversationActive) return;
         gunnarConversationActive = false;
-        gunnarDialogueSystem.stop();
-        gunnarDialogueBox.setVisible(false);
-        gunnarDialogueSprite.setVisible(false);
+        gunnarDialogue.stop();
         if (completed) {
             GameState state = GameState.getInstance();
             boolean firstMeeting = !state.hasHeardGunnarIntroduction()

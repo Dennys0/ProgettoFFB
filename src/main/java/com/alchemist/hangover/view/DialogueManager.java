@@ -62,6 +62,7 @@ public final class DialogueManager {
         private final Map<String, ImageIcon> portraits = new HashMap<>();
         private final Set<String> fittedPortraits = new HashSet<>();
         private final Function<String, Rectangle> portraitBounds;
+        private String fixedPortraitSpeaker;
 
         public SceneSession(JPanel chapter, Function<String, Rectangle> portraitBounds,
                             Runnable onComplete) {
@@ -113,6 +114,19 @@ public final class DialogueManager {
             fittedPortraits.add(speaker);
         }
 
+        /** Mantiene lo stesso ritratto anche quando nel TXT parla Arthur. */
+        public void setFixedPortrait(String speaker) {
+            fixedPortraitSpeaker = speaker;
+        }
+
+        public SharedDialogueBox dialogueBox() {
+            return box;
+        }
+
+        public void setWrapWidth(int width) {
+            dialogue.setWrapWidth(width);
+        }
+
         public void advance() {
             if (isVisible()) dialogue.nextLine();
         }
@@ -128,6 +142,7 @@ public final class DialogueManager {
             chapter.setComponentZOrder(portrait, 1);
             dialogue.loadDialogue(resource);
             dialogue.startDialogue();
+            if (fixedPortraitSpeaker != null) updatePortrait();
         }
 
         /** Closing by navigation must never call a narrative completion callback. */
@@ -140,15 +155,17 @@ public final class DialogueManager {
 
         private void updatePortrait() {
             DialogueSystem.DialogueLine line = dialogue.getCurrentLine();
-            ImageIcon icon = line == null ? null : portraits.get(line.getSpeaker());
+            String speaker = fixedPortraitSpeaker != null ? fixedPortraitSpeaker
+                    : line == null ? null : line.getSpeaker();
+            ImageIcon icon = portraits.get(speaker);
             portrait.setVisible(icon != null);
             if (icon == null) {
                 portrait.setIcon(null);
                 return;
             }
-            Rectangle bounds = portraitBounds.apply(line.getSpeaker());
+            Rectangle bounds = portraitBounds.apply(speaker);
             portrait.setBounds(bounds);
-            if (fittedPortraits.contains(line.getSpeaker())) {
+            if (fittedPortraits.contains(speaker)) {
                 double scale = Math.min((double) bounds.width / Math.max(1, icon.getIconWidth()),
                         (double) bounds.height / Math.max(1, icon.getIconHeight()));
                 int width = Math.max(1, (int) Math.round(icon.getIconWidth() * scale));
