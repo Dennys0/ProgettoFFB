@@ -21,17 +21,29 @@ mvn exec:java
 - **ESC:** menu pausa durante i capitoli; ESC chiude anche il diario e le impostazioni.
 - **J:** apri il diario di Arthur.
 - **F2:** scorciatoia *solo di sviluppo* per accedere al capitolo 2.
+- **F3:** anteprima del capitolo 3 (*solo sviluppo*).
+- **F4:** selezione di una stanza nel capitolo 3 (*solo sviluppo*).
 
-## Rifiniture pre-capitolo 3
+## Architettura e capitoli
 
-- Evidenziazione degli oggetti interattivi, tooltips e notifiche di raccolta senza dialoghi bloccanti.
-- Dialoghi con avanzamento e rivelazione distinti, punteggiatura scandita e sfondo dello SKIP opaco.
-- Cuori aggiornati dal modello e visibili durante i due boss.
-- Retry del boss dopo il game-over senza ripetere il dialogo introduttivo.
-- Diario contestuale che deriva le annotazioni dallo stato già salvato.
-- Menu pausa e impostazioni audio/transizioni locali.
-- Colonna sonora ambientale e segnali sonori **originali, generati proceduralmente**, silenziati automaticamente se manca un dispositivo audio.
-- Schermata provvisoria di fine Capitolo II, in attesa degli asset del Capitolo III.
+Il gioco comprende tre mondi (Cielo, Mare e Terra) con scene PNG, dialoghi,
+boss distinti, calderoni condivisi, inventario e diario.
+
+Il codice e' organizzato in **model / gameplay / controller / view / dao**.
+Le nuove regole si aggiungono ai package dedicati per funzionalita';
+le schermate grafiche rimangono separate dalle regole, cosi' sono testabili
+anche senza una finestra Swing.
+
+Leggi [la guida dettagliata ai package](docs/ARCHITETTURA.md) prima di creare nuove classi.
+
+## Salvataggi e progressione
+
+La schermata di fine capitolo crea una fotografia immutabile della partita,
+senza avanzare realmente il capitolo fino al comando **CONTINUA**.
+I salvataggi del Capitolo III conservano il seed delle rune e le tappe narrative
+di Gunnar, compresa la sua prima conversazione.
+
+`target/` e' output di Maven e non va pubblicata nel repository.
 
 ## Salvataggi e test
 
@@ -39,4 +51,4 @@ I salvataggi reali restano in `saves/alchemist.mv.db`. **Non cancellare questa c
 
 I test JUnit usano esclusivamente `jdbc:h2:mem:alchemist_test`. Non scrivono, sovrascrivono o cancellano slot del database reale. La build su GitHub Actions esegue `mvn clean test` con Java 25.
 
-La directory `target/` contiene file generati: non includerli nei commit. Nel repository precedente alcuni file di `target/` e `saves/` risultano già tracciati: modificarne la gestione Git richiede attenzione per non perdere dati locali.
+La directory `target/` contiene file generati ed e' ignorata da Git. Non inserirla nei commit. Tieni sempre separati i salvataggi locali contenuti in `saves/`.
