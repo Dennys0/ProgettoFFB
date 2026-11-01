@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameState {
@@ -16,7 +17,7 @@ public class GameState {
     private int currentChapter = 1;
     private int currentRoom = 1; // Traccia della stanza attuale per i salvataggi
 
-    private List<Item> inventory;
+    private final List<Item> inventory = new ArrayList<>();
     private boolean givenMapToMartino = false;
     private boolean hasDragonKey = false;
     private boolean dragonUnlocked = false; // Flag per sblocco polena/drago
@@ -32,9 +33,7 @@ public class GameState {
     // Checkpoint di sessione: non viene serializzato nei salvataggi H2.
     private boolean bossRetryAvailable = false;
 
-    private GameState() {
-        inventory = new ArrayList<>();
-    }
+    private GameState() { }
 
     public static GameState getInstance() {
         if (instance == null) {
@@ -108,17 +107,29 @@ public class GameState {
     }
 
     // --- Gestione Inventario ---
+    /**
+     * Restituisce una fotografia in sola lettura dell'inventario.
+     * I chiamanti non possono piu' cancellare oggetti senza passare dal modello.
+     */
     public List<Item> getInventory() {
-        return inventory;
+        return List.copyOf(inventory);
     }
 
+    /** Copia difensiva: modifiche alla lista esterna non alterano la partita. */
     public void setInventory(List<Item> items) {
-        this.inventory = items;
+        List<Item> snapshot = List.copyOf(Objects.requireNonNull(items, "items"));
+        inventory.clear();
+        snapshot.forEach(this::addItem);
+    }
+
+    public void clearInventory() {
+        inventory.clear();
     }
 
     public void addItem(Item item) {
-        if (!hasItem(item.getId())) {
-            inventory.add(item);
+        Item valid = Objects.requireNonNull(item, "item");
+        if (!hasItem(valid.getId())) {
+            inventory.add(valid);
         }
     }
 
@@ -183,27 +194,41 @@ public class GameState {
     public void setBossRetryAvailable(boolean val) { this.bossRetryAvailable = val; }
 
     // --- Reset Stato Generale ---
+    /** Ripristina una nuova partita senza sostituire l'oggetto GameState singleton. */
     public void resetState() {
-        int oldHealth = currentHealth;
-        int oldMaxHealth = maxHealth;
-        this.currentHealth = 3;
-        this.maxHealth = 3;
-        this.currentChapter = 1;
-        this.currentRoom = 1;
-        this.inventory.clear();
-        this.givenMapToMartino = false;
-        this.hasDragonKey = false;
-        this.dragonUnlocked = false;
-        this.bossDefeated = false;
-        this.ymirPacified = false;
-        this.ymirRuneSeed = 0;
-        this.gunnarWisdomLearned = false;
-        this.gunnarFirstDialogueHeard = false;
-        this.ymirSteleRead = false;
-        this.ymirOldFashionedCreated = false;
-        this.bossRetryAvailable = false;
-        if (oldHealth != currentHealth || oldMaxHealth != maxHealth) {
+        int previousHealth = currentHealth;
+        int previousMaxHealth = maxHealth;
+        resetExploration();
+        resetStoryProgress();
+        resetYmirProgress();
+        maxHealth = 3;
+        currentHealth = 3;
+        // Un solo evento: l'HUD non viene aggiornato su uno stato intermedio.
+        if (previousHealth != currentHealth || previousMaxHealth != maxHealth) {
             notifyHealthChanged();
         }
+    }
+
+    private void resetExploration() {
+        currentChapter = 1;
+        currentRoom = 1;
+        clearInventory();
+    }
+
+    private void resetStoryProgress() {
+        givenMapToMartino = false;
+        hasDragonKey = false;
+        dragonUnlocked = false;
+        bossDefeated = false;
+        bossRetryAvailable = false;
+    }
+
+    private void resetYmirProgress() {
+        ymirPacified = false;
+        ymirRuneSeed = 0;
+        gunnarWisdomLearned = false;
+        gunnarFirstDialogueHeard = false;
+        ymirSteleRead = false;
+        ymirOldFashionedCreated = false;
     }
 }

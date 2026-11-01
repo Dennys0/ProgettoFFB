@@ -49,7 +49,7 @@ public final class CauldronController {
             state.setYmirOldFashionedCreated(true);
         } else if (chapter == 1) {
             // Preserve the original chapter-one transition behavior.
-            state.getInventory().clear();
+            state.clearInventory();
         }
         state.resetHealth();
         AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
