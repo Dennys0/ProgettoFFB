@@ -461,16 +461,35 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         ymirHotspot.setVisible(false);
     }
 
+    /** Indica esattamente gli indizi mancanti, senza testi incorporati nei PNG. */
+    static String missingYmirClues(boolean hasGunnarWisdom, boolean hasStele) {
+        StringBuilder message = new StringBuilder(
+                "Il gigante si muove sotto la pietra. Per placarlo devi ancora:");
+        if (!hasGunnarWisdom) message.append(
+                "\n• Comprendere la saggezza di Gunnar nel Cerchio delle Rune.");
+        if (!hasStele) message.append(
+                "\n• Leggere la stele della Rupe dell'Eco.");
+        return message.toString();
+    }
+
     private void triggerYmirEncounter(boolean askConfirmation) {
         GameState state = GameState.getInstance();
         if (state.isYmirPacified()) return;
 
-        if (askConfirmation && !YmirStoryPrompt.confirmFight(mainFrameRef)) return;
+        // Gli avvisi e la conferma usano la stessa finestra fantasy
+        // dei boss dei capitoli precedenti, con tema Terra.
         if (!state.hasLearnedGunnarWisdom() || !state.hasReadYmirStele()) {
-            YmirStoryPrompt.showMissingClues(mainFrameRef,
-                    !state.hasLearnedGunnarWisdom(), !state.hasReadYmirStele());
+            StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.EARTH,
+                    "IL SONNO DI YMIR",
+                    missingYmirClues(state.hasLearnedGunnarWisdom(),
+                            state.hasReadYmirStele()));
             return;
         }
+        if (askConfirmation && !StoryPromptDialog.confirm(mainFrameRef,
+                StoryPromptDialog.Theme.EARTH, "IL CUORE DI ROCCIA — YMIR",
+                "Il gigante dorme nel cuore della montagna. "
+                + "Vuoi tentare il rituale del sonno prima che si risvegli?",
+                "AFFRONTA YMIR", "NON ANCORA")) return;
         setArrowsVisible(false);
         ymirHotspot.setVisible(false);
         new YmirBossOverlay(mainFrameRef).setVisible(true);
