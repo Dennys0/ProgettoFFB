@@ -1,5 +1,8 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.view.cauldron.CauldronController;
+import com.alchemist.hangover.view.cauldron.CauldronOverlay;
+
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
 import com.alchemist.hangover.model.RecipeManager;

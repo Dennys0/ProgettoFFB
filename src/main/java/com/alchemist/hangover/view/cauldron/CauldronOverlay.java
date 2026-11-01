@@ -1,4 +1,6 @@
-package com.alchemist.hangover.view;
+package com.alchemist.hangover.view.cauldron;
+
+import com.alchemist.hangover.view.HotspotButton;
 
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;

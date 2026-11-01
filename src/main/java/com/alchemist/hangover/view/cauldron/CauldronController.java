@@ -1,4 +1,7 @@
-package com.alchemist.hangover.view;
+package com.alchemist.hangover.view.cauldron;
+
+import com.alchemist.hangover.view.GameOverPanel;
+import com.alchemist.hangover.view.StoryPromptDialog;
 
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
@@ -33,7 +36,7 @@ public final class CauldronController {
 
     /** A common outcome for all three cauldrons; no pickup popup is shown.
      * Completion scenes are responsible for the illustrated drink and actions. */
-    static String completionScene(int chapter) {
+    public static String completionScene(int chapter) {
         return CauldronGameService.completionScene(chapter);
     }
 

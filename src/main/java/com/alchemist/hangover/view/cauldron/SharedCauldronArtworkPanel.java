@@ -1,4 +1,4 @@
-package com.alchemist.hangover.view;
+package com.alchemist.hangover.view.cauldron;
 
 import javax.swing.*;
 import java.awt.*;
