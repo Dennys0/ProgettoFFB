@@ -14,6 +14,7 @@ public abstract class AbstractChapterPanel extends JPanel {
     protected Image currentBgImage;
     protected JButton btnUp, btnDown, btnLeft, btnRight;
     protected JFrame mainFrameRef;
+    private RoomAtmosphereEffect roomAtmosphere;
 
     private Map<Integer, String> roomBgPaths = Map.of();
     private Map<Integer, Map<String, Integer>> roomExits = Map.of();
@@ -32,6 +33,11 @@ public abstract class AbstractChapterPanel extends JPanel {
         hudPanel.setBounds(0, 0, 1280, 80);
         add(hudPanel);
         createArrowButtons();
+        roomAtmosphere = new RoomAtmosphereEffect();
+        // Solo zona di gioco, non l'HUD. Sempre dietro gli hotspot.
+        roomAtmosphere.setBounds(0, 80, 1280, 530);
+        add(roomAtmosphere);
+        setComponentZOrder(roomAtmosphere, getComponentCount() - 1);
     }
 
     private void createArrowButtons() {
@@ -142,11 +148,18 @@ public abstract class AbstractChapterPanel extends JPanel {
             System.err.println("[AbstractChapterPanel] Stanza non configurata: " + roomId);
             return;
         }
+        boolean changed = roomId != currentRoom;
         currentRoom = roomId;
         GameState state = GameState.getInstance();
         state.setCurrentRoom(roomId);
         java.net.URL url = getClass().getResource(roomBgPaths.get(roomId));
         currentBgImage = url == null ? null : new ImageIcon(url).getImage();
+        roomAtmosphere.configure(roomBgPaths.get(roomId));
+        // Un accento breve, mai un loop aggiuntivo, solo entrando in una nuova stanza.
+        if (changed && isShowing()) {
+            com.alchemist.hangover.controller.AudioManager.getInstance()
+                    .playRoomCue(roomBgPaths.get(roomId));
+        }
         updateWorldItemsVisibility(state);
         updateArrowVisibility();
         onRoomChanged();
