@@ -29,6 +29,12 @@ class StyledEventDialogTest {
                 JLabel icon = find(content, "bossRewardIcon", JLabel.class);
                 assertNotNull(icon);
                 assertNotNull(icon.getIcon(), "Usare lo sprite reale dell'ingrediente.");
+                ImageIcon original = new ImageIcon(StyledEventDialogTest.class.getResource(art[i]));
+                assertTrue(icon.getIcon().getIconWidth() <= 150);
+                assertTrue(icon.getIcon().getIconHeight() <= 150);
+                assertEquals(original.getIconWidth() / (double) original.getIconHeight(),
+                        icon.getIcon().getIconWidth() / (double) icon.getIcon().getIconHeight(),
+                        0.02, "Non deformare le immagini degli ingredienti.");
                 JTextArea body = find(content, "bossRewardDescription", JTextArea.class);
                 assertNotNull(body);
                 assertTrue(body.getText().contains(item.getName()));

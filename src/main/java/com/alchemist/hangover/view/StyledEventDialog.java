@@ -94,9 +94,15 @@ public final class StyledEventDialog {
         if (item != null && item.getIconPath() != null) {
             URL sprite = StyledEventDialog.class.getResource(item.getIconPath());
             if (sprite != null) {
-                Image image = new ImageIcon(sprite).getImage()
-                        .getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-                icon.setIcon(new ImageIcon(image));
+                ImageIcon sourceIcon = new ImageIcon(sprite);
+                int sourceWidth = Math.max(1, sourceIcon.getIconWidth());
+                int sourceHeight = Math.max(1, sourceIcon.getIconHeight());
+                double scale = Math.min(150.0 / sourceWidth, 150.0 / sourceHeight);
+                int width = Math.max(1, (int) Math.round(sourceWidth * scale));
+                int height = Math.max(1, (int) Math.round(sourceHeight * scale));
+                Image scaledImage = sourceIcon.getImage()
+                        .getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                icon.setIcon(new ImageIcon(scaledImage));
             }
         }
         if (icon.getIcon() == null) {
