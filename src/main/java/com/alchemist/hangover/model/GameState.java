@@ -26,7 +26,7 @@ public class GameState {
     private boolean ymirPacified = false;
     private int ymirRuneSeed = 0;
     private boolean gunnarWisdomLearned = false;
-    // Tappa intermedia della conversazione: solo sessione, senza cambiare schema H2.
+    // Tappa intermedia della conversazione: ora persiste nei salvataggi H2.
     private boolean gunnarFirstDialogueHeard = false;
     private boolean ymirSteleRead = false;
     private boolean ymirOldFashionedCreated = false;

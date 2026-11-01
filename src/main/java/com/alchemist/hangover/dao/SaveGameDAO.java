@@ -101,8 +101,9 @@ public class SaveGameDAO {
      * Salva lo stato attuale del gioco (GameState + Inventario) nello slot specificato.
      */
     public static boolean saveGame(int slotId, String slotName) {
-        return saveGame(slotId, slotName, GameSaveSnapshot.capture(
-                GameState.getInstance()));
+        GameState state = GameState.getInstance();
+        if (state.getChapter() == 3) state.ensureYmirRuneSeed();
+        return saveGame(slotId, slotName, GameSaveSnapshot.capture(state));
     }
 
     /** Persiste uno snapshot, senza modificare la partita attiva. */
@@ -111,9 +112,9 @@ public class SaveGameDAO {
                 .withPersistentRuneSeed();
         String upsertSql = "MERGE INTO save_slots (slot_id, slot_name, current_chapter, current_room, current_health, "
                 + "max_health, has_given_map, has_dragon_key, is_dragon_unlocked, is_boss_defeated, "
-                + "is_ymir_pacified, ymir_rune_seed, gunnar_wisdom, ymir_stele_read, "
+                + "is_ymir_pacified, ymir_rune_seed, gunnar_wisdom, gunnar_intro_heard, ymir_stele_read, "
                 + "ymir_old_fashioned_created, last_saved) "
-                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         Connection conn = null;
         try {
@@ -135,8 +136,9 @@ public class SaveGameDAO {
                 ps.setBoolean(11, state.ymirPacified());
                 ps.setInt(12, state.ymirRuneSeed());
                 ps.setBoolean(13, state.gunnarWisdomLearned());
-                ps.setBoolean(14, state.ymirSteleRead());
-                ps.setBoolean(15, state.ymirOldFashionedCreated());
+                ps.setBoolean(14, state.gunnarIntroductionHeard());
+                ps.setBoolean(15, state.ymirSteleRead());
+                ps.setBoolean(16, state.ymirOldFashionedCreated());
                 ps.executeUpdate();
             }
 
@@ -196,6 +198,7 @@ public class SaveGameDAO {
                     state.setYmirPacified(rs.getBoolean("is_ymir_pacified"));
                     state.setYmirRuneSeed(rs.getInt("ymir_rune_seed"));
                     state.setGunnarWisdomLearned(rs.getBoolean("gunnar_wisdom"));
+                    state.setGunnarIntroductionHeard(rs.getBoolean("gunnar_intro_heard"));
                     state.setYmirSteleRead(rs.getBoolean("ymir_stele_read"));
                     state.setYmirOldFashionedCreated(rs.getBoolean("ymir_old_fashioned_created"));
 

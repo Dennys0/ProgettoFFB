@@ -93,6 +93,7 @@ public class DatabaseSelfTest {
         state.setYmirPacified(true);
         state.setYmirRuneSeed(9345);
         state.setGunnarWisdomLearned(true);
+        state.setGunnarIntroductionHeard(true);
         state.setYmirSteleRead(true);
         state.setYmirOldFashionedCreated(true);
 
@@ -104,6 +105,7 @@ public class DatabaseSelfTest {
         assertTrue(state.isYmirPacified(), "Vittoria di Ymir non ripristinata");
         assertEquals(9345, state.getYmirRuneSeed());
         assertTrue(state.hasLearnedGunnarWisdom());
+        assertTrue(state.hasHeardGunnarIntroduction());
         assertTrue(state.hasReadYmirStele());
         assertTrue(state.isYmirOldFashionedCreated(),
                 "Il finale completato deve sopravvivere al caricamento H2");
@@ -120,6 +122,7 @@ public class DatabaseSelfTest {
         state.setCurrentRoom(6);
         state.setYmirRuneSeed(123456);
         state.setGunnarWisdomLearned(true);
+        state.setGunnarIntroductionHeard(true);
         state.setYmirSteleRead(true);
         state.addItem(ItemDAO.getItemById("MUSCHIO_MIDGARD"));
         assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Schema ripetuto"));
@@ -131,6 +134,7 @@ public class DatabaseSelfTest {
         assertEquals(6, state.getCurrentRoom());
         assertEquals(123456, state.getYmirRuneSeed());
         assertTrue(state.hasLearnedGunnarWisdom());
+        assertTrue(state.hasHeardGunnarIntroduction());
         assertTrue(state.hasReadYmirStele());
         assertTrue(state.hasItem("MUSCHIO_MIDGARD"));
     }

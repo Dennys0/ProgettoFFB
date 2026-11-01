@@ -41,6 +41,8 @@ ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS is_ymir_pacified BOOLEAN DEFAULT
 -- cancellare o sovrascrivere slot, inventari o salvataggi già presenti.
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ymir_rune_seed INT DEFAULT 0;
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS gunnar_wisdom BOOLEAN DEFAULT FALSE;
+-- Migrazione non distruttiva: persiste la prima tappa della conversazione di Gunnar.
+ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS gunnar_intro_heard BOOLEAN DEFAULT FALSE;
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ymir_stele_read BOOLEAN DEFAULT FALSE;
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ymir_old_fashioned_created BOOLEAN DEFAULT FALSE;
 

@@ -9,8 +9,9 @@ public record GameSaveSnapshot(
         int chapter, int room, int health, int maxHealth,
         boolean givenMapToMartino, boolean dragonKey, boolean dragonUnlocked,
         boolean bossDefeated, boolean ymirPacified, int ymirRuneSeed,
-        boolean gunnarWisdomLearned, boolean ymirSteleRead,
-        boolean ymirOldFashionedCreated, List<Item> inventory) {
+        boolean gunnarWisdomLearned, boolean gunnarIntroductionHeard,
+        boolean ymirSteleRead, boolean ymirOldFashionedCreated,
+        List<Item> inventory) {
 
     public GameSaveSnapshot {
         inventory = List.copyOf(Objects.requireNonNull(inventory, "inventory"));
@@ -25,8 +26,9 @@ public record GameSaveSnapshot(
                 state.hasGivenMapToMartino(), state.hasDragonKey(),
                 state.isDragonUnlocked(), state.isBossDefeated(),
                 state.isYmirPacified(), state.getYmirRuneSeed(),
-                state.hasLearnedGunnarWisdom(), state.hasReadYmirStele(),
-                state.isYmirOldFashionedCreated(), state.getInventory());
+                state.hasLearnedGunnarWisdom(), state.hasHeardGunnarIntroduction(),
+                state.hasReadYmirStele(), state.isYmirOldFashionedCreated(),
+                state.getInventory());
     }
 
     /** La partita in memoria resta alla schermata di completamento fino a PROSEGUI. */
@@ -36,14 +38,14 @@ public record GameSaveSnapshot(
             case 1 -> new GameSaveSnapshot(2, 1, s.maxHealth(), s.maxHealth(),
                     s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
                     false, s.ymirPacified(), s.ymirRuneSeed(),
-                    s.gunnarWisdomLearned(), s.ymirSteleRead(),
-                    s.ymirOldFashionedCreated(), s.inventory());
+                    s.gunnarWisdomLearned(), s.gunnarIntroductionHeard(),
+                    s.ymirSteleRead(), s.ymirOldFashionedCreated(), s.inventory());
             case 2 -> new GameSaveSnapshot(3, 1, s.maxHealth(), s.maxHealth(),
                     s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
                     s.bossDefeated(), s.ymirPacified(),
                     s.ymirRuneSeed() == 0 ? nextRuneSeed() : s.ymirRuneSeed(),
-                    s.gunnarWisdomLearned(), s.ymirSteleRead(),
-                    s.ymirOldFashionedCreated(), s.inventory());
+                    s.gunnarWisdomLearned(), s.gunnarIntroductionHeard(),
+                    s.ymirSteleRead(), s.ymirOldFashionedCreated(), s.inventory());
             case 3 -> s;
             default -> throw new IllegalArgumentException("Capitolo non previsto: " + completedChapter);
         };
@@ -55,7 +57,7 @@ public record GameSaveSnapshot(
         return new GameSaveSnapshot(chapter, room, health, maxHealth,
                 givenMapToMartino, dragonKey, dragonUnlocked, bossDefeated,
                 ymirPacified, nextRuneSeed(), gunnarWisdomLearned,
-                ymirSteleRead, ymirOldFashionedCreated, inventory);
+                gunnarIntroductionHeard, ymirSteleRead, ymirOldFashionedCreated, inventory);
     }
 
     private static int nextRuneSeed() {
