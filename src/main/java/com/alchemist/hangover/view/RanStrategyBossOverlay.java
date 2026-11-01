@@ -1,7 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.model.BossRewardCatalog;
+import com.alchemist.hangover.gameplay.boss.BossRewardCatalog;
 import com.alchemist.hangover.controller.CombatManager;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.Item;
