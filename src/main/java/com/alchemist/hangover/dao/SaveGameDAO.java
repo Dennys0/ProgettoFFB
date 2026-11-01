@@ -2,6 +2,7 @@ package com.alchemist.hangover.dao;
 
 import com.alchemist.hangover.database.DatabaseManager;
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.GameSaveSnapshot;
 import com.alchemist.hangover.model.Item;
 
 import java.sql.*;
@@ -100,8 +101,14 @@ public class SaveGameDAO {
      * Salva lo stato attuale del gioco (GameState + Inventario) nello slot specificato.
      */
     public static boolean saveGame(int slotId, String slotName) {
-        GameState state = GameState.getInstance();
-        if (state.getChapter() == 3) state.ensureYmirRuneSeed();
+        return saveGame(slotId, slotName, GameSaveSnapshot.capture(
+                GameState.getInstance()));
+    }
+
+    /** Persiste uno snapshot, senza modificare la partita attiva. */
+    public static boolean saveGame(int slotId, String slotName, GameSaveSnapshot snapshot) {
+        GameSaveSnapshot state = java.util.Objects.requireNonNull(snapshot, "snapshot")
+                .withPersistentRuneSeed();
         String upsertSql = "MERGE INTO save_slots (slot_id, slot_name, current_chapter, current_room, current_health, "
                 + "max_health, has_given_map, has_dragon_key, is_dragon_unlocked, is_boss_defeated, "
                 + "is_ymir_pacified, ymir_rune_seed, gunnar_wisdom, ymir_stele_read, "
@@ -117,19 +124,19 @@ public class SaveGameDAO {
             try (PreparedStatement ps = conn.prepareStatement(upsertSql)) {
                 ps.setInt(1, slotId);
                 ps.setString(2, (slotName == null || slotName.trim().isEmpty()) ? "Partita " + slotId : slotName.trim());
-                ps.setInt(3, state.getChapter());
-                ps.setInt(4, state.getCurrentRoom());
-                ps.setInt(5, state.getCurrentHealth());
-                ps.setInt(6, state.getMaxHealth());
-                ps.setBoolean(7, state.hasGivenMapToMartino());
-                ps.setBoolean(8, state.hasDragonKey());
-                ps.setBoolean(9, state.isDragonUnlocked());
-                ps.setBoolean(10, state.isBossDefeated());
-                ps.setBoolean(11, state.isYmirPacified());
-                ps.setInt(12, state.getYmirRuneSeed());
-                ps.setBoolean(13, state.hasLearnedGunnarWisdom());
-                ps.setBoolean(14, state.hasReadYmirStele());
-                ps.setBoolean(15, state.isYmirOldFashionedCreated());
+                ps.setInt(3, state.chapter());
+                ps.setInt(4, state.room());
+                ps.setInt(5, state.health());
+                ps.setInt(6, state.maxHealth());
+                ps.setBoolean(7, state.givenMapToMartino());
+                ps.setBoolean(8, state.dragonKey());
+                ps.setBoolean(9, state.dragonUnlocked());
+                ps.setBoolean(10, state.bossDefeated());
+                ps.setBoolean(11, state.ymirPacified());
+                ps.setInt(12, state.ymirRuneSeed());
+                ps.setBoolean(13, state.gunnarWisdomLearned());
+                ps.setBoolean(14, state.ymirSteleRead());
+                ps.setBoolean(15, state.ymirOldFashionedCreated());
                 ps.executeUpdate();
             }
 
@@ -141,7 +148,7 @@ public class SaveGameDAO {
 
             // 3. Inserisci gli oggetti attuali
             try (PreparedStatement insPs = conn.prepareStatement("INSERT INTO save_inventory (slot_id, item_id) VALUES (?, ?)")) {
-                for (Item item : state.getInventory()) {
+                for (Item item : state.inventory()) {
                     insPs.setInt(1, slotId);
                     insPs.setString(2, item.getId());
                     insPs.executeUpdate();

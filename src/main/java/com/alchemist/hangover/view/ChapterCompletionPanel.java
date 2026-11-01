@@ -2,6 +2,7 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.GameSaveSnapshot;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,10 +99,10 @@ public final class ChapterCompletionPanel extends JPanel {
 
         JButton save = button("SALVA PARTITA", "chapterCompletionSave", 128);
         save.addActionListener(e -> {
-            // A completed C1/C2 save must load directly into the NEXT chapter,
-            // not into an emptied cauldron inventory of the finished chapter.
-            prepareNextChapterState(details.chapter(), GameState.getInstance());
-            new SaveLoadDialog(owner, SaveLoadDialog.Mode.SAVE).setVisible(true);
+            // Fotografiamo il prossimo capitolo, senza anticipare la transizione.
+            GameSaveSnapshot snapshot = GameSaveSnapshot.afterCompletedChapter(
+                    GameState.getInstance(), details.chapter());
+            new SaveLoadDialog(owner, SaveLoadDialog.Mode.SAVE, snapshot).setVisible(true);
         });
         add(save);
 

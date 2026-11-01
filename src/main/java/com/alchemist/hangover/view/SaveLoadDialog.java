@@ -4,6 +4,7 @@ import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.dao.SaveGameDAO;
 import com.alchemist.hangover.dao.SaveGameDAO.SaveSlotInfo;
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.GameSaveSnapshot;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -23,11 +24,19 @@ public class SaveLoadDialog extends JDialog {
     }
 
     private final Mode mode;
+    private final GameSaveSnapshot saveSnapshot;
     private JPanel slotsContainer;
 
     public SaveLoadDialog(JFrame parent, Mode mode) {
+        this(parent, mode, null);
+    }
+
+    public SaveLoadDialog(JFrame parent, Mode mode, GameSaveSnapshot snapshot) {
         super(parent, mode == Mode.SAVE ? "SALVA PARTITA" : "CARICA PARTITA", true);
+        if (snapshot != null && mode != Mode.SAVE)
+            throw new IllegalArgumentException("Snapshot disponibile solo per SAVE");
         this.mode = mode;
+        this.saveSnapshot = snapshot;
 
         setSize(700, 520);
         setLocationRelativeTo(parent);
@@ -150,7 +159,9 @@ public class SaveLoadDialog extends JDialog {
         String defaultName = current != null ? current.getSlotName() : "Partita " + slotId;
         String name = JOptionPane.showInputDialog(this, "Inserisci un nome per questo salvataggio:", defaultName);
         if (name != null && !name.trim().isEmpty()) {
-            boolean ok = SaveGameDAO.saveGame(slotId, name.trim());
+            boolean ok = saveSnapshot == null
+                    ? SaveGameDAO.saveGame(slotId, name.trim())
+                    : SaveGameDAO.saveGame(slotId, name.trim(), saveSnapshot);
             if (ok) {
                 JOptionPane.showMessageDialog(this, "Partita salvata con successo!", "Salvataggio", JOptionPane.INFORMATION_MESSAGE);
                 refreshSlots();

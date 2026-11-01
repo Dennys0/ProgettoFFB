@@ -57,6 +57,38 @@ class ChapterCompletionPanelTest {
         } finally { state.resetState(); }
     }
 
+    @Test void preparingCompletionSaveNeverChangesTheCurrentGameState() {
+        GameState state = GameState.getInstance();
+        try {
+            state.resetState();
+            state.setChapter(1);
+            state.setCurrentRoom(4);
+            state.setCurrentHealth(1);
+            state.setBossDefeated(true);
+            var snapshot = com.alchemist.hangover.model.GameSaveSnapshot
+                    .afterCompletedChapter(state, 1);
+            assertEquals(1, state.getChapter());
+            assertEquals(4, state.getCurrentRoom());
+            assertEquals(1, state.getCurrentHealth());
+            assertTrue(state.isBossDefeated());
+            assertEquals(2, snapshot.chapter());
+            assertEquals(1, snapshot.room());
+            assertEquals(3, snapshot.health());
+            assertFalse(snapshot.bossDefeated());
+
+            state.setChapter(2);
+            state.setCurrentRoom(3);
+            state.setYmirRuneSeed(0);
+            var next = com.alchemist.hangover.model.GameSaveSnapshot
+                    .afterCompletedChapter(state, 2);
+            assertEquals(2, state.getChapter());
+            assertEquals(3, state.getCurrentRoom());
+            assertEquals(0, state.getYmirRuneSeed());
+            assertEquals(3, next.chapter());
+            assertTrue(next.ymirRuneSeed() > 0);
+        } finally { state.resetState(); }
+    }
+
     private static Component find(Container panel,String name) {
         for(Component child:panel.getComponents()) {
             if(name.equals(child.getName())) return child;

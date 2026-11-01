@@ -136,6 +136,30 @@ public class DatabaseSelfTest {
     }
 
     @Test
+    void savesNextChapterSnapshotWithoutAdvancingLiveGame() {
+        GameState state = GameState.getInstance();
+        state.setChapter(1);
+        state.setCurrentRoom(4);
+        state.setCurrentHealth(2);
+        state.setBossDefeated(true);
+        var snapshot = com.alchemist.hangover.model.GameSaveSnapshot
+                .afterCompletedChapter(state, 1);
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Fine capitolo 1", snapshot));
+        assertEquals(1, state.getChapter(), "SALVA non deve avanzare la partita");
+        assertEquals(4, state.getCurrentRoom());
+        assertEquals(2, state.getCurrentHealth());
+        assertTrue(state.isBossDefeated());
+        assertEquals(2, SaveGameDAO.getSlot(TEST_SLOT).getCurrentChapter());
+
+        state.resetState();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(2, state.getChapter());
+        assertEquals(1, state.getCurrentRoom());
+        assertEquals(3, state.getCurrentHealth());
+        assertFalse(state.isBossDefeated());
+    }
+
+    @Test
     void deletesOnlyTheTestSlot() {
         assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Eliminazione di prova"));
         assertTrue(SaveGameDAO.deleteSave(TEST_SLOT));

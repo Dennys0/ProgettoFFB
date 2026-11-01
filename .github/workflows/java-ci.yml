@@ -6,6 +6,7 @@ on:
       - fix/ui-chapter1-polish
       - feat/chapter3
       - refactor/view-model-cleanup
+      - refactor/gameplay-logic-cleanup
   pull_request:
 
 jobs:
