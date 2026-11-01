@@ -1,5 +1,8 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.view.cauldron.CauldronController;
+import com.alchemist.hangover.view.cauldron.SharedCauldronArtworkPanel;
+
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;

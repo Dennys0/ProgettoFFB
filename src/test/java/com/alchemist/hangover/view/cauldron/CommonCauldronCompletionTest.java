@@ -1,4 +1,4 @@
-package com.alchemist.hangover.view;
+package com.alchemist.hangover.view.cauldron;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
