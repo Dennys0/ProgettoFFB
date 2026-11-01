@@ -74,7 +74,24 @@ final class ChapterLayouts {
                            7, Map.of("UP", 5)))
     );
 
+    /** Nomi delle stanze usati nei menu di sviluppo, separati dai percorsi. */
+    private static final Map<Integer, Map<Integer, String>> ROOM_NAMES = Map.of(
+            3, Map.of(
+                    1, "La Radura delle Radici",
+                    2, "Il Cerchio delle Rune",
+                    3, "La Forgia di Caverna",
+                    4, "La Foresta Pietrificata",
+                    5, "Le Miniere Basaltiche",
+                    6, "La Rupe dell'Eco",
+                    7, "Il Cuore di Roccia")
+    );
+
     private ChapterLayouts() { }
+
+    static String roomName(int chapter, int room) {
+        return ROOM_NAMES.getOrDefault(chapter, Map.of())
+                .getOrDefault(room, "Stanza " + room);
+    }
 
     static Layout forChapter(int chapter) {
         Layout layout = CHAPTERS.get(chapter);

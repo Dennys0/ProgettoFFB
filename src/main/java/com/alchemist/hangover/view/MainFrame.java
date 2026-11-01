@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
                 if (!"CHAPTER3".equals(manager.getCurrentSceneName())) return;
                 Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
                 String[] rooms = java.util.stream.IntStream.rangeClosed(1, 7)
-                        .mapToObj(n -> n + " - " + Chapter3World.roomName(n))
+                        .mapToObj(n -> n + " - " + ChapterLayouts.roomName(3, n))
                         .toArray(String[]::new);
                 Object selection = javax.swing.JOptionPane.showInputDialog(
                         MainFrame.this, "Scegli una stanza da provare:",
