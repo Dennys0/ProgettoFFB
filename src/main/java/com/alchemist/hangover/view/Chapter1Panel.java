@@ -11,8 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Chapter1Panel extends AbstractChapterPanel {
 
@@ -34,7 +32,6 @@ public class Chapter1Panel extends AbstractChapterPanel {
     /** Ogni conversazione ha una conseguenza propria: gli NPC non aprono il boss. */
     enum DialogueKind { NONE, MARTINO, NPC, BOSS_INTRO }
     private DialogueKind activeDialogueKind = DialogueKind.NONE;
-    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
 
     static boolean opensBossAfterDialogue(DialogueKind kind, int room, boolean bossDefeated) {
         return kind == DialogueKind.BOSS_INTRO && room == 7 && !bossDefeated;
@@ -162,27 +159,10 @@ private void loadSprite(String name, String path) {
                 "Rugiada delle Nuvole di Asgard", "Acqua fluttuante condensata sulla polena drago.");
     }
 
-    private HotspotButton addNpcHotspot(int room, Rectangle bounds,
-                                       String label, String dialogueResource) {
-        HotspotButton hotspot = new HotspotButton();
-        hotspot.setBounds(bounds);
-        hotspot.setToolTipText(label);
-        hotspot.getAccessibleContext().setAccessibleName(label);
-        hotspot.addActionListener(e -> startSceneDialogue(dialogueResource, DialogueKind.NPC));
-        npcHotspots.computeIfAbsent(room, ignored -> new ArrayList<>()).add(hotspot);
-        add(hotspot);
-        hotspot.setVisible(false);
-        return hotspot;
-    }
-
-    private void setNpcHotspotsVisible(boolean visible) {
-        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
-            for (HotspotButton button : entry.getValue()) {
-                boolean show = visible && entry.getKey() == currentRoom;
-                button.setVisible(show);
-                if (show) setComponentZOrder(button, 0);
-            }
-        }
+    private void addNpcHotspot(int room, Rectangle bounds,
+                               String label, String dialogueResource) {
+        registerNpcHotspot(room, bounds, label,
+                () -> startSceneDialogue(dialogueResource, DialogueKind.NPC));
     }
 
     /**
@@ -194,7 +174,7 @@ private void loadSprite(String name, String path) {
         if (dialogueBoxOverlay.isVisible()) return;
         activeDialogueKind = kind;
         setArrowsVisible(false);
-        setNpcHotspotsVisible(false);
+        setRegisteredNpcHotspotsVisible(false);
         martinoHotspot.setVisible(false);
         cauldronHotspot.setVisible(false);
         room7ScreenClickHotspot.setVisible(false);
@@ -313,7 +293,7 @@ add(characterSpriteLabel);
         room7ScreenClickHotspot.setVisible(idle && currentRoom == 7);
         if (idle && currentRoom == 7) setComponentZOrder(room7ScreenClickHotspot, 0);
         // I nuovi NPC devono essere sopra le aree generiche della stanza 7.
-        setNpcHotspotsVisible(idle);
+        setRegisteredNpcHotspotsVisible(idle);
     }
 
     @Override

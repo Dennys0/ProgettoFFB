@@ -4,7 +4,10 @@ import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /** Logica grafica e interattiva condivisa da tutti i capitoli. */
@@ -18,6 +21,8 @@ public abstract class AbstractChapterPanel extends JPanel {
 
     private Map<Integer, String> roomBgPaths = Map.of();
     private Map<Integer, Map<String, Integer>> roomExits = Map.of();
+    /** Registro condiviso: nessuna sottoclasse duplica la gestione degli NPC. */
+    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
     protected final Map<String, JButton> itemButtons = new LinkedHashMap<>();
     private final Map<String, WorldItemDefinition> worldItems = new LinkedHashMap<>();
 
@@ -78,6 +83,34 @@ public abstract class AbstractChapterPanel extends JPanel {
             System.err.println("[AbstractChapterPanel] Risorsa non trovata: " + path);
         }
         return button;
+    }
+
+    /** Registra un NPC gia' visibile nel PNG della stanza, senza sovrapporre sprite. */
+    protected final HotspotButton registerNpcHotspot(int room, Rectangle bounds,
+            String label, Runnable action) {
+        HotspotButton hotspot = new HotspotButton();
+        hotspot.setBounds(bounds);
+        hotspot.setToolTipText(label);
+        hotspot.getAccessibleContext().setAccessibleName(label);
+        hotspot.addActionListener(e -> action.run());
+        npcHotspots.computeIfAbsent(room, ignored -> new ArrayList<>()).add(hotspot);
+        add(hotspot);
+        hotspot.setVisible(false);
+        return hotspot;
+    }
+
+    /**
+     * La visibilita' dipende dalla stanza e dallo stato di interazione.
+     * Gli hotspot attivi vengono portati davanti alle zone generiche.
+     */
+    protected final void setRegisteredNpcHotspotsVisible(boolean enabled) {
+        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
+            for (HotspotButton hotspot : entry.getValue()) {
+                boolean show = enabled && entry.getKey() == currentRoom;
+                hotspot.setVisible(show);
+                if (show) setComponentZOrder(hotspot, 0);
+            }
+        }
     }
 
     /** Crea un hotspot grafico e registra i dati necessari all'oggetto. */

@@ -9,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +31,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
     /** The meaning of a conversation must not depend on its room number. */
     enum DialogueKind { NONE, SIEGFRIED, NPC, BOSS_INTRO }
     private DialogueKind activeDialogueKind = DialogueKind.NONE;
-    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
 
     /** 1280 x 720 logical coordinates, aligned to the provided illustrations. */
     record NpcDefinition(int room, Rectangle bounds, String tooltip, String dialogue) { }
@@ -176,25 +173,8 @@ public class Chapter2Panel extends AbstractChapterPanel {
     }
 
     private void addNpcHotspot(NpcDefinition npc) {
-        HotspotButton button = new HotspotButton();
-        button.setBounds(npc.bounds());
-        button.setToolTipText(npc.tooltip());
-        button.getAccessibleContext().setAccessibleName(npc.tooltip());
-        button.addActionListener(e -> startSceneDialogue(npc.dialogue(), DialogueKind.NPC));
-        npcHotspots.computeIfAbsent(npc.room(), ignored -> new ArrayList<>()).add(button);
-        add(button);
-        button.setVisible(false);
-    }
-
-    private void setNpcHotspotsVisible(boolean enabled) {
-        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
-            for (HotspotButton button : entry.getValue()) {
-                boolean show = enabled && entry.getKey() == currentRoom;
-                button.setVisible(show);
-                // Position NPCs in front of the more generic scene hotspot.
-                if (show) setComponentZOrder(button, 0);
-            }
-        }
+        registerNpcHotspot(npc.room(), npc.bounds(), npc.tooltip(),
+                () -> startSceneDialogue(npc.dialogue(), DialogueKind.NPC));
     }
 
     @Override
@@ -216,7 +196,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
         cauldronHotspot.setVisible(idle && currentRoom == 3);
         ranBossHotspot.setVisible(idle && currentRoom == 7
                 && !GameState.getInstance().isBossDefeated());
-        setNpcHotspotsVisible(idle);
+        setRegisteredNpcHotspotsVisible(idle);
     }
 
     /** One shared entry point for Siegfried, room NPCs and Rán. */
@@ -227,7 +207,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
         siegfriedHotspot.setVisible(false);
         cauldronHotspot.setVisible(false);
         ranBossHotspot.setVisible(false);
-        setNpcHotspotsVisible(false);
+        setRegisteredNpcHotspotsVisible(false);
         dialogueBoxOverlay.setVisible(true);
         setComponentZOrder(dialogueBoxOverlay, 0);
         setComponentZOrder(characterSpriteLabel, 1);

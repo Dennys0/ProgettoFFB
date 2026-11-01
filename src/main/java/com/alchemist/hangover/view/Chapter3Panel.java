@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             new NpcDefinition(6, new Rectangle(713, 373, 365, 178),
                     "Parla con Níðhöggr", "/dialogues/ch3_nighodd_revised.txt")
     );
-    private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
     private final Map<String, ImageIcon> npcPortraits = new HashMap<>();
     private SharedDialogueBox npcDialogueBox;
     private JLabel npcDialogueSprite;
@@ -367,26 +365,14 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     }
 
     private void createNpcHotspot(NpcDefinition npc) {
-        HotspotButton hotspot = new HotspotButton();
-        hotspot.setBounds(npc.bounds());
-        hotspot.setToolTipText(npc.action());
-        hotspot.getAccessibleContext().setAccessibleName(npc.action());
-        hotspot.addActionListener(e -> startNpcDialogue(npc));
-        npcHotspots.computeIfAbsent(npc.room(), ignored -> new ArrayList<>()).add(hotspot);
-        add(hotspot);
-        hotspot.setVisible(false);
+        registerNpcHotspot(npc.room(), npc.bounds(), npc.action(),
+                () -> startNpcDialogue(npc));
     }
 
     private void updateNpcHotspots() {
-        for (Map.Entry<Integer, List<HotspotButton>> entry : npcHotspots.entrySet()) {
-            for (HotspotButton hotspot : entry.getValue()) {
-                boolean show = currentRoom == entry.getKey()
-                        && !gunnarConversationActive && !npcConversationActive
-                        && (brewingPanel == null || !brewingPanel.isVisible());
-                hotspot.setVisible(show);
-                if (show) setComponentZOrder(hotspot, 0);
-            }
-        }
+        setRegisteredNpcHotspotsVisible(
+                !gunnarConversationActive && !npcConversationActive
+                && (brewingPanel == null || !brewingPanel.isVisible()));
     }
 
     private void startNpcDialogue(NpcDefinition npc) {
