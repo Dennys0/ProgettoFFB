@@ -1,5 +1,7 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.gameplay.chapter.EarthChapterRules;
+
 import com.alchemist.hangover.view.cauldron.CauldronController;
 import com.alchemist.hangover.view.cauldron.CauldronOverlay;
 
@@ -200,27 +202,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         });
     }
 
-    /** Stage choice stays independent from visual rendering and can be tested headlessly. */
-    static String gunnarDialoguePath(GameState state) {
-        if (state.hasLearnedGunnarWisdom()) return "/dialogues/ch3_gunnar_repeat.txt";
-        return state.hasHeardGunnarIntroduction()
-                ? "/dialogues/ch3_gunnar_reward.txt" : "/dialogues/ch3_gunnar.txt";
-    }
-
-    /** Invoked only after the final line, never on ESC or a room change. */
-    static boolean completeGunnarStage(GameState state, boolean rewardConversation) {
-        if (state.hasLearnedGunnarWisdom()) return false;
-        if (!state.hasHeardGunnarIntroduction()) {
-            state.setGunnarIntroductionHeard(true);
-            return false;
-        }
-        if (rewardConversation) {
-            state.setGunnarWisdomLearned(true);
-            return true;
-        }
-        return false;
-    }
-
     private void startGunnarDialogue() {
         if (gunnarConversationActive || npcConversationActive || currentRoom != 2) return;
         gunnarConversationActive = true;
@@ -229,7 +210,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         GameState state = GameState.getInstance();
         gunnarRewardConversation = !state.hasLearnedGunnarWisdom()
                 && state.hasHeardGunnarIntroduction();
-        String resource = gunnarDialoguePath(state);
+        String resource = EarthChapterRules.gunnarDialoguePath(state);
         gunnarDialogue.start(resource);
         repaint();
     }
@@ -242,7 +223,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             GameState state = GameState.getInstance();
             boolean firstMeeting = !state.hasHeardGunnarIntroduction()
                     && !state.hasLearnedGunnarWisdom();
-            boolean rewarded = completeGunnarStage(state, gunnarRewardConversation);
+            boolean rewarded = EarthChapterRules.completeGunnarStage(state, gunnarRewardConversation);
             if (firstMeeting) ToastNotification.show(this,
                     "Gunnar ha terminato il racconto. Torna a parlargli per la sua saggezza.");
             else if (rewarded) ToastNotification.show(this,
@@ -360,17 +341,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         ymirHotspot.setVisible(false);
     }
 
-    /** Indica esattamente gli indizi mancanti, senza testi incorporati nei PNG. */
-    static String missingYmirClues(boolean hasGunnarWisdom, boolean hasStele) {
-        StringBuilder message = new StringBuilder(
-                "Il gigante si muove sotto la pietra. Per placarlo devi ancora:");
-        if (!hasGunnarWisdom) message.append(
-                "\n• Comprendere la saggezza di Gunnar nel Cerchio delle Rune.");
-        if (!hasStele) message.append(
-                "\n• Leggere la stele della Rupe dell'Eco.");
-        return message.toString();
-    }
-
     private void triggerYmirEncounter(boolean askConfirmation) {
         GameState state = GameState.getInstance();
         if (state.isYmirPacified()) return;
@@ -380,7 +350,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         if (!state.hasLearnedGunnarWisdom() || !state.hasReadYmirStele()) {
             StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.EARTH,
                     "IL SONNO DI YMIR",
-                    missingYmirClues(state.hasLearnedGunnarWisdom(),
+                    EarthChapterRules.missingYmirClues(state.hasLearnedGunnarWisdom(),
                             state.hasReadYmirStele()));
             return;
         }

@@ -1,5 +1,7 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.gameplay.chapter.EarthChapterRules;
+
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import java.awt.*;
@@ -9,13 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
 /** The Ymir encounter uses the same accessible fantasy prompt as other bosses. */
 class YmirEncounterPromptTest {
     @Test void displaysCorrectMissingRequirementsWithoutBakedText() {
-        String both = Chapter3Panel.missingYmirClues(false, false);
+        String both = EarthChapterRules.missingYmirClues(false, false);
         assertTrue(both.contains("Gunnar"));
         assertTrue(both.contains("stele"));
-        String one = Chapter3Panel.missingYmirClues(true, false);
+        String one = EarthChapterRules.missingYmirClues(true, false);
         assertFalse(one.contains("Gunnar"));
         assertTrue(one.contains("stele"));
-        String other = Chapter3Panel.missingYmirClues(false, true);
+        String other = EarthChapterRules.missingYmirClues(false, true);
         assertTrue(other.contains("Gunnar"));
         assertFalse(other.contains("stele"));
     }
