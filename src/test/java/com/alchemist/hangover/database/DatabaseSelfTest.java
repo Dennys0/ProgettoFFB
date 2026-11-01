@@ -164,6 +164,18 @@ public class DatabaseSelfTest {
     }
 
     @Test
+    void missingSaveSlotDoesNotAlterTheActiveGame() {
+        GameState state = GameState.getInstance();
+        state.setChapter(3);
+        state.setCurrentRoom(5);
+        state.setGunnarIntroductionHeard(true);
+        assertFalse(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(3, state.getChapter());
+        assertEquals(5, state.getCurrentRoom());
+        assertTrue(state.hasHeardGunnarIntroduction());
+    }
+
+    @Test
     void deletesOnlyTheTestSlot() {
         assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Eliminazione di prova"));
         assertTrue(SaveGameDAO.deleteSave(TEST_SLOT));

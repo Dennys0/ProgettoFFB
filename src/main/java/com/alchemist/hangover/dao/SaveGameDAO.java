@@ -184,28 +184,29 @@ public class SaveGameDAO {
             ps.setInt(1, slotId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    GameState state = GameState.getInstance();
-                    state.resetState();
-
-                    state.setChapter(rs.getInt("current_chapter"));
-                    state.setCurrentRoom(rs.getInt("current_room"));
-                    state.setCurrentHealth(rs.getInt("current_health"));
-                    state.setMaxHealth(rs.getInt("max_health"));
-                    state.setGivenMapToMartino(rs.getBoolean("has_given_map"));
-                    state.setHasDragonKey(rs.getBoolean("has_dragon_key"));
-                    state.setDragonUnlocked(rs.getBoolean("is_dragon_unlocked"));
-                    state.setBossDefeated(rs.getBoolean("is_boss_defeated"));
-                    state.setYmirPacified(rs.getBoolean("is_ymir_pacified"));
-                    state.setYmirRuneSeed(rs.getInt("ymir_rune_seed"));
-                    state.setGunnarWisdomLearned(rs.getBoolean("gunnar_wisdom"));
-                    state.setGunnarIntroductionHeard(rs.getBoolean("gunnar_intro_heard"));
-                    state.setYmirSteleRead(rs.getBoolean("ymir_stele_read"));
-                    state.setYmirOldFashionedCreated(rs.getBoolean("ymir_old_fashioned_created"));
-
-                    // Carica gli oggetti dell'inventario
-                    loadInventoryForSlot(conn, slotId, state);
-
-                    System.out.println("[SaveGameDAO] Partita caricata dallo slot " + slotId + ". Stanza: " + state.getCurrentRoom());
+                    // Preleva interamente slot e inventario prima di mutare la partita.
+                    int chapter = rs.getInt("current_chapter");
+                    int room = rs.getInt("current_room");
+                    int health = rs.getInt("current_health");
+                    int maxHealth = rs.getInt("max_health");
+                    boolean givenMap = rs.getBoolean("has_given_map");
+                    boolean dragonKey = rs.getBoolean("has_dragon_key");
+                    boolean dragonUnlocked = rs.getBoolean("is_dragon_unlocked");
+                    boolean bossDefeated = rs.getBoolean("is_boss_defeated");
+                    boolean ymirPacified = rs.getBoolean("is_ymir_pacified");
+                    int runeSeed = rs.getInt("ymir_rune_seed");
+                    boolean gunnarWisdom = rs.getBoolean("gunnar_wisdom");
+                    boolean gunnarIntro = rs.getBoolean("gunnar_intro_heard");
+                    boolean steleRead = rs.getBoolean("ymir_stele_read");
+                    boolean cocktail = rs.getBoolean("ymir_old_fashioned_created");
+                    List<Item> inventory = readInventoryForSlot(conn, slotId);
+                    GameSaveSnapshot snapshot = new GameSaveSnapshot(chapter, room,
+                            health, maxHealth, givenMap, dragonKey, dragonUnlocked,
+                            bossDefeated, ymirPacified, runeSeed, gunnarWisdom,
+                            gunnarIntro, steleRead, cocktail, inventory);
+                    GameState.getInstance().restoreFrom(snapshot);
+                    System.out.println("[SaveGameDAO] Partita caricata dallo slot "
+                            + slotId + ". Stanza: " + room);
                     return true;
                 }
             }
@@ -215,23 +216,21 @@ public class SaveGameDAO {
         return false;
     }
 
-    private static void loadInventoryForSlot(Connection conn, int slotId, GameState state) throws SQLException {
+    /** Legge l'inventario per intero prima di applicare il caricamento. */
+    private static List<Item> readInventoryForSlot(Connection conn, int slotId) throws SQLException {
+        List<Item> inventory = new ArrayList<>();
         String invSql = "SELECT i.id, i.name, i.description, i.icon_path FROM save_inventory si "
                 + "JOIN items i ON si.item_id = i.id WHERE si.slot_id = ?";
         try (PreparedStatement invPs = conn.prepareStatement(invSql)) {
             invPs.setInt(1, slotId);
             try (ResultSet rs = invPs.executeQuery()) {
                 while (rs.next()) {
-                    Item item = new Item(
-                            rs.getString("id"),
-                            rs.getString("name"),
-                            rs.getString("description"),
-                            rs.getString("icon_path")
-                    );
-                    state.addItem(item);
+                    inventory.add(new Item(rs.getString("id"), rs.getString("name"),
+                            rs.getString("description"), rs.getString("icon_path")));
                 }
             }
         }
+        return inventory;
     }
 
     /**

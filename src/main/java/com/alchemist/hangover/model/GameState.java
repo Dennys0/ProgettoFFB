@@ -193,6 +193,27 @@ public class GameState {
     public boolean isBossRetryAvailable() { return bossRetryAvailable; }
     public void setBossRetryAvailable(boolean val) { this.bossRetryAvailable = val; }
 
+    /** Carica uno stato completo, dopo che ogni lettura H2 e' riuscita. */
+    public void restoreFrom(GameSaveSnapshot snapshot) {
+        Objects.requireNonNull(snapshot, "snapshot");
+        resetState();
+        setChapter(snapshot.chapter());
+        setCurrentRoom(snapshot.room());
+        setMaxHealth(snapshot.maxHealth());
+        setCurrentHealth(snapshot.health());
+        setGivenMapToMartino(snapshot.givenMapToMartino());
+        setHasDragonKey(snapshot.dragonKey());
+        setDragonUnlocked(snapshot.dragonUnlocked());
+        setBossDefeated(snapshot.bossDefeated());
+        setYmirPacified(snapshot.ymirPacified());
+        setYmirRuneSeed(snapshot.ymirRuneSeed());
+        setGunnarWisdomLearned(snapshot.gunnarWisdomLearned());
+        setGunnarIntroductionHeard(snapshot.gunnarIntroductionHeard());
+        setYmirSteleRead(snapshot.ymirSteleRead());
+        setYmirOldFashionedCreated(snapshot.ymirOldFashionedCreated());
+        setInventory(snapshot.inventory());
+    }
+
     // --- Reset Stato Generale ---
     /** Ripristina una nuova partita senza sostituire l'oggetto GameState singleton. */
     public void resetState() {

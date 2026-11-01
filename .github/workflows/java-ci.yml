@@ -7,6 +7,7 @@ on:
       - feat/chapter3
       - refactor/view-model-cleanup
       - refactor/gameplay-logic-cleanup
+      - refactor/state-and-architecture
   pull_request:
 
 jobs:
