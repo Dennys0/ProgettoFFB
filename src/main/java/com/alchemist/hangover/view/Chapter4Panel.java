@@ -18,18 +18,19 @@ public final class Chapter4Panel extends AbstractChapterPanel {
     record Npc(int room, Rectangle bounds, String label, String dialogue) { }
 
     static final List<Npc> NPCS = List.of(
-            new Npc(1, new Rectangle(455, 255, 285, 310),
+            new Npc(1, new Rectangle(546, 301, 185, 128),
                     "Ascolta il Muspelsonar ferito", "/dialogues/ch4_bersercker_dialogue.txt"),
-            new Npc(2, new Rectangle(465, 300, 280, 260),
+            new Npc(2, new Rectangle(386, 417, 486, 205),
                     "Parla con Sigrún, la Valchiria", "/dialogues/ch4_valkyrie_dialogue.txt"),
-            new Npc(3, new Rectangle(920, 505, 160, 145),
+            new Npc(3, new Rectangle(822, 512, 149, 116),
                     "Esamina i resti del diavoletto", "/dialogues/ch4_diavoletto_dialogue.txt"),
-            new Npc(4, new Rectangle(738, 330, 190, 265),
+            new Npc(4, new Rectangle(784, 280, 78, 99),
                     "Parla con il vagabondo", "/dialogues/ch4_oldman_dialogue.txt"),
-            new Npc(5, new Rectangle(465, 305, 230, 245),
+            new Npc(5, new Rectangle(858, 380, 137, 125),
                     "Parla con il Figlio di Ivaldi", "/dialogues/ch4_blacksmith_dialogue.txt")
     );
 
+    private final java.util.Map<HotspotButton, Rectangle> npcBounds = new java.util.LinkedHashMap<>();
     private final DialogueManager.SceneSession dialogues;
     private final HotspotButton cauldron;
     private final HotspotButton stele;
@@ -48,8 +49,8 @@ public final class Chapter4Panel extends AbstractChapterPanel {
         dialogues.addFittedPortrait("FIGLIO_IVALDI", "/images/characters/ch4_blacksmith.png");
 
         for (Npc npc : NPCS) {
-            registerNpcHotspot(npc.room(), npc.bounds(), npc.label(),
-                    () -> startDialogue(npc.dialogue()));
+            addNpcArea(npc, npc.bounds());
+            if (npc.room() == 3) addNpcArea(npc, new Rectangle(118, 520, 328, 137));
         }
 
         addItemWorldButton("CENERE_FENRIR", "/images/items/item_fenrir_ash.png",
@@ -59,7 +60,7 @@ public final class Chapter4Panel extends AbstractChapterPanel {
                 970, 490, 145, 100, 4, "Zolfo Ingannatore di Loki",
                 "Una polvere dorata e luminosa, insidiosamente invitante.");
         addItemWorldButton("MAGMA_SVARTALFAHEIMR", "/images/items/item_magma.png",
-                930, 475, 140, 113, 5, "Magma Filtrato di Svartálfaheimr",
+                1020, 493, 140, 113, 5, "Magma Filtrato di Svartálfaheimr",
                 "La base liquida incandescente del Ragnarök Flambé.");
         addItemWorldButton("LACRIMA_HEL", "/images/items/item_ice_tear.png",
                 215, 480, 135, 110, 5, "Lacrima di Ghiaccio di Hel",
@@ -69,7 +70,7 @@ public final class Chapter4Panel extends AbstractChapterPanel {
                 "Ascolta il cuore di Muspelheim", () ->
                 ToastNotification.show(this,
                         "Arthur: Il pavimento batte come un cuore. Non è rassicurante."));
-        shield = registerActionHotspot(new Rectangle(230, 300, 185, 190),
+        shield = registerActionHotspot(new Rectangle(901, 564, 167, 91),
                 "Esamina lo scudo della Valchiria", () ->
                 StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.FIRE,
                         "INCISIONI SULLO SCUDO",
@@ -85,6 +86,20 @@ public final class Chapter4Panel extends AbstractChapterPanel {
         surtur = registerActionHotspot(new Rectangle(380, 175, 485, 390),
                 "Affronta Surtur", () -> startSurtur(true));
         loadRoom(1);
+    }
+
+    private void addNpcArea(Npc npc, Rectangle bounds) {
+        HotspotButton button = registerNpcHotspot(npc.room(), bounds, npc.label(),
+                () -> startDialogue(npc.dialogue()));
+        npcBounds.put(button, bounds);
+    }
+
+    @Override public void doLayout() {
+        super.doLayout();
+        // Lo sfondo viene stirato sul pannello, la cornice del sistema ne varia le dimensioni.
+        npcBounds.forEach((button, r) -> button.setBounds(
+                r.x * getWidth() / 1280, r.y * getHeight() / 720,
+                r.width * getWidth() / 1280, r.height * getHeight() / 720));
     }
 
     private void startDialogue(String resource) {
