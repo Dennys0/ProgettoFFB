@@ -18,7 +18,7 @@ MARTINO|Forse! Ma occhio alla polvere dorata che galleggia nell'aria. È bella d
 ARTHUR|Piuma scintillante sì, polvere dorata no. Ricevuto.
 NARRATOR|Una goccia d'acqua si stacca dal cannocchiale di Martino, ma invece di cadere rimane sospesa nell'aria.
 ARTHUR|E quella che diavolo è?!
-MARTINO|TERZO! L'acqua che non cade, idiota! Cercala sulle scaglie della polena a drago, dove la nave bacia le nuvole. Brilla, ma non fa scintille.
+MARTINO|TERZO! L'acqua che non cade, idiota! L’ho chiusa nella cassa di prua. Cerca l’ottone tra le cime sulla sinistra. Brilla, ma non fa scintille.
 ARTHUR|Rugiada sospesa sulle nuvole... capito!
 MARTINO|E se trovi una fiala piena di fumo gelido, non aprirla e non versarla nel calderone! Quella merda viene da un regno tanto freddo che congelerebbe persino le palle di Thor! Ti spaccherebbe il calderone!
 ARTHUR|Quindi respiro del falco, piuma fulminante e rugiada. Niente polvere dorata né fumo gelido.

@@ -30,12 +30,14 @@ public final class AudioManager {
         if (scene.equals(activeScene) && ambience != null && ambience.isRunning()) return;
         stopAmbience();
         activeScene = scene;
-        if (!GameSettings.getInstance().isSoundEnabled() || !GameSettings.getInstance().isAmbienceEnabled()) return;
-        if (!("INTRO".equals(scene) || "CHAPTER1".equals(scene)
+        boolean battleMusic = "STORM_DUEL".equals(scene);
+        if (!GameSettings.getInstance().isSoundEnabled()
+                || (!battleMusic && !GameSettings.getInstance().isAmbienceEnabled())) return;
+        if (!(battleMusic || "INTRO".equals(scene) || "CHAPTER1".equals(scene)
                 || "CHAPTER2".equals(scene) || "CHAPTER3".equals(scene)
                 || "CHAPTER4".equals(scene) || "EPILOGUE".equals(scene) || "MENU".equals(scene))) return;
         try {
-            byte[] samples = makeAmbience(scene);
+            byte[] samples = battleMusic ? makeStormMusic() : makeAmbience(scene);
             ambience = AudioSystem.getClip();
             ambience.open(FORMAT, samples, 0, samples.length);
             setLevel(ambience, -12f);
@@ -105,7 +107,7 @@ public final class AudioManager {
             byte[] samples = makeEffect(effect);
             Clip sound = AudioSystem.getClip();
             sound.open(FORMAT, samples, 0, samples.length);
-            setLevel(sound, -16f);
+            setLevel(sound, effect == Effect.DAMAGE ? -7f : -16f);
             sound.addLineListener(event -> {
                 if (event.getType() == LineEvent.Type.STOP) {
                     sound.close();
@@ -173,13 +175,46 @@ public final class AudioManager {
         return pcm;
     }
 
+    private static byte[] makeStormMusic() {
+        double[] bass = {110, 110, 130.81, 98, 110, 146.83, 130.81, 98};
+        int beat = SAMPLE_RATE / 2;
+        byte[] pcm = new byte[beat * 16 * 2];
+        for (int i = 0; i < pcm.length / 2; i++) {
+            int pulse = i / beat;
+            double t = (i % beat) / (double) SAMPLE_RATE;
+            double note = bass[(pulse / 2) % bass.length];
+            double drum = Math.exp(-15 * t) * Math.sin(2 * Math.PI * 62 * t);
+            double strings = Math.sin(2 * Math.PI * note * t)
+                    + 0.38 * Math.sin(2 * Math.PI * note * 1.5 * t);
+            double edge = Math.min(1, Math.min(t * 110, (0.5 - t) * 70));
+            writeSample(pcm, i, edge * (0.20 * drum + 0.12 * Math.exp(-5 * t) * strings));
+        }
+        return pcm;
+    }
+
+    private static byte[] makeImpact() {
+        byte[] pcm = new byte[SAMPLE_RATE]; // Mezzo secondo di PCM a 16 bit.
+        Random noise = new Random(71);
+        double rumble = 0;
+        for (int i = 0; i < pcm.length / 2; i++) {
+            double t = i / (double) SAMPLE_RATE;
+            rumble = 0.7 * rumble + 0.3 * (noise.nextDouble() * 2 - 1);
+            double thud = Math.sin(2 * Math.PI * (94 * t - 53 * t * t));
+            double crack = Math.exp(-25 * t) * rumble;
+            double envelope = Math.min(1, t * 300) * Math.min(1, (0.5 - t) * 65);
+            writeSample(pcm, i, envelope * (0.65 * thud * Math.exp(-8 * t) + 0.45 * crack));
+        }
+        return pcm;
+    }
+
     private static byte[] makeEffect(Effect effect) {
+        if (effect == Effect.DAMAGE) return makeImpact();
         if (effect == Effect.RECIPE_READY) return makeRecipeChord();
         if (effect == Effect.EARTH_BREATH) return makeEarthBreath();
         if (effect == Effect.FOOTSTEP || effect == Effect.WIND_GUST || effect == Effect.WATER_DROP
                 || effect == Effect.FORGE_SPARK || effect == Effect.STONE_RUMBLE
                 || effect == Effect.RUNE_CHIME) return makeRoomEffect(effect);
-        double seconds = effect == Effect.DAMAGE ? 0.38 : 0.27;
+        double seconds = 0.27;
         int length = (int) (SAMPLE_RATE * seconds);
         byte[] pcm = new byte[length * 2];
         for (int i = 0; i < length; i++) {
@@ -187,7 +222,7 @@ public final class AudioManager {
             double progress = t / seconds;
             double frequency = switch (effect) {
                 case PICKUP -> 650 + 440 * progress;
-                case DAMAGE -> 250 - 160 * progress;
+                case DAMAGE -> throw new AssertionError(effect);
                 case SUCCESS -> 420 + 600 * progress;
                 case CLICK -> 550;
                 case EARTH_BREATH, RECIPE_READY, FOOTSTEP -> 55; // gestito separatamente sopra

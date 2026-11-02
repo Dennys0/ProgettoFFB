@@ -21,11 +21,11 @@ public final class ItemOriginCatalog {
     private static final Origin UNKNOWN = new Origin(0, "Luogo non ancora catalogato", null);
 
     private static final Map<String, Origin> ORIGINS = Map.ofEntries(
-            Map.entry("MAPPA_CIELO", new Origin(1, "Stiva dello Skíðblaðnir", "/images/chapter1/room5_hold.png")),
+            Map.entry("MAPPA_CIELO", new Origin(1, "Scaffale nella stiva dello Skíðblaðnir", "/images/chapter1/room5_hold.png")),
             Map.entry("NEBBIA_NIFLHEIM", new Origin(1, "Stiva dello Skíðblaðnir", "/images/chapter1/room5_hold.png")),
-            Map.entry("PIUMA_FOLGORE", new Origin(1, "Coffa dell'albero maestro", "/images/chapter1/room6_crowsnest.png")),
-            Map.entry("POLLINE_YGGDRASIL", new Origin(1, "Prua del veliero volante", "/images/chapter1/room3_prow.png")),
-            Map.entry("RUGIADA_ASGARD", new Origin(1, "Polena sulla prua", "/images/chapter1/room3_prow.png")),
+            Map.entry("PIUMA_FOLGORE", new Origin(1, "Dono di Huginn nella coffa", "/images/chapter1/room6_crowsnest.png")),
+            Map.entry("POLLINE_YGGDRASIL", new Origin(1, "Dono del mozzo sul ponte", "/images/chapter1/room1_deck.png")),
+            Map.entry("RUGIADA_ASGARD", new Origin(1, "Cassa d’ottone a prua", "/images/chapter1/room3_prow.png")),
             Map.entry("CHIAVE_DRAGO", new Origin(1, "Ricevuta da Martino, al timone", "/images/chapter1/room2_helm.png")),
             Map.entry("SOFFIO_HRAESVELGR", new Origin(1, "Dono di Hræsvelgr dopo lo scontro", "/images/chapter1/room7_boss.png")),
             Map.entry("DIARIO_CAPITANO", new Origin(2, "Balconata dei relitti", "/images/chapter2/room6_balcony.png")),

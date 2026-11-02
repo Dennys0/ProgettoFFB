@@ -8,7 +8,13 @@ import java.awt.event.ActionEvent;
 public class MainMenuPanel extends JPanel {
 
     private final Image backgroundImage = new ImageIcon(getClass().getResource("/images/intro/menu_bg.png")).getImage();
-    private final JLabel hint = new JLabel("", SwingConstants.CENTER);
+    private final JLabel hint = new JLabel("", SwingConstants.CENTER) {
+        @Override protected void paintComponent(Graphics g) {
+            g.setColor(getBackground());
+            g.fillRect(0, 0, getWidth(), getHeight());
+            super.paintComponent(g);
+        }
+    };
     private final JPanel entries = new JPanel(new GridLayout(6, 1, 0, 4));
     private JButton selected;
 
@@ -16,7 +22,7 @@ public class MainMenuPanel extends JPanel {
         setLayout(null);
         entries.setOpaque(false);
         add(entries);
-        hint.setOpaque(true);
+        hint.setOpaque(false);
         hint.setBackground(new Color(13, 13, 13, 208));
         hint.setForeground(new Color(238, 226, 205));
         hint.setFont(new Font(Font.SERIF, Font.PLAIN, 17));
@@ -148,7 +154,11 @@ public class MainMenuPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (backgroundImage != null) {
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            double scale = Math.max((double) getWidth() / backgroundImage.getWidth(this),
+                    (double) getHeight() / backgroundImage.getHeight(this));
+            int w = (int) Math.ceil(backgroundImage.getWidth(this) * scale);
+            int h = (int) Math.ceil(backgroundImage.getHeight(this) * scale);
+            g.drawImage(backgroundImage, (getWidth() - w) / 2, (getHeight() - h) / 2, w, h, this);
         }
     }
 }

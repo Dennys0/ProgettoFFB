@@ -188,9 +188,8 @@ public final class YmirBossOverlay extends JDialog {
         if (selectedZone == null || phase >= ritual.size()) return;
         YmirRuneRitual.Step current = ritual.get(phase);
         if (!YmirRuneRitual.isCorrectStep(current, rune, selectedZone)) {
-            if (CombatManager.takeHit("Ymir si è svegliato. La terra ha travolto Arthur.")) {
-                dispose();
-                CombatManager.finishDefeat((Frame) getOwner(), StoryPromptDialog.Theme.EARTH,
+            if (CombatManager.takeHit(this, "Ymir si è svegliato. La terra ha travolto Arthur.")) {
+                CombatManager.finishDefeat(this, StoryPromptDialog.Theme.EARTH,
                         "IL GIGANTE SI RISVEGLIA",
                         "Le rune perdono la loro luce e Ymir scuote il mondo.\n"
                         + "Potrai riprovare il rituale dal checkpoint.");

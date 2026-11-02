@@ -141,9 +141,8 @@ public class RanStrategyBossOverlay extends JDialog {
         } else {
             // Errore
             GameState gs = GameState.getInstance();
-            if (CombatManager.takeHit("Le reti di Rán ti trascinano nel vortice.")) {
-                dispose();
-                CombatManager.finishDefeat(parentFrame, StoryPromptDialog.Theme.OCEAN,
+            if (CombatManager.takeHit(this, "Le reti di Rán ti trascinano nel vortice.")) {
+                CombatManager.finishDefeat(this, StoryPromptDialog.Theme.OCEAN,
                         "LE PROFONDITÀ PREVALGONO",
                         "Le reti di Rán si stringono e il vortice ti trascina nell'abisso.\n"
                         + "Puoi riprovare lo scontro dal checkpoint.");

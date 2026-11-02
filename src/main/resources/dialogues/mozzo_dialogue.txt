@@ -80,4 +80,5 @@ MOZZO|Devo pur cambiare questa maledetta scopa!
 
 NARRATOR|Il mozzo riprende a spazzare mentre una raffica improvvisa attraversa il ponte.
 
-NARRATOR|FINE DEL DIALOGO.
+MOZZO|Aspetta. Tieni questo cartoccio. Da quando siamo passati sotto i rami di Yggdrasil, spazzo via polvere d’oro.
+ARTHUR|Polline? Finalmente un ingrediente che non cerca di mangiarmi.

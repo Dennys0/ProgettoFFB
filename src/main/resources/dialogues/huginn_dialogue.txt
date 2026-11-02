@@ -13,7 +13,7 @@ ARTHUR|Il dio falco? Hai qualche consiglio?
 HUGINN|Le sue ali comandano il vento, ma persino un dio deve respirare. Ricordalo quando il cielo diventerà silenzioso.
 ARTHUR|Non potevi semplicemente dirmi come batterlo?!
 HUGINN|CRA! E tu non potevi semplicemente ordinare un'acqua minerale?!
-NARRATOR|Huginn spalanca le ali, lasciando cadere una piuma nera ai piedi di Arthur.
+NARRATOR|Huginn spalanca le ali, lasciando cadere una piuma nel palmo di Arthur. Un lampo dorato le corre lungo il bordo.
 HUGINN|Un ultimo consiglio, ubriacone... Non fidarti di chi ti ha portato qui.
 ARTHUR|E chi sarebbe?!
 HUGINN|CRA! Questo è proprio ciò che dovresti ricordare.

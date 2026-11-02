@@ -91,7 +91,7 @@ public final class GameJournalDialog extends JDialog {
         }
         if (!state.isBossDefeated()) {
             return "Martino ha ricevuto la mappa. Ora possiedo la Chiave del Drago."
-                    + "\n\nDevo raggiungere la polena e scoprire cosa nasconde, poi affrontare la tempesta.";
+                    + "\n\nDevo provare la chiave nella serratura della cassa di prua, poi affrontare la tempesta.";
         }
         return "Ho superato la prova di Hræsvelgr. Mi resta da preparare la miscela nel calderone.";
     }

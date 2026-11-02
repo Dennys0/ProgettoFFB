@@ -79,7 +79,7 @@ public class GameOverPanel extends JPanel {
         add(btnRetry);
 
         // Bottone 2: TORNA AL MENU
-        JButton btnMenu = new JButton("TORNA AL MENU ðŸ ");
+        JButton btnMenu = new JButton("TORNA AL MENU");
         btnMenu.setFont(new Font("Georgia", Font.BOLD, 16));
         btnMenu.setForeground(Color.WHITE);
         btnMenu.setBackground(new Color(80, 30, 30));

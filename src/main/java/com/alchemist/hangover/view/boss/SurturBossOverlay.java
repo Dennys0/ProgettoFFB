@@ -186,10 +186,9 @@ public final class SurturBossOverlay extends JDialog {
             case BROKEN -> feedback.setText("Il sigillo si spezza sotto la lama del gigante.");
             case HIT -> {
                 feedback.setText("COLPITO! Un cuore in meno. Impara il ritmo della fornace!");
-                if (CombatManager.takeHit("Surtur ha travolto Arthur con la spada infernale.")) {
+                if (CombatManager.takeHit(this, "Surtur ha travolto Arthur con la spada infernale.")) {
                     finished = true;
-                    dispose();
-                    CombatManager.finishDefeat((Frame) getOwner(), StoryPromptDialog.Theme.FIRE,
+                    CombatManager.finishDefeat(this, StoryPromptDialog.Theme.FIRE,
                             "LA FURIA DI MUSPELHEIM",
                             "Arthur cade tra le fiamme. Riprovaci e osserva i segnali del gigante.");
                     return;
