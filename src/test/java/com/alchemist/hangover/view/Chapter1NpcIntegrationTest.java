@@ -55,10 +55,11 @@ class Chapter1NpcIntegrationTest {
 
     @Test
     void newCharacterArtAndFiveBackgroundsExist() {
-        for (String name : new String[]{"mozzo", "grifone", "diavoletto"}) {
+        for (String path : new String[]{"/images/chapter1/npc/mozzo_realms.png",
+                "/images/chapter1/npc/grifone_realms.png", "/images/shared/npc/diavoletto_realms.png"}) {
             assertNotNull(getClass().getResource(
-                    "/images/characters/" + name + "_realms.png"),
-                    "Manca lo sprite di " + name);
+                    path),
+                    "Manca lo sprite " + path);
         }
         for (String background : new String[]{"room1_deck.png", "room3_prow.png",
                 "room4_lab.png", "room6_crowsnest.png", "room7_boss.png"}) {

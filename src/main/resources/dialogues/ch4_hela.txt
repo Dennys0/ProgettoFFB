@@ -1,0 +1,8 @@
+NARRATOR|Sul crinale, Hela tiene una mano aperta sopra la lava. Tra le sue dita si forma una goccia di brina.
+ARTHUR|Al bar il ghiaccio lo servivamo con le pinze. Ma apprezzo il servizio.
+HELA|Al bar. È la prima volta che ne parli come di un posto in cui potresti tornare.
+ARTHUR|E tu come fai a sapere che voglio tornarci?
+HELA|Perché anche adesso cerchi una porta. Tieni il palmo aperto.
+NARRATOR|La goccia cade. Sulla pelle di Arthur resta un piccolo cristallo freddo.
+ARTHUR|Se devo spegnere la fornace, me ne servirebbe un secchio.
+HELA|Mettila in tasca. L’ultima volta che il mio gelo ha toccato il magma, è stato il boccale a spezzarsi.

@@ -31,7 +31,9 @@ class CombatManagerTest {
             if(chapter==3){
                 assertTrue(state.isYmirPacified());
                 assertFalse(state.isBossDefeated());
-                assertTrue(BossRewardCatalog.immediateReward(3).isEmpty());
+                assertTrue(state.hasItem("LACRIMA_YMIR"));
+                CombatManager.victory(3);
+                assertEquals(1, state.getInventory().size());
             }else{
                 assertTrue(state.isBossDefeated());
                 assertFalse(state.isYmirPacified());

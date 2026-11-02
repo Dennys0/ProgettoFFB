@@ -87,7 +87,7 @@ class Chapter3NpcIntegrationTest {
     @Test
     void allPortraitsAreAvailableWithoutModifyingSceneryArt() {
         for (String path : List.of(
-                "/images/characters/diavoletto_realms.png",
+                "/images/shared/npc/diavoletto_realms.png",
                 "/images/chapter3/npc/visir_or_vanir.png",
                 "/images/chapter3/npc/billingr.png",
                 "/images/chapter3/npc/nidhoggr.png")) {

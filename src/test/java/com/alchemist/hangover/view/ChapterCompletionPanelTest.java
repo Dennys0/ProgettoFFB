@@ -15,7 +15,7 @@ class ChapterCompletionPanelTest {
                 ChapterCompletionPanel.Details details = ChapterCompletionPanel.detailsFor(chapter);
                 assertEquals(chapter,details.chapter());
                 assertTrue(details.title().contains("COMPLETATO"));
-                assertTrue(details.imagePath().endsWith("cocktail_"+chapter+".png"));
+                assertTrue(details.imagePath().startsWith("/images/chapter"+chapter+"/items/"));
                 ChapterCompletionPanel panel=new ChapterCompletionPanel(null,chapter);
                 assertEquals("chapterCompletionPanel",panel.getName());
                 JLabel drink=(JLabel) find(panel,"chapterCompletionDrink");

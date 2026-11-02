@@ -71,8 +71,8 @@ public final class GameJournalDialog extends JDialog {
                 return "Ho preparato l'Ymir's Old Fashioned. Il dominio della Terra non trema più.";
             }
             if (state.isYmirPacified()) {
-                return "Ymir è tornato a dormire. Devo raccogliere la sua Lacrima "
-                        + "e preparare l'Old Fashioned nella Forgia di Caverna.";
+                return "Ymir è tornato a dormire. Ho la sua Lacrima. Devo tornare "
+                        + "alla Forgia di Caverna per preparare l'Old Fashioned.";
             }
             return "Ascoltare Gunnar nel Cerchio delle Rune, leggere la stele "
                     + "alla Rupe dell'Eco e riaddormentare Ymir nel Cuore di Roccia."
@@ -146,9 +146,7 @@ public final class GameJournalDialog extends JDialog {
                     .append("Il suolo è la carne del gigante primordiale. Sento il suo cuore sotto i piedi.\n");
             if (state.hasLearnedGunnarWisdom()) text.append("Gunnar mi ha finalmente insegnato il linguaggio delle rune.\n");
             if (state.hasReadYmirStele()) text.append("Ho copiato i versi della Rupe dell'Eco.\n");
-            if (state.isYmirPacified()) text.append(state.hasItem("LACRIMA_YMIR")
-                    ? "Ymir dorme. Ho raccolto la sua Lacrima.\n"
-                    : "Ymir è tornato al sonno. La sua Lacrima mi attende.\n");
+            if (state.isYmirPacified()) text.append("Ymir dorme. Mi ha affidato la sua Lacrima.\n");
         }
         return text.toString();
     }

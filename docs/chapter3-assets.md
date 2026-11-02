@@ -5,9 +5,9 @@ Branch: `feat/chapter3`
 ## Risorse
 
 Gli scenari sono in `src/main/resources/images/chapter3/room1_hub.png` ...
-`room7_boss.png`; gli oggetti sono in `src/main/resources/images/items/`,
-lo sprite del boss in `src/main/resources/images/characters/boss_ymir.png`
-e Gunnar in `/images/characters/gunnar_realms.png`.
+`room7_boss.png`; gli oggetti sono in `src/main/resources/images/chapter3/items/`,
+lo sprite del boss in `src/main/resources/images/chapter3/npc/boss_ymir.png`
+e Gunnar in `/images/shared/npc/gunnar_realms.png`.
 
 ## Mappa
 
@@ -35,7 +35,7 @@ e Gunnar in `/images/characters/gunnar_realms.png`.
   dopo aver ascoltato Gunnar e letto la stele. In ogni fase scegli una
   piattaforma e una runa. Errore: un cuore. Tre successi: Ymir dorme.
   Puoi rileggere i versi durante lo scontro. Dopo il terzo successo,
-  torna alla stanza e raccogli la Lacrima di Ymir.
+  la Lacrima di Ymir entra direttamente nell’inventario.
 - Nella **stanza 3**, clicca direttamente il boccale visibile
   nell'immagine: la postazione di preparazione appare SOPRA lo
   scenario. Scegli tre ingredienti:

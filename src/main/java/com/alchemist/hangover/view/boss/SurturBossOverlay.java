@@ -22,8 +22,8 @@ public final class SurturBossOverlay extends JDialog {
     private final JLabel clockLabel = label(15, Font.BOLD);
     private final JProgressBar timeBar = new JProgressBar(0, 1000);
     private final HealthDisplayPanel hearts = new HealthDisplayPanel(32);
-    private final Image arthur = artwork("arthur_silhouette");
-    private final Image surtur = artwork("ch4_boss");
+    private final Image arthur = artwork("/images/shared/npc/arthur_silhouette.png");
+    private final Image surtur = artwork("/images/chapter4/npc/boss.png");
     private final ArenaPanel arena = new ArenaPanel();
     private final javax.swing.Timer animation;
 
@@ -135,9 +135,9 @@ public final class SurturBossOverlay extends JDialog {
         arena.repaint();
     }
 
-    private static Image artwork(String character) {
+    private static Image artwork(String path) {
         return new ImageIcon(SurturBossOverlay.class.getResource(
-                "/images/characters/" + character + ".png")).getImage();
+                path)).getImage();
     }
 
     private void startCountdown() {

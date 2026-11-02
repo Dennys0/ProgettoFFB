@@ -21,21 +21,21 @@ public final class ChapterCompletionPanel extends JPanel {
     static Details detailsFor(int chapter) {
         return switch (chapter) {
             case 1 -> new Details(1, "CAPITOLO I COMPLETATO", "Asgardian Aviation",
-                    "/images/items/cocktail_1.png",
+                    "/images/chapter1/items/cocktail_1.png",
                     "<html><center>"
                     + "Il primo sorso dell'Asgardian Aviation sprigiona vento e fulmini.<br>"
                     + "Skíðblaðnir inizia la discesa verso i mari inferiori.<br>"
                     + "Arthur: «Certo che questo non era nel menu del bar!»"
                     + "</center></html>", "ENTRA NEL CAPITOLO II");
             case 2 -> new Details(2, "CAPITOLO II COMPLETATO", "Maelstrom Martini",
-                    "/images/items/cocktail_2.png",
+                    "/images/chapter2/items/cocktail_2.png",
                     "<html><center>"
                     + "La Schiuma di Ægir, il Corallo di Rán e il Sale di Jörmungandr<br>"
                     + "si uniscono in un cocktail luminoso, come le profondità marine.<br>"
                     + "La terra di Ymir ora attende Arthur."
                     + "</center></html>", "ENTRA NEL CAPITOLO III");
             case 3 -> new Details(3, "CAPITOLO III COMPLETATO", "Ymir's Old Fashioned",
-                    "/images/items/cocktail_3.png",
+                    "/images/chapter3/items/ymir_old_fashioned.png",
                     "<html><center>"
                     + "Il Muschio di Midgard, il Frammento di Yggdrasil e la Lacrima di Ymir<br>"
                     + "si fondono in un drink fumante di energia primordiale.<br>"

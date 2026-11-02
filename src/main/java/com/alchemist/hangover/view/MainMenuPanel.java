@@ -3,70 +3,104 @@ package com.alchemist.hangover.view;
 import com.alchemist.hangover.controller.SceneManager;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
 
 public class MainMenuPanel extends JPanel {
 
-    private Image backgroundImage;
+    private final Image backgroundImage = new ImageIcon(getClass().getResource("/images/intro/menu_bg.png")).getImage();
+    private final JLabel hint = new JLabel("", SwingConstants.CENTER);
+    private final JPanel entries = new JPanel(new GridLayout(6, 1, 0, 4));
+    private JButton selected;
 
     public MainMenuPanel() {
-        setLayout(null); // Layout assoluto per posizionare i pulsanti sulla destra
-
-        // Carica lo sfondo senza tasti inserito nella cartella risorse
-        try {
-            backgroundImage = new ImageIcon(getClass().getResource("/images/intro/menu_bg.png")).getImage();
-        } catch (Exception e) {
-            System.err.println("Immagine di sfondo non trovata in /images/intro/menu_bg.jpg");
-        }
-
-        // Creazione del pannello contenitore dei pulsanti in colonna a destra
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(6, 1, 0, 12));
-        buttonPanel.setOpaque(false);
-        JPanel menu = new JPanel(new BorderLayout(0, 16));
-        menu.setBackground(new Color(24, 28, 29));
-        menu.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(114, 92, 60)),
-                BorderFactory.createEmptyBorder(18, 23, 18, 23)));
-        menu.setBounds(896, 142, 298, 420);
-        JLabel heading = new JLabel("TACCUINO   /   MENU PRINCIPALE");
-        heading.setForeground(new Color(218, 175, 105));
-        heading.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-        menu.add(heading, BorderLayout.NORTH);
-        menu.add(buttonPanel, BorderLayout.CENTER);
-
-        // Definizione delle voci del menu
-        String[] menuItems = {"Nuova partita", "Carica partita", "Come giocare", "Opzioni", "Crediti", "Esci"};
-
-        for (String item : menuItems) {
-            JButton btn = createCustomButton(item);
-            buttonPanel.add(btn);
-        }
-
-        add(menu);
+        setLayout(null);
+        entries.setOpaque(false);
+        add(entries);
+        hint.setOpaque(true);
+        hint.setBackground(new Color(13, 13, 13, 208));
+        hint.setForeground(new Color(238, 226, 205));
+        hint.setFont(new Font(Font.SERIF, Font.PLAIN, 17));
+        add(hint);
+        String[][] actions = {
+                {"Nuova partita", "Comincia la storia di Arthur."},
+                {"Carica partita", "Riprendi il viaggio da un salvataggio."},
+                {"Come giocare", "Consulta i comandi di esplorazione, dialogo e alchimia."},
+                {"Opzioni", "Regola l’audio e le dissolvenze."},
+                {"Crediti", "Sfoglia i crediti di The Alchemist’s Hangover."},
+                {"Esci", "Chiudi il gioco."}
+        };
+        for (String[] action : actions) entries.add(createCustomButton(action[0], action[1]));
+        select((JButton) entries.getComponent(0));
+        bind("UP", () -> step(-1));
+        bind("DOWN", () -> step(1));
+        bind("ENTER", () -> selected.doClick());
     }
 
-    private JButton createCustomButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font(Font.SERIF, Font.BOLD, 21));
-        button.setForeground(new Color(200, 200, 200)); // Colore di base testo
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(true);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setHorizontalAlignment(SwingConstants.LEFT);
+    private void bind(String key, Runnable action) {
+        getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(key), key);
+        getActionMap().put(key, new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent event) { action.run(); }
+        });
+    }
 
-        // Gestione dell'effetto Hover illuminato al passaggio del mouse
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setForeground(new Color(255, 220, 100)); // Testo oro brillante
+    @Override public void addNotify() {
+        super.addNotify();
+        SwingUtilities.invokeLater(() -> { if (isShowing()) selected.requestFocusInWindow(); });
+    }
+
+    private void step(int delta) {
+        int i = (entries.getComponentZOrder(selected) + delta + entries.getComponentCount())
+                % entries.getComponentCount();
+        ((JButton) entries.getComponent(i)).requestFocusInWindow();
+    }
+
+    private void select(JButton button) {
+        if (selected != null) selected.repaint();
+        selected = button;
+        selected.repaint();
+        hint.setText(button.getAccessibleContext().getAccessibleDescription());
+    }
+
+    @Override public void doLayout() {
+        int w = getWidth(), h = getHeight();
+        entries.setBounds(w * 68 / 100, h * 26 / 100, w * 27 / 100, h * 48 / 100);
+        hint.setBounds(0, h * 84 / 100, w, h * 8 / 100);
+    }
+
+    private JButton createCustomButton(String text, String description) {
+        JButton button = new JButton(text) {
+            @Override protected void paintComponent(Graphics graphics) {
+                Graphics2D g = (Graphics2D) graphics.create();
+                boolean active = this == selected;
+                g.setPaint(new GradientPaint(0, 0, active ? new Color(112, 55, 16, 240)
+                        : new Color(8, 10, 11, 225), getWidth(), 0,
+                        active ? new Color(56, 29, 12, 224) : new Color(17, 18, 18, 178)));
+                g.fillRect(0, 0, getWidth(), getHeight());
+                if (active) {
+                    g.setColor(new Color(219, 161, 72));
+                    g.drawRect(0, 0, getWidth()-1, getHeight()-1);
+                    g.fillRect(0, 0, 4, getHeight());
+                }
+                g.dispose();
+                super.paintComponent(graphics);
             }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setForeground(new Color(200, 200, 200)); // Ritorna al colore originale
+        };
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(0, 18, 0, 8));
+        button.setForeground(new Color(249, 237, 210));
+        button.setFont(new Font(Font.SERIF, Font.PLAIN, 22));
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button.getAccessibleContext().setAccessibleDescription(description);
+        button.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override public void focusGained(java.awt.event.FocusEvent e) { select(button); }
+        });
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mouseEntered(java.awt.event.MouseEvent e) {
+                button.requestFocusInWindow();
+                select(button);
             }
         });
 

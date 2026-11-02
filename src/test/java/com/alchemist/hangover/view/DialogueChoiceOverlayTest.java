@@ -54,7 +54,7 @@ class DialogueChoiceOverlayTest {
             state.resetState();
             try {
                 Item map = new Item("MAPPA_CIELO", "Mappa del Cielo",
-                        "Una mappa incisa con stelle.", "/images/items/item_map.png");
+                        "Una mappa incisa con stelle.", "/images/chapter1/items/map.png");
                 state.addItem(map);
                 AtomicReference<Boolean> choice = new AtomicReference<>();
                 JPanel panel = DialogueChoiceOverlay.buildContent(state, choice::set);

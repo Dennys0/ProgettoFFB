@@ -8,6 +8,7 @@ import com.alchemist.hangover.view.cauldron.CauldronOverlay;
 import com.alchemist.hangover.view.boss.YmirBossOverlay;
 
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.Item;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.controller.DialogueSystem;
 import javax.swing.*;
@@ -55,27 +56,17 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     public Chapter3Panel(JFrame mainFrame) {
         initializeChapterBase(mainFrame, ChapterLayouts.forChapter(3));
         // Stanza 4: Foresta Pietrificata.
-        addItemWorldButton("MUSCHIO_MIDGARD", "/images/items/item_moss.png",
+        addItemWorldButton("MUSCHIO_MIDGARD", "/images/chapter3/items/moss.png",
                 184, 480, 66, 47, 4, "Muschio di Midgard",
                 "Un lichene brillante che emana un profumo amarognolo di terra pulita.");
-        addItemWorldButton("RADICE_NIDHOGG", "/images/items/item_nidhogg.png",
+        addItemWorldButton("RADICE_NIDHOGG", "/images/chapter3/items/nidhogg.png",
                 953, 541, 72, 50, 4, "Radice Nera di Nidhogg",
                 "Una radice nerastra e pulsante, attraversata da vene cremisi.");
 
         // Stanza 5: Miniere Basaltiche.
-        addItemWorldButton("FRAMMENTO_YGGDRASIL", "/images/items/item_fragment_yggdrasil.png",
+        addItemWorldButton("FRAMMENTO_YGGDRASIL", "/images/chapter3/items/fragment_yggdrasil.png",
                 303, 481, 62, 44, 5, "Frammento di Yggdrasil",
                 "Una scheggia di legno millenario che emette una debole luce dorata.");
-        addItemWorldButton("POLVERE_OSSA_GIGANTE", "/images/items/item_bone.png",
-                995, 498, 62, 47, 5, "Polvere di Ossa di Gigante",
-                "Una polvere biancastra di ossa antiche, straordinariamente pesante.");
-
-        // La Lacrima di Ymir e' disponibile solo dopo il rituale del boss.
-        // Non viene aggiunta automaticamente dall'anteprima dello scontro.
-        addItemWorldButton("LACRIMA_YMIR", "/images/items/item_ymircry.png",
-                714, 533, 66, 48, 7, "Lacrima di Ymir",
-                "Una lacrima cristallina del gigante primordiale, intrisa della memoria della terra.");
-
         createBreathingCrackHotspot();
         createGunnarHotspot();
         initGunnarDialogue();
@@ -165,7 +156,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         gunnarDialogue = new DialogueManager.SceneSession(
                 this, speaker -> new Rectangle(340, 30, 600, 620),
                 () -> closeGunnarDialogue(true), false);
-        gunnarDialogue.addPortrait("GUNNAR", "/images/characters/gunnar_realms.png");
+        gunnarDialogue.addPortrait("GUNNAR", "/images/shared/npc/gunnar_realms.png");
         // Come prima, Gunnar resta in primo piano durante l'intera conversazione.
         gunnarDialogue.setFixedPortrait("GUNNAR");
         gunnarDialogue.setWrapWidth(995);
@@ -244,8 +235,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private void initNpcDialogues() {
         // La gestione di SPAZIO/INVIO e' gia' condivisa con Gunnar qui sopra.
         npcDialogue = new DialogueManager.SceneSession(
-                this, Chapter3Panel::portraitBoundsFor, this::closeNpcDialogue, false);
-        npcDialogue.addFittedPortrait("SGHERRO", "/images/characters/diavoletto_realms.png");
+                this, Chapter3Panel::portraitBoundsFor, this::finishNpcDialogue, false);
+        npcDialogue.addFittedPortrait("SGHERRO", "/images/shared/npc/diavoletto_realms.png");
         npcDialogue.addFittedPortrait("VANIR", "/images/chapter3/npc/visir_or_vanir.png");
         npcDialogue.addFittedPortrait("BILLINGR", "/images/chapter3/npc/billingr.png");
         npcDialogue.addFittedPortrait("NIDHOGGR", "/images/chapter3/npc/nidhoggr.png");
@@ -281,6 +272,15 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         com.alchemist.hangover.controller.AudioManager.getInstance()
                 .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.CLICK);
         repaint();
+    }
+
+    private void finishNpcDialogue() {
+        if (npcConversationActive && currentRoom == 5) {
+            receiveItem(new Item("POLVERE_OSSA_GIGANTE",
+                    "Polvere di Ossa di Gigante", "La polvere che Billingr usa per far presa sulle pietre.",
+                    "/images/chapter3/items/bone.png"));
+        }
+        closeNpcDialogue();
     }
 
     private void closeNpcDialogue() {
@@ -363,7 +363,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         ymirHotspot.setVisible(false);
         new YmirBossOverlay(mainFrameRef).setVisible(true);
         if ("CHAPTER3".equals(SceneManager.getInstance().getCurrentSceneName())) {
-            loadRoom(7); // Mostra la Lacrima dopo la vittoria.
+            loadRoom(7);
         }
     }
 
@@ -373,16 +373,6 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         loadRoom(7);
         // Il retry e' gia' una scelta esplicita: non richiede altra conferma.
         triggerYmirEncounter(false);
-    }
-
-    @Override
-    protected boolean shouldShowWorldItem(String itemId, GameState state) {
-        return !"LACRIMA_YMIR".equals(itemId) || state.isYmirPacified();
-    }
-
-    @Override
-    protected boolean canCollectWorldItem(String itemId, GameState state) {
-        return !"LACRIMA_YMIR".equals(itemId) || state.isYmirPacified();
     }
 
     @Override

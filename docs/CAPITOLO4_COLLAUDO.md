@@ -5,14 +5,10 @@
 1. Aggiorna il branch `feat/chapter4-muspelheim` e avvia `mvn clean test`.
 2. Avvia con `mvn exec:java`, quindi premi **F5** per entrare subito in Muspelheim.
 3. Controlla tutte le **7 stanze** e il percorso 1 → 5 → 7.
-4. Clicca i cinque personaggi/elementi narrativi e leggi fino alla fine:
-   Muspelsonar (1), Sigrún (2), resti del diavoletto (3), vagabondo (4), figlio di Ivaldi (5).
-   Il dialogo della Valchiria la chiama Sigrún; il progetto iniziale menzionava Hela.
-5. Clicca lo scudo in stanza 2 e la stele in stanza 6: forniscono gli indizi.
-6. Raccogli **Cenere di Fenrir** e **Zolfo di Loki** nella stanza 4,
-   **Magma** e **Lacrima di Hel** nella stanza 5.
-7. Affronta Surtur in stanza 7: prova una sconfitta/RETRY e poi
-   quattro schivate corrette, attira il colpo al centro e schiva lateralmente.
+4. Completa i dialoghi di Muspelsonar (1), Sigrún (2), resti del diavoletto (3), vagabondo (4), figlio di Ivaldi (5) e Hela (6).
+5. Clicca lo scudo in stanza 2 e la stele sotto Hela nella stanza 6.
+6. Raccogli la Cenere di Fenrir in stanza 4. Verifica i doni del vagabondo (Zolfo), del nano (Magma) e di Hela (Lacrima di Hel).
+7. Affronta Surtur sul trono nella stanza 7. Attira la lama sui due sigilli e sul calderone.
 8. Controlla che venga assegnata la **Brace di Muspelheim** una sola volta.
 9. Nella stanza 3 prova il calderone con Zolfo e Ghiaccio (fallimento + retry);
    poi usa Magma/Cenere/Brace in ordine, con la Brace per ultima.

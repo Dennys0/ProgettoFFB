@@ -21,7 +21,7 @@ class CauldronCheckpointTest {
                     state.setChapter(chapter);
                     state.setCurrentRoom(7);
                     for(String id:RecipeManager.forChapter(chapter).correct())
-                        state.addItem(new Item(id,id,"Desc","/images/items/item_map.png"));
+                        state.addItem(new Item(id,id,"Desc","/images/chapter1/items/map.png"));
                     Set<String> snapshot=new HashSet<>();
                     state.getInventory().forEach(item->snapshot.add(item.getId()));
                     GameOverPanel panel=new GameOverPanel();

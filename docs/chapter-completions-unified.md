@@ -28,9 +28,9 @@ Le route di `SceneManager` rimangono invariate:
 
 | Capitolo | Scene ID | Cocktail | PNG opzionale | Seconda azione |
 |---|---|---|---|---|
-| I | `TRANSITION_CH1_CH2` | Asgardian Aviation | `/images/items/cocktail_1.png` | ENTRA NEL CAPITOLO II |
-| II | `TRANSITION_CH2_CH3` | Maelstrom Martini | `/images/items/cocktail_2.png` | ENTRA NEL CAPITOLO III |
-| III | `CHAPTER3_COMPLETE` | Ymir's Old Fashioned | `/images/items/cocktail_3.png` | TORNA ALLA FORGIA |
+| I | `TRANSITION_CH1_CH2` | Asgardian Aviation | `/images/chapter1/items/cocktail_1.png` | ENTRA NEL CAPITOLO II |
+| II | `TRANSITION_CH2_CH3` | Maelstrom Martini | `/images/chapter2/items/cocktail_2.png` | ENTRA NEL CAPITOLO III |
+| III | `CHAPTER3_COMPLETE` | Ymir's Old Fashioned | `/images/chapter3/items/ymir_old_fashioned.png` | TORNA ALLA FORGIA |
 
 Ogni completamento mostra titolo dorato, immagine/nome del cocktail,
 narrazione e pulsanti SALVA PARTITA, PROSEGUI e MENU PRINCIPALE.

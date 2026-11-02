@@ -58,7 +58,7 @@ public final class YmirBossOverlay extends JDialog {
         JLabel image = new JLabel("YMIR", SwingConstants.CENTER);
         image.setForeground(GOLD);
         image.setPreferredSize(new Dimension(395, 450));
-        URL url = getClass().getResource("/images/characters/boss_ymir.png");
+        URL url = getClass().getResource("/images/chapter3/npc/boss_ymir.png");
         if (url != null) {
             image.setText("");
             image.setIcon(new ImageIcon(new ImageIcon(url).getImage()
@@ -200,17 +200,16 @@ public final class YmirBossOverlay extends JDialog {
             return;
         }
         phase++;
-        AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
         if (phase == ritual.size()) {
             CombatManager.victory(3);
             dispose();
-            StoryPromptDialog.message((Frame) getOwner(), StoryPromptDialog.Theme.EARTH,
+            StoryPromptDialog.reward((Frame) getOwner(), StoryPromptDialog.Theme.EARTH,
                     "IL GIGANTE DORME ANCORA",
-                    "Arthur traccia l'ultima runa. Ymir inspira e torna a dormire.\n"
-                    + "La Lacrima cristallina appare nel Cuore di Roccia.\n"
-                    + "Raccoglila e completa l'Ymir's Old Fashioned nella Forgia!");
+                    "Ymir chiude gli occhi. Una goccia si cristallizza nel palmo di Arthur.",
+                    com.alchemist.hangover.gameplay.boss.BossRewardCatalog.immediateReward(3).orElseThrow());
             return;
         }
+        AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
         refreshPhase("La runa risuona nella pietra. Il prossimo verso è pronto.");
     }
 

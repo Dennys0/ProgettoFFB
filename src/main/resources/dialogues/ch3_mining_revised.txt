@@ -22,5 +22,6 @@ BILLINGR|Ehi, Arthur! Un'ultima cosa... Se incontri un diavoletto rosso, tienilo
 ARTHUR|...MA SUL SERIO? LO CONOSCI PURE TU?!
 BILLINGR|Quel piccolo bastardo mi ha rubato una gemma! Se lo rivedi, digli che Billingr gli spezzerà le corna!
 ARTHUR|Finalmente qualcuno con cui sono d'accordo!
+BILLINGR|Prendi questo sacchetto. Ossa macinate. Una presa nella malta e il pilastro non si muove più. Io ci ho rimesso tre scalpelli.
 NARRATOR|Il rumore del piccone riprende a riecheggiare nella miniera.
 ARTHUR|...Quasi quasi gli chiedo in prestito il piccone.

@@ -18,13 +18,13 @@ class BossRulesTest {
         assertTrue(state.isBossRetryAvailable());
     }
 
-    @Test void rewardsAreUniqueAndYmirHasNoImmediateItem() {
+    @Test void everyBossGrantsExactlyOneReward() {
         GameState state = GameState.getInstance();
         for (int chapter=1; chapter<=4; chapter++) {
             state.resetState();
             BossRules.victory(state, chapter);
             BossRules.victory(state, chapter);
-            assertEquals(chapter == 3 ? 0 : 1, state.getInventory().size());
+            assertEquals(1, state.getInventory().size());
             assertEquals(chapter == 3, state.isYmirPacified());
         }
         assertThrows(IllegalArgumentException.class, () -> BossRules.victory(state, 5));

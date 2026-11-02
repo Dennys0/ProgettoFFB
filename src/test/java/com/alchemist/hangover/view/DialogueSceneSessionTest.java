@@ -13,7 +13,7 @@ class DialogueSceneSessionTest {
             DialogueManager.SceneSession session = new DialogueManager.SceneSession(
                     parent, speaker -> new Rectangle(340, 30, 600, 620),
                     () -> completions[0]++);
-            session.addPortrait("MOZZO", "/images/characters/mozzo_realms.png");
+            session.addPortrait("MOZZO", "/images/chapter1/npc/mozzo_realms.png");
             assertFalse(session.isVisible());
             assertEquals(2, parent.getComponentCount());
             assertInstanceOf(SharedDialogueBox.class, parent.getComponent(0));

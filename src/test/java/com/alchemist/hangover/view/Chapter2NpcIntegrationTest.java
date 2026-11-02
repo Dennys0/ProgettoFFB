@@ -31,12 +31,12 @@ class Chapter2NpcIntegrationTest {
     );
 
     private static final Map<Integer, String> PORTRAITS = Map.of(
-            1, "ch2_marmael.png",
-            3, "diavoletto_realms.png",
-            4, "ch2_sirena.png",
-            5, "ch2_jormungandr.png",
-            6, "ch2_captain.png",
-            7, "ch2_hronn.png"
+            1, "/images/chapter2/npc/marmael.png",
+            3, "/images/shared/npc/diavoletto_realms.png",
+            4, "/images/chapter2/npc/sirena.png",
+            5, "/images/chapter2/npc/jormungandr.png",
+            6, "/images/chapter2/npc/captain.png",
+            7, "/images/chapter2/npc/hronn.png"
     );
 
     @Test
@@ -147,7 +147,7 @@ class Chapter2NpcIntegrationTest {
     void characterSpritesAreAvailableAfterPackageImport() {
         boolean strict = Boolean.getBoolean("alchemist.require.chapter2.assets");
         for (String portrait : PORTRAITS.values()) {
-            String path = "/images/characters/" + portrait;
+            String path = portrait;
             if (strict) {
                 assertNotNull(getClass().getResource(path),
                         "Missing sprite after package import: " + path);

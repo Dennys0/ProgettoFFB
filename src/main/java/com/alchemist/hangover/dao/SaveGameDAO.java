@@ -202,6 +202,12 @@ public class SaveGameDAO {
                     boolean cocktail = rs.getBoolean("ymir_old_fashioned_created");
                     boolean finalCocktail = rs.getBoolean("ragnarok_flambe_created");
                     List<Item> inventory = readInventoryForSlot(conn, slotId);
+                    // Gli slot precedenti potevano essere salvati fra il rituale e la raccolta.
+                    if (chapter == 3 && ymirPacified && !cocktail
+                            && inventory.stream().noneMatch(item -> "LACRIMA_YMIR".equals(item.getId()))) {
+                        inventory.add(com.alchemist.hangover.gameplay.boss.BossRewardCatalog
+                                .immediateReward(3).orElseThrow());
+                    }
                     GameSaveSnapshot snapshot = new GameSaveSnapshot(chapter, room,
                             health, maxHealth, givenMap, dragonKey, dragonUnlocked,
                             bossDefeated, ymirPacified, runeSeed, gunnarWisdom,

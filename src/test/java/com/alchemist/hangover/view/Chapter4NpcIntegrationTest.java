@@ -11,7 +11,7 @@ class Chapter4NpcIntegrationTest {
         for (String image : layout.backgrounds().values()) {
             assertNotNull(getClass().getResource(image), "PNG mancante: " + image);
         }
-        assertEquals(5, Chapter4Panel.NPCS.size());
+        assertEquals(6, Chapter4Panel.NPCS.size());
         for (var npc : Chapter4Panel.NPCS) {
             assertNotNull(getClass().getResource(npc.dialogue()),
                     "Dialogo NPC mancante: " + npc.dialogue());
@@ -20,16 +20,16 @@ class Chapter4NpcIntegrationTest {
             assertTrue(npc.bounds().y + npc.bounds().height <= 720);
         }
         for (String sprite : List.of(
-                "/images/characters/ch4_berserker.png",
-                "/images/characters/ch4_valkyrie.png",
-                "/images/characters/ch4_oldman.png",
-                "/images/characters/ch4_blacksmith.png",
-                "/images/characters/ch4_boss.png",
-                "/images/items/item_fenrir_ash.png",
-                "/images/items/item_ember.png",
-                "/images/items/item_magma.png",
-                "/images/items/item_sulfur.png",
-                "/images/items/item_ice_tear.png")) {
+                "/images/chapter4/npc/berserker.png",
+                "/images/chapter4/npc/valkyrie.png",
+                "/images/chapter4/npc/oldman.png",
+                "/images/chapter4/npc/blacksmith.png",
+                "/images/chapter4/npc/boss.png",
+                "/images/chapter4/items/fenrir_ash.png",
+                "/images/chapter4/items/ember.png",
+                "/images/chapter4/items/magma.png",
+                "/images/chapter4/items/sulfur.png",
+                "/images/chapter4/items/ice_tear.png")) {
             assertNotNull(getClass().getResource(sprite), "Sprite non trovato: " + sprite);
         }
     }

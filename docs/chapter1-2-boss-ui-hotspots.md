@@ -29,9 +29,9 @@ lo sprite e la descrizione dell'ingrediente sotto la stessa cornice
 tematica. Le immagini mantengono le proporzioni originali.
 
 - **Hræsvelgr (Capitolo 1):** avviso di vittoria, poi ricompensa
-  con `/images/items/item_breath.png` e nome Soffio di Hræsvelgr.
+  con `/images/chapter1/items/breath.png` e nome Soffio di Hræsvelgr.
 - **Rán (Capitolo 2):** avviso di vittoria, poi ricompensa
-  con `/images/items/item_foam.png` e nome Schiuma di Ægir.
+  con `/images/chapter2/items/foam.png` e nome Schiuma di Ægir.
 - Alla sconfitta di Arthur contro uno di questi boss appare
   un avviso nel colore del capitolo, seguito dal Game Over
   che offre il checkpoint con la causa corretta della sconfitta.

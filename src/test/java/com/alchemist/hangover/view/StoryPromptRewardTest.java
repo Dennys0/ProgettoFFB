@@ -14,7 +14,7 @@ class StoryPromptRewardTest {
     @Test
     void bothChapterThemesDisplayRealBossLootWithOneWorkingContinueButton() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
-            String[] art = {"/images/items/item_breath.png", "/images/items/item_foam.png"};
+            String[] art = {"/images/chapter1/items/breath.png", "/images/chapter2/items/foam.png"};
             StoryPromptDialog.Theme[] themes = {
                     StoryPromptDialog.Theme.SKY, StoryPromptDialog.Theme.OCEAN
             };

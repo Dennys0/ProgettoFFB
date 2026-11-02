@@ -37,13 +37,13 @@ public class Chapter1Panel extends AbstractChapterPanel {
         dialogue = new DialogueManager.SceneSession(this,
                 speaker -> new Rectangle(340, 30, 600, 620),
                 this::onDialogueFinished);
-        dialogue.addPortrait("MARTINO", "/images/characters/martino_realms.png");
-        dialogue.addPortrait("HELA", "/images/characters/hela_realms.png");
-        dialogue.addPortrait("SIEGFRIED", "/images/characters/siegfried_realms.png");
-        dialogue.addPortrait("GUNNAR", "/images/characters/gunnar_realms.png");
-        dialogue.addPortrait("MOZZO", "/images/characters/mozzo_realms.png");
-        dialogue.addPortrait("DIAVOLETTO", "/images/characters/diavoletto_realms.png");
-        dialogue.addPortrait("GRIFONE", "/images/characters/grifone_realms.png");
+        dialogue.addPortrait("MARTINO", "/images/chapter1/npc/martino_realms.png");
+        dialogue.addPortrait("HELA", "/images/shared/npc/hela_realms.png");
+        dialogue.addPortrait("SIEGFRIED", "/images/shared/npc/siegfried_realms.png");
+        dialogue.addPortrait("GUNNAR", "/images/shared/npc/gunnar_realms.png");
+        dialogue.addPortrait("MOZZO", "/images/chapter1/npc/mozzo_realms.png");
+        dialogue.addPortrait("DIAVOLETTO", "/images/shared/npc/diavoletto_realms.png");
+        dialogue.addPortrait("GRIFONE", "/images/chapter1/npc/grifone_realms.png");
 
         // 4. Inizializzazione Hotspots & Oggetti
         initHotspots();
@@ -59,7 +59,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
                 "Esamina il guardiano delle tempeste", this::triggerBossEncounter);
 
 // Carica lo sprite di HrÃ¦svelgr
-        dialogue.addPortrait("HRAESVELGR", "/images/characters/hraesvelgr.png");
+        dialogue.addPortrait("HRAESVELGR", "/images/chapter1/npc/hraesvelgr.png");
         // Hotspot Martino al Timone (Stanza 2)
         martinoHotspot = registerActionHotspot(
                 new Rectangle(500, 200, 280, 400),
@@ -84,19 +84,19 @@ public class Chapter1Panel extends AbstractChapterPanel {
                 "Parla con Veðrfölnir", "/dialogues/vedrfolnir_dialogue.txt");
 
         // Creazione bottoni visibili per gli oggetti raccolti a schermo
-        addItemWorldButton("MAPPA_CIELO", "/images/items/item_map.png", 902, 469, 67, 61, 5,
+        addItemWorldButton("MAPPA_CIELO", "/images/chapter1/items/map.png", 902, 469, 67, 61, 5,
                 "Mappa del Cielo", "Una pergamena cosmica trovata nella stiva.");
 
-        addItemWorldButton("NEBBIA_NIFLHEIM", "/images/items/item_fog.png", 322, 529, 55, 55, 5,
+        addItemWorldButton("NEBBIA_NIFLHEIM", "/images/chapter1/items/fog.png", 322, 529, 55, 55, 5,
                 "Nebbia di Niflheim", "Una fiala sigillata contenente fumo denso e gelido.");
 
-        addItemWorldButton("PIUMA_FOLGORE", "/images/items/item_feather.png", 924, 450, 56, 56, 6,
+        addItemWorldButton("PIUMA_FOLGORE", "/images/chapter1/items/feather.png", 924, 450, 56, 56, 6,
                 "Piuma di Folgore", "Una piuma dorata carica di elettricitÃ  incastrata tra le carrucole.");
 
-        addItemWorldButton("POLLINE_YGGDRASIL", "/images/items/item_pollen.png", 315, 555, 61, 61, 3,
+        addItemWorldButton("POLLINE_YGGDRASIL", "/images/chapter1/items/pollen.png", 315, 555, 61, 61, 3,
                 "Polline di Yggdrasil", "Polvere dorata fluttuante nell'aria.");
 
-        addItemWorldButton("RUGIADA_ASGARD", "/images/items/item_dew.png", 608, 372, 52, 52, 3,
+        addItemWorldButton("RUGIADA_ASGARD", "/images/chapter1/items/dew.png", 608, 372, 52, 52, 3,
                 "Rugiada delle Nuvole di Asgard", "Acqua fluttuante condensata sulla polena drago.");
     }
 

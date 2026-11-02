@@ -2,6 +2,7 @@ package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.model.Item;
 import com.alchemist.hangover.view.boss.SurturBossOverlay;
 import com.alchemist.hangover.view.cauldron.CauldronController;
 import com.alchemist.hangover.view.cauldron.CauldronOverlay;
@@ -27,10 +28,12 @@ public final class Chapter4Panel extends AbstractChapterPanel {
             new Npc(4, new Rectangle(784, 280, 78, 99),
                     "Parla con il vagabondo", "/dialogues/ch4_oldman_dialogue.txt"),
             new Npc(5, new Rectangle(858, 380, 137, 125),
-                    "Parla con il Figlio di Ivaldi", "/dialogues/ch4_blacksmith_dialogue.txt")
+                    "Parla con il Figlio di Ivaldi", "/dialogues/ch4_blacksmith_dialogue.txt"),
+            new Npc(6, new Rectangle(577, 99, 110, 150),
+                    "Parla con Hela", "/dialogues/ch4_hela.txt")
     );
 
-    private final java.util.Map<HotspotButton, Rectangle> npcBounds = new java.util.LinkedHashMap<>();
+    private final java.util.Map<HotspotButton, Rectangle> sceneBounds = new java.util.LinkedHashMap<>();
     private final DialogueManager.SceneSession dialogues;
     private final HotspotButton cauldron;
     private final HotspotButton stele;
@@ -42,30 +45,22 @@ public final class Chapter4Panel extends AbstractChapterPanel {
         initializeChapterBase(owner, ChapterLayouts.forChapter(4));
         dialogues = new DialogueManager.SceneSession(this,
                 speaker -> new Rectangle(245, 20, 790, 465), this::endDialogue);
-        dialogues.addFittedPortrait("MUSPELSONAR", "/images/characters/ch4_berserker.png");
-        dialogues.addFittedPortrait("VALCHIRIA", "/images/characters/ch4_valkyrie.png");
-        dialogues.addFittedPortrait("SIGRUN", "/images/characters/ch4_valkyrie.png");
-        dialogues.addFittedPortrait("VAGABONDO", "/images/characters/ch4_oldman.png");
-        dialogues.addFittedPortrait("FIGLIO_IVALDI", "/images/characters/ch4_blacksmith.png");
+        dialogues.addFittedPortrait("MUSPELSONAR", "/images/chapter4/npc/berserker.png");
+        dialogues.addFittedPortrait("VALCHIRIA", "/images/chapter4/npc/valkyrie.png");
+        dialogues.addFittedPortrait("SIGRUN", "/images/chapter4/npc/valkyrie.png");
+        dialogues.addFittedPortrait("VAGABONDO", "/images/chapter4/npc/oldman.png");
+        dialogues.addFittedPortrait("FIGLIO_IVALDI", "/images/chapter4/npc/blacksmith.png");
+
+        dialogues.addFittedPortrait("HELA", "/images/shared/npc/hela_realms.png");
 
         for (Npc npc : NPCS) {
             addNpcArea(npc, npc.bounds());
             if (npc.room() == 3) addNpcArea(npc, new Rectangle(118, 520, 328, 137));
         }
 
-        addItemWorldButton("CENERE_FENRIR", "/images/items/item_fenrir_ash.png",
+        addItemWorldButton("CENERE_FENRIR", "/images/chapter4/items/fenrir_ash.png",
                 218, 496, 74, 49, 4, "Cenere di Fenrir",
                 "Polvere nera di lupo che assorbe la magia.");
-        addItemWorldButton("ZOLFO_LOKI", "/images/items/item_sulfur.png",
-                970, 527, 65, 47, 4, "Zolfo Ingannatore di Loki",
-                "Una polvere dorata e luminosa, insidiosamente invitante.");
-        addItemWorldButton("MAGMA_SVARTALFAHEIMR", "/images/items/item_magma.png",
-                382, 482, 82, 60, 5, "Magma Filtrato di Svartálfaheimr",
-                "La base liquida incandescente del Ragnarök Flambé.");
-        addItemWorldButton("LACRIMA_HEL", "/images/items/item_ice_tear.png",
-                1066, 490, 62, 48, 5, "Lacrima di Ghiaccio di Hel",
-                "Un cristallo gelido che non va mai mischiato al magma.");
-
         pulse = registerActionHotspot(new Rectangle(690, 490, 195, 112),
                 "Ascolta il cuore di Muspelheim", () ->
                 ToastNotification.show(this,
@@ -77,27 +72,29 @@ public final class Chapter4Panel extends AbstractChapterPanel {
                         "Il ghiaccio di Hel e il magma non devono mai essere mescolati."));
         cauldron = registerActionHotspot(new Rectangle(455, 272, 330, 285),
                 "Usa il Calderone d'Ossidiana", this::openCauldron);
-        stele = registerActionHotspot(new Rectangle(500, 240, 280, 300),
+        stele = registerActionHotspot(new Rectangle(597, 375, 114, 231),
                 "Leggi la stele delle fiamme", () ->
                 StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.FIRE,
                         "LA STELE DEI VENTI FOCOSI",
                         "Non colpire Surtur. Attira la lama sui due sigilli, poi al centro "
                         + "della fornace: la sua stessa spada libererà la Brace."));
-        surtur = registerActionHotspot(new Rectangle(380, 175, 485, 390),
+        surtur = registerActionHotspot(new Rectangle(821, 267, 126, 115),
                 "Affronta Surtur", () -> startSurtur(true));
+        sceneBounds.put(stele, stele.getBounds());
+        sceneBounds.put(surtur, surtur.getBounds());
         loadRoom(1);
     }
 
     private void addNpcArea(Npc npc, Rectangle bounds) {
         HotspotButton button = registerNpcHotspot(npc.room(), bounds, npc.label(),
                 () -> startDialogue(npc.dialogue()));
-        npcBounds.put(button, bounds);
+        sceneBounds.put(button, bounds);
     }
 
     @Override public void doLayout() {
         super.doLayout();
         // Lo sfondo viene stirato sul pannello, la cornice del sistema ne varia le dimensioni.
-        npcBounds.forEach((button, r) -> button.setBounds(
+        sceneBounds.forEach((button, r) -> button.setBounds(
                 r.x * getWidth() / 1280, r.y * getHeight() / 720,
                 r.width * getWidth() / 1280, r.height * getHeight() / 720));
     }
@@ -112,6 +109,14 @@ public final class Chapter4Panel extends AbstractChapterPanel {
 
     private void endDialogue() {
         dialogues.stop();
+        switch (currentRoom) {
+            case 4 -> receiveItem(new Item("ZOLFO_LOKI", "Zolfo Ingannatore di Loki",
+                    "Un pizzico di zolfo dorato avvolto in un lembo di stoffa.", "/images/chapter4/items/sulfur.png"));
+            case 5 -> receiveItem(new Item("MAGMA_SVARTALFAHEIMR", "Magma Filtrato di Svartálfaheimr",
+                    "Magma passato attraverso il filtro del fabbro.", "/images/chapter4/items/magma.png"));
+            case 6 -> receiveItem(new Item("LACRIMA_HEL", "Lacrima di Ghiaccio di Hel",
+                    "Una goccia di gelo che il fuoco non riesce a sciogliere.", "/images/chapter4/items/ice_tear.png"));
+        }
         updateArrowVisibility();
         onRoomChanged();
     }

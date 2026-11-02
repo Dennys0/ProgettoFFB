@@ -26,5 +26,6 @@ ARTHUR|Ecco, perfetto. Adesso pure le catene mi danno indizi!
 FIGLIO_IVALDI|Vai, umano. E se riuscirai a fermare tutto questo... ricordati di chi è rimasto qui.
 ARTHUR|Tranquillo, vecchio. Se ne esco vivo, torno con un seghetto e una cassa di birra.
 FIGLIO_IVALDI|Ahahah... Allora porterò io i boccali.
+FIGLIO_IVALDI|Aspetta. Prendi la fiala vicino al mio polso. Ho filtrato quel magma tre volte. Se la lascio qui, diventerà la tempra di un’altra spada.
 NARRATOR|Arthur si allontana. Alle sue spalle, il rumore delle catene riecheggia nella fucina.
 ARTHUR|...Quell'essere misterioso ha proprio bisogno di una bella martellata sulla testa.

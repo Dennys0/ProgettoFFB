@@ -20,6 +20,7 @@ ARTHUR|Perfetto. Quindi devo diffidare praticamente di tutti?!
 VAGABONDO|Quando raggiungerai il calderone, ricorda una cosa: qualcuno potrebbe aver bisogno di te soltanto per completare ciò che lui non può.
 ARTHUR|E chi sarebbe questo qualcuno?!
 VAGABONDO|Se conoscessi il suo nome, ragazzo... non sarei ancora vivo.
+VAGABONDO|Tieni. Loki mi pagò con questa polvere. Ha il colore dell’oro, ma quando la scaldi senti subito che razza di affare hai fatto.
 NARRATOR|Il vagabondo si rimette lentamente in cammino, lasciando impronte nella cenere.
 ARTHUR|EHI! ASPETTA! Non puoi mollarmi un'informazione del genere e andartene!
 VAGABONDO|Buona fortuna, Arthur. E ricorda... anche la cenere conserva le tracce di ciò che è bruciato.

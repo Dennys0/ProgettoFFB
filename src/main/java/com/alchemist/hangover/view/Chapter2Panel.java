@@ -54,15 +54,15 @@ public class Chapter2Panel extends AbstractChapterPanel {
         dialogue = new DialogueManager.SceneSession(this,
                 Chapter2Panel::portraitBoundsFor,
                 this::onDialogueFinished);
-        dialogue.addPortrait("SIEGFRIED", "/images/characters/siegfried_realms.png");
-        dialogue.addPortrait("RÁN", "/images/characters/ran_boss.png");
-        dialogue.addPortrait("RAN", "/images/characters/ran_boss.png");
-        dialogue.addPortrait("MARMÆL", "/images/characters/ch2_marmael.png");
-        dialogue.addPortrait("SGHERRO", "/images/characters/diavoletto_realms.png");
-        dialogue.addPortrait("SIRENA", "/images/characters/ch2_sirena.png");
-        dialogue.addPortrait("JORMUNGANDR", "/images/characters/ch2_jormungandr.png");
-        dialogue.addPortrait("CAPITANO", "/images/characters/ch2_captain.png");
-        dialogue.addPortrait("HRÖNN", "/images/characters/ch2_hronn.png");
+        dialogue.addPortrait("SIEGFRIED", "/images/shared/npc/siegfried_realms.png");
+        dialogue.addPortrait("RÁN", "/images/chapter2/npc/ran_boss.png");
+        dialogue.addPortrait("RAN", "/images/chapter2/npc/ran_boss.png");
+        dialogue.addPortrait("MARMÆL", "/images/chapter2/npc/marmael.png");
+        dialogue.addPortrait("SGHERRO", "/images/shared/npc/diavoletto_realms.png");
+        dialogue.addPortrait("SIRENA", "/images/chapter2/npc/sirena.png");
+        dialogue.addPortrait("JORMUNGANDR", "/images/chapter2/npc/jormungandr.png");
+        dialogue.addPortrait("CAPITANO", "/images/chapter2/npc/captain.png");
+        dialogue.addPortrait("HRÖNN", "/images/chapter2/npc/hronn.png");
 
         initHotspots();
         loadRoom(1);
@@ -91,21 +91,21 @@ public class Chapter2Panel extends AbstractChapterPanel {
         }
 
         // Oggetto Diario del Capitano (Stanza 6 - Balconata dei Relitti)
-        addItemWorldButton("DIARIO_CAPITANO", "/images/items/item_journl.png", 970, 432, 63, 46, 6,
+        addItemWorldButton("DIARIO_CAPITANO", "/images/chapter2/items/captain_journal.png", 970, 432, 63, 46, 6,
                 "Diario del Capitano",
                 "CODICE DEL CAPITANO:\n1: Tra le correnti spezzo la rete\n2: Invoco la forza della marea\n3: Placo l'ira della dea\n4: Proteggo la rotta del veliero\n5: Rivelo il segreto dell'abisso\n6: Padroneggio il vortice finale");
 
         // Oggetti Raccoglibili (Stanza 4 e Stanza 5)
-        addItemWorldButton("CORALLO_RAN", "/images/items/item_coral.png", 211, 510, 52, 52, 4,
+        addItemWorldButton("CORALLO_RAN", "/images/chapter2/items/coral.png", 211, 510, 52, 52, 4,
                 "Corallo di Rán", "Un ramo di corallo aspro rosso sangue incastrato nelle rocce.");
 
-        addItemWorldButton("INCHIOSTRO_KRAKEN", "/images/items/item_ink.png", 1022, 491, 85, 62, 4,
+        addItemWorldButton("INCHIOSTRO_KRAKEN", "/images/chapter2/items/ink.png", 1022, 491, 85, 62, 4,
                 "Inchiostro di Kraken", "Una boccetta di liquido buio e denso depositata nell'anfratto.");
 
-        addItemWorldButton("SALE_JORMUNGANDR", "/images/items/item_salt.png", 255, 552, 55, 55, 5,
+        addItemWorldButton("SALE_JORMUNGANDR", "/images/chapter2/items/salt.png", 255, 552, 55, 55, 5,
                 "Sale di Jörmungandr", "Cristalli lucenti di squama salmastra staccati dalle pareti.");
 
-        addItemWorldButton("ACQUA_LETE", "/images/items/item_lete.png", 969, 521, 75, 75, 5,
+        addItemWorldButton("ACQUA_LETE", "/images/chapter2/items/lete.png", 969, 521, 75, 75, 5,
                 "Acqua del Lete", "Una linfa trasparente e stranamente immobile.");
     }
 

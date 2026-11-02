@@ -67,7 +67,7 @@ Branch di lavoro: `refactor/view-model-cleanup`. Il branch giocabile
   `Chapter3PreviewPanel` e `Chapter3CompletePanel`.
 - I Capitoli I, II e III usano la stessa schermata scura/oro, titolo,
   illustrazione del drink, testo e tre pulsanti SALVA / PROSEGUI / MENU.
-- Le immagini opzionali sono `/images/items/cocktail_1.png`,
+- Le immagini opzionali sono `/images/chapter1/items/cocktail_1.png`,
   `cocktail_2.png` e `cocktail_3.png`. Per i primi due
   viene mostrato il nome del cocktail fino all'arrivo dei PNG.
 - La ricetta esatta porta direttamente alla schermata di completamento;

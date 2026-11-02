@@ -67,7 +67,7 @@ public class DialogueChoiceOverlay extends JDialog {
         state.removeItem(map);
         Item key = new Item(KEY_ID, "Chiave del Drago",
                 "Una pesante chiave d'ottone con incisioni a forma di drago celeste.",
-                "/images/items/item_key.png");
+                "/images/chapter1/items/key.png");
         state.addItem(key);
         state.setGivenMapToMartino(true);
         state.setHasDragonKey(true);
@@ -146,8 +146,8 @@ public class DialogueChoiceOverlay extends JDialog {
 
         JLabel itemIcon = new JLabel("", SwingConstants.CENTER);
         itemIcon.setName("martinoChoiceItemIcon");
-        String imageResource = hasMap ? "/images/items/item_map.png"
-                : alreadyDonated ? "/images/items/item_key.png" : null;
+        String imageResource = hasMap ? "/images/chapter1/items/map.png"
+                : alreadyDonated ? "/images/chapter1/items/key.png" : null;
         if (imageResource != null) {
             URL imageUrl = DialogueChoiceOverlay.class.getResource(imageResource);
             if (imageUrl != null) {

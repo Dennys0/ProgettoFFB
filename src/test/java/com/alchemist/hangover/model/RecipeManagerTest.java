@@ -5,7 +5,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RecipeManagerTest {
-    private static Item item(String id) { return new Item(id, id, "Item", "/images/items/item_map.png"); }
+    private static Item item(String id) { return new Item(id, id, "Item", "/images/chapter1/items/map.png"); }
 
     @Test void validatesOnlyExactThreeIngredientsForEachChapter() {
         for (int chapter=1; chapter<=4; chapter++) {

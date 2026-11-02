@@ -156,12 +156,18 @@ public abstract class AbstractChapterPanel extends JPanel {
         }
         if (!canCollectWorldItem(definition.id, state)) return;
         Item item = new Item(definition.id, definition.name, definition.description, definition.iconPath);
-        state.addItem(item);
         button.setVisible(false);
+        receiveItem(item);
+    }
+
+    protected final void receiveItem(Item item) {
+        GameState state = GameState.getInstance();
+        if (state.hasItem(item.getId())) return;
+        state.addItem(item);
+        hudPanel.updateHUD();
         com.alchemist.hangover.controller.AudioManager.getInstance()
                 .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.PICKUP);
-        hudPanel.updateHUD();
-        ToastNotification.show(this, "Oggetto raccolto: " + item.getName(), item.getIconPath());
+        ToastNotification.show(this, "Hai ricevuto: " + item.getName(), item.getIconPath());
     }
 
     protected boolean canCollectWorldItem(String itemId, GameState state) { return true; }

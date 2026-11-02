@@ -4,7 +4,7 @@ import com.alchemist.hangover.model.Item;
 
 import java.util.Optional;
 
-/** Ricompense immediate dei boss; Ymir lascia invece la Lacrima nella stanza. */
+/** Ricompense immediate dei boss dei quattro capitoli. */
 public final class BossRewardCatalog {
     private BossRewardCatalog() { }
 
@@ -13,16 +13,17 @@ public final class BossRewardCatalog {
             case 1 -> Optional.of(new Item(
                     "SOFFIO_HRAESVELGR", "Soffio di Hræsvelgr",
                     "L'ampolla contenente il vento celestiale puro donato dall'aquila gigante.",
-                    "/images/items/item_breath.png"));
+                    "/images/chapter1/items/breath.png"));
             case 2 -> Optional.of(new Item(
                     "SCHIUMA_AEGIR", "Schiuma di Ægir",
                     "La birra sottomarina lucente estratta dalle reti della dea Rán.",
-                    "/images/items/item_foam.png"));
-            case 3 -> Optional.empty();
+                    "/images/chapter2/items/foam.png"));
+            case 3 -> Optional.of(new Item("LACRIMA_YMIR", "Lacrima di Ymir",
+                    "Una lacrima cristallina donata dal gigante nel sonno.", "/images/chapter3/items/ymircry.png"));
             case 4 -> Optional.of(new Item(
                     "BRACE_MUSPELHEIM", "Brace di Muspelheim",
                     "Il cuore di fuoco inestinguibile liberato dalla spada di Surtur.",
-                    "/images/items/item_ember.png"));
+                    "/images/chapter4/items/ember.png"));
             default -> throw new IllegalArgumentException("Capitolo senza boss: " + chapter);
         };
     }

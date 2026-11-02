@@ -10,7 +10,7 @@ class CauldronGameServiceTest {
     @AfterEach void resetState() { GameState.getInstance().resetState(); }
 
     private static Item item(String id) {
-        return new Item(id, id, "", "/images/items/item_map.png");
+        return new Item(id, id, "", "/images/chapter1/items/map.png");
     }
 
     @Test void successfulChapterOneConsumesOnlyRecipeIngredients() {

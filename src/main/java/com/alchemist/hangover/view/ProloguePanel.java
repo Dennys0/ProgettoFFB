@@ -14,11 +14,11 @@ public final class ProloguePanel extends JPanel {
     private static final String INTRO_DIALOGUE = "/dialogues/intro_dialogue.txt";
     private static final String TAVERN_BACKGROUND = "/images/intro/tavern_bg.png";
     private static final Map<String, String> PORTRAIT_PATHS = Map.of(
-            "ARTHUR", "/images/characters/arthur_silhouette.png",
-            "MARTINO", "/images/characters/martino.png",
-            "HELA", "/images/characters/hela.png",
-            "SIEGFRIED", "/images/characters/siegfried.png",
-            "GUNNAR", "/images/characters/gunnar.png"
+            "ARTHUR", "/images/shared/npc/arthur_silhouette.png",
+            "MARTINO", "/images/intro/npc/martino.png",
+            "HELA", "/images/intro/npc/hela.png",
+            "SIEGFRIED", "/images/intro/npc/siegfried.png",
+            "GUNNAR", "/images/intro/npc/gunnar.png"
     );
 
     private final Image backgroundImage;
