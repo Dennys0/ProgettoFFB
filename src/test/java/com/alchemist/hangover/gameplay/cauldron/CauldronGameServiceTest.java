@@ -45,6 +45,6 @@ class CauldronGameServiceTest {
         assertEquals(0, state.getCurrentHealth());
         assertFalse(state.isBossRetryAvailable());
         assertThrows(IllegalArgumentException.class,
-                () -> CauldronGameService.registerSuccess(state, 4));
+                () -> CauldronGameService.registerSuccess(state, 5));
     }
 }
