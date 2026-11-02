@@ -84,19 +84,19 @@ public class Chapter1Panel extends AbstractChapterPanel {
                 "Parla con Veðrfölnir", "/dialogues/vedrfolnir_dialogue.txt");
 
         // Creazione bottoni visibili per gli oggetti raccolti a schermo
-        addItemWorldButton("MAPPA_CIELO", "/images/items/item_map.png", 1080, 280, 100, 120, 5,
+        addItemWorldButton("MAPPA_CIELO", "/images/items/item_map.png", 902, 469, 67, 61, 5,
                 "Mappa del Cielo", "Una pergamena cosmica trovata nella stiva.");
 
-        addItemWorldButton("NEBBIA_NIFLHEIM", "/images/items/item_fog.png", 780, 520, 60, 60, 5,
+        addItemWorldButton("NEBBIA_NIFLHEIM", "/images/items/item_fog.png", 322, 529, 55, 55, 5,
                 "Nebbia di Niflheim", "Una fiala sigillata contenente fumo denso e gelido.");
 
-        addItemWorldButton("PIUMA_FOLGORE", "/images/items/item_feather.png", 740, 520, 80, 80, 6,
+        addItemWorldButton("PIUMA_FOLGORE", "/images/items/item_feather.png", 924, 450, 56, 56, 6,
                 "Piuma di Folgore", "Una piuma dorata carica di elettricitÃ  incastrata tra le carrucole.");
 
-        addItemWorldButton("POLLINE_YGGDRASIL", "/images/items/item_pollen.png", 445, 530, 65, 65, 3,
+        addItemWorldButton("POLLINE_YGGDRASIL", "/images/items/item_pollen.png", 315, 555, 61, 61, 3,
                 "Polline di Yggdrasil", "Polvere dorata fluttuante nell'aria.");
 
-        addItemWorldButton("RUGIADA_ASGARD", "/images/items/item_dew.png", 655, 486, 65, 65, 3,
+        addItemWorldButton("RUGIADA_ASGARD", "/images/items/item_dew.png", 608, 372, 52, 52, 3,
                 "Rugiada delle Nuvole di Asgard", "Acqua fluttuante condensata sulla polena drago.");
     }
 

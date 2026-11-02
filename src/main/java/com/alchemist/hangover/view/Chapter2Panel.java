@@ -91,21 +91,21 @@ public class Chapter2Panel extends AbstractChapterPanel {
         }
 
         // Oggetto Diario del Capitano (Stanza 6 - Balconata dei Relitti)
-        addItemWorldButton("DIARIO_CAPITANO", "/images/items/item_journl.png", 580, 420, 70, 70, 6,
+        addItemWorldButton("DIARIO_CAPITANO", "/images/items/item_journl.png", 970, 432, 63, 46, 6,
                 "Diario del Capitano",
                 "CODICE DEL CAPITANO:\n1: Tra le correnti spezzo la rete\n2: Invoco la forza della marea\n3: Placo l'ira della dea\n4: Proteggo la rotta del veliero\n5: Rivelo il segreto dell'abisso\n6: Padroneggio il vortice finale");
 
         // Oggetti Raccoglibili (Stanza 4 e Stanza 5)
-        addItemWorldButton("CORALLO_RAN", "/images/items/item_coral.png", 450, 380, 80, 80, 4,
+        addItemWorldButton("CORALLO_RAN", "/images/items/item_coral.png", 211, 510, 52, 52, 4,
                 "Corallo di Rán", "Un ramo di corallo aspro rosso sangue incastrato nelle rocce.");
 
-        addItemWorldButton("INCHIOSTRO_KRAKEN", "/images/items/item_ink.png", 800, 450, 70, 70, 4,
+        addItemWorldButton("INCHIOSTRO_KRAKEN", "/images/items/item_ink.png", 1022, 491, 85, 62, 4,
                 "Inchiostro di Kraken", "Una boccetta di liquido buio e denso depositata nell'anfratto.");
 
-        addItemWorldButton("SALE_JORMUNGANDR", "/images/items/item_salt.png", 400, 420, 80, 80, 5,
+        addItemWorldButton("SALE_JORMUNGANDR", "/images/items/item_salt.png", 255, 552, 55, 55, 5,
                 "Sale di Jörmungandr", "Cristalli lucenti di squama salmastra staccati dalle pareti.");
 
-        addItemWorldButton("ACQUA_LETE", "/images/items/item_lete.png", 850, 480, 70, 70, 5,
+        addItemWorldButton("ACQUA_LETE", "/images/items/item_lete.png", 969, 521, 75, 75, 5,
                 "Acqua del Lete", "Una linfa trasparente e stranamente immobile.");
     }
 

@@ -56,24 +56,24 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         initializeChapterBase(mainFrame, ChapterLayouts.forChapter(3));
         // Stanza 4: Foresta Pietrificata.
         addItemWorldButton("MUSCHIO_MIDGARD", "/images/items/item_moss.png",
-                350, 445, 132, 98, 4, "Muschio di Midgard",
+                184, 480, 66, 47, 4, "Muschio di Midgard",
                 "Un lichene brillante che emana un profumo amarognolo di terra pulita.");
         addItemWorldButton("RADICE_NIDHOGG", "/images/items/item_nidhogg.png",
-                858, 460, 135, 110, 4, "Radice Nera di Nidhogg",
+                953, 541, 72, 50, 4, "Radice Nera di Nidhogg",
                 "Una radice nerastra e pulsante, attraversata da vene cremisi.");
 
         // Stanza 5: Miniere Basaltiche.
         addItemWorldButton("FRAMMENTO_YGGDRASIL", "/images/items/item_fragment_yggdrasil.png",
-                370, 485, 125, 90, 5, "Frammento di Yggdrasil",
+                303, 481, 62, 44, 5, "Frammento di Yggdrasil",
                 "Una scheggia di legno millenario che emette una debole luce dorata.");
         addItemWorldButton("POLVERE_OSSA_GIGANTE", "/images/items/item_bone.png",
-                830, 465, 140, 100, 5, "Polvere di Ossa di Gigante",
+                995, 498, 62, 47, 5, "Polvere di Ossa di Gigante",
                 "Una polvere biancastra di ossa antiche, straordinariamente pesante.");
 
         // La Lacrima di Ymir e' disponibile solo dopo il rituale del boss.
         // Non viene aggiunta automaticamente dall'anteprima dello scontro.
         addItemWorldButton("LACRIMA_YMIR", "/images/items/item_ymircry.png",
-                575, 480, 125, 108, 7, "Lacrima di Ymir",
+                714, 533, 66, 48, 7, "Lacrima di Ymir",
                 "Una lacrima cristallina del gigante primordiale, intrisa della memoria della terra.");
 
         createBreathingCrackHotspot();

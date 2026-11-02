@@ -54,16 +54,16 @@ public final class Chapter4Panel extends AbstractChapterPanel {
         }
 
         addItemWorldButton("CENERE_FENRIR", "/images/items/item_fenrir_ash.png",
-                295, 490, 150, 105, 4, "Cenere di Fenrir",
+                218, 496, 74, 49, 4, "Cenere di Fenrir",
                 "Polvere nera di lupo che assorbe la magia.");
         addItemWorldButton("ZOLFO_LOKI", "/images/items/item_sulfur.png",
-                970, 490, 145, 100, 4, "Zolfo Ingannatore di Loki",
+                970, 527, 65, 47, 4, "Zolfo Ingannatore di Loki",
                 "Una polvere dorata e luminosa, insidiosamente invitante.");
         addItemWorldButton("MAGMA_SVARTALFAHEIMR", "/images/items/item_magma.png",
-                1020, 493, 140, 113, 5, "Magma Filtrato di Svartálfaheimr",
+                382, 482, 82, 60, 5, "Magma Filtrato di Svartálfaheimr",
                 "La base liquida incandescente del Ragnarök Flambé.");
         addItemWorldButton("LACRIMA_HEL", "/images/items/item_ice_tear.png",
-                215, 480, 135, 110, 5, "Lacrima di Ghiaccio di Hel",
+                1066, 490, 62, 48, 5, "Lacrima di Ghiaccio di Hel",
                 "Un cristallo gelido che non va mai mischiato al magma.");
 
         pulse = registerActionHotspot(new Rectangle(690, 490, 195, 112),
