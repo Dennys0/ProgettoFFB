@@ -8,6 +8,7 @@ on:
       - refactor/view-model-cleanup
       - refactor/gameplay-logic-cleanup
       - refactor/state-and-architecture
+      - release/consegna-2026-11-04
   pull_request:
 
 jobs:
