@@ -245,7 +245,7 @@ public final class SurturBossOverlay extends JDialog {
             addMouseListener(new MouseAdapter() {
                 @Override public void mouseClicked(MouseEvent event) {
                     int index = Math.max(0, Math.min(2, event.getX() * 3 / Math.max(1, getWidth())));
-                    move(SurturDuel.Lane.values()[index]);
+                    SurturBossOverlay.this.move(SurturDuel.Lane.values()[index]);
                 }
             });
         }
