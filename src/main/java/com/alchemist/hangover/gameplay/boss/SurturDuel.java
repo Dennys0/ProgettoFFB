@@ -1,104 +1,80 @@
 package com.alchemist.hangover.gameplay.boss;
 
 import java.util.EnumSet;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
-/**
- * Motore indipendente da Swing: Arthur sceglie una corsia, il timer della
- * view decide quando il fendente impatta. Lo schermo non conosce la sequenza
- * degli attacchi, ma ne mostra le zone di pericolo prima della collisione.
- */
+/** Surtur segue Arthur durante la mira. Una volta piantato il piede, la lama
+ * cade sul punto fissato anche se Arthur si è già spostato. */
 public final class SurturDuel {
     public enum Lane { LEFT, CENTER, RIGHT }
-    public enum Attack { SINGLE, DOUBLE, SWEEP, FINAL }
-    public enum Result { DODGED, HIT, VICTORY }
+    public enum Attack { SURGE, AIM, STRIKE }
+    public enum Result { DODGED, LOCKED, HIT, MISS, BROKEN, VICTORY }
 
     private final Random random;
+    private final Lane firstSeal;
     private Lane position = Lane.CENTER;
-    private EnumSet<Lane> danger = EnumSet.noneOf(Lane.class);
-    private int completedAttacks;
-    private int sweepWave;
-    private boolean reverseSweep;
-    private boolean lurePrepared;
+    private Attack attack;
+    private int seals;
+    private int waves;
+    private EnumSet<Lane> danger;
 
     public SurturDuel(Random random) {
-        this.random = Objects.requireNonNull(random, "random");
-        prepareAttack();
+        this.random = random;
+        firstSeal = random.nextBoolean() ? Lane.LEFT : Lane.RIGHT;
+        startSurge();
     }
 
-    /** Gli attacchi richiedono movimenti attivi, non una risposta a scelta. */
-    public void move(Lane lane) {
-        position = Objects.requireNonNull(lane, "lane");
-    }
-
+    public void move(Lane lane) { position = lane; }
     public Lane position() { return position; }
-    public int completedAttacks() { return completedAttacks; }
-    public int sweepWave() { return sweepWave; }
-    public boolean finalTrap() { return completedAttacks >= 6; }
-    public boolean lured() { return lurePrepared; }
+    public int seals() { return seals; }
+    public Attack attack() { return attack; }
     public Set<Lane> danger() { return Set.copyOf(danger); }
 
-    public Attack attack() {
-        if (finalTrap()) return Attack.FINAL;
-        if (completedAttacks < 2) return Attack.SINGLE;
-        if (completedAttacks < 4) return Attack.DOUBLE;
-        return Attack.SWEEP;
+    public Lane seal() {
+        if (seals == 0) return firstSeal;
+        if (seals == 1) return firstSeal == Lane.LEFT ? Lane.RIGHT : Lane.LEFT;
+        return Lane.CENTER;
     }
 
-    /** Solo dalla corsia centrale si puo' provocare il gigante con E. */
-    public boolean taunt() {
-        if (!finalTrap() || position != Lane.CENTER || lurePrepared) return false;
-        lurePrepared = true;
-        danger = EnumSet.of(Lane.CENTER);
-        return true;
+    public int durationMs() {
+        return switch (attack) {
+            case SURGE -> 1500 - seals * 200;
+            case AIM -> 1800 - seals * 230;
+            case STRIKE -> 840 - seals * 95;
+        };
     }
 
-    /** Chiamato dal timer allo scadere del preavviso, non dal clic del giocatore. */
+    private void startSurge() {
+        attack = Attack.SURGE;
+        danger = EnumSet.of(position);
+        if (seals > 0) {
+            int offset = random.nextBoolean() ? 1 : 2;
+            danger.add(Lane.values()[(position.ordinal() + offset) % 3]);
+        }
+    }
+
     public Result impact() {
-        if (finalTrap()) {
-            if (!lurePrepared || position == Lane.CENTER) {
-                lurePrepared = false;  // Permette di riprovare la trappola.
-                danger = EnumSet.noneOf(Lane.class);
-                return Result.HIT;
-            }
-            return Result.VICTORY;
+        if (attack == Attack.AIM) {
+            danger = EnumSet.of(position);
+            attack = Attack.STRIKE;
+            return Result.LOCKED;
         }
-
         boolean hit = danger.contains(position);
-        if (attack() == Attack.SWEEP && sweepWave == 0) {
-            // La spazzata richiede due schivate consecutive in direzioni opposte.
-            sweepWave = 1;
-            setSweepDanger();
-        } else {
-            completedAttacks++;
-            sweepWave = 0;
-            prepareAttack();
-        }
-        return hit ? Result.HIT : Result.DODGED;
-    }
-
-    private void prepareAttack() {
-        danger = EnumSet.noneOf(Lane.class);
-        Lane[] lanes = Lane.values();
-        switch (attack()) {
-            case SINGLE -> danger.add(lanes[random.nextInt(lanes.length)]);
-            case DOUBLE -> {
-                Lane safe = lanes[random.nextInt(lanes.length)];
-                for (Lane lane : lanes) if (lane != safe) danger.add(lane);
+        if (attack == Attack.SURGE) {
+            if (++waves >= seals + 1) {
+                attack = Attack.AIM;
+                danger.clear();
+            } else {
+                startSurge();
             }
-            case SWEEP -> {
-                reverseSweep = random.nextBoolean();
-                setSweepDanger();
-            }
-            case FINAL -> { /* Si attende la provocazione con E. */ }
+            return hit ? Result.HIT : Result.DODGED;
         }
-    }
-
-    private void setSweepDanger() {
-        danger = reverseSweep == (sweepWave == 0)
-                ? EnumSet.of(Lane.CENTER, Lane.RIGHT)
-                : EnumSet.of(Lane.LEFT, Lane.CENTER);
+        boolean broken = !hit && danger.contains(seal());
+        if (broken && ++seals == 3) return Result.VICTORY;
+        waves = 0;
+        startSurge();
+        if (hit) return Result.HIT;
+        return broken ? Result.BROKEN : Result.MISS;
     }
 }

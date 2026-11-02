@@ -1,4 +1,4 @@
-# Capitolo IV — collaudo interattivo: NPC e boss Surtur V2
+# Capitolo IV — collaudo interattivo: NPC e boss Surtur
 
 Branch: `fix/ch4-gameplay-polish` (non fare merge su `master` ora).
 
@@ -22,32 +22,16 @@ Branch: `fix/ch4-gameplay-polish` (non fare merge su `master` ora).
 **Nota:** la modalità F6 serve per la calibrazione e rimane disattivata
 all'avvio; non altera i salvataggi e non cambia i file PNG.
 
-## 2. Surtur V2 — controllo completo
+## 2. Il duello nella fornace
 
-Il vecchio sistema di scelte istantanee è stato sostituito da una vera
-sequenza a timer. La finestra mostra lo sfondo della fornace,
-la posizione di Arthur, le corsie rosse pericolose e i cuori.
+Muovi Arthur con **A/S/D** o cliccando la corsia. **Esc** chiude il duello.
+Le fratture colpiscono allo scadere del timer. Superata l’ondata, Surtur
+inizia a seguire Arthur con la spada. Posizionati sul segno dorato. Quando
+la mira si blocca, cambia corsia prima dell’impatto. Se schivi in anticipo,
+la lama segue Arthur e manca il sigillo. Se rimani fermo, perdi un cuore.
 
-- **A**: vai a sinistra.
-- **S**: vai al centro.
-- **D**: vai a destra.
-- **E**: provoca Surtur *soltanto* al centro nella fase finale.
-- **ESC**: abbandona e torna alla stanza.
-- Puoi anche **cliccare** sulla corsia per spostare Arthur.
-
-**Fase I:** due fendenti singoli, un solo lato colpito.
-**Fase II:** due fendenti doppi, resta una sola corsia sicura.
-**Fase III:** due spazzate a doppia ondata: bisogna spostarsi
-sulla corsia sicura della prima ondata e poi cambiare lato.
-**Finale:** vai al centro, premi E, scappa a sinistra/destra
-prima che il timer finisca. La spada di Surtur cade nella fornace
-e libera la Brace di Muspelheim.
-
-L'impatto avviene **quando il timer raggiunge zero**: cliccare
-una corsia sicura non fa avanzare immediatamente la fase.
-Un fendente subito fa perdere un cuore. Dopo la terza ferita
-il vecchio Game Over permette il retry dal boss.
-La ricompensa non deve duplicarsi.
+Spezza entrambi i sigilli laterali e ripeti la manovra sul calderone centrale.
+Ogni sigillo infranto aggiunge un’ondata e riduce il tempo di schivata.
 
 ## 3. Verifiche essenziali prima della consegna
 
@@ -55,8 +39,8 @@ La ricompensa non deve duplicarsi.
 - [ ] Tutti i dialoghi si aprono e si chiudono correttamente.
 - [ ] I tasti A/S/D spostano Arthur; il timer continua a scorrere.
 - [ ] Le corsie rosse producono un danno al momento dell'impatto.
-- [ ] Le due spazzate obbligano a spostarsi fra due ondate.
-- [ ] E non produce la vittoria prima della fase finale.
+- [ ] La mira segue Arthur fino al blocco della traiettoria.
+- [ ] Un colpo a vuoto lascia intatto il sigillo.
 - [ ] Sconfiggendo Surtur viene assegnata una sola Brace.
 - [ ] Tre colpi fanno apparire Game Over; RIPROVA riapre il boss.
 - [ ] Il calderone accetta Magma, Cenere e Brace per ultima.

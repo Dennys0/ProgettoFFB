@@ -81,7 +81,7 @@ public final class Chapter4Panel extends AbstractChapterPanel {
                 "Leggi la stele delle fiamme", () ->
                 StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.FIRE,
                         "LA STELE DEI VENTI FOCOSI",
-                        "Non colpire Surtur. Schiva i fendenti, poi attiralo al centro "
+                        "Non colpire Surtur. Attira la lama sui due sigilli, poi al centro "
                         + "della fornace: la sua stessa spada libererà la Brace."));
         surtur = registerActionHotspot(new Rectangle(380, 175, 485, 390),
                 "Affronta Surtur", () -> startSurtur(true));

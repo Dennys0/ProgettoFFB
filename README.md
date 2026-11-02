@@ -57,9 +57,10 @@ La directory `target/` contiene file generati ed e' ignorata da Git. Non inserir
 
 Le sette scene sono in `src/main/resources/images/chapter4/`.
 La navigazione (frecce, inventario, dialoghi) riusa `AbstractChapterPanel`;
-il boss Surtur si affronta con i tasti **A/S/D** o con tre pulsanti a schermo.
-Le corsie pericolose si illuminano di rosso: schivane quattro,
-poi seleziona il **centro** per attirare la lama e **sinistra/destra** per evitare il colpo finale.
+il boss Surtur segue Arthur con la lama. Usa **A/S/D** o clicca una corsia.
+Schiva le fratture, portati sul sigillo dorato e aspetta che Surtur fissi
+la traiettoria prima di spostarti. Dopo i due sigilli laterali, attira la lama
+sul calderone centrale per liberare la Brace.
 
 Il **Ragnarök Flambé** richiede Magma Filtrato e Cenere di Fenrir nei primi due slot
 e **Brace di Muspelheim tassativamente nel terzo**.
