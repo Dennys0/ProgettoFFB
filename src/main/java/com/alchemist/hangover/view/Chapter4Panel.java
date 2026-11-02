@@ -104,6 +104,8 @@ public final class Chapter4Panel extends AbstractChapterPanel {
     private void openCauldron() {
         GameState state = GameState.getInstance();
         if (state.isRagnarokFlambeCreated()) {
+            EpiloguePanel finale = (EpiloguePanel) SceneManager.getInstance().getPanel("EPILOGUE");
+            if (finale != null) finale.restart();
             SceneManager.getInstance().showScene("EPILOGUE");
             return;
         }

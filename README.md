@@ -52,3 +52,22 @@ I salvataggi reali restano in `saves/alchemist.mv.db`. **Non cancellare questa c
 I test JUnit usano esclusivamente `jdbc:h2:mem:alchemist_test`. Non scrivono, sovrascrivono o cancellano slot del database reale. La build su GitHub Actions esegue `mvn clean test` con Java 25.
 
 La directory `target/` contiene file generati ed e' ignorata da Git. Non inserirla nei commit. Tieni sempre separati i salvataggi locali contenuti in `saves/`.
+
+## Capitolo IV — Muspelheim
+
+Le sette scene sono in `src/main/resources/images/chapter4/`.
+La navigazione (frecce, inventario, dialoghi) riusa `AbstractChapterPanel`;
+il boss Surtur si affronta con i tasti **A/S/D** o con tre pulsanti a schermo.
+Le corsie pericolose si illuminano di rosso: schivane quattro,
+poi seleziona il **centro** per attirare la lama e **sinistra/destra** per evitare il colpo finale.
+
+Il **Ragnarök Flambé** richiede Magma Filtrato e Cenere di Fenrir nei primi due slot
+e **Brace di Muspelheim tassativamente nel terzo**.
+Dopo il drink viene mostrato l'epilogo con il risveglio di Arthur e i ringraziamenti.
+Il pulsante Salva il finale conserva il progresso in H2.
+
+Premi **F5** durante lo sviluppo per aprire direttamente il Capitolo IV.
+La versione finale dell'immagine del cocktail e i crediti nominativi
+sono ancora da completare.
+
+Leggi la [checklist di collaudo](docs/CAPITOLO4_COLLAUDO.md) prima della consegna.
