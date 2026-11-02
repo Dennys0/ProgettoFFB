@@ -34,7 +34,7 @@ class ChapterCompletionPanelTest {
         });
     }
 
-    @Test void savedCompletionsResumeInNextChapterWhileThirdRemainsCompleted() {
+    @Test void savedCompletionsResumeInNextChapterIncludingTheFourth() {
         GameState state=GameState.getInstance();
         try {
             state.resetState();
@@ -52,8 +52,8 @@ class ChapterCompletionPanelTest {
             state.setCurrentRoom(3);
             state.setYmirOldFashionedCreated(true);
             ChapterProgression.advanceToNextChapter(state,3);
-            assertEquals(3,state.getChapter());
-            assertEquals(3,state.getCurrentRoom());
+            assertEquals(4,state.getChapter());
+            assertEquals(1,state.getCurrentRoom());
             assertTrue(state.isYmirOldFashionedCreated());
         } finally { state.resetState(); }
     }

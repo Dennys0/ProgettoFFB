@@ -23,7 +23,7 @@ class CombatManagerTest {
 
     @Test void victoryMarksChapterSpecificBossAndClearsRetry() {
         GameState state=GameState.getInstance();
-        for(int chapter=1; chapter<=3;chapter++){
+        for(int chapter=1; chapter<=4;chapter++){
             state.resetState();
             state.setBossRetryAvailable(true);
             CombatManager.victory(chapter);
@@ -42,6 +42,6 @@ class CombatManagerTest {
                 assertEquals(1, state.getInventory().size(), "Premio non duplicato");
             }
         }
-        assertThrows(IllegalArgumentException.class,()->CombatManager.victory(4));
+        assertThrows(IllegalArgumentException.class,()->CombatManager.victory(5));
     }
 }

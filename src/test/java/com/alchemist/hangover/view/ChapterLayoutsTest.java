@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
-/** World definitions are now identical in structure for all three chapters. */
+/** World definitions are now identical in structure for all four chapters. */
 class ChapterLayoutsTest {
     private static final Map<String, String> OPPOSITES = Map.of(
             "UP", "DOWN", "DOWN", "UP", "LEFT", "RIGHT", "RIGHT", "LEFT");
 
     @Test void sevenBackgroundsAndExitsAreDefinedForEachChapter() {
-        for (int chapter = 1; chapter <= 3; chapter++) {
+        for (int chapter = 1; chapter <= 4; chapter++) {
             var layout = ChapterLayouts.forChapter(chapter);
             assertEquals(7, layout.backgrounds().size());
             assertEquals(7, layout.exits().size());
@@ -22,11 +22,11 @@ class ChapterLayoutsTest {
                         "Scenario non trovato: " + image);
             }
         }
-        assertThrows(IllegalArgumentException.class, () -> ChapterLayouts.forChapter(4));
+        assertThrows(IllegalArgumentException.class, () -> ChapterLayouts.forChapter(5));
     }
 
     @Test void everyDirectionHasAReversibleConnection() {
-        for (int chapter = 1; chapter <= 3; chapter++) {
+        for (int chapter = 1; chapter <= 4; chapter++) {
             var exits = ChapterLayouts.forChapter(chapter).exits();
             for (var room : exits.entrySet()) {
                 for (var direction : room.getValue().entrySet()) {
