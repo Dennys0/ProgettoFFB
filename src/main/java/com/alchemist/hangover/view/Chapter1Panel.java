@@ -92,6 +92,8 @@ public class Chapter1Panel extends AbstractChapterPanel {
         addItemWorldButton("NEBBIA_NIFLHEIM", "/images/chapter1/items/fog.png", 322, 529, 55, 55, 5,
                 "Nebbia di Niflheim", "Una fiala sigillata contenente fumo denso e gelido.");
 
+        registerNpcHotspot(3, new Rectangle(527, 598, 82, 24), "Esamina le assi",
+                () -> ToastNotification.show(this, "Un graffio attraversa le assi e sparisce sotto le cime. Laggiù luccica qualcosa di ottone."));
         chest = registerActionHotspot(CHEST_AREA, "Esamina la serratura d’ottone", this::openChest);
     }
 
@@ -183,7 +185,14 @@ public class Chapter1Panel extends AbstractChapterPanel {
     }
 
     private void startMartinoDialogue() {
-        startSceneDialogue("/dialogues/martino_dialogue.txt", DialogueKind.MARTINO);
+        GameState state = GameState.getInstance();
+        if (state.hasDragonKey()) {
+            String resource = state.hasItem("RUGIADA_ASGARD")
+                    ? "/dialogues/martino_cassa.txt" : "/dialogues/martino_chiave.txt";
+            startSceneDialogue(resource, DialogueKind.NPC);
+        } else {
+            startSceneDialogue("/dialogues/martino_dialogue.txt", DialogueKind.MARTINO);
+        }
     }
 
     private void onDialogueFinished() {

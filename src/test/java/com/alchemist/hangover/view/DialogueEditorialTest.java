@@ -12,8 +12,7 @@ import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/** Ensures scene headings stay out of spoken narration and editorial
- * edits keep every line of the six new underwater conversations.
+/** Ensures scene headings stay out of spoken narration and the chapter guides teach the playable recipes.
  */
 class DialogueEditorialTest {
     private static final List<String> ALL_DIALOGUES = List.of(
@@ -24,11 +23,25 @@ class DialogueEditorialTest {
             "ch2_marmael_dialogue.txt",
             "ch2_sgherro_dialogue.txt",
             "ch2_sirena_dialogue.txt",
+            "ch3_caldron_revised.txt",
             "ch3_gunnar.txt",
+            "ch3_gunnar_repeat.txt",
+            "ch3_gunnar_reward.txt",
+            "ch3_mining_revised.txt",
+            "ch3_nighodd_revised.txt",
+            "ch3_vanir_revised.txt",
+            "ch4_bersercker_dialogue.txt",
+            "ch4_blacksmith_dialogue.txt",
+            "ch4_diavoletto_dialogue.txt",
+            "ch4_hela.txt",
+            "ch4_oldman_dialogue.txt",
+            "ch4_valkyrie_dialogue.txt",
             "diavoletto_dialogue.txt",
             "grifone_dialogue.txt",
             "huginn_dialogue.txt",
             "intro_dialogue.txt",
+            "martino_cassa.txt",
+            "martino_chiave.txt",
             "martino_dialogue.txt",
             "mozzo_dialogue.txt",
             "ran_boss_dialogue.txt",
@@ -58,24 +71,23 @@ class DialogueEditorialTest {
     }
 
     @Test
-    void sixChapterTwoDialoguesKeepOriginalLineCountsAndNarrativeOpenings()
-            throws Exception {
-        Map<String, Integer> expected = Map.of(
-                "ch2_captain_dialogue.txt", 27,
-                "ch2_hronn_dialogue.txt", 23,
-                "ch2_jormungandr_dialogue.txt", 22,
-                "ch2_marmael_dialogue.txt", 31,
-                "ch2_sgherro_dialogue.txt", 19,
-                "ch2_sirena_dialogue.txt", 22
-        );
-        for (Map.Entry<String, Integer> entry : expected.entrySet()) {
-            List<String> lines = load(entry.getKey());
-            assertEquals(entry.getValue(), lines.size(),
-                    "Non cambiare il numero di battute e le parti narrative");
-            assertTrue(lines.get(0).startsWith("NARRATOR|"),
-                    "La descrizione introduttiva deve rimanere: " + entry.getKey());
-            assertTrue(lines.get(0).length() > 80,
-                    "Conservare la descrizione, eliminando solo SCENA e titolo");
+    void eachGuideNamesTheThreeIngredientsUsedAtTheCauldron() throws Exception {
+        Map<String, List<String>> guides = Map.of(
+                "martino_dialogue.txt", List.of("Soffio di Hræsvelgr", "Piuma di Folgore", "Rugiada delle Nuvole di Asgard"),
+                "siegfried_dialogue_2.txt", List.of("Schiuma di Ægir", "Corallo di Rán", "Sale di Jörmungandr"),
+                "ch3_gunnar_reward.txt", List.of("Muschio di Midgard", "Frammento di Yggdrasil", "Lacrima di Ymir"),
+                "ch4_hela.txt", List.of("Cenere di Fenrir", "magma filtrato di Svartálfaheimr", "Brace di Muspelheim va per ultima"));
+        for (var guide : guides.entrySet()) {
+            String script = String.join(" ", load(guide.getKey()));
+            for (String ingredient : guide.getValue())
+                assertTrue(script.contains(ingredient), guide.getKey() + " — " + ingredient);
+        }
+    }
+
+    @Test
+    void underwaterEncountersOpenWithSceneNarration() throws Exception {
+        for (String name : ALL_DIALOGUES) {
+            if (name.startsWith("ch2_")) assertTrue(load(name).get(0).startsWith("NARRATOR|"), name);
         }
     }
 

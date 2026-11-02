@@ -1,18 +1,6 @@
-NARRATOR|IL PREZZO DEL SILENZIO. Arthur entra nella stanza del calderone. Sul pavimento, tra le rocce, giacciono due ali strappate e un corno spezzato. Qualcosa di terribilmente familiare attira la sua attenzione.
-ARTHUR|Aspetta un momento... Quelle ali... No, non può essere.
-NARRATOR|Arthur si avvicina ai resti e raccoglie il corno annerito.
-ARTHUR|Ma porca ... Sono del piccolo stalker rosso?!
-ARTHUR|Ehi?! Dove sei?! Dai, esci fuori! Lo so che è uno dei tuoi scherzi!
-NARRATOR|Nessuna risposta. Soltanto il rumore del fuoco che arde sotto il calderone.
-ARTHUR|...Merda. Stavolta non stai scherzando, vero?
-NARRATOR|Arthur osserva le ali lacerate. Sul pavimento, poche gocce di sangue ormai asciutto.
-ARTHUR|Quel diavolo mi seguiva ovunque... Parlava sempre di un padrone misterioso.
-ARTHUR|Aspetta... L'ultima volta mi aveva detto di non fidarmi di chi mi avrebbe offerto da bere...
-NARRATOR|Un brivido percorre Arthur. Il calderone emette un gorgoglio profondo.
-ARTHUR|...Ti hanno fatto fuori perché hai parlato troppo, vero?
-NARRATOR|Arthur posa lentamente il corno accanto alle ali.
-ARTHUR|Cazzo... Non pensavo che mi sarebbe dispiaciuto per quel piccolo rompicoglioni.
-ARTHUR|Chiunque sia il tuo padrone... comincio davvero ad averne piene le scatole.
-NARRATOR|Una raffica di aria calda attraversa la stanza. Per un istante, Arthur crede di sentire una risatina lontana.
-ARTHUR|...Addio, piccolo stronzo.
-NARRATOR|Arthur si rialza e osserva il calderone. Per la prima volta, non ha alcuna voglia di scherzare.
+NARRATOR|Accanto al calderone, due ali piegate e un corno. Nella cenere qualcuno ha tracciato sei piccoli segni con un'unghia.
+ARTHUR|Sei. Potevi contare anche quello d'acqua, sai. Avrei fatto una figura migliore.
+NARRATOR|Arthur si accovaccia. Sfiora il corno. Nessuna voce ripete le sue parole.
+ARTHUR|Avevi cominciato a dirmi cosa fare se ti trovavo per terra.
+NARRATOR|Scosta il corno dal bordo della fornace e lo posa fra le ali, al riparo dalla brace.
+ARTHUR|Il resto me lo racconti al tavolo. Ti tengo un posto.

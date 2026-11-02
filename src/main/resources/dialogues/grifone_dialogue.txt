@@ -1,9 +1,5 @@
-# Grifone intravisto tra le nuvole della prua.
-NARRATOR|Un piccolo grifone emerge per un istante dalla foschia, aggrappato a una corrente d'aria.
-ARTHUR|Ehi! Tu sei un leone con le ali oppure ho bevuto davvero troppo?
-GRIFONE|Quando il vento si ferma, il cielo trattiene il respiro.
-ARTHUR|E questo sarebbe un saluto?
-GRIFONE|Non guardare soltanto chi spalanca le ali. Ascolta ciò che resta in silenzio.
-ARTHUR|Siete tutti così criptici quassù?
-GRIFONE|Solo quelli che hanno ancora il tempo di avvertirti.
-NARRATOR|Il grifone scompare dietro una nuvola, lasciando Arthur a fissare l'orizzonte.
+NARRATOR|Due zampe da leone poggiano sulla nebbia. Il becco che le segue punta verso le vele.
+ARTHUR|Dimmi che vedi anche tu la nave. Mi basterebbe un testimone.
+ARTHUR|Un momento. Prima le nuvole correvano più di noi.
+GRIFONE|Guarda la tela quando tace il vento.
+NARRATOR|La vela si affloscia. Nel silenzio, Arthur sente un'ala enorme aprirsi oltre le nubi. Il grifone è già lontano.

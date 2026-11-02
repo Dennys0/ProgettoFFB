@@ -26,13 +26,12 @@ public final class EpiloguePanel extends JPanel {
         "<html><center>Arthur avvicina il Ragnarök Flambé alle labbra.<br>"
         + "Il fuoco della Brace attraversa la Cenere di Fenrir e il Magma filtrato.<br>"
         + "Una vampata bianca, un boato... e il mondo si dissolve.</center></html>",
-        "<html><center>Il tintinnio di un bicchiere. Odore di legno e birra.<br>"
-        + "Arthur riapre gli occhi, piegato sul bancone del vecchio bar.<br>"
-        + "Il barista scuote la testa: «Hai dormito per ore. Tutto bene?»</center></html>",
-        "<html><center>Arthur guarda le proprie mani. Nessuna runa, nessuna spada.<br>"
-        + "Solo un tremendo mal di testa e il ricordo dei Nove Mondi.<br>"
-        + "«La prossima volta... solo acqua.»<br>"
-        + "Dal bicchiere ancora vuoto sale una minuscola scintilla rossa.</center></html>",
+        "<html><center>Il respiro di Surtur gratta ancora. Poi Martino, addormentato sul tavolo, cambia fianco.<br>"
+        + "Siegfried posa il cucchiaio. Gunnar ferma il tavolo con due dita.<br>"
+        + "Hela tiene ancora il bicchiere d’acqua.</center></html>",
+        "<html><center>«Stavolta la prendo subito.» Arthur beve. Nessuno gli chiede dove sia stato.<br>"
+        + "Mette una sedia in più vicino alla finestra. «Aspetti qualcuno?» chiede Hela.<br>"
+        + "«Uno che teneva il conto meglio di me.» Sul davanzale crepita una scintilla.</center></html>",
         "<html><center>THE ALCHEMIST'S HANGOVER<br><br>"
         + "Avventura realizzata come progetto universitario in Java Swing.<br>"
         + "Salvataggi H2, dialoghi, inventario, boss e alchimia.<br><br>"

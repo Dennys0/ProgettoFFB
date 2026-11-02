@@ -1,39 +1,9 @@
-NARRATOR|Il vento scuote le vele dello Skíðblaðnir. Martino stringe il timone d'ottone con una mano e un boccale di grog con l'altra.
-ARTHUR|Martino! Ieri eravamo in una taverna e ora siamo su una maledetta nave volante! Che diavolo succede?!
-MARTINO|Ahahah! Benvenuto a bordo, pivello! Qui il mare sta sotto le nuvole e le spiegazioni non valgono un cazzo!
-ARTHUR|Voglio tornare a casa!
-MARTINO|E io voglio un barile di idromele e due valchirie nel letto! Ma siamo entrambi nella merda!
-ARTHUR|Quindi siamo intrappolati?!
-MARTINO|Finché non preparerai un cocktail degno degli dèi, sì! Il calderone è nella cabina. Ma se ci butti dentro stronzate, saltiamo tutti in aria!
-ARTHUR|Fantastico. E cosa dovrei cercare?
-MARTINO|Tre ingredienti, tre indizi. Apri bene quelle orecchie da ubriacone!
-NARRATOR|Una raffica violenta scuote le vele. Martino indica il cielo con il boccale.
-MARTINO|PRIMO! Ti serve qualcosa che non puoi vedere né afferrare, ma che può spazzare via una flotta intera. Lassù vola un maledetto bestione piumato. Quando apre le ali, persino le tempeste si cagano sotto!
-ARTHUR|Il vento? Devo catturare il suo respiro?
-MARTINO|Bravo, per Odino! Ma quel bastardo non regala il fiato a nessuno. Dovrai guadagnartelo!
-NARRATOR|Martino indica una piuma gialla incastrata tra le assi del ponte. Piccole scintille ne illuminano i bordi.
-MARTINO|SECONDO! Vedi quella piuma? Alcuni uccelli lasciano piume, altri lasciano fulmini! Un buon cocktail deve dare una bella scossa alle palle!
-ARTHUR|Quindi mi serve una piuma elettrica?
-MARTINO|Forse! Ma occhio alla polvere dorata che galleggia nell'aria. È bella da vedere, ma se la versi nel calderone finirai in un sogno del cazzo senza via d'uscita!
-ARTHUR|Piuma scintillante sì, polvere dorata no. Ricevuto.
-NARRATOR|Una goccia d'acqua si stacca dal cannocchiale di Martino, ma invece di cadere rimane sospesa nell'aria.
-ARTHUR|E quella che diavolo è?!
-MARTINO|TERZO! L'acqua che non cade, idiota! L’ho chiusa nella cassa di prua. Cerca l’ottone tra le cime sulla sinistra. Brilla, ma non fa scintille.
-ARTHUR|Rugiada sospesa sulle nuvole... capito!
-MARTINO|E se trovi una fiala piena di fumo gelido, non aprirla e non versarla nel calderone! Quella merda viene da un regno tanto freddo che congelerebbe persino le palle di Thor! Ti spaccherebbe il calderone!
-ARTHUR|Quindi respiro del falco, piuma fulminante e rugiada. Niente polvere dorata né fumo gelido.
-MARTINO|Finalmente quel cervello marcio funziona! Ma attento all'ordine, dannazione!
-ARTHUR|C'è pure un ordine?!
-MARTINO|Prima il respiro che dà forza, poi la piuma che lo risveglia, infine la rugiada che tiene insieme tutto. Sbaglia e il tuo cocktail diventerà una bella esplosione!
-ARTHUR|Perfetto. Un dio falco da affrontare e un calderone pronto a esplodermi in faccia.
-MARTINO|Ahahah! Questo è lo spirito, ragazzo! E un'ultima cosa...
-ARTHUR|Che c'è ancora?!
-MARTINO|Se senti qualcuno sussurrare il tuo nome mentre sei solo... tieni chiusa quella cazzo di bocca.
-ARTHUR|Perché?
-NARRATOR|Martino smette di ridere. Per un istante osserva il cielo con un'espressione cupa.
-MARTINO|Perché non tutti quelli che ti chiamano vogliono vederti tornare vivo.
-NARRATOR|Un silenzio inquietante cala sul ponte. Poi Martino alza il boccale.
-MARTINO|E ORA LEVATI DALLE PALLE! Il capitano ha un grog da finire!
-ARTHUR|Giuro che questa è la peggior sbornia della mia vita.
-MARTINO|AH! Aspetta di vedere il conto!
-NARRATOR|FINE DEL DIALOGO.
+NARRATOR|Martino dà un quarto di giro al timone. Sotto la chiglia passa una nuvola con dentro un lampo.
+ARTHUR|Quando ti ho nominato capitano, il tavolo era ancora attaccato al pavimento.
+MARTINO|E tu eri ancora attaccato al tavolo. Tieniti alla murata, qui si cade a lungo.
+ARTHUR|Mi serve qualcosa che rimetta a posto l'orizzonte. Hai una ricetta?
+MARTINO|Asgardian Aviation. Nel calderone in cabina ci vanno il Soffio di Hræsvelgr, la Piuma di Folgore e la Rugiada delle Nuvole di Asgard.
+ARTHUR|Il primo ingrediente respira ancora. Spero che gli altri due siano più accomodanti.
+MARTINO|Chiedi la piuma a Huginn. La rugiada l'ho chiusa a prua, sotto le cime. Per il soffio dovrai vedertela con chi gonfia queste vele.
+ARTHUR|Tu custodisci una fiala in cassaforte e lasci il timone in mano a uno che vede due prue?
+MARTINO|Infatti il timone lo tengo io. Portami la mappa dallo scaffale e facciamo cambio con la chiave.

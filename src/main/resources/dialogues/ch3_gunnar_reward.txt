@@ -1,11 +1,6 @@
-NARRATOR|Gunnar posa la mano sulla pietra. Stavolta il nano sembra averti aspettato.
-GUNNAR|Sei tornato, Arthur. Non tutti sanno fermarsi ad ascoltare una seconda volta.
-ARTHUR|Dopo quel discorso infinito, almeno una risposta me la sono meritata.
-GUNNAR|Allora ascolta bene. RADICE: la radice trattiene il mondo.
-GUNNAR|BATTITO: il cuore pulsa nel granito.
-GUNNAR|RESPIRO: il vento torna al silenzio.
-ARTHUR|Radice, battito, respiro. Finalmente istruzioni che riesco a ricordare.
-GUNNAR|Ricorda anche questo: il Muschio di Midgard profuma di terra pulita. La Radice Nera non va mai nel boccale.
-ARTHUR|Quindi il calderone potrebbe esplodere se scelgo male. Meraviglioso.
-GUNNAR|La saggezza non impedisce l'errore, ma ti offre la possibilità di evitarlo.
-NARRATOR|Gunnar traccia tre rune sulla roccia. Arthur le ripete e le annota nel diario.
+GUNNAR|Appoggia la mano. Se la radice trattiene il mondo, leggi Radice. Se il cuore pulsa nel granito, Battito. Quando il vento torna al silenzio, Respiro.
+ARTHUR|Radice, battito, respiro. Li scrivo prima che il pavimento giri pagina.
+GUNNAR|Alla Rupe dell'Eco, leggi anche la stele. Per il boccale, invece, segui il naso.
+GUNNAR|Il Muschio di Midgard dà l'amaro. Mescola con un Frammento di Yggdrasil. La Lacrima di Ymir addolcisce entrambi.
+ARTHUR|Ymir's Old Fashioned. Da sveglio avrei messo lo zucchero. Qui devo rimboccare le coperte a una montagna.
+GUNNAR|Piano con quel cucchiaio.

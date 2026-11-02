@@ -1,31 +1,6 @@
-NARRATOR|IL FIGLIO DI IVALDI. Arthur attraversa un'antica fucina circondata da fiumi di lava. In fondo alla stanza, un nano dalla lunga barba giace seduto a terra, incatenato a due pilastri. Il suo corpo è ricoperto di ferite e bruciature.
-ARTHUR|Ma porca ... Un altro nano?! E perché diavolo sei incatenato?!
-FIGLIO_IVALDI|Vattene, umano... Prima che tornino a costringermi a lavorare.
-ARTHUR|Costringerti?! Ma chi ti ha ridotto così?!
-FIGLIO_IVALDI|Sono uno dei figli di Ivaldi. Un tempo forgiavamo tesori per gli dèi... Ora sono soltanto uno schiavo.
-ARTHUR|Aspetta... Ivaldi?! Quelli che costruivano le armi magiche?!
-FIGLIO_IVALDI|Proprio noi. Ma qualcuno ha scoperto come piegare la nostra arte ai propri desideri.
-ARTHUR|Fammi indovinare... Un misterioso essere che nessuno vuole nominare?!
-FIGLIO_IVALDI|Non conosco il suo volto. So soltanto che mi hanno ordinato di forgiare un'arma capace di ferire persino gli dèi.
-ARTHUR|...MA CRISTO! E per chi sarebbe quest'arma?!
-FIGLIO_IVALDI|Per colui che prepara la caduta di Asgard. Le Valchirie hanno tentato di fermare il trasporto delle armi... ma sono state tradite.
-ARTHUR|Quindi è per questo che le ho trovate massacrate?! Qualcuno le ha mandate in una trappola?!
-FIGLIO_IVALDI|Sì... E temo che non saranno le ultime vittime.
-NARRATOR|Il nano solleva lentamente le braccia. Le pesanti catene tintinnano contro la pietra.
-ARTHUR|Senti, posso provare a liberarti! Magari troviamo qualcosa per rompere queste catene!
-FIGLIO_IVALDI|Non rischiare la tua vita per me, Arthur. Sono incantate. Soltanto chi le ha forgiate può spezzarle.
-ARTHUR|Ma che diavolo! Pure le manette premium avete in questo mondo?!
-FIGLIO_IVALDI|Ahahah... Hai uno spirito curioso, umano. Ma ascoltami: ciò che viene forgiato nel fuoco può essere distrutto dallo stesso fuoco.
-ARTHUR|Aspetta... Vuoi dire che posso distruggere quell'arma?!
-FIGLIO_IVALDI|Forse. Ma dovrai prima scoprire nelle mani di chi si trova.
-ARTHUR|Fantastico! Un'altra caccia al tesoro nel posto peggiore di sempre!
-NARRATOR|Il nano abbassa lo sguardo. Arthur nota un piccolo simbolo inciso su una delle catene: lo stesso che aveva visto sul calderone.
-ARTHUR|...Aspetta un momento. Quel simbolo... L'ho già visto!
-FIGLIO_IVALDI|Allora sei più vicino alla verità di quanto immagini, Arthur.
-ARTHUR|Ecco, perfetto. Adesso pure le catene mi danno indizi!
-FIGLIO_IVALDI|Vai, umano. E se riuscirai a fermare tutto questo... ricordati di chi è rimasto qui.
-ARTHUR|Tranquillo, vecchio. Se ne esco vivo, torno con un seghetto e una cassa di birra.
-FIGLIO_IVALDI|Ahahah... Allora porterò io i boccali.
-FIGLIO_IVALDI|Aspetta. Prendi la fiala vicino al mio polso. Ho filtrato quel magma tre volte. Se la lascio qui, diventerà la tempra di un’altra spada.
-NARRATOR|Arthur si allontana. Alle sue spalle, il rumore delle catene riecheggia nella fucina.
-ARTHUR|...Quell'essere misterioso ha proprio bisogno di una bella martellata sulla testa.
+NARRATOR|Il fabbro batte un anello della catena contro il filtro. Una goccia rossa passa dalla maglia e resta intera.
+FIGLIO_IVALDI|Reggi il recipiente. Dal fondo, con due mani.
+ARTHUR|Lo stesso consiglio che mi davano per il vassoio. Stavolta sono motivato.
+FIGLIO_IVALDI|Magma filtrato di Svartálfaheimr. Grezzo spaccherebbe il boccale. Così ci ho saldato perfino gli anelli che mi tengono qui.
+ARTHUR|Hai riconosciuto il tuo lavoro.
+FIGLIO_IVALDI|Riconoscerei quella saldatura al buio. Porta via il magma, prima che mi chiedano di farci un'altra catena.

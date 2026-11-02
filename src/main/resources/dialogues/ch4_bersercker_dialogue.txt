@@ -1,25 +1,6 @@
-NARRATOR|IL GIGANTE CADUTO. Arthur raggiunge una piattaforma sospesa sopra un oceano di lava. Al centro, un gigantesco Muspelsonar è inginocchiato, ferito e senza forze. La sua spada incandescente giace al suolo.
-ARTHUR|Ma porca ... Che diavolo è successo qui?! Sembra che qualcuno abbia preso a calci un vulcano!
-MUSPELSONAR|Grrr... Chi osa avvicinarsi a un figlio di Muspell?!
-ARTHUR|GESÙ CRISTO! Sei ancora vivo?! Guarda, non voglio problemi! Ne ho già abbastanza!
-MUSPELSONAR|Io sono un guerriero delle fiamme eterne... e sono stato sconfitto. Un'umiliazione che il fuoco non potrà cancellare.
-ARTHUR|Aspetta... Qualcuno è riuscito a ridurre così un armadio di lava come te?!
-MUSPELSONAR|Le guerriere di Odino... Le Valchirie. Sono state loro a combattermi.
-ARTHUR|Ah, le Valchirie! Finalmente qualcuno che sa fare il proprio lavoro!
-MUSPELSONAR|Non ridere, umano. Anche loro hanno pagato un prezzo terribile.
-ARTHUR|...Che significa?
-MUSPELSONAR|Le ho viste cadere oltre il passo. Le loro ali spezzate, le loro armi disperse... Nessuna ha più fatto ritorno.
-ARTHUR|Aspetta, aspetta... Quindi mi stai dicendo che devo passare proprio dove sono cadute delle guerriere divine?!
-MUSPELSONAR|Ahahah... Se temi la morte, torna indietro. Ciò che le ha abbattute potrebbe essere ancora là fuori.
-ARTHUR|Ma porca troia! E io che speravo fosse finalmente finito il peggio!
-NARRATOR|Il gigante solleva lentamente il capo. Le crepe incandescenti sul suo corpo si affievoliscono.
-MUSPELSONAR|Ascolta, Arthur. Non tutte le sconfitte vengono inflitte da una spada. Talvolta è il tradimento a spezzare anche i più forti.
-ARTHUR|Tradimento?! Aspetta... Che cosa è successo davvero?!
-MUSPELSONAR|Lo scoprirai quando vedrai le Valchirie. Se avranno ancora la forza di parlare.
-ARTHUR|Fantastico. Un altro mistero! Ma in questo mondo nessuno sa raccontare una storia dall'inizio alla fine?!
-MUSPELSONAR|Vai, umano. E se incontrerai le guerriere di Odino... di' loro che il fuoco di Muspell non dimentica.
-ARTHUR|Sì, certo! Adesso faccio pure il postino tra divinità incazzate!
-NARRATOR|Il gigante abbassa il capo, stringendo il pugno contro la roccia. Arthur si allontana verso il passaggio successivo.
-ARTHUR|Un gigante di fuoco sconfitto, delle Valchirie massacrate e qualcosa che le ha tradite...
-NARRATOR|Una violenta esplosione di lava illumina il cielo rosso.
-ARTHUR|...Io volevo solo farmi una cazzo di birra.
+NARRATOR|La spada è a un passo dal gigante caduto. Lui muove il piede, cercando ancora la presa.
+MUSPELSONAR|Hai guardato la lama. Sei già morto.
+ARTHUR|Seduto come sei? Dev'essere stato imbarazzante per entrambi.
+MUSPELSONAR|La lama può fingere. Il piede che porta il peso, mai. Surtur deve piantarlo prima di calare il ferro.
+ARTHUR|Resto sul segno finché si impegna nel colpo. Poi gli lascio il posto.
+MUSPELSONAR|Fammi vedere. Anche da terra so distinguere un passo da un inciampo.

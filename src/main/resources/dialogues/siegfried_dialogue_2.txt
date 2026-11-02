@@ -1,5 +1,4 @@
-SIEGFRIED|Vedo che hai recuperato il Diario del Capitano! Ora sei pronto a conoscere la verità.
-SIEGFRIED|Ascolta bene: per il Maelstrom Martini ti serve la Schiuma della Regina delle Onde, strappata alla sua rete.
-SIEGFRIED|Il contrasto aspro richiede il Corallo di Sangue che cresce nei giardini scarlatti...
-SIEGFRIED|...e per stabilizzare la magia ti serve la sapidità del Cristallo di Squama, nascosto nella fossa profonda!
-SIEGFRIED|Ma attento: evita l'Acqua del Lete e l'Inchiostro di Kraken, o il tuo viaggio finirà qui.
+SIEGFRIED|Ecco la pagina. Vedi le tre macchie sul margine? Una per ogni brindisi andato bene.
+SIEGFRIED|Per il Maelstrom Martini versa la Schiuma di Ægir, che strapperai a Rán. Il Corallo di Rán dà l'aspro. Il Sale di Jörmungandr gli tiene testa.
+ARTHUR|Schiuma, corallo, sale. Riesco quasi a sentire il bordo del bicchiere sulle labbra.
+SIEGFRIED|Eccoti, finalmente. Al tavolo eri sempre tu quello che sapeva dire cosa mancava dopo un solo sorso.

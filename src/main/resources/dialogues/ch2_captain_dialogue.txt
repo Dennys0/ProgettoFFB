@@ -1,27 +1,6 @@
-NARRATOR|Arthur raggiunge una balconata affacciata su un immenso cimitero di navi. Sulla rupe a sinistra, uno scheletro vestito da capitano pirata siede accanto a un vecchio forziere.
-ARTHUR|Ma che diamine... Un cimitero di navi?! E quello è uno scheletro con un cappello?!
-CAPITANO|ARRR! Chi osa disturbare il riposo del Capitano Barbanera?!
-ARTHUR|Per tutti i mari! Ma perché ogni cadavere che incontro deve parlare?!
-CAPITANO|Ahahah! Un marinaio vivo! Da quanto tempo non ne vedevo uno!
-ARTHUR|Marinaio un corno! Io fino a ieri bevevo birra al bar!
-CAPITANO|ARRR! Birra, dici?! Per mille balene! Darei il mio ultimo doblone per un sorso di rum!
-ARTHUR|Senti, Capitan Findus, che diamine è successo a tutte queste navi?!
-CAPITANO|Il mare se le è prese, ragazzo! Una dopo l'altra... trascinate negli abissi da qualcosa di immenso.
-ARTHUR|Aspetta... Non mi dire che c'entra quel serpente gigante!
-CAPITANO|Jörmungandr! ARRR! Quel maledetto mostro ha spezzato la mia nave come fosse un ramoscello!
-ARTHUR|Fantastico. E io ci ho appena parlato. Che fortuna sfacciata!
-CAPITANO|Ahahah! E sei ancora intero?! Allora gli dèi devono avere grandi progetti per te!
-ARTHUR|Sì, guarda, me lo dicono tutti! Peccato che nessuno mi spieghi quali!
-CAPITANO|Ascolta, ragazzo. Tra questi relitti giacciono tesori dimenticati... ma non tutto l'oro brilla.
-ARTHUR|Ecco, pure il pirata filosofo! Un indizio normale mai?!
-CAPITANO|ARRR! Ricorda questo: ciò che il mare inghiotte, il mare conserva. Anche i segreti degli dèi.
-NARRATOR|Il capitano solleva lentamente la sciabola, indicando una nave spezzata sul fondo dell'abisso.
-CAPITANO|Laggiù ho perso la nave. Ma una cosa sono riuscito a portarmela dietro.
-ARTHUR|Fammi indovinare. Il rum?
-CAPITANO|Meglio. Il codice per sfuggire alle reti di Rán.
-ARTHUR|Allora sì, per una volta preferisco il libro.
-NARRATOR|Il capitano scoppia in una risata, mentre una corrente gelida attraversa il cimitero sommerso.
-CAPITANO|Sotto la giubba porto ancora il diario di bordo. Ogni numero che urla Rán ha una risposta. Le ho scritte tutte.
-ARTHUR|E quanto costa il prestito? Un occhio? Perché vedo che da queste parti va di moda.
-CAPITANO|A bordo mi bastava una cosa: sapere che il mio ordine era arrivato fino all’ultimo uomo. Alla mia domanda si risponde «Sì, capitano!».
-ARTHUR|Tre alberi spezzati e ancora fa l’appello. Sentiamo questi ordini.
+NARRATOR|Il capitano conta i relitti con le nocche. Per arrivare all'ultimo deve ricominciare dalla prima mano.
+ARTHUR|Io ieri contavo i bicchieri allo stesso modo. Ho perso il conto molto prima di voi.
+CAPITANO|L'ultimo era il mio. Restò a galla finché ogni ordine arrivò dalla ruota fino al mozzo.
+ARTHUR|È per questo che tenete il diario sotto la giubba?
+CAPITANO|Ci sono le risposte ai numeri di Rán. Lo affido a chi sa dare riscontro a un ordine. Ogni volta che te lo chiedo, rispondi «Sì, capitano!».
+ARTHUR|Per una volta conosco la risposta prima dell'esame.

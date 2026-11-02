@@ -31,6 +31,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private EarthBreathEffect breathingEffect;
     private JComponent crackArtwork;
     private int crackInspections;
+    private boolean heardQuietGlade;
     private JButton steleHotspot;
     private JButton forgeHotspot;
     // Gunnar condivide la stessa sessione grafica degli altri dialoghi.
@@ -134,6 +135,10 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
     private void inspectBreathingCrack() {
         if (currentRoom != 1) return;
+        if (GameState.getInstance().isYmirPacified()) {
+            ToastNotification.show(this, "Arthur appoggia il palmo alla crepa. Un battito lento, poi il silenzio.");
+            return;
+        }
         breathingEffect.startEffect();
         com.alchemist.hangover.controller.AudioManager.getInstance()
                 .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.EARTH_BREATH);
@@ -384,6 +389,11 @@ public final class Chapter3Panel extends AbstractChapterPanel {
 
     @Override
     protected void onRoomChanged() {
+        if (!GameState.getInstance().isYmirPacified()) heardQuietGlade = false;
+        else if (currentRoom == 1 && !heardQuietGlade) {
+            heardQuietGlade = true;
+            ToastNotification.show(this, "Arthur: Adesso riesco a sentire i miei passi.");
+        }
         if (gunnarConversationActive) closeGunnarDialogue(false);
         if (npcConversationActive) closeNpcDialogue();
         if (breathingEffect != null && currentRoom != 1) breathingEffect.stopEffect();

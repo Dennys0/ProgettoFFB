@@ -1,8 +1,8 @@
-NARRATOR|Sul crinale, Hela tiene una mano aperta sopra la lava. Tra le sue dita si forma una goccia di brina.
-ARTHUR|Al bar il ghiaccio lo servivamo con le pinze. Ma apprezzo il servizio.
-HELA|Al bar. È la prima volta che ne parli come di un posto in cui potresti tornare.
-ARTHUR|E tu come fai a sapere che voglio tornarci?
-HELA|Perché anche adesso cerchi una porta. Tieni il palmo aperto.
-NARRATOR|La goccia cade. Sulla pelle di Arthur resta un piccolo cristallo freddo.
-ARTHUR|Se devo spegnere la fornace, me ne servirebbe un secchio.
-HELA|Mettila in tasca. L’ultima volta che il mio gelo ha toccato il magma, è stato il boccale a spezzarsi.
+NARRATOR|Sul crinale Hela porge una goccia gelata. Il pollice lascia sul palmo di Arthur lo stesso cerchio di un bicchiere bagnato.
+HELA|Te l'ho messa davanti tutta la sera, quell'acqua.
+ARTHUR|E io ti ho detto «dopo». Adesso mi ricordo anche dove eri seduta.
+HELA|Allora ascolta come si fa il Ragnarök Flambé. Cenere di Fenrir e magma filtrato di Svartálfaheimr nel calderone. La Brace di Muspelheim va per ultima.
+ARTHUR|Perché se trova il fondo vuoto mi arrostisce le sopracciglia. Questa parte la so per esperienza.
+HELA|E la Lacrima di Hel?
+ARTHUR|La tengo in tasca. Col ghiaccio in quel boccale spaccherei il vetro. Hela... quando apro gli occhi, resti un minuto?
+HELA|Ti sto ancora tenendo il bicchiere.
