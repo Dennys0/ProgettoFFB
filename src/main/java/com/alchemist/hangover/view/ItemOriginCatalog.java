@@ -6,7 +6,7 @@ import java.util.Map;
  * Provenienze narrative dei singoli oggetti.
  * I luoghi sono predefiniti dai capitoli, quindi rimangono validi anche dopo
  * aver caricato una partita H2 senza aggiungere nuovi campi ai salvataggi.
- * Aggiungere qui i futuri oggetti del capitolo 3.
+ * Aggiungere qui la provenienza di ogni nuovo oggetto dei capitoli.
  */
 public final class ItemOriginCatalog {
     public record Origin(int chapter, String place, String scenePath) {
@@ -38,7 +38,12 @@ public final class ItemOriginCatalog {
             Map.entry("RADICE_NIDHOGG", new Origin(3, "Foresta Pietrificata", "/images/chapter3/room4_forest.png")),
             Map.entry("FRAMMENTO_YGGDRASIL", new Origin(3, "Miniere Basaltiche", "/images/chapter3/room5_miners.png")),
             Map.entry("POLVERE_OSSA_GIGANTE", new Origin(3, "Miniere Basaltiche", "/images/chapter3/room5_miners.png")),
-            Map.entry("LACRIMA_YMIR", new Origin(3, "Cuore di Roccia — ricompensa di Ymir", "/images/chapter3/room7_boss.png"))
+            Map.entry("LACRIMA_YMIR", new Origin(3, "Cuore di Roccia — ricompensa di Ymir", "/images/chapter3/room7_boss.png")),
+            Map.entry("CENERE_FENRIR", new Origin(4, "La Cenere dei Mondi", "/images/chapter4/room_4.png")),
+            Map.entry("ZOLFO_LOKI", new Origin(4, "La Cenere dei Mondi", "/images/chapter4/room_4.png")),
+            Map.entry("MAGMA_SVARTALFAHEIMR", new Origin(4, "I Fiumi di Svartálfaheimr", "/images/chapter4/room_5.png")),
+            Map.entry("LACRIMA_HEL", new Origin(4, "I Fiumi di Svartálfaheimr", "/images/chapter4/room_5.png")),
+            Map.entry("BRACE_MUSPELHEIM", new Origin(4, "Ricompensa di Surtur nella Fornace", "/images/chapter4/room_boss.png"))
     );
 
     private ItemOriginCatalog() { }
@@ -52,6 +57,7 @@ public final class ItemOriginCatalog {
             case 1 -> "I";
             case 2 -> "II";
             case 3 -> "III";
+            case 4 -> "IV";
             default -> Integer.toString(number);
         };
     }

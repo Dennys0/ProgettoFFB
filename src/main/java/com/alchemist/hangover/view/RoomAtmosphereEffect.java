@@ -34,6 +34,7 @@ public final class RoomAtmosphereEffect extends JComponent {
             return background.contains("room4_lab") ? Style.EMBERS : Style.SKY;
         }
         if (background.contains("/chapter2/")) return Style.SEA;
+        if (background.contains("/chapter4/")) return Style.EMBERS;
         if (background.contains("/chapter3/")) {
             if (background.contains("room3_forge")) return Style.EMBERS;
             if (background.contains("room4_forest")
