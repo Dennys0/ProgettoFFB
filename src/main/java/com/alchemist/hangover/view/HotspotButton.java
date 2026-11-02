@@ -14,6 +14,11 @@ import java.awt.event.MouseMotionAdapter;
  */
 public final class HotspotButton extends JButton {
     private static final Font HINT_FONT = new Font("Georgia", Font.BOLD, 12);
+    // Modalita' di sviluppo: inattiva di default, quindi mai visibile al giocatore.
+    private static boolean showDebugBounds;
+
+    static boolean debugBoundsVisible() { return showDebugBounds; }
+    static void setDebugBoundsVisible(boolean enabled) { showDebugBounds = enabled; }
     private boolean collectibleEmphasis;
     private int pointerX = -1;
     private int pointerY = -1;
@@ -77,6 +82,28 @@ public final class HotspotButton extends JButton {
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+        if (showDebugBounds && isVisible()) {
+            Graphics2D debug = (Graphics2D) graphics.create();
+            try {
+                debug.setColor(new Color(0, 215, 158, 48));
+                debug.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+                debug.setColor(new Color(68, 255, 189, 230));
+                debug.setStroke(new BasicStroke(2f));
+                debug.drawRect(1, 1, Math.max(0, getWidth() - 3), Math.max(0, getHeight() - 3));
+                debug.setFont(new Font("SansSerif", Font.BOLD, 11));
+                String label = getToolTipText();
+                if (label == null || label.isBlank()) label = "Hotspot";
+                String info = getX() + "," + getY() + "  " + getWidth() + "x" + getHeight();
+                int width = Math.min(getWidth() - 4, Math.max(0,
+                        debug.getFontMetrics().stringWidth(info) + 6));
+                if (width > 0 && getHeight() >= 16) {
+                    debug.setColor(new Color(14, 39, 34, 225));
+                    debug.fillRoundRect(2, 2, width, 17, 5, 5);
+                    debug.setColor(Color.WHITE);
+                    debug.drawString(info, 5, 14);
+                }
+            } finally { debug.dispose(); }
+        }
         if (!isEnabled() || !getModel().isRollover()) return;
 
         Graphics2D g = (Graphics2D) graphics.create();
