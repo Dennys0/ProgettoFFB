@@ -6,6 +6,7 @@ import java.util.prefs.Preferences;
 public final class GameSettings {
     private static final GameSettings INSTANCE = new GameSettings();
     private final Preferences preferences;
+    private boolean ambienceEnabled = true;
     private boolean soundEnabled = true;
     private boolean transitionsEnabled = true;
 
@@ -13,6 +14,7 @@ public final class GameSettings {
         Preferences store = null;
         try {
             store = Preferences.userNodeForPackage(GameSettings.class);
+            ambienceEnabled = store.getBoolean("audio.ambience", true);
             soundEnabled = store.getBoolean("audio.enabled", true);
             transitionsEnabled = store.getBoolean("transitions.enabled", true);
         } catch (SecurityException ignored) {
@@ -24,6 +26,14 @@ public final class GameSettings {
     public static GameSettings getInstance() { return INSTANCE; }
     public boolean isSoundEnabled() { return soundEnabled; }
     public boolean isTransitionsEnabled() { return transitionsEnabled; }
+
+    public boolean isAmbienceEnabled() { return ambienceEnabled; }
+
+    public void setAmbienceEnabled(boolean enabled) {
+        ambienceEnabled = enabled;
+        store("audio.ambience", enabled);
+        AudioManager.getInstance().refreshSettings();
+    }
 
     public void setSoundEnabled(boolean enabled) {
         soundEnabled = enabled;

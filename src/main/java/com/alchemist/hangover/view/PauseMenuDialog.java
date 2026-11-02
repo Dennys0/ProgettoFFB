@@ -29,7 +29,7 @@ public final class PauseMenuDialog extends JDialog {
         actions.add(button("Riprendi", () -> dispose()));
         actions.add(button("Salva partita", () -> new SaveLoadDialog(owner, SaveLoadDialog.Mode.SAVE).setVisible(true)));
         actions.add(button("Diario di Arthur", () -> new GameJournalDialog(owner).setVisible(true)));
-        actions.add(button("Impostazioni", () -> new GameSettingsDialog(owner).setVisible(true)));
+        actions.add(button("Impostazioni", () -> new MenuBookDialog(owner, MenuBookDialog.Page.OPTIONS).setVisible(true)));
         actions.add(button("Comandi", () -> JOptionPane.showMessageDialog(this,
                 "Frecce e hotspot: esplora le stanze\n"
                 + "Click / SPAZIO / INVIO: avanza dialogo\n"

@@ -24,28 +24,38 @@ public class MainMenuPanel extends JPanel {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(6, 1, 0, 12));
         buttonPanel.setOpaque(false);
-        buttonPanel.setBounds(850, 230, 300, 350); // Coordinate X, Y, Larghezza, Altezza
+        JPanel menu = new JPanel(new BorderLayout(0, 16));
+        menu.setBackground(new Color(24, 28, 29));
+        menu.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(114, 92, 60)),
+                BorderFactory.createEmptyBorder(18, 23, 18, 23)));
+        menu.setBounds(896, 142, 298, 420);
+        JLabel heading = new JLabel("TACCUINO   /   MENU PRINCIPALE");
+        heading.setForeground(new Color(218, 175, 105));
+        heading.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        menu.add(heading, BorderLayout.NORTH);
+        menu.add(buttonPanel, BorderLayout.CENTER);
 
         // Definizione delle voci del menu
-        String[] menuItems = {"START GAME", "LOAD GAME", "HOW TO PLAY", "OPTIONS", "CREDITS", "EXIT GAME"};
+        String[] menuItems = {"Nuova partita", "Carica partita", "Come giocare", "Opzioni", "Crediti", "Esci"};
 
         for (String item : menuItems) {
             JButton btn = createCustomButton(item);
             buttonPanel.add(btn);
         }
 
-        add(buttonPanel);
+        add(menu);
     }
 
     private JButton createCustomButton(String text) {
         JButton button = new JButton(text);
-        button.setFont(new Font("SansSerif", Font.BOLD, 22));
+        button.setFont(new Font(Font.SERIF, Font.BOLD, 21));
         button.setForeground(new Color(200, 200, 200)); // Colore di base testo
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
-        button.setFocusPainted(false);
+        button.setFocusPainted(true);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setHorizontalAlignment(SwingConstants.RIGHT);
+        button.setHorizontalAlignment(SwingConstants.LEFT);
 
         // Gestione dell'effetto Hover illuminato al passaggio del mouse
         button.addMouseListener(new MouseAdapter() {
@@ -63,39 +73,28 @@ public class MainMenuPanel extends JPanel {
         // Azioni dei pulsanti
         button.addActionListener(e -> {
             switch (text) {
-                case "START GAME":
+                case "Nuova partita":
                     com.alchemist.hangover.model.GameState.getInstance().resetState();
                     ProloguePanel intro = (ProloguePanel)
                             SceneManager.getInstance().getPanel("INTRO");
                     if (intro != null) intro.restartDialogue();
                     SceneManager.getInstance().showScene("INTRO");
                     break;
-                case "LOAD GAME":
+                case "Carica partita":
                     JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                     SaveLoadDialog loadDialog = new SaveLoadDialog(topFrame, SaveLoadDialog.Mode.LOAD);
                     loadDialog.setVisible(true);
                     break;
-                case "HOW TO PLAY":
-                    JOptionPane.showMessageDialog(this,
-                            "ESPLORAZIONE: clicca gli oggetti e usa le frecce.\n"
-                            + "DIALOGHI: click, spazio o invio per avanzare.\n"
-                            + "DIARIO: J. PAUSA: ESC.\n"
-                            + "Usa il calderone per creare le ricette con gli ingredienti.",
-                            "Come giocare", JOptionPane.INFORMATION_MESSAGE);
+                case "Come giocare":
+                    openPage(MenuBookDialog.Page.GUIDE);
                     break;
-                case "OPTIONS":
-                    new GameSettingsDialog((JFrame) SwingUtilities.getWindowAncestor(this)).setVisible(true);
+                case "Opzioni":
+                    openPage(MenuBookDialog.Page.OPTIONS);
                     break;
-                case "CREDITS":
-                    JOptionPane.showMessageDialog(this,
-                            "THE ALCHEMIST'S HANGOVER\n"
-                            + "Avventura grafica sviluppata in Java Swing.\n"
-                            + "Database di salvataggio: H2.\n"
-                            + "Musica ambientale ed effetti: generazione sonora originale.\n\n"
-                            + "I crediti definitivi degli asset saranno completati a fine sviluppo.",
-                            "Crediti", JOptionPane.INFORMATION_MESSAGE);
+                case "Crediti":
+                    openPage(MenuBookDialog.Page.CREDITS);
                     break;
-                case "EXIT GAME":
+                case "Esci":
                     System.exit(0);
                     break;
                 default:
@@ -105,6 +104,10 @@ public class MainMenuPanel extends JPanel {
         });
 
         return button;
+    }
+
+    private void openPage(MenuBookDialog.Page page) {
+        new MenuBookDialog((Frame) SwingUtilities.getWindowAncestor(this), page).setVisible(true);
     }
 
     @Override

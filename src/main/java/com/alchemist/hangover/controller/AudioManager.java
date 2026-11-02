@@ -30,7 +30,7 @@ public final class AudioManager {
         if (scene.equals(activeScene) && ambience != null && ambience.isRunning()) return;
         stopAmbience();
         activeScene = scene;
-        if (!GameSettings.getInstance().isSoundEnabled()) return;
+        if (!GameSettings.getInstance().isSoundEnabled() || !GameSettings.getInstance().isAmbienceEnabled()) return;
         if (!("INTRO".equals(scene) || "CHAPTER1".equals(scene)
                 || "CHAPTER2".equals(scene) || "CHAPTER3".equals(scene)
                 || "CHAPTER4".equals(scene) || "EPILOGUE".equals(scene) || "MENU".equals(scene))) return;
