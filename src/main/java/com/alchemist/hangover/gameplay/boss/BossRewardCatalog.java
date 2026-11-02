@@ -22,7 +22,7 @@ public final class BossRewardCatalog {
             case 4 -> Optional.of(new Item(
                     "BRACE_MUSPELHEIM", "Brace di Muspelheim",
                     "Il cuore di fuoco inestinguibile liberato dalla spada di Surtur.",
-                    "/images/items/item_muspelheim_ember.png"));
+                    "/images/items/item_ember.png"));
             default -> throw new IllegalArgumentException("Capitolo senza boss: " + chapter);
         };
     }

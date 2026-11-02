@@ -25,7 +25,11 @@ class Chapter4NpcIntegrationTest {
                 "/images/characters/ch4_oldman.png",
                 "/images/characters/ch4_blacksmith.png",
                 "/images/characters/ch4_boss.png",
-                "/images/items/item_fenrir_ash.png")) {
+                "/images/items/item_fenrir_ash.png",
+                "/images/items/item_ember.png",
+                "/images/items/item_magma.png",
+                "/images/items/item_sulfur.png",
+                "/images/items/item_ice_tear.png")) {
             assertNotNull(getClass().getResource(sprite), "Sprite non trovato: " + sprite);
         }
     }
