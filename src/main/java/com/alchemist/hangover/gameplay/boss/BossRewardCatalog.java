@@ -19,6 +19,10 @@ public final class BossRewardCatalog {
                     "La birra sottomarina lucente estratta dalle reti della dea Rán.",
                     "/images/items/item_foam.png"));
             case 3 -> Optional.empty();
+            case 4 -> Optional.of(new Item(
+                    "BRACE_MUSPELHEIM", "Brace di Muspelheim",
+                    "Il cuore di fuoco inestinguibile liberato dalla spada di Surtur.",
+                    "/images/items/item_muspelheim_ember.png"));
             default -> throw new IllegalArgumentException("Capitolo senza boss: " + chapter);
         };
     }

@@ -71,6 +71,21 @@ final class ChapterLayouts {
                            4, Map.of("LEFT", 1),
                            5, Map.of("UP", 1, "DOWN", 7),
                            6, Map.of("DOWN", 2),
+                           7, Map.of("UP", 5))),
+            4, new Layout(
+                    Map.of(1, "/images/chapter4/room_1.png",
+                           2, "/images/chapter4/room_2.png",
+                           3, "/images/chapter4/room_3.png",
+                           4, "/images/chapter4/room_4.png",
+                           5, "/images/chapter4/room_5.png",
+                           6, "/images/chapter4/room_6.png",
+                           7, "/images/chapter4/room_boss.png"),
+                    Map.of(1, Map.of("UP", 2, "LEFT", 3, "RIGHT", 4, "DOWN", 5),
+                           2, Map.of("DOWN", 1, "UP", 6),
+                           3, Map.of("RIGHT", 1),
+                           4, Map.of("LEFT", 1),
+                           5, Map.of("UP", 1, "DOWN", 7),
+                           6, Map.of("DOWN", 2),
                            7, Map.of("UP", 5)))
     );
 
@@ -83,7 +98,15 @@ final class ChapterLayouts {
                     4, "La Foresta Pietrificata",
                     5, "Le Miniere Basaltiche",
                     6, "La Rupe dell'Eco",
-                    7, "Il Cuore di Roccia")
+                    7, "Il Cuore di Roccia"),
+            4, Map.of(
+                    1, "Il Crogiolo di Magma",
+                    2, "L'Avamposto della Valchiria",
+                    3, "La Fossa di Vulcano",
+                    4, "La Cenere dei Mondi",
+                    5, "I Fiumi di Svartálfaheimr",
+                    6, "Il Poggio dei Venti Focosi",
+                    7, "La Fornace di Surtur")
     );
 
     private ChapterLayouts() { }

@@ -32,7 +32,11 @@ public final class RecipeManager {
             3, new Recipe(3, 3, "Ymir's Old Fashioned",
                     Set.of("MUSCHIO_MIDGARD", "FRAMMENTO_YGGDRASIL", "LACRIMA_YMIR"),
                     Set.of("MUSCHIO_MIDGARD", "FRAMMENTO_YGGDRASIL", "LACRIMA_YMIR",
-                            "RADICE_NIDHOGG", "POLVERE_OSSA_GIGANTE"))
+                            "RADICE_NIDHOGG", "POLVERE_OSSA_GIGANTE")),
+            4, new Recipe(4, 3, "Ragnarök Flambé",
+                    Set.of("BRACE_MUSPELHEIM", "CENERE_FENRIR", "MAGMA_SVARTALFAHEIMR"),
+                    Set.of("BRACE_MUSPELHEIM", "CENERE_FENRIR", "MAGMA_SVARTALFAHEIMR",
+                            "ZOLFO_LOKI", "LACRIMA_HEL"))
     );
 
     private RecipeManager() { }
@@ -62,14 +66,28 @@ public final class RecipeManager {
     public static Result evaluate(int chapter, Collection<String> ids) {
         if (ids == null || ids.size() != 3 || ids.stream().anyMatch(Objects::isNull)
                 || ids.stream().distinct().count() != 3) return Result.INCOMPLETE;
-        return Set.copyOf(ids).equals(forChapter(chapter).correct())
-                ? Result.SUCCESS : Result.WRONG_INGREDIENT;
+        if (!Set.copyOf(ids).equals(forChapter(chapter).correct()))
+            return Result.WRONG_INGREDIENT;
+        // Nel capitolo IV la Brace deve essere aggiunta per ultima.
+        if (chapter == 4 && !"BRACE_MUSPELHEIM".equals(
+                ids.stream().toList().get(2))) return Result.WRONG_INGREDIENT;
+        return Result.SUCCESS;
     }
 
     /** Gives the player a meaningful failure message without destroying items. */
     public static String failureText(int chapter, Collection<String> selection,
                                      Collection<Item> inventory) {
         Set<String> required = forChapter(chapter).correct();
+        if (chapter == 4 && selection != null && selection.size() == 3
+                && Set.copyOf(selection).equals(required)
+                && !"BRACE_MUSPELHEIM".equals(selection.stream().toList().get(2)))
+            return "La Brace deve essere aggiunta per ultima: la miscela divampa!";
+        if (chapter == 4 && selection != null) {
+            if (selection.contains("LACRIMA_HEL"))
+                return "Il ghiaccio di Hel causa uno shock termico: il calderone esplode!";
+            if (selection.contains("ZOLFO_LOKI"))
+                return "Lo zolfo di Loki evapora in una nube pungente: miscela fallita!";
+        }
         String wrongId = selection.stream().filter(id -> !required.contains(id))
                 .findFirst().orElse(null);
         String name = wrongId;

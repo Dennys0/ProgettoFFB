@@ -22,6 +22,7 @@ public final class CauldronGameService {
             case 1 -> "TRANSITION_CH1_CH2";
             case 2 -> "TRANSITION_CH2_CH3";
             case 3 -> "CHAPTER3_COMPLETE";
+            case 4 -> "EPILOGUE";
             default -> throw new IllegalArgumentException("Capitolo senza calderone: " + chapter);
         };
     }
@@ -39,6 +40,8 @@ public final class CauldronGameService {
             }
         } else if (chapter == 3) {
             state.setYmirOldFashionedCreated(true);
+        } else if (chapter == 4) {
+            state.setRagnarokFlambeCreated(true);
         }
         state.resetHealth();
     }
