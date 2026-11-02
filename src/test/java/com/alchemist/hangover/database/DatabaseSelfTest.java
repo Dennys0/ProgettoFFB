@@ -176,6 +176,28 @@ public class DatabaseSelfTest {
     }
 
     @Test
+    void chapterFourFinaleAndSurturRewardSurviveSaveAndReload() {
+        GameState state = GameState.getInstance();
+        state.setChapter(4);
+        state.setCurrentRoom(3);
+        state.setBossDefeated(true);
+        state.setRagnarokFlambeCreated(true);
+        state.addItem(ItemDAO.getItemById("BRACE_MUSPELHEIM"));
+        state.addItem(ItemDAO.getItemById("CENERE_FENRIR"));
+        state.addItem(ItemDAO.getItemById("MAGMA_SVARTALFAHEIMR"));
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Ragnarok Flambe"));
+        state.resetState();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(4, state.getChapter());
+        assertEquals(3, state.getCurrentRoom());
+        assertTrue(state.isBossDefeated());
+        assertTrue(state.isRagnarokFlambeCreated());
+        assertTrue(state.hasItem("BRACE_MUSPELHEIM"));
+        assertTrue(state.hasItem("CENERE_FENRIR"));
+        assertTrue(state.hasItem("MAGMA_SVARTALFAHEIMR"));
+    }
+
+    @Test
     void deletesOnlyTheTestSlot() {
         assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Eliminazione di prova"));
         assertTrue(SaveGameDAO.deleteSave(TEST_SLOT));
