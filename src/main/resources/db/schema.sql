@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS save_inventory (
 
 -- Muspelheim: ingredienti veri e due esche del Ragnarok Flambe.
 MERGE INTO items KEY(id) VALUES
-('BRACE_MUSPELHEIM', 'Brace di Muspelheim', 'L\'innesco inestinguibile strappato alla spada di Surtur.', '/images/items/item_ember.png'),
+('BRACE_MUSPELHEIM', 'Brace di Muspelheim', 'L''innesco inestinguibile strappato alla spada di Surtur.', '/images/items/item_ember.png'),
 ('CENERE_FENRIR', 'Cenere di Fenrir', 'Polvere nera che assorbe la magia.', '/images/items/item_fenrir_ash.png'),
 ('MAGMA_SVARTALFAHEIMR', 'Magma Filtrato di Svartalfaheimr', 'Liquore lavico incandescente.', '/images/items/item_magma.png'),
 ('ZOLFO_LOKI', 'Zolfo Ingannatore di Loki', 'Polvere dorata che fa evaporare la miscela.', '/images/items/item_sulfur.png'),
