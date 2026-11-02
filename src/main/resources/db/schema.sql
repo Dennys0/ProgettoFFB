@@ -45,6 +45,8 @@ ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS gunnar_wisdom BOOLEAN DEFAULT FA
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS gunnar_intro_heard BOOLEAN DEFAULT FALSE;
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ymir_stele_read BOOLEAN DEFAULT FALSE;
 ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ymir_old_fashioned_created BOOLEAN DEFAULT FALSE;
+-- Epilogo del capitolo IV: migrazione non distruttiva.
+ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ragnarok_flambe_created BOOLEAN DEFAULT FALSE;
 
 -- Catalogo oggetti del Capitolo 2.
 MERGE INTO items KEY(id) VALUES
@@ -72,3 +74,11 @@ CREATE TABLE IF NOT EXISTS save_inventory (
     FOREIGN KEY (slot_id) REFERENCES save_slots(slot_id) ON DELETE CASCADE,
     FOREIGN KEY (item_id) REFERENCES items(id)
 );
+
+-- Muspelheim: ingredienti veri e due esche del Ragnarok Flambe.
+MERGE INTO items KEY(id) VALUES
+('BRACE_MUSPELHEIM', 'Brace di Muspelheim', 'L\'innesco inestinguibile strappato alla spada di Surtur.', '/images/items/item_muspelheim_ember.png'),
+('CENERE_FENRIR', 'Cenere di Fenrir', 'Polvere nera che assorbe la magia.', '/images/items/item_fenrir_ash.png'),
+('MAGMA_SVARTALFAHEIMR', 'Magma Filtrato di Svartalfaheimr', 'Liquore lavico incandescente.', '/images/items/item_svartalfheim_magma.png'),
+('ZOLFO_LOKI', 'Zolfo Ingannatore di Loki', 'Polvere dorata che fa evaporare la miscela.', '/images/items/item_loki_sulfur.png'),
+('LACRIMA_HEL', 'Lacrima di Ghiaccio di Hel', 'Cristallo gelido incompatibile con il magma.', '/images/items/item_hel_ice.png');

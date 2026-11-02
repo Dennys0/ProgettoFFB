@@ -8,6 +8,7 @@ on:
       - refactor/view-model-cleanup
       - refactor/gameplay-logic-cleanup
       - refactor/state-and-architecture
+      - feat/chapter4-muspelheim
   pull_request:
 
 jobs:

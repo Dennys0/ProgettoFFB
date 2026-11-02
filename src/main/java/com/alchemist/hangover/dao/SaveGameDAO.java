@@ -113,8 +113,8 @@ public class SaveGameDAO {
         String upsertSql = "MERGE INTO save_slots (slot_id, slot_name, current_chapter, current_room, current_health, "
                 + "max_health, has_given_map, has_dragon_key, is_dragon_unlocked, is_boss_defeated, "
                 + "is_ymir_pacified, ymir_rune_seed, gunnar_wisdom, gunnar_intro_heard, ymir_stele_read, "
-                + "ymir_old_fashioned_created, last_saved) "
-                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                + "ymir_old_fashioned_created, ragnarok_flambe_created, last_saved) "
+                + "KEY(slot_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         Connection conn = null;
         try {
@@ -139,6 +139,7 @@ public class SaveGameDAO {
                 ps.setBoolean(14, state.gunnarIntroductionHeard());
                 ps.setBoolean(15, state.ymirSteleRead());
                 ps.setBoolean(16, state.ymirOldFashionedCreated());
+                ps.setBoolean(17, state.ragnarokFlambeCreated());
                 ps.executeUpdate();
             }
 
@@ -199,11 +200,12 @@ public class SaveGameDAO {
                     boolean gunnarIntro = rs.getBoolean("gunnar_intro_heard");
                     boolean steleRead = rs.getBoolean("ymir_stele_read");
                     boolean cocktail = rs.getBoolean("ymir_old_fashioned_created");
+                    boolean finalCocktail = rs.getBoolean("ragnarok_flambe_created");
                     List<Item> inventory = readInventoryForSlot(conn, slotId);
                     GameSaveSnapshot snapshot = new GameSaveSnapshot(chapter, room,
                             health, maxHealth, givenMap, dragonKey, dragonUnlocked,
                             bossDefeated, ymirPacified, runeSeed, gunnarWisdom,
-                            gunnarIntro, steleRead, cocktail, inventory);
+                            gunnarIntro, steleRead, cocktail, finalCocktail, inventory);
                     GameState.getInstance().restoreFrom(snapshot);
                     System.out.println("[SaveGameDAO] Partita caricata dallo slot "
                             + slotId + ". Stanza: " + room);
