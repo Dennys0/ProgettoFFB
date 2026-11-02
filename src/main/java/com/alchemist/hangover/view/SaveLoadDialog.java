@@ -179,7 +179,18 @@ public class SaveLoadDialog extends JDialog {
                 dispose();
 
                 GameState state = GameState.getInstance();
-                if (state.getChapter() == 3) {
+                if (state.getChapter() == 4) {
+                    Chapter4Panel chapter4 =
+                            (Chapter4Panel) SceneManager.getInstance().getPanel("CHAPTER4");
+                    if (chapter4 != null) chapter4.refreshFromGameState();
+                    if (state.isRagnarokFlambeCreated()) {
+                        EpiloguePanel finale =
+                                (EpiloguePanel) SceneManager.getInstance().getPanel("EPILOGUE");
+                        if (finale != null) finale.restart();
+                    }
+                    SceneManager.getInstance().showScene(
+                            state.isRagnarokFlambeCreated() ? "EPILOGUE" : "CHAPTER4");
+                } else if (state.getChapter() == 3) {
                     Chapter3Panel chapter3 =
                             (Chapter3Panel) SceneManager.getInstance().getPanel("CHAPTER3");
                     if (chapter3 != null) chapter3.refreshFromGameState();

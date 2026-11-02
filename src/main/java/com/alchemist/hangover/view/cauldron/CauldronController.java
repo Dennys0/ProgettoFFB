@@ -2,6 +2,7 @@ package com.alchemist.hangover.view.cauldron;
 
 import com.alchemist.hangover.view.GameOverPanel;
 import com.alchemist.hangover.view.StoryPromptDialog;
+import com.alchemist.hangover.view.EpiloguePanel;
 
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
@@ -20,6 +21,7 @@ public final class CauldronController {
         return switch (chapter) {
             case 2 -> StoryPromptDialog.Theme.OCEAN;
             case 3 -> StoryPromptDialog.Theme.EARTH;
+            case 4 -> StoryPromptDialog.Theme.FIRE;
             default -> StoryPromptDialog.Theme.SKY;
         };
     }
@@ -44,6 +46,10 @@ public final class CauldronController {
         String scene = completionScene(chapter);
         CauldronGameService.registerSuccess(GameState.getInstance(), chapter);
         AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
+        if (chapter == 4) {
+            EpiloguePanel finale = (EpiloguePanel) SceneManager.getInstance().getPanel("EPILOGUE");
+            if (finale != null) finale.restart();
+        }
         SceneManager.getInstance().showScene(scene);
     }
 

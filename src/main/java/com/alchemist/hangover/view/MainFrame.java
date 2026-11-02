@@ -23,6 +23,8 @@ public class MainFrame extends JFrame {
         manager.addPanel("TRANSITION_CH1_CH2", new ChapterCompletionPanel(this, 1));
         manager.addPanel("CHAPTER2", new Chapter2Panel(this));
         manager.addPanel("CHAPTER3", new Chapter3Panel(this));
+        manager.addPanel("CHAPTER4", new Chapter4Panel(this));
+        manager.addPanel("EPILOGUE", new EpiloguePanel(this));
         manager.addPanel("CHAPTER3_COMPLETE", new ChapterCompletionPanel(this, 3));
         manager.addPanel("TRANSITION_CH2_CH3", new ChapterCompletionPanel(this, 2));
         manager.addPanel("GAMEOVER", new GameOverPanel());
@@ -80,6 +82,21 @@ public class MainFrame extends JFrame {
             }
         });
 
+        // F5: anteprima diretta delle sette stanze di Muspelheim.
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "previewChapter4");
+        getRootPane().getActionMap().put("previewChapter4", new AbstractAction() {
+            @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+                GameState state = GameState.getInstance();
+                state.resetState();
+                state.setChapter(4);
+                state.setCurrentRoom(1);
+                Chapter4Panel chapter = (Chapter4Panel) manager.getPanel("CHAPTER4");
+                if (chapter != null) chapter.refreshFromGameState();
+                manager.showScene("CHAPTER4");
+            }
+        });
+
         // F4: scelta rapida della stanza di Ymir, senza azzerare inventario.
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), "chapter3RoomPicker");
@@ -106,6 +123,6 @@ public class MainFrame extends JFrame {
     private boolean isPlayingChapter() {
         String scene = SceneManager.getInstance().getCurrentSceneName();
         return "CHAPTER1".equals(scene) || "CHAPTER2".equals(scene)
-                || "CHAPTER3".equals(scene);
+                || "CHAPTER3".equals(scene) || "CHAPTER4".equals(scene);
     }
 }

@@ -41,7 +41,7 @@ public final class ChapterCompletionPanel extends JPanel {
                     + "si fondono in un drink fumante di energia primordiale.<br>"
                     + "Ymir riposa, la terra è finalmente quieta.<br>"
                     + "Arthur: «Alla prossima catastrofe. Possibilmente dopo un aperitivo.»"
-                    + "</center></html>", "TORNA ALLA FORGIA");
+                    + "</center></html>", "ENTRA NEL CAPITOLO IV");
             default -> throw new IllegalArgumentException(
                     "Nessuna schermata di completamento per il capitolo " + chapter);
         };
@@ -149,15 +149,8 @@ public final class ChapterCompletionPanel extends JPanel {
         GameState state = GameState.getInstance();
         SceneManager manager = SceneManager.getInstance();
         int chapter = details.chapter();
-        if (chapter == 3) {
-            state.setCurrentRoom(3);
-            Chapter3Panel earth = (Chapter3Panel) manager.getPanel("CHAPTER3");
-            if (earth != null) earth.refreshFromGameState();
-            manager.showScene("CHAPTER3");
-            return;
-        }
         ChapterProgression.advanceToNextChapter(state, chapter);
-        String nextScene = chapter == 1 ? "CHAPTER2" : "CHAPTER3";
+        String nextScene = "CHAPTER" + (chapter + 1);
         AbstractChapterPanel nextPanel = (AbstractChapterPanel) manager.getPanel(nextScene);
         if (nextPanel != null) nextPanel.refreshFromGameState();
         manager.showScene(nextScene);
