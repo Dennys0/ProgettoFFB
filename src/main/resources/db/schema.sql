@@ -50,7 +50,13 @@ ALTER TABLE save_slots ADD COLUMN IF NOT EXISTS ragnarok_flambe_created BOOLEAN 
 
 -- Catalogo oggetti del Capitolo 2.
 MERGE INTO items KEY(id) VALUES
-('DIARIO_CAPITANO', 'Diario del Capitano', 'Un diario con il codice per decifrare le strategie di Rán.', '/images/chapter2/items/captain_journal.png'),
+('DIARIO_CAPITANO', 'Diario del Capitano', 'CODICE DEL CAPITANO
+1: Tra le correnti spezzo la rete
+2: Invoco la forza della marea
+3: Placo l''ira della dea
+4: Proteggo la rotta del veliero
+5: Rivelo il segreto dell''abisso
+6: Padroneggio il vortice finale', '/images/chapter2/items/captain_journal.png'),
 ('CORALLO_RAN', 'Corallo di Rán', 'Un ramo di corallo aspro rosso sangue incastrato nelle rocce.', '/images/chapter2/items/coral.png'),
 ('INCHIOSTRO_KRAKEN', 'Inchiostro di Kraken', 'Una boccetta di liquido buio e denso depositata nell''anfratto.', '/images/chapter2/items/ink.png'),
 ('SALE_JORMUNGANDR', 'Sale di Jörmungandr', 'Cristalli lucenti di squama salmastra staccati dalle pareti.', '/images/chapter2/items/salt.png'),

@@ -5,7 +5,8 @@ import com.alchemist.hangover.view.cauldron.CauldronOverlay;
 
 import com.alchemist.hangover.view.boss.RanStrategyBossOverlay;
 
-import com.alchemist.hangover.controller.DialogueSystem;
+import com.alchemist.hangover.controller.AudioManager;
+import com.alchemist.hangover.model.Item;
 import com.alchemist.hangover.model.GameState;
 
 import javax.swing.*;
@@ -90,11 +91,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
             addNpcHotspot(npc);
         }
 
-        // Oggetto Diario del Capitano (Stanza 6 - Balconata dei Relitti)
-        addItemWorldButton("DIARIO_CAPITANO", "/images/chapter2/items/captain_journal.png", 970, 432, 63, 46, 6,
-                "Diario del Capitano",
-                "CODICE DEL CAPITANO:\n1: Tra le correnti spezzo la rete\n2: Invoco la forza della marea\n3: Placo l'ira della dea\n4: Proteggo la rotta del veliero\n5: Rivelo il segreto dell'abisso\n6: Padroneggio il vortice finale");
-
         // Oggetti Raccoglibili (Stanza 4 e Stanza 5)
         addItemWorldButton("CORALLO_RAN", "/images/chapter2/items/coral.png", 211, 510, 52, 52, 4,
                 "Corallo di Rán", "Un ramo di corallo aspro rosso sangue incastrato nelle rocce.");
@@ -102,11 +98,6 @@ public class Chapter2Panel extends AbstractChapterPanel {
         addItemWorldButton("INCHIOSTRO_KRAKEN", "/images/chapter2/items/ink.png", 1022, 491, 85, 62, 4,
                 "Inchiostro di Kraken", "Una boccetta di liquido buio e denso depositata nell'anfratto.");
 
-        addItemWorldButton("SALE_JORMUNGANDR", "/images/chapter2/items/salt.png", 255, 552, 55, 55, 5,
-                "Sale di Jörmungandr", "Cristalli lucenti di squama salmastra staccati dalle pareti.");
-
-        addItemWorldButton("ACQUA_LETE", "/images/chapter2/items/lete.png", 969, 521, 75, 75, 5,
-                "Acqua del Lete", "Una linfa trasparente e stranamente immobile.");
     }
 
     private void interactWithCauldron() {
@@ -149,6 +140,8 @@ public class Chapter2Panel extends AbstractChapterPanel {
         cauldronHotspot.setVisible(false);
         ranBossHotspot.setVisible(false);
         setRegisteredNpcHotspotsVisible(false);
+        if (kind == DialogueKind.NPC && currentRoom == 5)
+            AudioManager.getInstance().playEffect(AudioManager.Effect.SERPENT_CALL);
         dialogue.start(resource);
     }
 
@@ -207,6 +200,24 @@ public class Chapter2Panel extends AbstractChapterPanel {
         };
     }
 
+    private void captainOrders() {
+        if (GameState.getInstance().hasItem("DIARIO_CAPITANO")) return;
+        String[] orders = {
+                "La rete sale a babordo. Al mio segnale molli la cima. Ricevuto?",
+                "Anche se senti il tuo nome tra le onde, tieni gli occhi sulla prua. Intesi?",
+                "Se cado io, porti tu il codice al timoniere. Ho la tua parola?"
+        };
+        for (String order : orders) {
+            if (!StoryPromptDialog.confirm(mainFrameRef, StoryPromptDialog.Theme.OCEAN,
+                    "GLI ORDINI DI BARBANERA", order, "Sì, capitano!", "Aspetti un momento…")) {
+                ToastNotification.show(this, "Barbanera richiude il diario. Torna quando sarai pronto.");
+                return;
+            }
+        }
+        receiveItem(new Item("DIARIO_CAPITANO", "Diario del Capitano",
+                RanStrategyBossOverlay.journalCode(), "/images/chapter2/items/captain_journal.png"));
+    }
+
     private void onDialogueFinished() {
         DialogueKind completed = activeDialogueKind;
         activeDialogueKind = DialogueKind.NONE;
@@ -214,6 +225,15 @@ public class Chapter2Panel extends AbstractChapterPanel {
         updateArrowVisibility();
         showRoomHotspots();
 
+        if (completed == DialogueKind.NPC) {
+            switch (currentRoom) {
+                case 1 -> receiveItem(new Item("ACQUA_LETE", "Acqua del Lete",
+                        "L’acqua immobile affidata ad Arthur da Marmæl.", "/images/chapter2/items/lete.png"));
+                case 5 -> receiveItem(new Item("SALE_JORMUNGANDR", "Sale di Jörmungandr",
+                        "Cristalli staccati dalle scaglie del Serpente del Mondo.", "/images/chapter2/items/salt.png"));
+                case 6 -> captainOrders();
+            }
+        }
         if (opensRanAfterDialogue(completed, currentRoom,
                 GameState.getInstance().isBossDefeated())) {
             ranBossHotspot.setVisible(false);

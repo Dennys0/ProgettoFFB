@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public final class AudioManager {
     public enum Effect {
-        CLICK, PICKUP, DAMAGE, SUCCESS, RECIPE_READY, FOOTSTEP, EARTH_BREATH,
+        CLICK, PICKUP, DAMAGE, SERPENT_CALL, SUCCESS, RECIPE_READY, FOOTSTEP, EARTH_BREATH,
         WIND_GUST, WATER_DROP, FORGE_SPARK, STONE_RUMBLE, RUNE_CHIME
     }
 
@@ -208,6 +208,16 @@ public final class AudioManager {
     }
 
     private static byte[] makeEffect(Effect effect) {
+        if (effect == Effect.SERPENT_CALL) {
+            byte[] pcm = new byte[SAMPLE_RATE * 2];
+            for (int i = 0; i < SAMPLE_RATE; i++) {
+                double t = (double) i / SAMPLE_RATE;
+                double phase = 2 * Math.PI * (86 * t - 16 * t * t);
+                double voice = Math.sin(phase) + 0.4 * Math.sin(2 * phase + Math.sin(18 * t));
+                writeSample(pcm, i, 0.36 * voice * Math.pow(Math.sin(Math.PI * t), 2));
+            }
+            return pcm;
+        }
         if (effect == Effect.DAMAGE) return makeImpact();
         if (effect == Effect.RECIPE_READY) return makeRecipeChord();
         if (effect == Effect.EARTH_BREATH) return makeEarthBreath();
@@ -222,7 +232,7 @@ public final class AudioManager {
             double progress = t / seconds;
             double frequency = switch (effect) {
                 case PICKUP -> 650 + 440 * progress;
-                case DAMAGE -> throw new AssertionError(effect);
+                case SERPENT_CALL, DAMAGE -> throw new AssertionError(effect);
                 case SUCCESS -> 420 + 600 * progress;
                 case CLICK -> 550;
                 case EARTH_BREATH, RECIPE_READY, FOOTSTEP -> 55; // gestito separatamente sopra

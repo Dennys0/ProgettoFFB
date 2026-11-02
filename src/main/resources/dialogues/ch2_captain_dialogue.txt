@@ -16,12 +16,12 @@ CAPITANO|Ascolta, ragazzo. Tra questi relitti giacciono tesori dimenticati... ma
 ARTHUR|Ecco, pure il pirata filosofo! Un indizio normale mai?!
 CAPITANO|ARRR! Ricorda questo: ciò che il mare inghiotte, il mare conserva. Anche i segreti degli dèi.
 NARRATOR|Il capitano solleva lentamente la sciabola, indicando una nave spezzata sul fondo dell'abisso.
-CAPITANO|Laggiù riposa qualcosa che nemmeno la morte è riuscita a portarmi via...
-ARTHUR|E immagino che tocchi a me andare a recuperarla, vero?!
-CAPITANO|Ahahah! Hai l'istinto del pirata, ragazzo!
-ARTHUR|No, ho l'istinto di mandarti a quel paese!
+CAPITANO|Laggiù ho perso la nave. Ma una cosa sono riuscito a portarmela dietro.
+ARTHUR|Fammi indovinare. Il rum?
+CAPITANO|Meglio. Il codice per sfuggire alle reti di Rán.
+ARTHUR|Allora sì, per una volta preferisco il libro.
 NARRATOR|Il capitano scoppia in una risata, mentre una corrente gelida attraversa il cimitero sommerso.
-CAPITANO|ARRR! Buona fortuna, Arthur! E se trovi del rum... ricordati del vecchio capitano!
-ARTHUR|...Ma perché pure gli scheletri sanno come mi chiamo?!
-NARRATOR|Il capitano continua a ridere, facendo tintinnare le ossa.
-ARTHUR|Vabbè... almeno questo non ha cercato di mangiarmi.
+CAPITANO|Sotto la giubba porto ancora il diario di bordo. Ogni numero che urla Rán ha una risposta. Le ho scritte tutte.
+ARTHUR|E quanto costa il prestito? Un occhio? Perché vedo che da queste parti va di moda.
+CAPITANO|A bordo mi bastava una cosa: sapere che il mio ordine era arrivato fino all’ultimo uomo. Alla mia domanda si risponde «Sì, capitano!».
+ARTHUR|Tre alberi spezzati e ancora fa l’appello. Sentiamo questi ordini.

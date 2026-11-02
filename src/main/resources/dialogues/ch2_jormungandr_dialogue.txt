@@ -13,7 +13,7 @@ ARTHUR|Fammi indovinare... Un padrone misterioso, un calderone e qualche altra a
 JORMUNGANDR|Dunque qualcuno ti sta già osservando... Ma ricorda, umano: non tutti coloro che ti seguono desiderano vederti arrivare vivo.
 ARTHUR|Perfetto! Un altro che parla per indovinelli! Ma un navigatore GPS non ce l'avete?!
 NARRATOR|Jörmungandr muove lentamente il suo corpo colossale. L'intera voragine trema e una corrente violentissima investe Arthur.
-JORMUNGANDR|Prosegui, Arthur. Ma quando il serpente lascerà la propria coda... i nove mondi conosceranno la fine.
+JORMUNGANDR|Apri la mano, piccolo navigante. Il sale che cade dalle mie scaglie ha attraversato tutti i mari. Ora è tuo. Prosegui, Arthur. Ma quando il serpente lascerà la propria coda... i nove mondi conosceranno la fine.
 ARTHUR|Aspetta... LA FINE?! Di che accidenti stai parlando?!
 JORMUNGANDR|Del Ragnarök, piccolo umano. E temo che il tuo viaggio ne sia più vicino di quanto immagini.
 NARRATOR|Gli occhi del serpente scompaiono nell'oscurità. Il suo corpo continua a scivolare lentamente tra le rocce, apparentemente senza fine.

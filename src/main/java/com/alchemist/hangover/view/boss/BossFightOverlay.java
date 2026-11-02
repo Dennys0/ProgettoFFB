@@ -28,6 +28,7 @@ public class BossFightOverlay extends JDialog {
 
     private JLabel stepLabel;
     private JLabel sequenceDisplayLabel;
+    private final JProgressBar timeBar = new JProgressBar(0, 1000);
     private JLabel timerLabel;
     private JLabel statusLabel;
 
@@ -94,8 +95,11 @@ public class BossFightOverlay extends JDialog {
         timerLabel = new JLabel("TEMPO: 10s", SwingConstants.CENTER);
         timerLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
         timerLabel.setForeground(Color.WHITE);
-        timerLabel.setBounds(50, 370, 2550, 35);
+        timerLabel.setBounds(50, 370, 700, 28);
         contentPanel.add(timerLabel);
+        timeBar.setBounds(120, 397, 560, 7);
+        timeBar.setForeground(new Color(222, 183, 103));
+        contentPanel.add(timeBar);
 
         // Messaggi di Stato
         statusLabel = new JLabel("Premi i tasti WASD corretti prima che scada il tempo!", SwingConstants.CENTER);
@@ -167,12 +171,14 @@ public class BossFightOverlay extends JDialog {
         updateSequenceDisplay();
 
         int durationMs = 2200 + (step - 1) * 250;
+        timeBar.setValue(1000);
         deadline = System.nanoTime() + durationMs * 1_000_000L;
         timerLabel.setText(String.format("%.1f s", durationMs / 1000.0));
         AudioManager.getInstance().playEffect(AudioManager.Effect.WIND_GUST);
         if (countdownTimer != null) countdownTimer.stop();
         countdownTimer = new Timer(50, e -> {
             long remaining = deadline - System.nanoTime();
+            timeBar.setValue((int) (Math.max(0, remaining) / (durationMs * 1000L)));
             timerLabel.setText(String.format("%.1f s", Math.max(0, remaining) / 1e9));
             if (remaining <= 0) {
                 countdownTimer.stop();
