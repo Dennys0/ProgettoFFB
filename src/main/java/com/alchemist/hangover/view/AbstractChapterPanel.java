@@ -237,8 +237,6 @@ public abstract class AbstractChapterPanel extends JPanel {
     protected void navigate(String direction) {
         Integer destination = roomExits.getOrDefault(currentRoom, Map.of()).get(direction);
         if (destination != null) {
-            com.alchemist.hangover.controller.AudioManager.getInstance()
-                    .playEffect(com.alchemist.hangover.controller.AudioManager.Effect.CLICK);
             loadRoom(destination);
         }
     }

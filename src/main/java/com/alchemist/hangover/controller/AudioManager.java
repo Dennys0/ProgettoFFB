@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public final class AudioManager {
     public enum Effect {
-        CLICK, PICKUP, DAMAGE, SUCCESS, EARTH_BREATH,
+        CLICK, PICKUP, DAMAGE, SUCCESS, RECIPE_READY, FOOTSTEP, EARTH_BREATH,
         WIND_GUST, WATER_DROP, FORGE_SPARK, STONE_RUMBLE, RUNE_CHIME
     }
 
@@ -96,7 +96,7 @@ public final class AudioManager {
 
     public void playRoomCue(String resourcePath) {
         Effect cue = cueForRoom(resourcePath);
-        if (cue != null) playEffect(cue);
+        playEffect(cue == null ? Effect.FOOTSTEP : cue);
     }
 
     public void playEffect(Effect effect) {
@@ -125,7 +125,7 @@ public final class AudioManager {
     }
 
     private static byte[] makeAmbience(String scene) {
-        int length = SAMPLE_RATE * 6;
+        int length = SAMPLE_RATE * 12;
         byte[] pcm = new byte[length * 2];
         Random random = new Random(scene.hashCode());
         boolean water = "CHAPTER2".equals(scene);
@@ -140,17 +140,17 @@ public final class AudioManager {
         double ember = 0;
         for (int i = 0; i < length; i++) {
             double t = (double) i / SAMPLE_RATE;
-            int noteIndex = Math.min(3, (int) (t / 1.5));
+            int noteIndex = Math.min(3, (int) ((t % 6) / 1.5));
             double phase = (t % 1.5) / 1.5;
             double envelope = Math.pow(Math.sin(Math.PI * phase), 2);
             double note = Math.sin(2 * Math.PI * notes[noteIndex] * t)
                     + 0.35 * Math.sin(2 * Math.PI * notes[noteIndex] * 0.5 * t);
             double wind = random.nextDouble() * 2 - 1;
-            filteredNoise = 0.985 * filteredNoise + 0.015 * wind;
+            filteredNoise = 0.994 * filteredNoise + 0.006 * wind;
             double swell = 0.5 + 0.5 * Math.sin(2 * Math.PI * t / 5.0);
             double sample;
             if (fire) {
-                ember = random.nextDouble() < 0.002 ? 0.32 : ember * 0.87;
+                ember = random.nextDouble() < 0.0006 ? 0.14 : ember * 0.91;
                 sample = (0.5 + swell) * filteredNoise + ember * wind
                         + 0.07 * Math.sin(2 * Math.PI * 52 * t) * swell;
             } else if (earth) {
@@ -168,14 +168,15 @@ public final class AudioManager {
             }
             // Dissolvenza ai confini del loop, per evitare scatti.
             double edge = Math.min(1.0, Math.min(i, length - i - 1) / 450.0);
-            writeSample(pcm, i, sample * edge);
+            writeSample(pcm, i, 0.27 * sample * edge);
         }
         return pcm;
     }
 
     private static byte[] makeEffect(Effect effect) {
+        if (effect == Effect.RECIPE_READY) return makeRecipeChord();
         if (effect == Effect.EARTH_BREATH) return makeEarthBreath();
-        if (effect == Effect.WIND_GUST || effect == Effect.WATER_DROP
+        if (effect == Effect.FOOTSTEP || effect == Effect.WIND_GUST || effect == Effect.WATER_DROP
                 || effect == Effect.FORGE_SPARK || effect == Effect.STONE_RUMBLE
                 || effect == Effect.RUNE_CHIME) return makeRoomEffect(effect);
         double seconds = effect == Effect.DAMAGE ? 0.38 : 0.27;
@@ -189,7 +190,7 @@ public final class AudioManager {
                 case DAMAGE -> 250 - 160 * progress;
                 case SUCCESS -> 420 + 600 * progress;
                 case CLICK -> 550;
-                case EARTH_BREATH -> 55; // gestito separatamente sopra
+                case EARTH_BREATH, RECIPE_READY, FOOTSTEP -> 55; // gestito separatamente sopra
                 case WIND_GUST, WATER_DROP, FORGE_SPARK, STONE_RUMBLE, RUNE_CHIME -> 220;
             };
             double envelope = Math.pow(1 - progress, 2) * Math.min(1, progress * 35);
@@ -213,6 +214,11 @@ public final class AudioManager {
             double fade = Math.sin(Math.PI * p);
             double sample;
             switch (effect) {
+                case FOOTSTEP -> {
+                    filtered = 0.83 * filtered + 0.17 * (noise.nextDouble() * 2 - 1);
+                    sample = (0.08 * Math.sin(2 * Math.PI * 94 * t) + filtered * 0.3)
+                            * Math.exp(-11 * p) * Math.min(1, p * 28);
+                }
                 case WIND_GUST -> {
                     filtered = 0.94 * filtered + 0.06 * (noise.nextDouble() * 2 - 1);
                     sample = 0.26 * filtered * fade * fade;
@@ -238,9 +244,29 @@ public final class AudioManager {
                         * Math.exp(-5 * p) * Math.min(1, p * 25);
                 default -> sample = 0;
             }
-            writeSample(data, i, sample);
+            writeSample(data, i, sample * fade * 0.6);
         }
         return data;
+    }
+
+    /** Tre attacchi di vetro sovrapposti, con decadimento naturale. */
+    private static byte[] makeRecipeChord() {
+        double[] notes = {392, 493.88, 587.33};
+        int length = SAMPLE_RATE * 3 / 2;
+        byte[] pcm = new byte[length * 2];
+        for (int i = 0; i < length; i++) {
+            double t = (double) i / SAMPLE_RATE;
+            double sample = 0;
+            for (int n = 0; n < notes.length; n++) {
+                double age = t - n * 0.16;
+                if (age < 0) continue;
+                double phase = 2 * Math.PI * notes[n] * age;
+                double ring = Math.sin(phase) + 0.2 * Math.sin(2.01 * phase);
+                sample += 0.18 * ring * Math.min(1, age / 0.015) * Math.exp(-4 * age);
+            }
+            writeSample(pcm, i, sample * Math.min(1, (length - 1 - i) / 320.0));
+        }
+        return pcm;
     }
 
     /** Due battiti profondi e un respiro lento, generati senza file WAV. */

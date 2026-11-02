@@ -45,7 +45,7 @@ public final class CauldronController {
     public static void complete(int chapter) {
         String scene = completionScene(chapter);
         CauldronGameService.registerSuccess(GameState.getInstance(), chapter);
-        AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
+        AudioManager.getInstance().playEffect(AudioManager.Effect.RECIPE_READY);
         if (chapter == 4) {
             EpiloguePanel finale = (EpiloguePanel) SceneManager.getInstance().getPanel("EPILOGUE");
             if (finale != null) finale.restart();
