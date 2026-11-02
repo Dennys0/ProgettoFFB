@@ -19,5 +19,6 @@ NARRATOR|Il Vanir riprende a intagliare, mentre una scintilla azzurra attraversa
 ARTHUR|Fantastico. Un altro indovinello! Ma qualcuno di normale in questo gioco esiste?!
 VANIR|Ahahah! Buon viaggio, Arthur. E non dimenticare... persino gli dèi possono essere ingannati.
 ARTHUR|Sì, sì... Grazie, Mastro Geppetto. Ora vado a farmi prendere in giro da qualcun altro.
+VANIR|Tieni questa radice. L’ho recisa dove Níðhöggr ha morso il tronco. Guarda il filo del mio coltello: una goccia della sua linfa si è già mangiata il ferro.
 NARRATOR|Arthur si allontana. Il Vanir osserva l'amuleto appena scolpito, sul quale compare lentamente il simbolo di un calderone.
 VANIR|Che le radici ti proteggano, umano... Ne avrai bisogno.

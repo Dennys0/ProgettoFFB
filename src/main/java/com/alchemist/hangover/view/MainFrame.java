@@ -102,10 +102,10 @@ public class MainFrame extends JFrame {
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), "showHitboxes");
         getRootPane().getActionMap().put("showHitboxes", new AbstractAction() {
             @Override public void actionPerformed(java.awt.event.ActionEvent e) {
-                if (!"CHAPTER4".equals(manager.getCurrentSceneName())) return;
+                if (!isPlayingChapter()) return;
                 HotspotButton.setDebugBoundsVisible(!HotspotButton.debugBoundsVisible());
                 manager.getMainPanel().repaint();
-                System.out.println("[DEBUG] Hitbox Muspelheim: "
+                System.out.println("[DEBUG] Hitbox: "
                         + (HotspotButton.debugBoundsVisible() ? "VISIBILI" : "NASCOSTE"));
             }
         });

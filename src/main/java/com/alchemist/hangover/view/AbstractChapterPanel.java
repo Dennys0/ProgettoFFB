@@ -26,6 +26,7 @@ public abstract class AbstractChapterPanel extends JPanel {
     private Map<Integer, String> roomBgPaths = Map.of();
     private Map<Integer, Map<String, Integer>> roomExits = Map.of();
     /** Registro condiviso: nessuna sottoclasse duplica la gestione degli NPC. */
+    private final Map<HotspotButton, Rectangle> sceneBounds = new LinkedHashMap<>();
     private final Map<Integer, List<HotspotButton>> npcHotspots = new HashMap<>();
     protected final Map<String, JButton> itemButtons = new LinkedHashMap<>();
     private final Map<String, WorldItemDefinition> worldItems = new LinkedHashMap<>();
@@ -93,6 +94,7 @@ public abstract class AbstractChapterPanel extends JPanel {
     protected final HotspotButton registerActionHotspot(
             Rectangle bounds, String label, Runnable action) {
         HotspotButton hotspot = new HotspotButton();
+        sceneBounds.put(hotspot, new Rectangle(bounds));
         hotspot.setBounds(bounds);
         hotspot.setToolTipText(label);
         hotspot.getAccessibleContext().setAccessibleName(label);
@@ -103,6 +105,12 @@ public abstract class AbstractChapterPanel extends JPanel {
     }
 
     /** Registra un NPC gia' visibile nel PNG della stanza, senza sovrapporre sprite. */
+    @Override public void doLayout() {
+        super.doLayout();
+        sceneBounds.forEach((button, r) -> button.setBounds(r.x * getWidth() / 1280,
+                r.y * getHeight() / 720, r.width * getWidth() / 1280, r.height * getHeight() / 720));
+    }
+
     protected final HotspotButton registerNpcHotspot(int room, Rectangle bounds,
             String label, Runnable action) {
         HotspotButton hotspot = registerActionHotspot(bounds, label, action);

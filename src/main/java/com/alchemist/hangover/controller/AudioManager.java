@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public final class AudioManager {
     public enum Effect {
-        CLICK, PICKUP, DAMAGE, SERPENT_CALL, SUCCESS, RECIPE_READY, FOOTSTEP, EARTH_BREATH,
+        CLICK, PICKUP, DAMAGE, SERPENT_CALL, MAGMA_BUBBLE, MAGMA_HEART, SUCCESS, RECIPE_READY, FOOTSTEP, EARTH_BREATH,
         WIND_GUST, WATER_DROP, FORGE_SPARK, STONE_RUMBLE, RUNE_CHIME
     }
 
@@ -20,6 +20,8 @@ public final class AudioManager {
             SAMPLE_RATE, false);
 
     private Clip ambience;
+    private Clip typingClip;
+    private boolean typingUnavailable;
     private String activeScene;
 
     private AudioManager() { }
@@ -89,7 +91,8 @@ public final class AudioManager {
                     || resourcePath.contains("room7_boss")) return Effect.STONE_RUMBLE;
             if (resourcePath.contains("room6_eco")) return Effect.WIND_GUST;
         } else if (resourcePath.contains("/chapter4/")) {
-            if (resourcePath.endsWith("room_5.png")) return Effect.FORGE_SPARK;
+            if (resourcePath.endsWith("room_1.png") || resourcePath.endsWith("room_3.png")
+                    || resourcePath.endsWith("room_5.png")) return Effect.MAGMA_BUBBLE;
             if (resourcePath.endsWith("room_6.png")) return Effect.WIND_GUST;
             if (resourcePath.endsWith("room_boss.png")) return Effect.STONE_RUMBLE;
         }
@@ -99,6 +102,29 @@ public final class AudioManager {
     public void playRoomCue(String resourcePath) {
         Effect cue = cueForRoom(resourcePath);
         playEffect(cue == null ? Effect.FOOTSTEP : cue);
+    }
+
+    public synchronized void playTypingTick() {
+        GameSettings settings = GameSettings.getInstance();
+        if (!settings.isSoundEnabled() || !settings.isTypingEnabled() || typingUnavailable) return;
+        try {
+            if (typingClip == null) {
+                byte[] tick = new byte[320];
+                for (int i = 0; i < tick.length / 2; i++)
+                    writeSample(tick, i, 0.11 * Math.sin(i * 0.85) * Math.exp(-i / 22.0));
+                typingClip = AudioSystem.getClip();
+                typingClip.open(FORMAT, tick, 0, tick.length);
+                setLevel(typingClip, -17f);
+            }
+            if (!typingClip.isRunning()) {
+                typingClip.setFramePosition(0);
+                typingClip.start();
+            }
+        } catch (LineUnavailableException | IllegalArgumentException | SecurityException ex) {
+            if (typingClip != null) typingClip.close();
+            typingClip = null;
+            typingUnavailable = true;
+        }
     }
 
     public void playEffect(Effect effect) {
@@ -207,7 +233,29 @@ public final class AudioManager {
         return pcm;
     }
 
+    private static byte[] makeMagma(boolean heartbeat) {
+        int frames = heartbeat ? SAMPLE_RATE * 3 / 2 : SAMPLE_RATE;
+        byte[] pcm = new byte[frames * 2];
+        double[] pulses = heartbeat ? new double[]{0.08, 0.58} : new double[]{0.04, 0.22, 0.53, 0.70};
+        for (int i = 0; i < frames; i++) {
+            double t = i / (double) SAMPLE_RATE;
+            double sample = 0;
+            for (double onset : pulses) {
+                double age = t - onset;
+                if (age < 0) continue;
+                double phase = 2 * Math.PI * (heartbeat ? 54 * age :
+                        90 * age + 0.65 * (1 - Math.exp(-26 * age)));
+                sample += Math.sin(phase) * Math.exp(-(heartbeat ? 7 : 16) * age)
+                        * Math.min(1, age * 80);
+            }
+            writeSample(pcm, i, 0.40 * sample * Math.min(1, (frames - 1 - i) / 100.0));
+        }
+        return pcm;
+    }
+
     private static byte[] makeEffect(Effect effect) {
+        if (effect == Effect.MAGMA_BUBBLE || effect == Effect.MAGMA_HEART)
+            return makeMagma(effect == Effect.MAGMA_HEART);
         if (effect == Effect.SERPENT_CALL) {
             byte[] pcm = new byte[SAMPLE_RATE * 2];
             for (int i = 0; i < SAMPLE_RATE; i++) {
@@ -232,7 +280,7 @@ public final class AudioManager {
             double progress = t / seconds;
             double frequency = switch (effect) {
                 case PICKUP -> 650 + 440 * progress;
-                case SERPENT_CALL, DAMAGE -> throw new AssertionError(effect);
+                case SERPENT_CALL, MAGMA_HEART, MAGMA_BUBBLE, DAMAGE -> throw new AssertionError(effect);
                 case SUCCESS -> 420 + 600 * progress;
                 case CLICK -> 550;
                 case EARTH_BREATH, RECIPE_READY, FOOTSTEP -> 55; // gestito separatamente sopra

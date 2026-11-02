@@ -91,6 +91,10 @@ final class ChapterLayouts {
 
     /** Nomi delle stanze usati nei menu di sviluppo, separati dai percorsi. */
     private static final Map<Integer, Map<Integer, String>> ROOM_NAMES = Map.of(
+            1, Map.of(1, "Ponte di coperta", 2, "Timone", 3, "Prua", 4, "Cabina dell’alchimista",
+                    5, "Stiva", 6, "Coffa", 7, "Il fronte della tempesta"),
+            2, Map.of(1, "Sala sommersa", 2, "Taverna abissale", 3, "Sacrestia corallina",
+                    4, "Giardini sommersi", 5, "Fossa degli abissi", 6, "Balconata dei relitti", 7, "Santuario di Rán"),
             3, Map.of(
                     1, "La Radura delle Radici",
                     2, "Il Cerchio delle Rune",

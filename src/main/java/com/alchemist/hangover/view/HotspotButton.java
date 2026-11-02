@@ -13,7 +13,6 @@ import java.awt.event.MouseMotionAdapter;
  * the pointer. No rectangles around characters, cauldrons or scenery.
  */
 public final class HotspotButton extends JButton {
-    private static final Font HINT_FONT = new Font("Georgia", Font.BOLD, 12);
     // Modalita' di sviluppo: inattiva di default, quindi mai visibile al giocatore.
     private static boolean showDebugBounds;
 
@@ -34,7 +33,7 @@ public final class HotspotButton extends JButton {
         setBorder(null);
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         setRolloverEnabled(true);
-        ToolTipManager.sharedInstance().setInitialDelay(1150);
+        ToolTipManager.sharedInstance().setInitialDelay(200);
         ToolTipManager.sharedInstance().setDismissDelay(4200);
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -54,16 +53,6 @@ public final class HotspotButton extends JButton {
 
     public boolean isHoverHighlightEnabled() {
         return collectibleEmphasis;
-    }
-
-    /**
-     * The hint is already painted inside the hotspot. Returning null here
-     * prevents Swing from displaying a SECOND floating tooltip with the
-     * identical "Parla con..." text.
-     */
-    @Override
-    public String getToolTipText(MouseEvent event) {
-        return null;
     }
 
     @Override
@@ -132,36 +121,9 @@ public final class HotspotButton extends JButton {
             g.setPaint(light);
             g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
 
-            String label = getToolTipText();
-            if (label == null || label.isBlank() || getWidth() < 45 || getHeight() < 22) return;
-
-            g.setFont(HINT_FONT);
-            FontMetrics fm = g.getFontMetrics();
-            int allowed = Math.max(15, getWidth() - 20);
-            String visible = fitText(label, fm, allowed);
-            int width = Math.min(getWidth() - 8, fm.stringWidth(visible) + 17);
-            int height = Math.min(25, getHeight() - 3);
-            // Center the label over the whole NPC interaction region rather
-            // than chasing the pointer into a cropped corner of the button.
-            int left = Math.max(4, (getWidth() - width) / 2);
-            int top = Math.max(2, Math.min(getHeight() - height - 2,
-                    y - radius - height / 2));
-            g.setColor(new Color(21, 21, 28, 218));
-            g.fillRoundRect(left, top, width, height, 13, 13);
-            g.setColor(new Color(245, 218, 170));
-            g.drawString(visible, left + 8,
-                    top + (height - fm.getHeight()) / 2 + fm.getAscent());
         } finally {
             g.dispose();
         }
     }
 
-    private static String fitText(String text, FontMetrics fm, int maxWidth) {
-        if (fm.stringWidth(text) <= maxWidth) return text;
-        String result = text;
-        while (!result.isEmpty() && fm.stringWidth(result + "...") > maxWidth) {
-            result = result.substring(0, result.length() - 1);
-        }
-        return result.isEmpty() ? "..." : result.stripTrailing() + "...";
-    }
 }

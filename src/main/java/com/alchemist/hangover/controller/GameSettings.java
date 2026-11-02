@@ -6,6 +6,7 @@ import java.util.prefs.Preferences;
 public final class GameSettings {
     private static final GameSettings INSTANCE = new GameSettings();
     private final Preferences preferences;
+    private boolean typingEnabled;
     private boolean ambienceEnabled = true;
     private boolean soundEnabled = true;
     private boolean transitionsEnabled = true;
@@ -14,6 +15,7 @@ public final class GameSettings {
         Preferences store = null;
         try {
             store = Preferences.userNodeForPackage(GameSettings.class);
+            typingEnabled = store.getBoolean("audio.typing", false);
             ambienceEnabled = store.getBoolean("audio.ambience", true);
             soundEnabled = store.getBoolean("audio.enabled", true);
             transitionsEnabled = store.getBoolean("transitions.enabled", true);
@@ -26,6 +28,13 @@ public final class GameSettings {
     public static GameSettings getInstance() { return INSTANCE; }
     public boolean isSoundEnabled() { return soundEnabled; }
     public boolean isTransitionsEnabled() { return transitionsEnabled; }
+
+    public boolean isTypingEnabled() { return typingEnabled; }
+
+    public void setTypingEnabled(boolean enabled) {
+        typingEnabled = enabled;
+        store("audio.typing", enabled);
+    }
 
     public boolean isAmbienceEnabled() { return ambienceEnabled; }
 

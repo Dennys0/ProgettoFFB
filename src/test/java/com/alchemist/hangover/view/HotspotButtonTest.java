@@ -28,10 +28,10 @@ class HotspotButtonTest {
             assertTrue((buffer.getRGB(90, 50) >>> 24) > 0,
                     "Un piccolo bagliore indica l'interazione.");
             assertEquals("Parla con Gunnar", button.getToolTipText());
-            assertNull(button.getToolTipText(new java.awt.event.MouseEvent(
+            assertEquals("Parla con Gunnar", button.getToolTipText(new java.awt.event.MouseEvent(
                     button, java.awt.event.MouseEvent.MOUSE_MOVED,
                     0L, 0, 25, 25, 0, false)),
-                    "Non mostrare un secondo tooltip nativo oltre a quello dipinto.");
+                    "Il popup deve mostrare il nome intero anche fuori dai limiti del pulsante.");
             assertEquals(new Color(31, 27, 38), button.createToolTip().getBackground());
         });
     }

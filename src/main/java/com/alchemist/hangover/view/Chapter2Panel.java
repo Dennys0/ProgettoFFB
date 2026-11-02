@@ -31,17 +31,17 @@ public class Chapter2Panel extends AbstractChapterPanel {
     record NpcDefinition(int room, Rectangle bounds, String tooltip, String dialogue) { }
 
     static final List<NpcDefinition> NPC_DEFINITIONS = List.of(
-            new NpcDefinition(1, new Rectangle(765, 287, 285, 274),
+            new NpcDefinition(1, new Rectangle(757, 390, 116, 181),
                     "Parla con Marmæl", "/dialogues/ch2_marmael_dialogue.txt"),
-            new NpcDefinition(3, new Rectangle(1002, 102, 265, 225),
+            new NpcDefinition(3, new Rectangle(1027, 105, 91, 79),
                     "Parla con lo sgherro", "/dialogues/ch2_sgherro_dialogue.txt"),
-            new NpcDefinition(4, new Rectangle(710, 110, 215, 240),
+            new NpcDefinition(4, new Rectangle(576, 141, 277, 131),
                     "Parla con la sirena", "/dialogues/ch2_sirena_dialogue.txt"),
-            new NpcDefinition(5, new Rectangle(365, 135, 540, 345),
+            new NpcDefinition(5, new Rectangle(627, 143, 121, 91),
                     "Parla con Jörmungandr", "/dialogues/ch2_jormungandr_dialogue.txt"),
-            new NpcDefinition(6, new Rectangle(140, 165, 300, 285),
+            new NpcDefinition(6, new Rectangle(120, 133, 290, 269),
                     "Parla con il Capitano", "/dialogues/ch2_captain_dialogue.txt"),
-            new NpcDefinition(7, new Rectangle(940, 175, 280, 285),
+            new NpcDefinition(7, new Rectangle(908, 218, 111, 145),
                     "Parla con Hrönn", "/dialogues/ch2_hronn_dialogue.txt")
     );
 
@@ -72,23 +72,31 @@ public class Chapter2Panel extends AbstractChapterPanel {
     private void initHotspots() {
         // NPC Siegfried al Bancone (Stanza 2)
         siegfriedHotspot = registerActionHotspot(
-                new Rectangle(790, 175, 235, 385),
+                new Rectangle(775, 264, 249, 418),
                 "Parla con Siegfried", this::startSiegfriedDialogue);
 
         // Calderone nella Sacrestia Corallina (Stanza 3)
         cauldronHotspot = registerActionHotspot(
-                new Rectangle(500, 350, 280, 250),
+                new Rectangle(545, 322, 159, 124),
                 "Interagisci con il calderone", this::interactWithCauldron);
 
         // Boss Rán nel Santuario (Stanza 7 - Area ridotta per non coprire le frecce)
         // Il vortice e' al centro; il pulsante non deve coprire Hrönn.
         ranBossHotspot = registerActionHotspot(
-                new Rectangle(400, 300, 470, 265),
+                new Rectangle(414, 365, 607, 237),
                 "Affronta Rán", this::triggerRanBossEncounter);
 
         // NPCs are baked into the seven scenes: only transparent hotzones.
         for (NpcDefinition npc : NPC_DEFINITIONS) {
             addNpcHotspot(npc);
+            if (npc.room() == 5) {
+                // Spire in primo piano: seguono il corpo senza coprire tutta la fossa.
+                for (Rectangle coil : List.of(new Rectangle(8, 230, 235, 121),
+                        new Rectangle(190, 327, 212, 118), new Rectangle(366, 417, 195, 116),
+                        new Rectangle(534, 506, 216, 122), new Rectangle(735, 446, 122, 148))) {
+                    registerNpcHotspot(5, coil, npc.tooltip(), () -> startSceneDialogue(npc.dialogue(), DialogueKind.NPC));
+                }
+            }
         }
 
         // Oggetti Raccoglibili (Stanza 4 e Stanza 5)

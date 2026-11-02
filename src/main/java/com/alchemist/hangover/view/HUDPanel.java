@@ -5,16 +5,22 @@ import java.awt.*;
 
 public class HUDPanel extends JPanel {
 
-    private HealthDisplayPanel heartDisplay;
+    private final JLabel location = new JLabel();
     public HUDPanel(JFrame mainFrame) {
         setLayout(null);
         setOpaque(false);
         setBounds(0, 0, 1280, 80);
 
-        // Indicatore condiviso con le finestre dei boss.
-        heartDisplay = new HealthDisplayPanel(40);
-        heartDisplay.setBounds(25, 20, 175, 42);
-        add(heartDisplay);
+        location.setOpaque(true);
+        location.setBackground(new Color(30, 27, 31));
+        location.setForeground(new Color(245, 222, 171));
+        location.setFont(new Font(Font.SERIF, Font.BOLD, 16));
+        location.setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 12));
+        add(location);
+        updateHUD();
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0 && isShowing()) updateHUD();
+        });
 
         // 2. Icona Inventario in Alto a Destra
         JButton inventoryButton = new JButton();
@@ -75,6 +81,9 @@ public class HUDPanel extends JPanel {
     }
 
     public void updateHUD() {
-        heartDisplay.refresh();
+        var state = com.alchemist.hangover.model.GameState.getInstance();
+        String room = ChapterLayouts.roomName(state.getChapter(), state.getCurrentRoom());
+        location.setText("Capitolo " + state.getChapter() + "   ·   " + room);
+        location.setBounds(25, 20, location.getPreferredSize().width, 36);
     }
 }

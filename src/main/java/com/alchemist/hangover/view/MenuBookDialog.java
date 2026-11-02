@@ -65,9 +65,14 @@ final class MenuBookDialog extends JDialog {
                         "Attiva gli effetti e i suoni del mondo.");
                 JCheckBox ambience = option(body, "Fondo ambientale", settings.isAmbienceEnabled(),
                         "Vento, mare, caverna e fornace durante l’esplorazione.");
+                JCheckBox typing = option(body, "Scrittura dei dialoghi", settings.isTypingEnabled(),
+                        "Un tocco leggero mentre appaiono le parole.");
+                typing.addActionListener(e -> settings.setTypingEnabled(typing.isSelected()));
+                typing.setEnabled(sound.isSelected());
                 ambience.setEnabled(sound.isSelected());
                 sound.addActionListener(e -> {
                     settings.setSoundEnabled(sound.isSelected());
+                    typing.setEnabled(sound.isSelected());
                     ambience.setEnabled(sound.isSelected());
                 });
                 ambience.addActionListener(e -> settings.setAmbienceEnabled(ambience.isSelected()));

@@ -22,7 +22,7 @@ public final class SurturBossOverlay extends JDialog {
     private final JLabel clockLabel = label(15, Font.BOLD);
     private final JProgressBar timeBar = new JProgressBar(0, 1000);
     private final HealthDisplayPanel hearts = new HealthDisplayPanel(32);
-    private final Image arthur = artwork("/images/shared/npc/arthur_silhouette.png");
+
     private final Image surtur = artwork("/images/chapter4/npc/boss.png");
     private final ArenaPanel arena = new ArenaPanel();
     private final javax.swing.Timer animation;
@@ -91,7 +91,7 @@ public final class SurturBossOverlay extends JDialog {
         JPanel actions = new JPanel(new BorderLayout(10, 0));
         actions.setOpaque(false);
         JLabel help = label(14, Font.PLAIN);
-        help.setText("A / S / D o clic per spostarti     •     Attira la lama sulla runa accesa");
+        help.setText("A / S / D o clic per spostare la tua runa azzurra     •     Attira la lama sulla runa accesa");
         actions.add(help, BorderLayout.CENTER);
         JButton leave = new JButton("ABBANDONA (ESC)");
         leave.setFocusable(false);
@@ -294,7 +294,17 @@ public final class SurturBossOverlay extends JDialog {
                     FontMetrics fm = g.getFontMetrics();
                     g.drawString(text, x + (laneWidth - fm.stringWidth(text)) / 2, laneHeight - 22);
 
-                    if (active) g.drawImage(arthur, x + laneWidth / 2 - 42, laneHeight - 175, 84, 125, this);
+                    if (active) {
+                        int cx = x + laneWidth / 2, cy = laneHeight - 119;
+                        g.setColor(new Color(18, 42, 48));
+                        g.fillOval(cx - 27, cy - 27, 54, 54);
+                        g.setColor(new Color(186, 249, 250));
+                        g.setStroke(new BasicStroke(3));
+                        g.drawOval(cx - 27, cy - 27, 54, 54);
+                        g.drawLine(cx - 13, cy + 10, cx, cy - 14);
+                        g.drawLine(cx, cy - 14, cx + 13, cy + 10);
+                        g.drawLine(cx, cy - 14, cx, cy + 17);
+                    }
                 }
             } finally { g.dispose(); }
         }

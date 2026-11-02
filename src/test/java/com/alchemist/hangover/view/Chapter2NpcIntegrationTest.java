@@ -71,7 +71,7 @@ class Chapter2NpcIntegrationTest {
             assertFalse(npc.tooltip().isBlank());
             Rectangle rect = npc.bounds();
             assertTrue(rect.x >= 0 && rect.y >= 80);
-            assertTrue(rect.width >= 100 && rect.height >= 100);
+            assertTrue(rect.width >= 40 && rect.height >= 40);
             assertTrue(rect.x + rect.width <= 1280);
             assertTrue(rect.y + rect.height <= 720);
         }
@@ -83,21 +83,16 @@ class Chapter2NpcIntegrationTest {
     }
 
     @Test
-    void interactionAreasCoverCharactersAndCenterTheSeaSerpent() {
+    void interactionAreasFollowThePaintedCharacters() {
         Map<Integer, Rectangle> byRoom = Chapter2Panel.NPC_DEFINITIONS.stream()
                 .collect(Collectors.toMap(Chapter2Panel.NpcDefinition::room,
                         Chapter2Panel.NpcDefinition::bounds));
-        Rectangle marmael = byRoom.get(1);
-        assertTrue(marmael.width >= 250 && marmael.height >= 250,
-                "Marmæl deve avere spazio per personaggio e didascalia");
-        assertTrue(marmael.contains(895, 420));
-        Rectangle imp = byRoom.get(3);
-        assertTrue(imp.width >= 250, "Lo sgherro non deve tagliare il testo");
-        assertTrue(imp.contains(1150, 200));
-        Rectangle serpent = byRoom.get(5);
-        assertEquals(635, serpent.getCenterX(), 25,
-                "Jörmungandr deve essere selezionabile al centro della scena");
-        assertTrue(serpent.width >= 500 && serpent.height >= 300);
+        assertTrue(byRoom.get(1).contains(804, 457), "Marmæl seduto al tavolo");
+        assertTrue(byRoom.get(3).contains(1074, 151), "Sgherro fra i coralli");
+        assertTrue(byRoom.get(4).contains(809, 192), "Sirena sopra i giardini");
+        assertTrue(byRoom.get(5).contains(673, 191), "Testa del serpente nel fascio di luce");
+        assertTrue(byRoom.get(6).contains(272, 211), "Capitano sopra i relitti");
+        assertTrue(byRoom.get(7).contains(983, 269), "Hrönn sullo sperone");
     }
 
     @Test

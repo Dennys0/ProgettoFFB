@@ -1,6 +1,7 @@
 package com.alchemist.hangover.view;
 
 import com.alchemist.hangover.controller.SceneManager;
+import com.alchemist.hangover.controller.AudioManager;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
 import com.alchemist.hangover.view.boss.SurturBossOverlay;
@@ -33,7 +34,6 @@ public final class Chapter4Panel extends AbstractChapterPanel {
                     "Parla con Hela", "/dialogues/ch4_hela.txt")
     );
 
-    private final java.util.Map<HotspotButton, Rectangle> sceneBounds = new java.util.LinkedHashMap<>();
     private final DialogueManager.SceneSession dialogues;
     private final HotspotButton cauldron;
     private final HotspotButton stele;
@@ -62,9 +62,10 @@ public final class Chapter4Panel extends AbstractChapterPanel {
                 218, 496, 74, 49, 4, "Cenere di Fenrir",
                 "Polvere nera di lupo che assorbe la magia.");
         pulse = registerActionHotspot(new Rectangle(690, 490, 195, 112),
-                "Ascolta il cuore di Muspelheim", () ->
-                ToastNotification.show(this,
-                        "Arthur: Il pavimento batte come un cuore. Non è rassicurante."));
+                "Ascolta il cuore di Muspelheim", () -> {
+                    AudioManager.getInstance().playEffect(AudioManager.Effect.MAGMA_HEART);
+                    ToastNotification.show(this, "Due battiti sotto il basalto. Al secondo, la roccia si incrina.");
+                });
         shield = registerActionHotspot(new Rectangle(901, 564, 167, 91),
                 "Esamina lo scudo della Valchiria", () ->
                 StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.FIRE,
@@ -80,23 +81,12 @@ public final class Chapter4Panel extends AbstractChapterPanel {
                         + "della fornace: la sua stessa spada libererà la Brace."));
         surtur = registerActionHotspot(new Rectangle(821, 267, 126, 115),
                 "Affronta Surtur", () -> startSurtur(true));
-        sceneBounds.put(stele, stele.getBounds());
-        sceneBounds.put(surtur, surtur.getBounds());
         loadRoom(1);
     }
 
     private void addNpcArea(Npc npc, Rectangle bounds) {
-        HotspotButton button = registerNpcHotspot(npc.room(), bounds, npc.label(),
+        registerNpcHotspot(npc.room(), bounds, npc.label(),
                 () -> startDialogue(npc.dialogue()));
-        sceneBounds.put(button, bounds);
-    }
-
-    @Override public void doLayout() {
-        super.doLayout();
-        // Lo sfondo viene stirato sul pannello, la cornice del sistema ne varia le dimensioni.
-        sceneBounds.forEach((button, r) -> button.setBounds(
-                r.x * getWidth() / 1280, r.y * getHeight() / 720,
-                r.width * getWidth() / 1280, r.height * getHeight() / 720));
     }
 
     private void startDialogue(String resource) {
@@ -110,6 +100,16 @@ public final class Chapter4Panel extends AbstractChapterPanel {
     private void endDialogue() {
         dialogues.stop();
         switch (currentRoom) {
+            case 1 -> {
+                if (StoryPromptDialog.confirm(mainFrameRef, StoryPromptDialog.Theme.FIRE,
+                        "LA LEZIONE DEL BERSERKER", "Vuoi imparare come Muspelsonar attirava i colpi di Surtur?",
+                        "ASCOLTA IL VETERANO", "PIÙ TARDI")) {
+                    AudioManager.getInstance().playEffect(AudioManager.Effect.MAGMA_HEART);
+                    StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.FIRE, "IL PIEDE DEL GIGANTE",
+                            "«Gli offrivo un bersaglio. Finché la punta mi seguiva, restavo sul sigillo. "
+                            + "Quando piantava il piede, schivavo. Allora la sua lama rompeva la pietra al posto mio.»");
+                }
+            }
             case 4 -> receiveItem(new Item("ZOLFO_LOKI", "Zolfo Ingannatore di Loki",
                     "Un pizzico di zolfo dorato avvolto in un lembo di stoffa.", "/images/chapter4/items/sulfur.png"));
             case 5 -> receiveItem(new Item("MAGMA_SVARTALFAHEIMR", "Magma Filtrato di Svartálfaheimr",

@@ -59,14 +59,22 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         addItemWorldButton("MUSCHIO_MIDGARD", "/images/chapter3/items/moss.png",
                 184, 480, 66, 47, 4, "Muschio di Midgard",
                 "Un lichene brillante che emana un profumo amarognolo di terra pulita.");
-        addItemWorldButton("RADICE_NIDHOGG", "/images/chapter3/items/nidhogg.png",
-                953, 541, 72, 50, 4, "Radice Nera di Nidhogg",
-                "Una radice nerastra e pulsante, attraversata da vene cremisi.");
-
         // Stanza 5: Miniere Basaltiche.
         addItemWorldButton("FRAMMENTO_YGGDRASIL", "/images/chapter3/items/fragment_yggdrasil.png",
                 303, 481, 62, 44, 5, "Frammento di Yggdrasil",
                 "Una scheggia di legno millenario che emette una debole luce dorata.");
+        // Il frammento sul terreno riflette meno luce rispetto all’icona nell’inventario.
+        JButton fragment = itemButtons.get("FRAMMENTO_YGGDRASIL");
+        ImageIcon source = (ImageIcon) fragment.getIcon();
+        if (source != null) {
+            java.awt.image.BufferedImage muted = new java.awt.image.BufferedImage(
+                    source.getIconWidth(), source.getIconHeight(), java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = muted.createGraphics();
+            g.setComposite(AlphaComposite.SrcOver.derive(0.55f));
+            source.paintIcon(fragment, g, 0, 0);
+            g.dispose();
+            fragment.setIcon(new ImageIcon(muted));
+        }
         createBreathingCrackHotspot();
         createGunnarHotspot();
         initGunnarDialogue();
@@ -275,6 +283,10 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     }
 
     private void finishNpcDialogue() {
+        if (npcConversationActive && currentRoom == 4) {
+            receiveItem(new Item("RADICE_NIDHOGG", "Radice Nera di Nidhogg",
+                    "Un pezzo di radice corrotta reciso dal Vanir.", "/images/chapter3/items/nidhogg.png"));
+        }
         if (npcConversationActive && currentRoom == 5) {
             receiveItem(new Item("POLVERE_OSSA_GIGANTE",
                     "Polvere di Ossa di Gigante", "La polvere che Billingr usa per far presa sulle pietre.",
@@ -308,13 +320,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     }
 
     private void createForgeHotspot() {
-        forgeHotspot = new HotspotButton();
-        forgeHotspot.setBounds(548, 282, 235, 260);
-        forgeHotspot.setToolTipText("Interagisci con il calderone");
-        forgeHotspot.getAccessibleContext().setAccessibleName("Apri il boccale di pietra");
-        forgeHotspot.addActionListener(e -> openForge());
-        add(forgeHotspot);
-        forgeHotspot.setVisible(false);
+        forgeHotspot = registerActionHotspot(new Rectangle(721, 384, 184, 132),
+                "Apri il calderone della Forgia", this::openForge);
     }
 
     /** I tre capitoli aprono esattamente lo stesso calderone, con la ricetta
