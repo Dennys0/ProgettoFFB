@@ -11,7 +11,7 @@ public record GameSaveSnapshot(
         boolean bossDefeated, boolean ymirPacified, int ymirRuneSeed,
         boolean gunnarWisdomLearned, boolean gunnarIntroductionHeard,
         boolean ymirSteleRead, boolean ymirOldFashionedCreated,
-        List<Item> inventory) {
+        boolean ragnarokFlambeCreated, List<Item> inventory) {
 
     public GameSaveSnapshot {
         inventory = List.copyOf(Objects.requireNonNull(inventory, "inventory"));
@@ -28,7 +28,7 @@ public record GameSaveSnapshot(
                 state.isYmirPacified(), state.getYmirRuneSeed(),
                 state.hasLearnedGunnarWisdom(), state.hasHeardGunnarIntroduction(),
                 state.hasReadYmirStele(), state.isYmirOldFashionedCreated(),
-                state.getInventory());
+                state.isRagnarokFlambeCreated(), state.getInventory());
     }
 
     /** Non scrivere in H2 un capitolo 3 privo di seed, senza mutare GameState. */
@@ -37,7 +37,8 @@ public record GameSaveSnapshot(
         return new GameSaveSnapshot(chapter, room, health, maxHealth,
                 givenMapToMartino, dragonKey, dragonUnlocked, bossDefeated,
                 ymirPacified, nextRuneSeed(), gunnarWisdomLearned,
-                gunnarIntroductionHeard, ymirSteleRead, ymirOldFashionedCreated, inventory);
+                gunnarIntroductionHeard, ymirSteleRead, ymirOldFashionedCreated,
+                ragnarokFlambeCreated, inventory);
     }
 
     private static int nextRuneSeed() {

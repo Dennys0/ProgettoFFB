@@ -30,6 +30,7 @@ public class GameState {
     private boolean gunnarFirstDialogueHeard = false;
     private boolean ymirSteleRead = false;
     private boolean ymirOldFashionedCreated = false;
+    private boolean ragnarokFlambeCreated = false;
     // Checkpoint di sessione: non viene serializzato nei salvataggi H2.
     private boolean bossRetryAvailable = false;
 
@@ -184,6 +185,9 @@ public class GameState {
     public boolean isYmirOldFashionedCreated() { return ymirOldFashionedCreated; }
     public void setYmirOldFashionedCreated(boolean value) { ymirOldFashionedCreated = value; }
 
+    public boolean isRagnarokFlambeCreated() { return ragnarokFlambeCreated; }
+    public void setRagnarokFlambeCreated(boolean value) { ragnarokFlambeCreated = value; }
+
     public boolean isYmirPacified() { return ymirPacified; }
     public void setYmirPacified(boolean value) { this.ymirPacified = value; }
 
@@ -211,6 +215,7 @@ public class GameState {
         setGunnarIntroductionHeard(snapshot.gunnarIntroductionHeard());
         setYmirSteleRead(snapshot.ymirSteleRead());
         setYmirOldFashionedCreated(snapshot.ymirOldFashionedCreated());
+        setRagnarokFlambeCreated(snapshot.ragnarokFlambeCreated());
         setInventory(snapshot.inventory());
     }
 
@@ -251,5 +256,6 @@ public class GameState {
         gunnarFirstDialogueHeard = false;
         ymirSteleRead = false;
         ymirOldFashionedCreated = false;
+        ragnarokFlambeCreated = false;
     }
 }

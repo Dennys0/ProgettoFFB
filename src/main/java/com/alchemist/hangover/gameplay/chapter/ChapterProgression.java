@@ -19,15 +19,21 @@ public final class ChapterProgression {
                     s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
                     false, s.ymirPacified(), s.ymirRuneSeed(),
                     s.gunnarWisdomLearned(), s.gunnarIntroductionHeard(),
-                    s.ymirSteleRead(), s.ymirOldFashionedCreated(), s.inventory());
+                    s.ymirSteleRead(), s.ymirOldFashionedCreated(),
+                    s.ragnarokFlambeCreated(), s.inventory());
             case 2 -> new GameSaveSnapshot(
                     3, 1, s.maxHealth(), s.maxHealth(),
                     s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
                     s.bossDefeated(), s.ymirPacified(), s.ymirRuneSeed(),
                     s.gunnarWisdomLearned(), s.gunnarIntroductionHeard(),
                     s.ymirSteleRead(), s.ymirOldFashionedCreated(),
-                    s.inventory()).withPersistentRuneSeed();
-            case 3 -> s;
+                    s.ragnarokFlambeCreated(), s.inventory()).withPersistentRuneSeed();
+            case 3 -> new GameSaveSnapshot(4, 1, s.maxHealth(), s.maxHealth(),
+                    s.givenMapToMartino(), s.dragonKey(), s.dragonUnlocked(),
+                    false, s.ymirPacified(), s.ymirRuneSeed(), s.gunnarWisdomLearned(),
+                    s.gunnarIntroductionHeard(), s.ymirSteleRead(),
+                    s.ymirOldFashionedCreated(), false, s.inventory());
+            case 4 -> s;
             default -> throw new IllegalArgumentException("Capitolo non previsto: " + completedChapter);
         };
     }
@@ -49,7 +55,14 @@ public final class ChapterProgression {
                 state.ensureYmirRuneSeed();
                 state.resetHealth();
             }
-            case 3 -> { /* Il Capitolo III resta completato. */ }
+            case 3 -> {
+                state.setChapter(4);
+                state.setCurrentRoom(1);
+                state.setBossDefeated(false);
+                state.setBossRetryAvailable(false);
+                state.resetHealth();
+            }
+            case 4 -> { /* Ultimo capitolo terminato. */ }
             default -> throw new IllegalArgumentException("Capitolo non previsto: " + completedChapter);
         }
     }
