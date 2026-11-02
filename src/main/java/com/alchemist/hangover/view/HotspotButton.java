@@ -102,6 +102,13 @@ public final class HotspotButton extends JButton {
                     debug.setColor(Color.WHITE);
                     debug.drawString(info, 5, 14);
                 }
+                if (getHeight() >= 42) {
+                    debug.setColor(new Color(14, 39, 34, 220));
+                    debug.fillRoundRect(2, 22, Math.max(0, getWidth() - 4), 20, 5, 5);
+                    debug.setColor(Color.WHITE);
+                    debug.setClip(4, 22, Math.max(0, getWidth() - 8), 19);
+                    debug.drawString(label, 6, 36);
+                }
             } finally { debug.dispose(); }
         }
         if (!isEnabled() || !getModel().isRollover()) return;
