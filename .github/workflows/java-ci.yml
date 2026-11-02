@@ -9,6 +9,7 @@ on:
       - refactor/gameplay-logic-cleanup
       - refactor/state-and-architecture
       - feat/chapter4-muspelheim
+      - fix/ch4-gameplay-polish
   pull_request:
 
 jobs:

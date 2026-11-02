@@ -5,25 +5,62 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SurturDuelTest {
-    @Test void fourDodgesThenLureAndEscape() {
-        SurturDuel duel = new SurturDuel(new Random(7));
-        while (!duel.finalTrap()) {
-            var safe = java.util.Arrays.stream(SurturDuel.Lane.values())
-                    .filter(l -> !duel.danger().contains(l)).findFirst().orElseThrow();
-            assertEquals(SurturDuel.Result.DODGED, duel.choose(safe));
-        }
-        assertEquals(4, duel.round());
-        assertEquals(SurturDuel.Result.HIT, duel.choose(SurturDuel.Lane.LEFT));
-        assertEquals(SurturDuel.Result.LURED, duel.choose(SurturDuel.Lane.CENTER));
-        assertEquals(SurturDuel.Result.HIT, duel.choose(SurturDuel.Lane.CENTER));
-        assertEquals(SurturDuel.Result.VICTORY, duel.choose(SurturDuel.Lane.RIGHT));
+
+    private static SurturDuel.Lane safe(SurturDuel duel) {
+        return java.util.Arrays.stream(SurturDuel.Lane.values())
+                .filter(l -> !duel.danger().contains(l)).findFirst().orElseThrow();
     }
 
-    @Test void attackLanesAreVisibleAndNeverAllDangerous() {
-        SurturDuel duel = new SurturDuel(new Random(42));
+    @Test void attacksBecomeMoreDifficultButAlwaysHaveASafeLane() {
+        SurturDuel duel = new SurturDuel(new Random(7));
+        assertEquals(SurturDuel.Lane.CENTER, duel.position());
+        for (int n = 0; n < 6; n++) {
+            SurturDuel.Attack expected = n < 2 ? SurturDuel.Attack.SINGLE
+                    : n < 4 ? SurturDuel.Attack.DOUBLE : SurturDuel.Attack.SWEEP;
+            assertEquals(expected, duel.attack());
+            assertEquals(n < 2 ? 1 : 2, duel.danger().size());
+            duel.move(safe(duel));
+            assertEquals(SurturDuel.Result.DODGED, duel.impact());
+            if (expected == SurturDuel.Attack.SWEEP) {
+                assertEquals(n, duel.completedAttacks(), "La spazzata ha due onde");
+                assertEquals(1, duel.sweepWave());
+                duel.move(safe(duel));
+                assertEquals(SurturDuel.Result.DODGED, duel.impact());
+            }
+            assertEquals(n + 1, duel.completedAttacks());
+        }
+        assertTrue(duel.finalTrap());
+        assertEquals(SurturDuel.Attack.FINAL, duel.attack());
+        assertFalse(duel.taunt()); // Arthur e' rimasto su una corsia laterale.
+        duel.move(SurturDuel.Lane.CENTER);
+        assertTrue(duel.taunt());
+        assertEquals(java.util.Set.of(SurturDuel.Lane.CENTER), duel.danger());
+        duel.move(SurturDuel.Lane.LEFT);
+        assertEquals(SurturDuel.Result.VICTORY, duel.impact());
+    }
+
+    @Test void gettingHitDoesNotProgressToVictoryAndFinalTrapCanRetry() {
+        SurturDuel duel = new SurturDuel(new Random(13));
+        var hitLane = duel.danger().iterator().next();
+        duel.move(hitLane);
+        assertEquals(SurturDuel.Result.HIT, duel.impact());
+        assertEquals(1, duel.completedAttacks());
+        while (!duel.finalTrap()) {
+            duel.move(safe(duel));
+            duel.impact();
+        }
+        duel.move(SurturDuel.Lane.CENTER);
+        assertTrue(duel.taunt());
+        assertEquals(SurturDuel.Result.HIT, duel.impact());
+        assertFalse(duel.lured());
+        assertTrue(duel.taunt());
+        duel.move(SurturDuel.Lane.RIGHT);
+        assertEquals(SurturDuel.Result.VICTORY, duel.impact());
+    }
+
+    @Test void tauntIsOnlyPossibleAtCenterInTheFinalRound() {
+        SurturDuel duel = new SurturDuel(new Random(7));
+        assertFalse(duel.taunt());
         assertEquals(1, duel.danger().size());
-        var struck = duel.danger().iterator().next();
-        assertEquals(SurturDuel.Result.HIT, duel.choose(struck));
-        assertEquals(0, duel.round());
     }
 }
