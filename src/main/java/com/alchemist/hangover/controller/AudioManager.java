@@ -33,12 +33,12 @@ public final class AudioManager {
         if (!GameSettings.getInstance().isSoundEnabled()) return;
         if (!("INTRO".equals(scene) || "CHAPTER1".equals(scene)
                 || "CHAPTER2".equals(scene) || "CHAPTER3".equals(scene)
-                || "MENU".equals(scene))) return;
+                || "CHAPTER4".equals(scene) || "EPILOGUE".equals(scene) || "MENU".equals(scene))) return;
         try {
             byte[] samples = makeAmbience(scene);
             ambience = AudioSystem.getClip();
             ambience.open(FORMAT, samples, 0, samples.length);
-            setLevel(ambience, -27f);
+            setLevel(ambience, -12f);
             ambience.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (LineUnavailableException | IllegalArgumentException | SecurityException ex) {
             // Nessun dispositivo sonoro: disattiviamo solo l'audio.
@@ -86,6 +86,10 @@ public final class AudioManager {
             if (resourcePath.contains("room5_miners")
                     || resourcePath.contains("room7_boss")) return Effect.STONE_RUMBLE;
             if (resourcePath.contains("room6_eco")) return Effect.WIND_GUST;
+        } else if (resourcePath.contains("/chapter4/")) {
+            if (resourcePath.endsWith("room_5.png")) return Effect.FORGE_SPARK;
+            if (resourcePath.endsWith("room_6.png")) return Effect.WIND_GUST;
+            if (resourcePath.endsWith("room_boss.png")) return Effect.STONE_RUMBLE;
         }
         return null;
     }
@@ -125,13 +129,15 @@ public final class AudioManager {
         byte[] pcm = new byte[length * 2];
         Random random = new Random(scene.hashCode());
         boolean water = "CHAPTER2".equals(scene);
-        boolean menu = "MENU".equals(scene);
+        boolean menu = "MENU".equals(scene) || "EPILOGUE".equals(scene);
+        boolean fire = "CHAPTER4".equals(scene);
         boolean earth = "CHAPTER3".equals(scene);
         double[] notes = water ? new double[]{110.0, 146.8, 164.8, 146.8}
                 : earth ? new double[]{65.4, 82.4, 73.4, 82.4}
                 : menu ? new double[]{130.8, 164.8, 196.0, 164.8}
                 : new double[]{146.8, 174.6, 220.0, 174.6};
         double filteredNoise = 0;
+        double ember = 0;
         for (int i = 0; i < length; i++) {
             double t = (double) i / SAMPLE_RATE;
             int noteIndex = Math.min(3, (int) (t / 1.5));
@@ -142,8 +148,24 @@ public final class AudioManager {
             double wind = random.nextDouble() * 2 - 1;
             filteredNoise = 0.985 * filteredNoise + 0.015 * wind;
             double swell = 0.5 + 0.5 * Math.sin(2 * Math.PI * t / 5.0);
-            double sample = 0.12 * envelope * note
-                    + (water ? 0.14 : 0.09) * swell * filteredNoise;
+            double sample;
+            if (fire) {
+                ember = random.nextDouble() < 0.002 ? 0.32 : ember * 0.87;
+                sample = (0.5 + swell) * filteredNoise + ember * wind
+                        + 0.07 * Math.sin(2 * Math.PI * 52 * t) * swell;
+            } else if (earth) {
+                double heartbeat = Math.pow(Math.max(0, Math.cos(Math.PI * t)), 12);
+                sample = (0.04 + 0.19 * heartbeat) * Math.sin(2 * Math.PI * 58 * t)
+                        + 0.5 * filteredNoise;
+            } else if (water) {
+                sample = (0.35 + 1.4 * swell) * filteredNoise
+                        + 0.07 * envelope * Math.sin(2 * Math.PI * 91 * t);
+            } else if (menu) {
+                sample = 0.12 * envelope * note + 0.22 * filteredNoise;
+            } else {
+                sample = (0.5 + 1.4 * swell) * filteredNoise
+                        + 0.06 * envelope * Math.sin(2 * Math.PI * (117 * t + swell));
+            }
             // Dissolvenza ai confini del loop, per evitare scatti.
             double edge = Math.min(1.0, Math.min(i, length - i - 1) / 450.0);
             writeSample(pcm, i, sample * edge);
