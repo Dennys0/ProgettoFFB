@@ -1,0 +1,30 @@
+NARRATOR|SCENA 19 — LE ALI SPEZZATE. Arthur attraversa un campo di battaglia ricoperto di spade e armature. Tra le rocce incandescenti giace una Valchiria gravemente ferita. In lontananza, un'altra guerriera fugge volando con le ultime forze.
+ARTHUR|Ma che accidenti... Il gigante aveva ragione! Qui è successo un massacro!
+VALCHIRIA|Fermati... umano. Non avvicinarti!
+ARTHUR|GESÙ CRISTO! Sei viva?! Tranquilla, non voglio farti del male!
+VALCHIRIA|Io sono Sigrún, guerriera di Odino... e ho fallito il mio compito.
+ARTHUR|Fallito?! Avete praticamente trasformato un gigante di lava in un barbecue!
+SIGRUN|Il Muspelsonar non era il nostro vero nemico. Siamo state ingannate.
+ARTHUR|Aspetta... Ingannate da chi?!
+SIGRUN|Qualcuno ha manipolato la battaglia. Quando ce ne siamo accorte... era troppo tardi.
+NARRATOR|Sigrún osserva il cielo. La sagoma dell'altra Valchiria scompare lentamente tra le nuvole di cenere.
+ARTHUR|E quella lassù?! La tua amica sta scappando?!
+SIGRUN|È mia sorella. Deve raggiungere Asgard... e avvertire Odino del tradimento.
+ARTHUR|Fantastico. Quindi c'è qualche stronzo che prende per il culo persino gli dèi?!
+SIGRUN|Ascoltami, Arthur. Il calderone che cerchi è più importante di quanto immagini. Qualcuno sta preparando qualcosa che potrebbe cambiare il destino dei nove mondi.
+ARTHUR|ANCORA QUEL DIAVOLO DI CALDERONE?! Ma possibile che tutti sappiano qualcosa tranne me?!
+SIGRUN|Non fidarti di chi ti guida troppo facilmente. Talvolta il nemico indossa il volto di un alleato.
+ARTHUR|Fammi indovinare... C'entra un piccolo stalker rosso con le ali?!
+SIGRUN|Il suo padrone... è molto più pericoloso di quanto credi.
+NARRATOR|Sigrún tossisce e cerca inutilmente di rialzarsi. Le sue ali spezzate si muovono appena.
+ARTHUR|Ehi, ehi! Non sforzarti! Posso fare qualcosa per aiutarti?!
+SIGRUN|Non per me... Ma puoi ancora impedire che tutto questo accada di nuovo.
+ARTHUR|...E come dovrei fare?!
+SIGRUN|Quando arriverà il momento di scegliere... ricorda che persino gli dèi possono mentire.
+NARRATOR|Sigrún abbassa lentamente il capo. Il vento solleva alcune piume insanguinate, trascinandole sopra il campo di battaglia.
+ARTHUR|Ehi... EHI! Non mi morire adesso!
+SIGRUN|Vai, Arthur... Prima che sia troppo tardi.
+NARRATOR|La Valchiria chiude gli occhi, esausta ma ancora viva. Arthur osserva le centinaia di spade conficcate nel terreno.
+ARTHUR|Un gigante sconfitto, delle Valchirie tradite e un demonio che mi segue da tre capitoli...
+NARRATOR|Un'esplosione lontana scuote il campo di battaglia.
+ARTHUR|...Comincio a pensare che questa non sia una semplice sbronza.
