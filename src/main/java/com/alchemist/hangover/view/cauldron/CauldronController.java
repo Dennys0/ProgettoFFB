@@ -1,14 +1,12 @@
 package com.alchemist.hangover.view.cauldron;
 
-import com.alchemist.hangover.view.GameOverPanel;
-import com.alchemist.hangover.view.StoryPromptDialog;
-import com.alchemist.hangover.view.EpiloguePanel;
-
-import com.alchemist.hangover.controller.SceneManager;
-import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.gameplay.cauldron.CauldronGameService;
 import com.alchemist.hangover.controller.AudioManager;
-
+import com.alchemist.hangover.controller.SceneManager;
+import com.alchemist.hangover.gameplay.cauldron.CauldronGameService;
+import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.view.dialogue.StoryPromptDialog;
+import com.alchemist.hangover.view.story.EpiloguePanel;
+import com.alchemist.hangover.view.story.GameOverPanel;
 import java.awt.Frame;
 import java.awt.Window;
 import javax.swing.SwingUtilities;

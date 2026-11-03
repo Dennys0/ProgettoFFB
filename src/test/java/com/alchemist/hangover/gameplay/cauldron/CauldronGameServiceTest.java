@@ -20,7 +20,7 @@ class CauldronGameServiceTest {
         state.setCurrentHealth(1);
         state.addItem(item("MAPPA_CIELO"));
         state.addItem(item("NEBBIA_NIFLHEIM"));
-        for (String id : com.alchemist.hangover.model.RecipeManager
+        for (String id : com.alchemist.hangover.gameplay.cauldron.RecipeManager
                 .forChapter(1).correct()) state.addItem(item(id));
 
         assertTrue(CauldronGameService.canOpen(state));
@@ -28,7 +28,7 @@ class CauldronGameServiceTest {
 
         assertTrue(state.hasItem("MAPPA_CIELO"), "Un oggetto narrativo non e' un ingrediente");
         assertTrue(state.hasItem("NEBBIA_NIFLHEIM"), "Le esche non sono state usate");
-        for (String id : com.alchemist.hangover.model.RecipeManager
+        for (String id : com.alchemist.hangover.gameplay.cauldron.RecipeManager
                 .forChapter(1).correct()) assertFalse(state.hasItem(id));
         assertEquals(3, state.getCurrentHealth());
     }

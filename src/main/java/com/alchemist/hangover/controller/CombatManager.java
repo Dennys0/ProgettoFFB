@@ -1,10 +1,9 @@
 package com.alchemist.hangover.controller;
 
-import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.gameplay.boss.BossRules;
-import com.alchemist.hangover.view.GameOverPanel;
-import com.alchemist.hangover.view.StoryPromptDialog;
-
+import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.view.dialogue.StoryPromptDialog;
+import com.alchemist.hangover.view.story.GameOverPanel;
 import java.awt.Frame;
 import java.awt.Point;
 import javax.swing.JDialog;

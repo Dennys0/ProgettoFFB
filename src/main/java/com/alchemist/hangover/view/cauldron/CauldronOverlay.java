@@ -1,15 +1,13 @@
 package com.alchemist.hangover.view.cauldron;
 
-import com.alchemist.hangover.view.HotspotButton;
-
+import com.alchemist.hangover.gameplay.cauldron.RecipeManager;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
-import com.alchemist.hangover.model.RecipeManager;
-
-import javax.swing.*;
+import com.alchemist.hangover.view.chapter.HotspotButton;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 
 public class CauldronOverlay extends JDialog {
 
@@ -26,7 +24,7 @@ public class CauldronOverlay extends JDialog {
 
         // Un unico asset visivo per tutte le postazioni alchemiche.
         // I risultati e le ricette rimangono specifici dei capitoli.
-        JPanel contentPanel = new SharedCauldronArtworkPanel();
+        JPanel contentPanel = new CauldronArtworkPanel();
         setContentPane(contentPanel);
 
         // 1. I 3 Slot Rettangolari per gli ingredienti scelti (Posizionati sui 3 riquadri luminosi in alto)

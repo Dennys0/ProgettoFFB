@@ -1,12 +1,27 @@
 package com.alchemist.hangover.view;
 
+import com.alchemist.hangover.view.chapter.AbstractChapterPanel;
 import com.alchemist.hangover.controller.SceneManager;
 import com.alchemist.hangover.model.GameState;
+import com.alchemist.hangover.view.chapter.Chapter1Panel;
+import com.alchemist.hangover.view.chapter.Chapter2Panel;
+import com.alchemist.hangover.view.chapter.Chapter3Panel;
+import com.alchemist.hangover.view.chapter.Chapter4Panel;
+import com.alchemist.hangover.view.chapter.ChapterLayouts;
+import com.alchemist.hangover.view.chapter.HotspotButton;
+import com.alchemist.hangover.view.inventory.GameJournalDialog;
+import com.alchemist.hangover.view.menu.MainMenuPanel;
+import com.alchemist.hangover.view.menu.PauseMenuDialog;
+import com.alchemist.hangover.view.story.ChapterCompletionPanel;
+import com.alchemist.hangover.view.story.EpiloguePanel;
+import com.alchemist.hangover.view.story.GameOverPanel;
+import com.alchemist.hangover.view.story.ProloguePanel;
+import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import java.awt.event.KeyEvent;
 
 public class MainFrame extends JFrame {
     public MainFrame() {
@@ -110,45 +125,28 @@ public class MainFrame extends JFrame {
             }
         });
 
-        // F7: apre velocemente ogni stanza per controllare le hitbox, senza reset.
-        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0), "chapter4RoomPicker");
-        getRootPane().getActionMap().put("chapter4RoomPicker", new AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) {
-                if (!"CHAPTER4".equals(manager.getCurrentSceneName())) return;
-                String[] choices = java.util.stream.IntStream.rangeClosed(1, 7)
-                        .mapToObj(n -> n + " - " + ChapterLayouts.roomName(4, n))
-                        .toArray(String[]::new);
-                Object choice = javax.swing.JOptionPane.showInputDialog(MainFrame.this,
-                        "Scegli la stanza da controllare (F6 mostra le hitbox):",
-                        "Debug Capitolo IV", javax.swing.JOptionPane.QUESTION_MESSAGE,
-                        null, choices, choices[GameState.getInstance().getCurrentRoom() - 1]);
-                if (choice == null) return;
-                Chapter4Panel panel = (Chapter4Panel) manager.getPanel("CHAPTER4");
-                if (panel != null) panel.loadRoom(
-                        Integer.parseInt(choice.toString().split(" - ", 2)[0]));
-            }
-        });
+        bindRoomPicker(KeyEvent.VK_F4, 3);
+        bindRoomPicker(KeyEvent.VK_F7, 4);
+    }
 
-        // F4: scelta rapida della stanza di Ymir, senza azzerare inventario.
+    private void bindRoomPicker(int key, int chapter) {
+        String action = "chapter" + chapter + "RoomPicker";
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), "chapter3RoomPicker");
-        getRootPane().getActionMap().put("chapter3RoomPicker", new AbstractAction() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                if (!"CHAPTER3".equals(manager.getCurrentSceneName())) return;
-                Chapter3Panel chapter3 = (Chapter3Panel) manager.getPanel("CHAPTER3");
+                .put(KeyStroke.getKeyStroke(key, 0), action);
+        getRootPane().getActionMap().put(action, new AbstractAction() {
+            @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+                SceneManager manager = SceneManager.getInstance();
+                String scene = "CHAPTER" + chapter;
+                if (!scene.equals(manager.getCurrentSceneName())) return;
                 String[] rooms = java.util.stream.IntStream.rangeClosed(1, 7)
-                        .mapToObj(n -> n + " - " + ChapterLayouts.roomName(3, n))
+                        .mapToObj(n -> n + " - " + ChapterLayouts.roomName(chapter, n))
                         .toArray(String[]::new);
-                Object selection = javax.swing.JOptionPane.showInputDialog(
-                        MainFrame.this, "Scegli una stanza da provare:",
-                        "Debug Capitolo III", javax.swing.JOptionPane.QUESTION_MESSAGE,
+                Object choice = JOptionPane.showInputDialog(MainFrame.this,
+                        "Scegli la stanza da controllare (F6 mostra le hitbox)",
+                        "Debug capitolo " + chapter, JOptionPane.QUESTION_MESSAGE,
                         null, rooms, rooms[GameState.getInstance().getCurrentRoom() - 1]);
-                if (selection != null && chapter3 != null) {
-                    int room = Integer.parseInt(selection.toString().split(" - ", 2)[0]);
-                    chapter3.loadRoom(room);
-                }
+                if (choice != null && manager.getPanel(scene) instanceof AbstractChapterPanel panel)
+                    panel.loadRoom(java.util.Arrays.asList(rooms).indexOf(choice) + 1);
             }
         });
     }

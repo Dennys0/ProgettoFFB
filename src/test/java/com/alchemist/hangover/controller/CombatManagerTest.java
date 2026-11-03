@@ -1,7 +1,7 @@
 package com.alchemist.hangover.controller;
 
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.gameplay.boss.BossRewardCatalog;
+import com.alchemist.hangover.gameplay.boss.BossRules;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,8 +37,7 @@ class CombatManagerTest {
             }else{
                 assertTrue(state.isBossDefeated());
                 assertFalse(state.isYmirPacified());
-                String reward = BossRewardCatalog.immediateReward(chapter)
-                        .orElseThrow().getId();
+                String reward = BossRules.rewardForChapter(chapter).getId();
                 assertTrue(state.hasItem(reward), "La ricompensa viene assegnata dal manager");
                 CombatManager.victory(chapter);
                 assertEquals(1, state.getInventory().size(), "Premio non duplicato");

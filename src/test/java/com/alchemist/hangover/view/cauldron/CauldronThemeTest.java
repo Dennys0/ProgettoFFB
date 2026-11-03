@@ -1,7 +1,6 @@
 package com.alchemist.hangover.view.cauldron;
 
-import com.alchemist.hangover.view.StoryPromptDialog;
-
+import com.alchemist.hangover.view.dialogue.StoryPromptDialog;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

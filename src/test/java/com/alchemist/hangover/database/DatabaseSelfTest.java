@@ -1,7 +1,5 @@
 package com.alchemist.hangover.database;
 
-import com.alchemist.hangover.dao.ItemDAO;
-import com.alchemist.hangover.dao.SaveGameDAO;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
 import org.junit.jupiter.api.AfterAll;
@@ -9,7 +7,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

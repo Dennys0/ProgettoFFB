@@ -1,10 +1,11 @@
 package com.alchemist.hangover.model;
 
-import com.alchemist.hangover.gameplay.chapter.ChapterProgression;
 import com.alchemist.hangover.gameplay.boss.BossRules;
 import com.alchemist.hangover.gameplay.cauldron.CauldronGameService;
-import org.junit.jupiter.api.Test;
+import com.alchemist.hangover.gameplay.cauldron.RecipeManager;
+import com.alchemist.hangover.gameplay.chapter.ChapterProgression;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Chapter4RulesTest {

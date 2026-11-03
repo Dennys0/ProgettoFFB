@@ -1,19 +1,15 @@
 package com.alchemist.hangover.view.boss;
 
-import com.alchemist.hangover.view.HealthDisplayPanel;
-import com.alchemist.hangover.view.StoryPromptDialog;
-
 import com.alchemist.hangover.controller.AudioManager;
 import com.alchemist.hangover.controller.CombatManager;
-import com.alchemist.hangover.controller.SceneManager;
+import com.alchemist.hangover.gameplay.boss.YmirRuneRitual;
 import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.model.YmirRuneRitual;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import com.alchemist.hangover.view.dialogue.StoryPromptDialog;
 import java.awt.*;
 import java.net.URL;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 /**
  * Scontro runico di Ymir.
@@ -205,7 +201,7 @@ public final class YmirBossOverlay extends JDialog {
             StoryPromptDialog.reward((Frame) getOwner(), StoryPromptDialog.Theme.EARTH,
                     "IL GIGANTE DORME ANCORA",
                     "Ymir chiude gli occhi. Una goccia si cristallizza nel palmo di Arthur.",
-                    com.alchemist.hangover.gameplay.boss.BossRewardCatalog.immediateReward(3).orElseThrow());
+                    com.alchemist.hangover.gameplay.boss.BossRules.rewardForChapter(3));
             return;
         }
         AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);

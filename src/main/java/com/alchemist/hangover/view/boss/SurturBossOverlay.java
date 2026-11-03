@@ -1,18 +1,15 @@
 package com.alchemist.hangover.view.boss;
 
 import com.alchemist.hangover.controller.CombatManager;
-import com.alchemist.hangover.gameplay.boss.BossRewardCatalog;
+import com.alchemist.hangover.gameplay.boss.BossRules;
 import com.alchemist.hangover.gameplay.boss.SurturDuel;
-import com.alchemist.hangover.model.GameState;
-import com.alchemist.hangover.view.HealthDisplayPanel;
-import com.alchemist.hangover.view.StoryPromptDialog;
-
-import javax.swing.*;
+import com.alchemist.hangover.view.dialogue.StoryPromptDialog;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
+import javax.swing.*;
 
 public final class SurturBossOverlay extends JDialog {
     private final SurturDuel duel = new SurturDuel(new Random());
@@ -202,7 +199,7 @@ public final class SurturBossOverlay extends JDialog {
                         "LA SPADA SI FRANTUMA NELLA FORNACE",
                         "Arthur si sposta appena in tempo: la lama conficcata nella roccia "
                         + "libera la Brace di Muspelheim. Nel cocktail va aggiunta per ULTIMA!",
-                        BossRewardCatalog.immediateReward(4).orElseThrow());
+                        BossRules.rewardForChapter(4));
                 return;
             }
         }
