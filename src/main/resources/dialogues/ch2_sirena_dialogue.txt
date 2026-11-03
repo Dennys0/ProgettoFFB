@@ -1,0 +1,22 @@
+NARRATOR|Arthur attraversa un meraviglioso giardino di coralli. Tra i raggi di luce, una sirena dai lunghi capelli rossi nuota lentamente, osservandolo con curiosità.
+ARTHUR|Accidenti... Finalmente qualcosa di bello in questo mondo assurdo!
+SIRENA|Che linguaggio curioso per un uomo tanto lontano da casa.
+ARTHUR|Oh, fantastico! Una sirena che parla! Dimmi almeno che non vuoi uccidermi.
+SIRENA|Dipende... hai intenzione di seguire il mio canto?
+ARTHUR|Considerando come mi è andata finora, direi proprio di no.
+SIRENA|Ahahah! Sei più saggio di quanto sembri, Arthur.
+ARTHUR|Ma non ci credo! Anche tu sai come mi chiamo?! C'è un gruppo WhatsApp con il mio nome?!
+SIRENA|Le correnti portano molte voci. Si racconta di un umano che ha attraversato i cieli e sfidato la tempesta.
+ARTHUR|Sfidato?! Io stavo solo cercando di non farmi ammazzare!
+SIRENA|Eppure sei ancora qui. Forse il destino ha davvero scelto te.
+ARTHUR|Senti, anche Marmæl mi ha fatto 'sto discorso sul destino. Non potete semplicemente indicarmi la strada di casa?!
+SIRENA|Il mare conosce molte strade, Arthur. Ma alcune conducono dove il cuore desidera... altre dove il destino pretende.
+ARTHUR|Ecco, un'altra poetessa degli abissi. Non potevo incontrare una sirena normale?!
+NARRATOR|La sirena sorride, poi si avvicina lentamente ad Arthur.
+SIRENA|Allora ascolta un consiglio. Non fidarti di ogni voce che sentirai. Alcune melodie sono fatte per guidarti... altre per trascinarti sul fondo.
+ARTHUR|Perfetto. Quindi oltre ai demoni stalker devo preoccuparmi pure delle canzoni?!
+SIRENA|Ahahah! Addio, Arthur. Spero che le correnti ci facciano incontrare ancora.
+NARRATOR|La sirena si allontana elegantemente tra i coralli, lasciando dietro di sé una scia di bolle luminose.
+ARTHUR|Aspetta! Almeno il numero me lo potevi lasciare!
+NARRATOR|La sua risata riecheggia nell'acqua prima di svanire.
+ARTHUR|...Niente. Riesco a farmi ghostare pure da un pesce.

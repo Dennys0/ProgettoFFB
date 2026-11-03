@@ -35,6 +35,14 @@ public class DialogueSystem {
     private String currentFullText = "";
     private int charIndex = 0;
     private boolean isTyping = false;
+    private boolean finished = false;
+    // La larghezza resta opzionale, così i dialoghi dei capitoli precedenti
+    // mantengono l'impaginazione originale.
+    private int wrapWidth = 0;
+
+    public void setWrapWidth(int width) {
+        this.wrapWidth = Math.max(0, width);
+    }
 
     public DialogueSystem(JLabel speakerLabel, JLabel textLabel, Runnable onSpeakerChanged, Runnable onDialogueComplete) {
         this.speakerLabel = speakerLabel;
@@ -48,6 +56,7 @@ public class DialogueSystem {
         stop();
         dialogueLines.clear();
         currentIndex = -1;
+        finished = false;
 
         java.io.InputStream is = getClass().getResourceAsStream(resourcePath);
         if (is == null) {
@@ -75,12 +84,23 @@ public class DialogueSystem {
         if (!dialogueLines.isEmpty()) {
             currentIndex = 0;
             displayCurrentLine();
-        } else if (onDialogueComplete != null) {
-            onDialogueComplete.run();
+        } else {
+            finishDialogue();
         }
     }
 
+    /** Mostra subito tutta la frase senza saltare al dialogo seguente. */
+    public void revealCurrentLine() {
+        if (isTyping) completeTypewriting();
+    }
+
+    /** Salta l'intera conversazione, eseguendone una volta la callback finale. */
+    public void skipDialogue() {
+        if (currentIndex >= 0 && !finished) finishDialogue();
+    }
+
     public void nextLine() {
+        if (finished || currentIndex < 0) return;
         if (isTyping) {
             // Se sta ancora scrivendo, il click mostra subito il testo completo
             completeTypewriting();
@@ -91,11 +111,15 @@ public class DialogueSystem {
         if (currentIndex < dialogueLines.size()) {
             displayCurrentLine();
         } else {
-            stop();
-            if (onDialogueComplete != null) {
-                onDialogueComplete.run();
-            }
+            finishDialogue();
         }
+    }
+
+    private void finishDialogue() {
+        if (finished) return;
+        finished = true;
+        stop();
+        if (onDialogueComplete != null) onDialogueComplete.run();
     }
 
     private void displayCurrentLine() {
@@ -110,18 +134,21 @@ public class DialogueSystem {
             onSpeakerChanged.run();
         }
 
+        stop(); // Ferma eventuali timer precedenti.
         currentFullText = line.getText();
         charIndex = 0;
         isTyping = true;
         textLabel.setText("");
 
-        stop(); // Ferma eventuali timer precedenti
-
-        // Effetto macchina da scrivere (15ms a carattere)
+        // Effetto macchina da scrivere, con pause naturali alla punteggiatura.
         typewriterTimer = new Timer(15, e -> {
             if (charIndex < currentFullText.length()) {
-                textLabel.setText("<html>" + currentFullText.substring(0, charIndex + 1) + "</html>");
+                char ch = currentFullText.charAt(charIndex);
+                if (textLabel.isShowing() && Character.isLetter(ch) && (charIndex == 0 || Character.isWhitespace(currentFullText.charAt(charIndex - 1))))
+                    AudioManager.getInstance().playTypingTick();
                 charIndex++;
+                textLabel.setText(formatLine(currentFullText.substring(0, charIndex)));
+                typewriterTimer.setDelay(".,!?;:".indexOf(ch) >= 0 ? 110 : 18);
             } else {
                 completeTypewriting();
             }
@@ -133,11 +160,24 @@ public class DialogueSystem {
         if (typewriterTimer != null && typewriterTimer.isRunning()) {
             typewriterTimer.stop();
         }
-        textLabel.setText("<html>" + currentFullText + "</html>");
+        textLabel.setText(formatLine(currentFullText));
         isTyping = false;
     }
 
-    // Metodo per fermare il dialogo (usato da SKIP)
+    private String formatLine(String source) {
+        String escaped = source.replace("&", "&amp;")
+                .replace("<", "&lt;").replace(">", "&gt;")
+                .replace("\n", "<br>");
+        if (wrapWidth > 0) {
+            // Tabelle HTML Swing rispettano la larghezza anche per righe lunghe.
+            return "<html><table width='" + wrapWidth
+                    + "' cellspacing='0' cellpadding='0'><tr><td>"
+                    + escaped + "</td></tr></table></html>";
+        }
+        return "<html>" + escaped + "</html>";
+    }
+
+    // Ferma il timer quando la scena cambia, senza attivare callback.
     public void stop() {
         if (typewriterTimer != null && typewriterTimer.isRunning()) {
             typewriterTimer.stop();

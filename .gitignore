@@ -1,0 +1,18 @@
+# Maven / IDE output
+/target/
+/build/
+/out/
+/nbproject/private/
+/.idea/
+*.iml
+
+# Local H2 save files (schema is versioned in src/main/resources/db)
+/saves/
+*.mv.db
+*.trace.db
+*.lock.db
+*.temp.db
+
+# OS files
+.DS_Store
+Thumbs.db

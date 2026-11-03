@@ -5,18 +5,20 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SceneManager {
-
+/** Gestisce gli scenari e le transizioni, senza ricreare i pannelli. */
+public final class SceneManager {
     private static SceneManager instance;
-    private JPanel mainPanel;
-    private CardLayout cardLayout;
-    private Map<String, JPanel> scenes;
+    private final JPanel mainPanel;
+    private final CardLayout cardLayout;
+    private final Map<String, JPanel> scenes;
 
-    // Gestione Dissolvenza (Fade Effect)
-    private float alpha = 0.0f;
-    private Timer fadeTimer;
+    private final Map<String, java.util.function.Supplier<JPanel>> factories = new HashMap<>();
+
+    private float alpha = 0f;
     private boolean isFading = false;
-    private String pendingSceneName = null;
+    private String currentSceneName = "MENU";
+    private JGlassPane glassPane;
+    private Runnable whenVisible;
 
     private SceneManager() {
         cardLayout = new CardLayout();
@@ -25,101 +27,127 @@ public class SceneManager {
     }
 
     public static SceneManager getInstance() {
-        if (instance == null) {
-            instance = new SceneManager();
-        }
+        if (instance == null) instance = new SceneManager();
         return instance;
     }
 
-    public JPanel getMainPanel() {
-        return mainPanel;
+    public JPanel getMainPanel() { return mainPanel; }
+    public JPanel getPanel(String name) {
+        JPanel panel = scenes.get(name);
+        if (panel != null || !factories.containsKey(name)) return panel;
+        // I costruttori dei capitoli inizializzano una stanza: preserva lo stato caricato.
+        var state = com.alchemist.hangover.model.GameState.getInstance();
+        var snapshot = com.alchemist.hangover.model.GameSaveSnapshot.capture(state);
+        boolean retry = state.isBossRetryAvailable();
+        long started = System.nanoTime();
+        try {
+            panel = factories.get(name).get();
+            addPanel(name, panel);
+            return panel;
+        } finally {
+            state.restoreFrom(snapshot);
+            state.setBossRetryAvailable(retry);
+            PerformanceLog.finished("Prima creazione " + name, started);
+        }
     }
+
+    public void registerScene(String name, java.util.function.Supplier<JPanel> factory) {
+        factories.put(name, factory);
+    }
+    public String getCurrentSceneName() { return currentSceneName; }
 
     public void addPanel(String name, JPanel panel) {
         scenes.put(name, panel);
         mainPanel.add(panel, name);
     }
 
-    public JPanel getPanel(String name) {
-        return scenes.get(name);
+    public void showScene(String name) {
+        showScene(name, null);
     }
 
-    // Passaggio di scena con effetto Fade Out -> Fade In
-    public void showScene(String name) {
-        if (isFading || !scenes.containsKey(name)) return;
-
-        isFading = true;
-        pendingSceneName = name;
-        alpha = 0.0f;
-
-        JGlassPane glassPane = getGlassPane();
-        if (glassPane != null) {
-            glassPane.setVisible(true);
+    /** Callback richiamata solo dopo il completamento della dissolvenza. */
+    public void showScene(String name, Runnable onShown) {
+        if ((!scenes.containsKey(name) && !factories.containsKey(name)) || isFading) return;
+        if (!GameSettings.getInstance().isTransitionsEnabled()) {
+            activateScene(name);
+            if (onShown != null) SwingUtilities.invokeLater(onShown);
+            return;
         }
 
-        fadeTimer = new Timer(25, e -> {
-            alpha += 0.08f;
-            if (alpha >= 1.0f) {
-                alpha = 1.0f;
-                fadeTimer.stop();
+        isFading = true;
+        whenVisible = onShown;
+        alpha = 0f;
+        JGlassPane glass = getGlassPane();
+        if (glass != null) {
+            glass.setVisible(true);
+            glass.repaint();
+        }
 
-                // Cambia la scena effettiva
-                cardLayout.show(mainPanel, pendingSceneName);
-                scenes.get(pendingSceneName).requestFocusInWindow();
-
-                // Avvia Fade In (da nero a trasparente)
-                fadeOutEffect();
+        Timer fadeOut = new Timer(25, null);
+        fadeOut.addActionListener(e -> {
+            alpha = Math.min(1f, alpha + 0.085f);
+            if (glass != null) glass.repaint();
+            if (alpha >= 1f) {
+                fadeOut.stop();
+                activateScene(name);
+                fadeIn(glass);
             }
-            if (glassPane != null) glassPane.repaint();
         });
-        fadeTimer.start();
+        fadeOut.start();
     }
 
-    private void fadeOutEffect() {
-        fadeTimer = new Timer(25, e -> {
-            alpha -= 0.08f;
-            if (alpha <= 0.0f) {
-                alpha = 0.0f;
-                fadeTimer.stop();
+    private void fadeIn(JGlassPane glass) {
+        Timer fadeIn = new Timer(25, null);
+        fadeIn.addActionListener(e -> {
+            alpha = Math.max(0f, alpha - 0.085f);
+            if (glass != null) glass.repaint();
+            if (alpha <= 0f) {
+                fadeIn.stop();
                 isFading = false;
-
-                JGlassPane glassPane = getGlassPane();
-                if (glassPane != null) {
-                    glassPane.setVisible(false);
-                }
+                if (glass != null) glass.setVisible(false);
+                Runnable callback = whenVisible;
+                whenVisible = null;
+                if (callback != null) SwingUtilities.invokeLater(callback);
             }
-            JGlassPane glassPane = getGlassPane();
-            if (glassPane != null) glassPane.repaint();
         });
-        fadeTimer.start();
+        fadeIn.start();
+    }
+
+    private void activateScene(String name) {
+        if (getPanel(name) == null) return;
+        cardLayout.show(mainPanel, name);
+        currentSceneName = name;
+        AudioManager.getInstance().playScene(name);
+        scenes.get(name).requestFocusInWindow();
     }
 
     private JGlassPane getGlassPane() {
-        Window window = SwingUtilities.getWindowAncestor(mainPanel);
-        if (window instanceof JFrame) {
-            JFrame frame = (JFrame) window;
-            if (!(frame.getGlassPane() instanceof JGlassPane)) {
-                JGlassPane gp = new JGlassPane();
-                frame.setGlassPane(gp);
-            }
-            return (JGlassPane) frame.getGlassPane();
+        Window owner = SwingUtilities.getWindowAncestor(mainPanel);
+        if (!(owner instanceof JFrame frame)) return null;
+        if (!(frame.getGlassPane() instanceof JGlassPane)) {
+            glassPane = new JGlassPane();
+            frame.setGlassPane(glassPane);
+        } else {
+            glassPane = (JGlassPane) frame.getGlassPane();
         }
-        return null;
+        return glassPane;
     }
 
-    // Componente personalizzato per il rendering del nero in trasparenza
-    private class JGlassPane extends JPanel {
-        public JGlassPane() {
-            setOpaque(false);
-        }
+    private final class JGlassPane extends JPanel {
+        private JGlassPane() { setOpaque(false); }
 
         @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (alpha > 0.0f) {
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(new Color(0, 0, 0, Math.min(255, (int) (alpha * 255))));
-                g2d.fillRect(0, 0, getWidth(), getHeight());
+        protected void paintComponent(Graphics graphics) {
+            super.paintComponent(graphics);
+            if (alpha <= 0f) return;
+            Graphics2D g = (Graphics2D) graphics.create();
+            try {
+                g.setComposite(AlphaComposite.SrcOver.derive(alpha));
+                g.setPaint(new GradientPaint(0, 0, new Color(10, 9, 22),
+                        0, getHeight(), new Color(26, 17, 35)));
+                g.fillRect(0, 0, getWidth(), getHeight());
+            } finally {
+                g.dispose();
             }
         }
     }

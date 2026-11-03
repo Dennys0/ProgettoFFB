@@ -1,0 +1,24 @@
+NARRATOR|L'INTAGLIATORE DEI VANIR. Arthur attraversa un'antica foresta pietrificata, illuminata da cristalli azzurri. In lontananza, un Vanir dalla lunga barba intaglia pazientemente un pezzo di legno.
+ARTHUR|Ma che diavolo... Alberi di pietra, funghi fluorescenti... Mi manca solo uno gnomo che vende souvenir.
+VANIR|Attento a come parli, straniero. Questi alberi erano vivi quando i tuoi antenati non erano ancora nati.
+ARTHUR|Oh, fantastico! Anche il falegname è permaloso!
+VANIR|Sono un Vanir, umano. E le mie mani hanno scolpito doni per gli dèi.
+ARTHUR|Ah, quindi sei una specie di Geppetto divino! Che stai costruendo?
+VANIR|Un amuleto. Il legno conserva ricordi che persino il tempo ha dimenticato.
+ARTHUR|Interessante... Senti, non è che sai indicarmi la strada per tornare a casa?
+VANIR|La via del ritorno non si trova sulle mappe, Arthur. Devi prima completare ciò che hai iniziato.
+ARTHUR|MA DAVVERO?! Pure tu sai come mi chiamo?! È possibile che nessuno qui rispetti la privacy?!
+VANIR|Ahahah! Le radici di Yggdrasill portano notizie attraverso i nove mondi.
+ARTHUR|Certo! Internet vegetale! Mi sembra tutto normale!
+VANIR|Ho sentito parlare del calderone che cerchi. Ma fai attenzione: non tutte le mani che ti aiutano desiderano la tua salvezza.
+ARTHUR|Fammi indovinare... C'entra uno sgorbietto rosso con le ali?!
+VANIR|Un messaggero dell'ombra, forse. Ma il vero pericolo è colui che tira i fili.
+ARTHUR|E chi sarebbe?
+VANIR|Quando il legno brucia, rivela ciò che nascondeva. Ricorda queste parole quando il fuoco cambierà colore.
+NARRATOR|Il Vanir riprende a intagliare, mentre una scintilla azzurra attraversa il piccolo amuleto.
+ARTHUR|Fantastico. Un altro indovinello! Ma qualcuno di normale in questo gioco esiste?!
+VANIR|Tieni questa Radice Nera di Nidhogg. L'ho separata dal legno sano: porta il segno della sua corruzione. Conservala, ma non versarla nel calderone.
+VANIR|Ahahah! Buon viaggio, Arthur. E non dimenticare... persino gli dèi possono essere ingannati.
+ARTHUR|Sì, sì... Grazie, Mastro Geppetto. Ora vado a farmi prendere in giro da qualcun altro.
+NARRATOR|Arthur si allontana. Il Vanir osserva l'amuleto appena scolpito, sul quale compare lentamente il simbolo di un calderone.
+VANIR|Che le radici ti proteggano, umano... Ne avrai bisogno.

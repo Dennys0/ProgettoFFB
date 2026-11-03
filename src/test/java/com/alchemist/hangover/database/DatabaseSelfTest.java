@@ -1,58 +1,203 @@
 package com.alchemist.hangover.database;
 
-import com.alchemist.hangover.dao.ItemDAO;
-import com.alchemist.hangover.dao.SaveGameDAO;
 import com.alchemist.hangover.model.GameState;
 import com.alchemist.hangover.model.Item;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test isolati: NON aprono, modificano o cancellano mai saves/alchemist.mv.db.
+ * Anche lo slot 1 esiste esclusivamente nel database jdbc:h2:mem.
+ */
 public class DatabaseSelfTest {
-    public static void main(String[] args) {
-        System.out.println("--- Inizio Test H2 Database ---");
+    private static final int TEST_SLOT = 1;
+
+    @BeforeAll
+    static void setupDatabase() {
+        System.setProperty(DatabaseManager.TEST_DATABASE_PROPERTY,
+                "jdbc:h2:mem:alchemist_test;DB_CLOSE_DELAY=-1");
         DatabaseManager.initDatabase();
+    }
 
-        // Test 1: Catalogo Oggetti
-        Item mapItem = ItemDAO.getItemById("MAPPA_CIELO");
-        if (mapItem == null || !"Mappa del Cielo".equals(mapItem.getName())) {
-            throw new RuntimeException("Test 1 Fallito: Mappa del cielo non trovata!");
-        }
-        System.out.println("Test 1 PASSATO: Catalogo oggetti OK (" + mapItem.getName() + ")");
-
-        // Test 2: Salvataggio GameState
-        GameState state = GameState.getInstance();
-        state.resetState();
-        state.setCurrentRoom(4);
-        state.takeDamage(); // 2 cuori
-        state.setGivenMapToMartino(true);
-        state.addItem(mapItem);
-
-        boolean saved = SaveGameDAO.saveGame(1, "Partita Test Alchimista");
-        if (!saved) throw new RuntimeException("Test 2 Fallito: Errore nel salvataggio!");
-        System.out.println("Test 2 PASSATO: Salvataggio effettuato!");
-
-        // Test 3: Reset e Caricamento
-        state.resetState();
-        if (state.getCurrentRoom() != 1 || state.getInventory().size() != 0) {
-            throw new RuntimeException("Reset fallito");
-        }
-
-        boolean loaded = SaveGameDAO.loadGame(1);
-        if (!loaded) throw new RuntimeException("Test 3 Fallito: Errore caricamento!");
-        if (state.getCurrentRoom() != 4 || state.getCurrentHealth() != 2 || !state.hasGivenMapToMartino()) {
-            throw new RuntimeException("Test 3 Fallito: Dati di stato non corrispondenti!");
-        }
-        if (!state.hasItem("MAPPA_CIELO")) {
-            throw new RuntimeException("Test 3 Fallito: Inventario non ripristinato!");
-        }
-        System.out.println("Test 3 PASSATO: Caricamento ripristinato con successo!");
-
-        // Test 4: Eliminazione
-        SaveGameDAO.deleteSave(1);
-        if (SaveGameDAO.getSlot(1) != null) {
-            throw new RuntimeException("Test 4 Fallito: Cancellazione slot non riuscita!");
-        }
-        System.out.println("Test 4 PASSATO: Eliminazione slot OK!");
-
+    @AfterAll
+    static void shutdownDatabase() {
         DatabaseManager.close();
-        System.out.println("--- TUTTI I TEST H2 COMPLETATI CON SUCCESSO! ---");
+        System.clearProperty(DatabaseManager.TEST_DATABASE_PROPERTY);
+    }
+
+    @BeforeEach
+    void resetGame() {
+        GameState.getInstance().resetState();
+    }
+
+    @AfterEach
+    void cleanupTestSlot() {
+        SaveGameDAO.deleteSave(TEST_SLOT);
+        GameState.getInstance().resetState();
+    }
+
+    @Test
+    void catalogContainsItemsFromBothChapters() {
+        Item map = ItemDAO.getItemById("MAPPA_CIELO");
+        assertNotNull(map);
+        assertEquals("Mappa del Cielo", map.getName());
+        assertNotNull(ItemDAO.getItemById("DIARIO_CAPITANO"));
+        assertNotNull(ItemDAO.getItemById("SCHIUMA_AEGIR"));
+        for (String itemId : java.util.List.of(
+                "MUSCHIO_MIDGARD", "RADICE_NIDHOGG",
+                "FRAMMENTO_YGGDRASIL", "POLVERE_OSSA_GIGANTE", "LACRIMA_YMIR")) {
+            Item item = ItemDAO.getItemById(itemId);
+            assertNotNull(item, "Oggetto del capitolo 3 mancante: " + itemId);
+            assertNotNull(getClass().getResource(item.getIconPath()),
+                    "Icona assente: " + item.getIconPath());
+        }
+    }
+
+    @Test
+    void savesAndRestoresChapterHealthAndInventory() {
+        GameState state = GameState.getInstance();
+        state.setChapter(2);
+        state.setCurrentRoom(4);
+        state.takeDamage();
+        state.setGivenMapToMartino(true);
+        state.addItem(ItemDAO.getItemById("MAPPA_CIELO"));
+
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Test in memoria"));
+        assertEquals(2, SaveGameDAO.getSlot(TEST_SLOT).getCurrentChapter());
+
+        state.resetState();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(2, state.getChapter());
+        assertEquals(4, state.getCurrentRoom());
+        assertEquals(2, state.getCurrentHealth());
+        assertTrue(state.hasGivenMapToMartino());
+        assertTrue(state.hasItem("MAPPA_CIELO"));
+    }
+
+    @Test
+    void chapter3ItemsCanBeSavedAndLoaded() {
+        GameState state = GameState.getInstance();
+        state.setChapter(3);
+        state.setCurrentRoom(5);
+        state.addItem(ItemDAO.getItemById("MUSCHIO_MIDGARD"));
+        state.addItem(ItemDAO.getItemById("RADICE_NIDHOGG"));
+        state.addItem(ItemDAO.getItemById("FRAMMENTO_YGGDRASIL"));
+        state.addItem(ItemDAO.getItemById("POLVERE_OSSA_GIGANTE"));
+        state.setYmirPacified(true);
+        state.setYmirRuneSeed(9345);
+        state.setGunnarWisdomLearned(true);
+        state.setGunnarIntroductionHeard(true);
+        state.setYmirSteleRead(true);
+        state.setYmirOldFashionedCreated(true);
+
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Terra: test"));
+        state.resetState();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(3, state.getChapter());
+        assertEquals(5, state.getCurrentRoom());
+        assertTrue(state.isYmirPacified(), "Vittoria di Ymir non ripristinata");
+        assertEquals(9345, state.getYmirRuneSeed());
+        assertTrue(state.hasLearnedGunnarWisdom());
+        assertTrue(state.hasHeardGunnarIntroduction());
+        assertTrue(state.hasReadYmirStele());
+        assertTrue(state.isYmirOldFashionedCreated(),
+                "Il finale completato deve sopravvivere al caricamento H2");
+        for (String id : java.util.List.of("MUSCHIO_MIDGARD",
+                "RADICE_NIDHOGG", "FRAMMENTO_YGGDRASIL", "POLVERE_OSSA_GIGANTE")) {
+            assertTrue(state.hasItem(id), "Oggetto non ripristinato: " + id);
+        }
+    }
+
+    @Test
+    void repeatedSchemaInitializationKeepsSavedProgress() {
+        GameState state = GameState.getInstance();
+        state.setChapter(3);
+        state.setCurrentRoom(6);
+        state.setYmirRuneSeed(123456);
+        state.setGunnarWisdomLearned(true);
+        state.setGunnarIntroductionHeard(true);
+        state.setYmirSteleRead(true);
+        state.addItem(ItemDAO.getItemById("MUSCHIO_MIDGARD"));
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Schema ripetuto"));
+
+        // La stessa migrazione che viene eseguita ai normali avvii del gioco.
+        DatabaseManager.initDatabase();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(3, state.getChapter());
+        assertEquals(6, state.getCurrentRoom());
+        assertEquals(123456, state.getYmirRuneSeed());
+        assertTrue(state.hasLearnedGunnarWisdom());
+        assertTrue(state.hasHeardGunnarIntroduction());
+        assertTrue(state.hasReadYmirStele());
+        assertTrue(state.hasItem("MUSCHIO_MIDGARD"));
+    }
+
+    @Test
+    void savesNextChapterSnapshotWithoutAdvancingLiveGame() {
+        GameState state = GameState.getInstance();
+        state.setChapter(1);
+        state.setCurrentRoom(4);
+        state.setCurrentHealth(2);
+        state.setBossDefeated(true);
+        var snapshot = com.alchemist.hangover.gameplay.chapter.ChapterProgression
+                .saveAfterCompletion(state, 1);
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Fine capitolo 1", snapshot));
+        assertEquals(1, state.getChapter(), "SALVA non deve avanzare la partita");
+        assertEquals(4, state.getCurrentRoom());
+        assertEquals(2, state.getCurrentHealth());
+        assertTrue(state.isBossDefeated());
+        assertEquals(2, SaveGameDAO.getSlot(TEST_SLOT).getCurrentChapter());
+
+        state.resetState();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(2, state.getChapter());
+        assertEquals(1, state.getCurrentRoom());
+        assertEquals(3, state.getCurrentHealth());
+        assertFalse(state.isBossDefeated());
+    }
+
+    @Test
+    void missingSaveSlotDoesNotAlterTheActiveGame() {
+        GameState state = GameState.getInstance();
+        state.setChapter(3);
+        state.setCurrentRoom(5);
+        state.setGunnarIntroductionHeard(true);
+        assertFalse(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(3, state.getChapter());
+        assertEquals(5, state.getCurrentRoom());
+        assertTrue(state.hasHeardGunnarIntroduction());
+    }
+
+    @Test
+    void chapterFourFinaleAndSurturRewardSurviveSaveAndReload() {
+        GameState state = GameState.getInstance();
+        state.setChapter(4);
+        state.setCurrentRoom(3);
+        state.setBossDefeated(true);
+        state.setRagnarokFlambeCreated(true);
+        state.addItem(ItemDAO.getItemById("BRACE_MUSPELHEIM"));
+        state.addItem(ItemDAO.getItemById("CENERE_FENRIR"));
+        state.addItem(ItemDAO.getItemById("MAGMA_SVARTALFAHEIMR"));
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Ragnarok Flambe"));
+        state.resetState();
+        assertTrue(SaveGameDAO.loadGame(TEST_SLOT));
+        assertEquals(4, state.getChapter());
+        assertEquals(3, state.getCurrentRoom());
+        assertTrue(state.isBossDefeated());
+        assertTrue(state.isRagnarokFlambeCreated());
+        assertTrue(state.hasItem("BRACE_MUSPELHEIM"));
+        assertTrue(state.hasItem("CENERE_FENRIR"));
+        assertTrue(state.hasItem("MAGMA_SVARTALFAHEIMR"));
+    }
+
+    @Test
+    void deletesOnlyTheTestSlot() {
+        assertTrue(SaveGameDAO.saveGame(TEST_SLOT, "Eliminazione di prova"));
+        assertTrue(SaveGameDAO.deleteSave(TEST_SLOT));
+        assertNull(SaveGameDAO.getSlot(TEST_SLOT));
     }
 }

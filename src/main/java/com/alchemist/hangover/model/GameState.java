@@ -1,26 +1,40 @@
 package com.alchemist.hangover.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameState {
 
     private static GameState instance;
 
+    private final PropertyChangeSupport healthChanges = new PropertyChangeSupport(this);
     private int currentHealth = 3;
     private int maxHealth = 3;
     private int currentChapter = 1;
     private int currentRoom = 1; // Traccia della stanza attuale per i salvataggi
 
-    private List<Item> inventory;
+    private final List<Item> inventory = new ArrayList<>();
     private boolean givenMapToMartino = false;
     private boolean hasDragonKey = false;
     private boolean dragonUnlocked = false; // Flag per sblocco polena/drago
     private boolean bossDefeated = false;
+    // Stato separato: Rán e Hræsvelgr non devono sbloccare la ricompensa di Ymir.
+    private boolean ymirPacified = false;
+    private int ymirRuneSeed = 0;
+    private boolean gunnarWisdomLearned = false;
+    // Tappa intermedia della conversazione: ora persiste nei salvataggi H2.
+    private boolean gunnarFirstDialogueHeard = false;
+    private boolean ymirSteleRead = false;
+    private boolean ymirOldFashionedCreated = false;
+    private boolean ragnarokFlambeCreated = false;
+    // Checkpoint di sessione: non viene serializzato nei salvataggi H2.
+    private boolean bossRetryAvailable = false;
 
-    private GameState() {
-        inventory = new ArrayList<>();
-    }
+    private GameState() { }
 
     public static GameState getInstance() {
         if (instance == null) {
@@ -52,7 +66,11 @@ public class GameState {
     }
 
     public void setCurrentHealth(int health) {
-        this.currentHealth = health;
+        int newHealth = Math.max(0, health);
+        if (currentHealth != newHealth) {
+            currentHealth = newHealth;
+            notifyHealthChanged();
+        }
     }
 
     public int getMaxHealth() {
@@ -60,31 +78,59 @@ public class GameState {
     }
 
     public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
+        if (this.maxHealth != maxHealth) {
+            this.maxHealth = maxHealth;
+            notifyHealthChanged();
+        }
     }
 
     public void takeDamage() {
         if (currentHealth > 0) {
-            currentHealth--;
+            setCurrentHealth(currentHealth - 1);
         }
     }
 
     public void resetHealth() {
-        this.currentHealth = maxHealth;
+        setCurrentHealth(maxHealth);
+    }
+
+    // Gli indicatori grafici si aggiornano anche mentre un JDialog modale e' aperto.
+    public void addHealthChangeListener(PropertyChangeListener listener) {
+        healthChanges.addPropertyChangeListener("health", listener);
+    }
+
+    public void removeHealthChangeListener(PropertyChangeListener listener) {
+        healthChanges.removePropertyChangeListener("health", listener);
+    }
+
+    private void notifyHealthChanged() {
+        healthChanges.firePropertyChange("health", null, new int[]{currentHealth, maxHealth});
     }
 
     // --- Gestione Inventario ---
+    /**
+     * Restituisce una fotografia in sola lettura dell'inventario.
+     * I chiamanti non possono piu' cancellare oggetti senza passare dal modello.
+     */
     public List<Item> getInventory() {
-        return inventory;
+        return List.copyOf(inventory);
     }
 
+    /** Copia difensiva: modifiche alla lista esterna non alterano la partita. */
     public void setInventory(List<Item> items) {
-        this.inventory = items;
+        List<Item> snapshot = List.copyOf(Objects.requireNonNull(items, "items"));
+        inventory.clear();
+        snapshot.forEach(this::addItem);
+    }
+
+    public void clearInventory() {
+        inventory.clear();
     }
 
     public void addItem(Item item) {
-        if (!hasItem(item.getId())) {
-            inventory.add(item);
+        Item valid = Objects.requireNonNull(item, "item");
+        if (!hasItem(valid.getId())) {
+            inventory.add(valid);
         }
     }
 
@@ -113,19 +159,103 @@ public class GameState {
     public boolean isDragonUnlocked() { return dragonUnlocked; }
     public void setDragonUnlocked(boolean val) { this.dragonUnlocked = val; }
 
+    /**
+     * The random seed is created once per Chapter III adventure and is persisted
+     * in H2, so Gunnar, the stele and the boss share the exact same ritual.
+     */
+    public int ensureYmirRuneSeed() {
+        if (ymirRuneSeed == 0) {
+            ymirRuneSeed = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
+        }
+        return ymirRuneSeed;
+    }
+
+    public int getYmirRuneSeed() { return ymirRuneSeed; }
+    public void setYmirRuneSeed(int seed) { this.ymirRuneSeed = seed; }
+
+    public boolean hasHeardGunnarIntroduction() { return gunnarFirstDialogueHeard; }
+    public void setGunnarIntroductionHeard(boolean heard) { gunnarFirstDialogueHeard = heard; }
+
+    public boolean hasLearnedGunnarWisdom() { return gunnarWisdomLearned; }
+    public void setGunnarWisdomLearned(boolean value) { gunnarWisdomLearned = value; }
+
+    public boolean hasReadYmirStele() { return ymirSteleRead; }
+    public void setYmirSteleRead(boolean value) { ymirSteleRead = value; }
+
+    public boolean isYmirOldFashionedCreated() { return ymirOldFashionedCreated; }
+    public void setYmirOldFashionedCreated(boolean value) { ymirOldFashionedCreated = value; }
+
+    public boolean isRagnarokFlambeCreated() { return ragnarokFlambeCreated; }
+    public void setRagnarokFlambeCreated(boolean value) { ragnarokFlambeCreated = value; }
+
+    public boolean isYmirPacified() { return ymirPacified; }
+    public void setYmirPacified(boolean value) { this.ymirPacified = value; }
+
     public boolean isBossDefeated() { return bossDefeated; }
     public void setBossDefeated(boolean val) { this.bossDefeated = val; }
 
+    public boolean isBossRetryAvailable() { return bossRetryAvailable; }
+    public void setBossRetryAvailable(boolean val) { this.bossRetryAvailable = val; }
+
+    /** Carica uno stato completo, dopo che ogni lettura H2 e' riuscita. */
+    public void restoreFrom(GameSaveSnapshot snapshot) {
+        Objects.requireNonNull(snapshot, "snapshot");
+        resetState();
+        setChapter(snapshot.chapter());
+        setCurrentRoom(snapshot.room());
+        setMaxHealth(snapshot.maxHealth());
+        setCurrentHealth(snapshot.health());
+        setGivenMapToMartino(snapshot.givenMapToMartino());
+        setHasDragonKey(snapshot.dragonKey());
+        setDragonUnlocked(snapshot.dragonUnlocked());
+        setBossDefeated(snapshot.bossDefeated());
+        setYmirPacified(snapshot.ymirPacified());
+        setYmirRuneSeed(snapshot.ymirRuneSeed());
+        setGunnarWisdomLearned(snapshot.gunnarWisdomLearned());
+        setGunnarIntroductionHeard(snapshot.gunnarIntroductionHeard());
+        setYmirSteleRead(snapshot.ymirSteleRead());
+        setYmirOldFashionedCreated(snapshot.ymirOldFashionedCreated());
+        setRagnarokFlambeCreated(snapshot.ragnarokFlambeCreated());
+        setInventory(snapshot.inventory());
+    }
+
     // --- Reset Stato Generale ---
+    /** Ripristina una nuova partita senza sostituire l'oggetto GameState singleton. */
     public void resetState() {
-        this.currentHealth = 3;
-        this.maxHealth = 3;
-        this.currentChapter = 1;
-        this.currentRoom = 1;
-        this.inventory.clear();
-        this.givenMapToMartino = false;
-        this.hasDragonKey = false;
-        this.dragonUnlocked = false;
-        this.bossDefeated = false;
+        int previousHealth = currentHealth;
+        int previousMaxHealth = maxHealth;
+        resetExploration();
+        resetStoryProgress();
+        resetYmirProgress();
+        maxHealth = 3;
+        currentHealth = 3;
+        // Un solo evento: l'HUD non viene aggiornato su uno stato intermedio.
+        if (previousHealth != currentHealth || previousMaxHealth != maxHealth) {
+            notifyHealthChanged();
+        }
+    }
+
+    private void resetExploration() {
+        currentChapter = 1;
+        currentRoom = 1;
+        clearInventory();
+    }
+
+    private void resetStoryProgress() {
+        givenMapToMartino = false;
+        hasDragonKey = false;
+        dragonUnlocked = false;
+        bossDefeated = false;
+        bossRetryAvailable = false;
+    }
+
+    private void resetYmirProgress() {
+        ymirPacified = false;
+        ymirRuneSeed = 0;
+        gunnarWisdomLearned = false;
+        gunnarFirstDialogueHeard = false;
+        ymirSteleRead = false;
+        ymirOldFashionedCreated = false;
+        ragnarokFlambeCreated = false;
     }
 }

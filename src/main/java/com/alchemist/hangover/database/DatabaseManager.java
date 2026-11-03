@@ -17,11 +17,21 @@ public class DatabaseManager {
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "";
 
+    /** Solo i test usano questa proprieta': sono ammessi esclusivamente DB H2 in memoria. */
+    public static final String TEST_DATABASE_PROPERTY = "alchemist.test.database.url";
+
     /**
      * Restituisce una nuova connessione attiva al database H2.
      * Ciascun chiamante è responsabile della chiusura (tramite try-with-resources).
      */
     public static Connection getConnection() throws SQLException {
+        String testingUrl = System.getProperty(TEST_DATABASE_PROPERTY);
+        if (testingUrl != null) {
+            if (!testingUrl.startsWith("jdbc:h2:mem:")) {
+                throw new SQLException("Il database di test deve essere H2 in memoria");
+            }
+            return DriverManager.getConnection(testingUrl, DB_USER, DB_PASSWORD);
+        }
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
@@ -32,7 +42,7 @@ public class DatabaseManager {
         try {
             // Crea la cartella dei salvataggi se non esiste
             File dir = new File(DB_DIR);
-            if (!dir.exists()) {
+            if (System.getProperty(TEST_DATABASE_PROPERTY) == null && !dir.exists()) {
                 dir.mkdirs();
             }
 
@@ -40,7 +50,10 @@ public class DatabaseManager {
                  InputStream in = DatabaseManager.class.getResourceAsStream("/db/schema.sql")) {
                 if (in != null) {
                     RunScript.execute(conn, new InputStreamReader(in, StandardCharsets.UTF_8));
-                    System.out.println("[DatabaseManager] Database H2 inizializzato con successo in: " + dir.getAbsolutePath());
+                    System.out.println("[DatabaseManager] Schema H2 inizializzato"
+                            + (System.getProperty(TEST_DATABASE_PROPERTY) == null
+                                    ? " in: " + dir.getAbsolutePath()
+                                    : " (solo memoria per test)"));
                 } else {
                     System.err.println("[DatabaseManager] File /db/schema.sql non trovato tra le risorse!");
                 }

@@ -1,0 +1,23 @@
+NARRATOR|Arthur raggiunge una voragine negli abissi. Un corpo immenso, ricoperto di squame nere, striscia lentamente tra le pareti rocciose. Due occhi giganteschi si accendono nell'oscurità.
+ARTHUR|Ma che diamine... Quello è un serpente?! Ma quanto accidenti è grande?!
+JORMUNGANDR|Chi osa disturbare il sonno di Jörmungandr, il Serpente del Mondo?
+ARTHUR|Oh, per tutti i mari... Pure questo parla?! Senti, io stavo solo passando!
+JORMUNGANDR|Un umano... nelle profondità del mio dominio. Curioso. Credevo che la tua specie fosse troppo fragile per giungere fin qui.
+ARTHUR|Infatti! Sono fragilissimo! Quindi magari evita di mangiarmi, grazie!
+JORMUNGANDR|Ahahah... Potrei stritolarti senza nemmeno accorgermene.
+ARTHUR|Fantastico. Un boa gigante con problemi di autostima.
+JORMUNGANDR|Attento alla tua lingua, mortale. Io sono colui che avvolge Miðgarðr. Persino gli dèi temono il mio risveglio.
+ARTHUR|Sì, sì, ho capito! Sei grosso, cattivo e importante! Posso andare?!
+JORMUNGANDR|Aspetta... Avverto su di te l'odore del destino. E qualcosa di molto più oscuro.
+ARTHUR|Fammi indovinare... Un padrone misterioso, un calderone e qualche altra assurdità?!
+JORMUNGANDR|Dunque qualcuno ti sta già osservando... Ma ricorda, umano: non tutti coloro che ti seguono desiderano vederti arrivare vivo.
+ARTHUR|Perfetto! Un altro che parla per indovinelli! Ma un navigatore GPS non ce l'avete?!
+NARRATOR|Jörmungandr muove lentamente il suo corpo colossale. L'intera voragine trema e una corrente violentissima investe Arthur.
+JORMUNGANDR|Prendi uno di questi cristalli: è il Sale di Jörmungandr, lasciato dal mare tra le mie scaglie. Che almeno il tuo viaggio abbia sapore.
+JORMUNGANDR|Prosegui, Arthur. Ma quando il serpente lascerà la propria coda... i nove mondi conosceranno la fine.
+ARTHUR|Aspetta... LA FINE?! Di che accidenti stai parlando?!
+JORMUNGANDR|Del Ragnarök, piccolo umano. E temo che il tuo viaggio ne sia più vicino di quanto immagini.
+NARRATOR|Gli occhi del serpente scompaiono nell'oscurità. Il suo corpo continua a scivolare lentamente tra le rocce, apparentemente senza fine.
+ARTHUR|Prima un'aquila gigante, poi un pesce veggente... e ora un serpente che annuncia l'apocalisse.
+NARRATOR|Un ultimo, profondissimo ruggito scuote gli abissi.
+ARTHUR|...Giuro che quando torno a casa passo direttamente agli analcolici.
