@@ -1,6 +1,28 @@
-VAGABONDO|Cammina nelle mie orme. La crosta chiara si apre.
-ARTHUR|Almeno qui c'è qualcuno a cui chiedere la strada. Di solito mi tocca interrogare la fauna.
-NARRATOR|Il vecchio slaccia una borsa. L'odore di zolfo passa perfino attraverso la stoffa.
-VAGABONDO|Loki me lo vendette come fuoco da bere. Senti che dolce, diceva.
-ARTHUR|E tu l'hai assaggiato?
-VAGABONDO|Mi chinai solo per annusare. Da questo lato del viso non sento più la pioggia. Tieni lo zolfo chiuso, ragazzo.
+NARRATOR|IL VAGABONDO DELLE CENERI. Arthur attraversa un immenso deserto di cenere nera. In lontananza, un uomo incappucciato cammina lentamente, appoggiandosi a un vecchio bastone. Metà del suo volto è segnata da profonde ustioni.
+ARTHUR|Ma che diavolo... Un deserto di cenere?! Ma qui non esiste un posto con un clima normale?!
+VAGABONDO|Se cerchi acqua, straniero... hai scelto il peggior posto dei nove mondi.
+ARTHUR|Oh, finalmente un essere umano! Aspetta... Sei umano, vero?!
+VAGABONDO|Lo ero, prima che le fiamme di Muspell mi portassero via ogni cosa.
+ARTHUR|Cristo santo... Che cosa ti è successo alla faccia?!
+VAGABONDO|Ho visto il fuoco divorare interi villaggi. Ho perso la mia casa, la mia famiglia... e metà del mio volto.
+ARTHUR|...Merda. Mi dispiace, davvero.
+VAGABONDO|Non cercare la mia pietà, ragazzo. Sono sopravvissuto abbastanza da sapere che il fuoco non è il vero nemico.
+ARTHUR|Ah no?! Perché a me sembra già abbastanza stronzo!
+VAGABONDO|Il fuoco distrugge ciò che tocca. Ma gli uomini... e persino gli dèi... distruggono ciò che temono.
+ARTHUR|Aspetta... Anche tu sai qualcosa di quello che sta succedendo?!
+VAGABONDO|Ho visto le Valchirie cadere. Ho visto il gigante inginocchiarsi. E ho visto un piccolo demonio rosso fuggire terrorizzato verso la fucina.
+ARTHUR|...Il diavoletto?! Lo hai visto?!
+VAGABONDO|Sì. Gridava che il suo padrone aveva scoperto tutto. Non l'ho più rivisto.
+ARTHUR|Cazzo... Allora è vero. Quel piccolo stalker è morto perché ha spifferato troppo.
+NARRATOR|Il vagabondo si ferma e osserva Arthur con il suo unico occhio ancora sano.
+VAGABONDO|Ascoltami bene, Arthur. Il pericolo più grande non è la creatura che mostra le proprie zanne... ma quella che ti sorride mentre prepara la tua rovina.
+ARTHUR|Perfetto. Quindi devo diffidare praticamente di tutti?!
+VAGABONDO|Quando raggiungerai il calderone, ricorda una cosa: qualcuno potrebbe aver bisogno di te soltanto per completare ciò che lui non può.
+ARTHUR|E chi sarebbe questo qualcuno?!
+VAGABONDO|Se conoscessi il suo nome, ragazzo... non sarei ancora vivo.
+NARRATOR|Il vagabondo si rimette lentamente in cammino, lasciando impronte nella cenere.
+ARTHUR|EHI! ASPETTA! Non puoi mollarmi un'informazione del genere e andartene!
+VAGABONDO|Buona fortuna, Arthur. E ricorda... anche la cenere conserva le tracce di ciò che è bruciato.
+ARTHUR|...Fantastico. Pure il barbone dell'apocalisse parla per indovinelli.
+NARRATOR|Una folata di vento solleva la cenere, nascondendo il vagabondo alla vista.
+ARTHUR|Però una cosa l'ho capita... Chiunque sia questo padrone, deve essere un gran figlio di puttana.

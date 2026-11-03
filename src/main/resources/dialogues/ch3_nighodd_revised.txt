@@ -1,15 +1,22 @@
-NARRATOR|Una scaglia raschia la rupe. Passa un lungo istante prima che arrivi il suono dal fondo.
-NIDHOGGR|Qualcuno cammina sopra il mio pasto.
-ARTHUR|Se è la rupe, ho una lamentela sulla consistenza del pane.
-NIDHOGGR|Le radici arrivano qui dopo secoli. Il rumore che fai le rende amare.
-ARTHUR|Va bene. Faccio piano.
-NARRATOR|Arthur sposta il piede. Un sassolino cade. Il drago aspetta che tocchi il fondo.
-NIDHOGGR|Sai aspettare, dopotutto.
-ARTHUR|Frequento Gunnar.
-NIDHOGGR|Lui ascolta perfino lo spazio fra i miei denti.
-ARTHUR|Quassù c'è una stele. Conosci i segni?
-NIDHOGGR|Gli uomini li incisero sulla rupe perché la terra dimenticava ogni volta che si girava nel sonno.
-ARTHUR|Mi conviene leggerli prima che cambi fianco.
-NIDHOGGR|Ti conviene leggere con gli occhi. La rupe ripete ogni parola.
-NARRATOR|Dal fondo torna, piccola e distinta, la voce di Arthur. «Frequento Gunnar.»
-ARTHUR|Se arriva fino a lui, domani mi interroga.
+NARRATOR|IL DIVORATORE DELLE RADICI. Arthur raggiunge una balconata sospesa sopra un immenso canyon. Tra le fiamme e la nebbia, un drago dalle squame nere plana lentamente, facendo tremare l'aria con il battito delle ali.
+ARTHUR|Ma porca miseria... UN DRAGO?! Ma che cos'è, il raduno annuale dei mostri giganti?!
+NIDHOGGR|Chi osa pronunciare simili sciocchezze nel dominio di Níðhöggr?!
+ARTHUR|Oh, cielo... Mi hai sentito?! Guarda, non volevo disturbarti! Stavo solo ammirando il panorama!
+NIDHOGGR|Io sono colui che rode le radici di Yggdrasill e si nutre dei morti. Tu, invece... sei molto lontano dal tuo mondo.
+ARTHUR|Fantastico! Un drago necrofago! Senti, io vorrei solo tornare al mio bar!
+NIDHOGGR|Ahahah! Conosco il tuo nome, Arthur. Le radici dell'albero mi hanno raccontato del tuo viaggio.
+ARTHUR|Ma davvero? Pure i draghi hanno il mio curriculum?!
+NIDHOGGR|Ho sentito anche di un piccolo demonio che ti segue nell'ombra...
+ARTHUR|QUEL DIAVOLETTO ROSSO?! Lo conosci?!
+NIDHOGGR|È soltanto una pedina. Il suo padrone sta muovendo qualcosa di molto più grande.
+ARTHUR|E CHI SAREBBE QUESTO PADRONE?! Possibile che nessuno voglia dirmelo?!
+NIDHOGGR|Non temere, umano. Lo incontrerai molto presto... se sopravvivrai.
+NARRATOR|Níðhöggr spalanca le ali. Una raffica violentissima scuote la balconata e alcune pietre precipitano nell'abisso.
+ARTHUR|EHI! PIANO CON QUELLE ALI! SONO SU UN PRECIPIZIO!
+NIDHOGGR|Ricorda, Arthur... Quando le radici bruceranno, persino gli dèi cadranno. E il calderone che cerchi potrebbe decidere il loro destino.
+ARTHUR|Ancora quel maledetto calderone! Ma non potevo finire in un mondo dove cercavano una bottiglia di Jack Daniel's?!
+NIDHOGGR|Ahahah! Continua il tuo cammino, piccolo umano. Il destino ha ancora fame.
+NARRATOR|Il drago si lascia cadere nell'abisso, scomparendo lentamente tra le fiamme e la nebbia.
+ARTHUR|Un serpente gigante, un drago mangiacadaveri e un demonio stalker... Mi manca solo Satana in persona.
+NARRATOR|Un ruggito lontano riecheggia nel canyon.
+ARTHUR|...No, aspetta. Non dovevo dirlo.

@@ -1,7 +1,23 @@
-NARRATOR|Fra due maglie della rete una ragazza tiene aperto un varco con le dita. I fili le hanno lasciato solchi d’oro sui polsi.
-HRÖNN|L'uomo nel terzo nodo era un cantore. Quando la corrente gira, la rete canta ancora.
-ARTHUR|Potresti sciogliere il nodo.
-HRÖNN|Mia madre sentirebbe mancare una voce. E manderebbe me a prenderne un'altra.
-ARTHUR|Quando parla in numeri, allora, è meglio avere la risposta pronta.
-HRÖNN|Il capitano dei relitti le segnava nel diario. Se ti manca, torna da lui prima di toccare il vortice.
-NARRATOR|Hrönn scosta un filo d'oro dal polso di Arthur. Per un momento la rete suona come una corda di violino.
+NARRATOR|Arthur entra in una grotta oscura. Un'enorme rete dorata intrappola le anime dei marinai annegati, mentre un vortice d'acqua si agita al centro della sala. Su una roccia, una misteriosa creatura osserva il suo arrivo.
+ARTHUR|Ma che diavolo... Quelli sono fantasmi?! E perché sono dentro una rete da pesca?!
+HRÖNN|Sono le anime di coloro che il mare ha reclamato. Benvenuto nel dominio di mia madre, umano.
+ARTHUR|Tua madre?! Fammi indovinare... Un altro mostro gigante che vuole mangiarmi?!
+HRÖNN|Io sono Hrönn, figlia di Rán, signora degli abissi e custode degli annegati.
+ARTHUR|Fantastico! Una famiglia di psicopatici acquatici! E tua madre dov'è?!
+HRÖNN|Ti sta aspettando. Le correnti hanno pronunciato il tuo nome molto prima del tuo arrivo.
+ARTHUR|Ma dai, ormai mi conoscono pure le alghe?!
+HRÖNN|Ahahah... Sei divertente, Arthur. Ma il sorriso ti abbandonerà quando incontrerai Rán.
+ARTHUR|Senti, io ho già incontrato un serpente grosso quanto un continente! Quanto potrà essere peggio tua madre?!
+HRÖNN|Jörmungandr distrugge ciò che incontra. Mia madre, invece... conserva ciò che desidera.
+NARRATOR|Hrönn indica la rete dorata. Le anime intrappolate cominciano a contorcersi, emettendo lamenti soffocati.
+ARTHUR|...E immagino che voglia aggiungermi alla sua collezione.
+HRÖNN|Forse. Ma Rán non desidera soltanto la tua anima. Sa del calderone... e di ciò che cerchi.
+ARTHUR|ANCORA QUEL BENEDETTO CALDERONE?! Ma non potete lasciarmi in pace?!
+HRÖNN|Se desideri proseguire, dovrai affrontarla. Ma ricorda: il mare non restituisce mai qualcosa senza ricevere nulla in cambio.
+ARTHUR|Quindi devo pagare pure il pedaggio?! Ma vai a quel paese!
+NARRATOR|Hrönn sorride e scompare lentamente nell'oscurità. Il vortice al centro della grotta comincia a ruotare sempre più velocemente.
+HRÖNN|Preparati, Arthur... Mia madre si è svegliata.
+ARTHUR|...Perfetto. Adesso devo pure conoscere la suocera degli abissi.
+NARRATOR|Una voce femminile, profonda e terrificante, riecheggia dalle profondità del vortice.
+RAN|CHI OSA ENTRARE NEL MIO REGNO?!
+ARTHUR|...Maledizione. Dovevo restare al bar.

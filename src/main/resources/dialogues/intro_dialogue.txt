@@ -1,12 +1,56 @@
-NARRATOR|Una goccia cade dal soffitto nel boccale di Martino. Lui sposta il boccale. La goccia successiva centra il suo cappello.
-MARTINO|Lo dicevo che questo tavolo prende acqua.
-ARTHUR|Hai già il cappello. Se affondiamo, nomino te capitano.
-SIEGFRIED|Un brindisi al capitano! E all'uomo che ha avuto il coraggio di assaggiare quello che ha preparato.
-ARTHUR|Sono un alchimista. Prima annuso, poi assaggio, poi scrivo cosa succede.
-HELA|Hai scritto tre volte «poi assaggio».
-GUNNAR|Appoggia il gomito qui. Questo lato del tavolo regge.
-NARRATOR|Gunnar dà due colpetti al legno. Hela posa un bicchiere d'acqua proprio nel cerchio lasciato dal boccale.
-ARTHUR|La prendo dopo. Prima vorrei sapere chi ha messo una vela nel mio bicchiere.
-MARTINO|È il riflesso della tovaglia, Arthur.
-ARTHUR|Allora perché prende vento?
-NARRATOR|Arthur cerca la matita. Le dita trovano una cima bagnata. Da qualche parte, ancora vicinissimo, un amico lo chiama per nome.
+NARRATOR|UNA NOTTE DA DIMENTICARE. Notte fonda. La pioggia batte contro le finestre di una vecchia taverna. Tra musica, risate e bicchieri vuoti, Arthur è seduto con Martino, Siegfried, Gunnar e Hela.
+MARTINO|Ve lo dico, ragazzi... Questo è davvero l'ultimo giro. Domani devo lavorare.
+HELA|Martino, sono tre ore che dici "ultimo giro".
+GUNNAR|E hai già dimenticato dove lavori.
+MARTINO|Dettagli! L'importante è presentarsi sobri!
+ARTHUR|Allora sei già nei guai.
+NARRATOR|Il tavolo esplode in una risata. Arthur solleva il boccale, decisamente troppo allegro.
+ARTHUR|Alla salute, ragazzi! E a chiunque domani riesca ad alzarsi dal letto!
+SIEGFRIED|Arthur, a proposito... Che fine hanno fatto le tue famose formule alchemiche?
+ARTHUR|Non cominciare! Un giorno creerò il cocktail perfetto. Una miscela talmente potente da farti dimenticare persino il tuo nome!
+HELA|Quindi praticamente quello che stai bevendo adesso.
+ARTHUR|No, no! Il mio sarà qualcosa di leggendario!
+MARTINO|Allora facciamo un gioco! Ognuno inventa un cocktail impossibile!
+GUNNAR|Questa finirà malissimo.
+NARRATOR|Arthur prende un tovagliolo e comincia a scrivere.
+MARTINO|Il mio deve farti volare! Leggero come il vento, con una piuma che sprigiona scintille!
+SIEGFRIED|Io voglio qualcosa che sappia di mare. Corallo rosso, schiuma eterna... e il sale delle squame di un serpente gigantesco.
+GUNNAR|Il mio viene dalla terra. Muschio antico, pietra viva e una scheggia dell'albero che sostiene i mondi.
+HELA|Principianti. Il mio deve bruciare come l'inferno! Magma, cenere nera e una fiamma che non si spegne mai!
+ARTHUR|Accidenti... Voi non volete bere, volete suicidarvi!
+NARRATOR|Arthur scrive quattro parole sul tovagliolo: ARIA. ACQUA. TERRA. FUOCO.
+ARTHUR|Quattro cocktail impossibili... Sapete che vi dico? Un giorno li preparerò davvero!
+SIEGFRIED|Attento a ciò che desideri, Arthur.
+ARTHUR|Sempre il solito pessimista! Passami quella bottiglia!
+NARRATOR|Gli amici ridono. Arthur si versa un altro bicchiere. La musica continua, ma qualcosa nella stanza sembra lentamente cambiare.
+NARRATOR|QUALCOSA NON VA. Arthur porta il bicchiere alle labbra. Il suono della pioggia sembra allontanarsi. Il musicista ripete lo stesso ritornello, identico a quello di pochi istanti prima.
+ARTHUR|Ragazzi... Ma questa canzone non l'ha già suonata?
+MARTINO|Arthur, è tutta la sera che suona la stessa roba!
+ARTHUR|Ah... Giusto.
+NARRATOR|Arthur ride, ma la sua vista comincia ad annebbiarsi. Le fiamme delle candele sembrano allungarsi in modo innaturale.
+GUNNAR|Arthur... Il pavimento si sta muovendo.
+ARTHUR|No, Gunnar. Quello sono io che sto per sentirmi male.
+HELA|Forse sarebbe meglio smettere di bere.
+ARTHUR|Finalmente una buona idea... con sette bicchieri di ritardo.
+NARRATOR|Un bicchiere cade dal bancone e si frantuma. Arthur si volta di scatto. Ma quando guarda di nuovo, il bicchiere è ancora intatto.
+ARTHUR|Aspetta... Ma com'è possibile?
+SIEGFRIED|Tutto bene, Arthur?
+ARTHUR|Sì... Credo. Devo solo chiudere gli occhi un secondo.
+NARRATOR|Arthur appoggia la testa sul tavolo. Le voci degli amici diventano lontane, distorte, come se provenissero da sott'acqua.
+MARTINO|Arthur? Ehi, non addormentarti adesso!
+NARRATOR|Per un istante, Arthur sente un rumore impossibile: il vento che gonfia delle enormi vele.
+ARTHUR|Martino... Perché sento il mare?
+MARTINO|Il mare?! Arthur, siamo in una taverna!
+NARRATOR|Arthur prova a sollevare la testa. Attraverso la finestra, per una frazione di secondo, gli sembra di vedere nuvole illuminate da lampi dorati al posto della strada.
+ARTHUR|...Accidenti. Devo aver bevuto davvero troppo.
+HELA|Arthur? Riesci a sentirmi?
+NARRATOR|Le pareti sembrano ondeggiare. Le risate rallentano. Il tavolo sotto le sue mani scricchiola come il ponte di una vecchia nave.
+SIEGFRIED|Forse è meglio lasciarlo dormire.
+NARRATOR|Arthur chiude gli occhi. Prima che tutto diventi buio, una voce indistinta sembra sussurrargli qualcosa.
+VOCE|Quattro elementi... Quattro ricette...
+ARTHUR|...Eh? Chi ha parlato?
+VOCE|Ricorda, Arthur...
+NARRATOR|Il rumore della pioggia svanisce. Per un istante rimane soltanto il battito lento di qualcosa di immenso.
+ARTHUR|...Mai più alcol...
+NARRATOR|Arthur perde conoscenza. Nell'oscurità, il tintinnio di un bicchiere si trasforma lentamente nel suono di una campana lontana.
+NARRATOR|FINE DEL PROLOGO.
