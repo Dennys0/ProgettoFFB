@@ -87,7 +87,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
                 "Parla con Veðrfölnir", "/dialogues/vedrfolnir_dialogue.txt");
 
         // Creazione bottoni visibili per gli oggetti raccolti a schermo
-        addItemWorldButton("MAPPA_CIELO", "/images/chapter1/items/map.png", 1050, 294, 78, 44, 5,
+        addItemWorldButton("MAPPA_CIELO", "/images/chapter1/items/map.png", 1050, 215, 140, 160, 5,
                 "Mappa del Cielo", "Una pergamena cosmica trovata nella stiva.");
         muteWorldItem("MAPPA_CIELO", 0.55f);
 
