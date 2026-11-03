@@ -9,11 +9,11 @@ ARTHUR|Fantastico. Allora dimmi come accidenti sono finito qui!
 HUGINN|Ahahah! Ricordi l'ultimo bicchiere? Quello che non avevi ordinato?
 ARTHUR|Io... no. Aspetta, cosa c'era dentro?!
 HUGINN|Una domanda per un'altra volta. Prima dovrai sopravvivere al signore delle tempeste.
-ARTHUR|Il dio falco? Hai qualche consiglio?
+ARTHUR|L'aquila divina? Hai qualche consiglio?
 HUGINN|Le sue ali comandano il vento, ma persino un dio deve respirare. Ricordalo quando il cielo diventerà silenzioso.
 ARTHUR|Non potevi semplicemente dirmi come batterlo?!
 HUGINN|CRA! E tu non potevi semplicemente ordinare un'acqua minerale?!
-NARRATOR|Huginn spalanca le ali, lasciando cadere una piuma nera ai piedi di Arthur.
+NARRATOR|Huginn spalanca le ali, lasciando cadere una piuma percorsa da scintille ai piedi di Arthur: la Piuma di Folgore.
 HUGINN|Un ultimo consiglio, ubriacone... Non fidarti di chi ti ha portato qui.
 ARTHUR|E chi sarebbe?!
 HUGINN|CRA! Questo è proprio ciò che dovresti ricordare.

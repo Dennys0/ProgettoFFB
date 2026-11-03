@@ -25,6 +25,7 @@ MARMÆL|Non necessariamente.
 NARRATOR|La sfera si oscura improvvisamente. Oltre le vetrate, un branco di pesci fugge terrorizzato verso le profondità.
 ARTHUR|...Come sarebbe a dire NON NECESSARIAMENTE?!
 MARMÆL|Il futuro non è scritto nella pietra, Arthur. Nemmeno per coloro che possono vederlo.
+MARMÆL|Porta con te questa fiala di Acqua del Lete. Tienila sigillata: cancella i ricordi, e tu ne hai già persi abbastanza. Non è un ingrediente per il tuo Martini.
 ARTHUR|Sai che c'è? Preferivo quando il mio problema più grande era la sbronza del sabato sera.
 NARRATOR|Marmæl accenna un sorriso enigmatico e torna a contemplare la sfera.
 MARMÆL|Eppure, Arthur... è proprio da una sbronza che tutto ha avuto inizio.

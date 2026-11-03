@@ -1,39 +1,39 @@
 NARRATOR|Il vento scuote le vele dello Skíðblaðnir. Martino stringe il timone d'ottone con una mano e un boccale di grog con l'altra.
 ARTHUR|Martino! Ieri eravamo in una taverna e ora siamo su una maledetta nave volante! Che diavolo succede?!
-MARTINO|Ahahah! Benvenuto a bordo, pivello! Qui il mare sta sotto le nuvole e le spiegazioni non valgono un cazzo!
+MARTINO|Ahahah! Benvenuto a bordo, pivello! Qui il mare sta sotto le nuvole e le spiegazioni non valgono un tappo!
 ARTHUR|Voglio tornare a casa!
-MARTINO|E io voglio un barile di idromele e due valchirie nel letto! Ma siamo entrambi nella merda!
+MARTINO|E io voglio un barile di idromele e due valchirie nel letto! Ma siamo entrambi nei guai!
 ARTHUR|Quindi siamo intrappolati?!
-MARTINO|Finché non preparerai un cocktail degno degli dèi, sì! Il calderone è nella cabina. Ma se ci butti dentro stronzate, saltiamo tutti in aria!
+MARTINO|Finché non preparerai un cocktail degno degli dèi, sì! Il calderone è nella cabina. Ma se ci butti dentro roba a caso, saltiamo tutti in aria!
 ARTHUR|Fantastico. E cosa dovrei cercare?
 MARTINO|Tre ingredienti, tre indizi. Apri bene quelle orecchie da ubriacone!
 NARRATOR|Una raffica violenta scuote le vele. Martino indica il cielo con il boccale.
-MARTINO|PRIMO! Ti serve qualcosa che non puoi vedere né afferrare, ma che può spazzare via una flotta intera il Soffio di Hræsvelgr. Lassù vola un maledetto bestione piumato. Quando apre le ali, persino le tempeste si cagano sotto!
+MARTINO|PRIMO! Ti serve qualcosa che non puoi vedere né afferrare, ma che può spazzare via una flotta intera: il Soffio di Hræsvelgr. Lassù vola un maledetto bestione piumato. Quando apre le ali, persino le tempeste cambiano rotta!
 ARTHUR|Il vento? Devo catturare il suo respiro?
-MARTINO|Bravo, per Odino! Ma quel bastardo non regala il fiato a nessuno. Dovrai guadagnartelo!
-NARRATOR|Martino indica una piuma gialla incastrata tra le assi del ponte. Piccole scintille ne illuminano i bordi.
-MARTINO|SECONDO! Vedi quella piuma? Alcuni uccelli lasciano piume, altri lasciano fulmini! Un buon cocktail deve dare una bella scossa alle palle!
+MARTINO|Bravo, per Odino! Ma quel bestione non regala il fiato a nessuno. Dovrai guadagnartelo!
+NARRATOR|Martino indica Huginn, appollaiato più in là. Tra le sue penne guizza una piccola scintilla.
+MARTINO|SECONDO! Vedi quel corvo? Chiedigli la Piuma di Folgore. Alcuni uccelli lasciano piume, altri lasciano fulmini! Un buon cocktail deve dare una bella scossa!
 ARTHUR|Quindi mi serve una piuma elettrica?
-MARTINO|Forse! Ma occhio alla polvere dorata che galleggia nell'aria. È bella da vedere, ma se la versi nel calderone finirai in un sogno del cazzo senza via d'uscita!
+MARTINO|Forse! Ma occhio alla polvere dorata che galleggia nell'aria. È bella da vedere, ma se la versi nel calderone finirai in un sogno storto senza via d'uscita!
 ARTHUR|Piuma scintillante sì, polvere dorata no. Ricevuto.
 NARRATOR|Una goccia d'acqua si stacca dal cannocchiale di Martino, ma invece di cadere rimane sospesa nell'aria.
 ARTHUR|E quella che diavolo è?!
-MARTINO|TERZO! L'acqua che non cade, idiota! Cercala sulle scaglie della polena a drago, dove la nave bacia le nuvole. Brilla, ma non fa scintille.
+MARTINO|TERZO! La Rugiada delle Nuvole di Asgard! L'ho raccolta sulla polena e chiusa nella cassa d'ottone, a prua sulla sinistra, sotto le cime. Portami la mappa dallo scaffale nella stiva e ti darò la chiave. Brilla, ma non fa scintille.
 ARTHUR|Rugiada sospesa sulle nuvole... capito!
-MARTINO|E se trovi una fiala piena di fumo gelido, non aprirla e non versarla nel calderone! Quella merda viene da un regno tanto freddo che congelerebbe persino le palle di Thor! Ti spaccherebbe il calderone!
-ARTHUR|Quindi respiro del falco, piuma fulminante e rugiada. Niente polvere dorata né fumo gelido.
-MARTINO|Finalmente quel cervello marcio funziona! Ma attento all'ordine, dannazione!
-ARTHUR|C'è pure un ordine?!
-MARTINO|Prima il respiro che dà forza, poi la piuma che lo risveglia, infine la rugiada che tiene insieme tutto. Sbaglia e il tuo cocktail diventerà una bella esplosione!
-ARTHUR|Perfetto. Un dio falco da affrontare e un calderone pronto a esplodermi in faccia.
+MARTINO|E se trovi una fiala piena di fumo gelido, non aprirla e non versarla nel calderone! Quella nebbia viene da un regno tanto freddo che congelerebbe persino la barba di Thor! Ti spaccherebbe il calderone!
+ARTHUR|Quindi respiro dell'aquila, piuma fulminante e rugiada. Niente polvere dorata né fumo gelido.
+MARTINO|Finalmente quel cervello marcio funziona! Ma ricorda la ricetta: Asgardian Aviation!
+ARTHUR|C'è pure un ordine da rispettare?!
+MARTINO|Qui conta cosa versi, non l'ordine: il respiro dà forza, la piuma lo risveglia e la rugiada tiene insieme tutto. Sbaglia ingrediente e avrai una bella esplosione!
+ARTHUR|Perfetto. Un'aquila divina da affrontare e un calderone pronto a esplodermi in faccia.
 MARTINO|Ahahah! Questo è lo spirito, ragazzo! E un'ultima cosa...
 ARTHUR|Che c'è ancora?!
-MARTINO|Se senti qualcuno sussurrare il tuo nome mentre sei solo... tieni chiusa quella cazzo di bocca.
+MARTINO|Se senti qualcuno sussurrare il tuo nome mentre sei solo... tieni chiusa quella boccaccia.
 ARTHUR|Perché?
 NARRATOR|Martino smette di ridere. Per un istante osserva il cielo con un'espressione cupa.
 MARTINO|Perché non tutti quelli che ti chiamano vogliono vederti tornare vivo.
 NARRATOR|Un silenzio inquietante cala sul ponte. Poi Martino alza il boccale.
-MARTINO|E ORA LEVATI DALLE PALLE! Il capitano ha un grog da finire!
+MARTINO|E ORA LIBERAMI IL PONTE! Il capitano ha un grog da finire!
 ARTHUR|Giuro che questa è la peggior sbornia della mia vita.
 MARTINO|AH! Aspetta di vedere il conto!
-NARRATOR|FINE DEL DIALOGO.
+# Fine del dialogo.

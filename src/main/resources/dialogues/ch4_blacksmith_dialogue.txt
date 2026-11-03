@@ -1,5 +1,5 @@
 NARRATOR|IL FIGLIO DI IVALDI. Arthur attraversa un'antica fucina circondata da fiumi di lava. In fondo alla stanza, un nano dalla lunga barba giace seduto a terra, incatenato a due pilastri. Il suo corpo è ricoperto di ferite e bruciature.
-ARTHUR|Ma porca ... Un altro nano?! E perché diavolo sei incatenato?!
+ARTHUR|Accidenti... Un altro nano?! E perché diavolo sei incatenato?!
 FIGLIO_IVALDI|Vattene, umano... Prima che tornino a costringermi a lavorare.
 ARTHUR|Costringerti?! Ma chi ti ha ridotto così?!
 FIGLIO_IVALDI|Sono uno dei figli di Ivaldi. Un tempo forgiavamo tesori per gli dèi... Ora sono soltanto uno schiavo.
@@ -7,7 +7,7 @@ ARTHUR|Aspetta... Ivaldi?! Quelli che costruivano le armi magiche?!
 FIGLIO_IVALDI|Proprio noi. Ma qualcuno ha scoperto come piegare la nostra arte ai propri desideri.
 ARTHUR|Fammi indovinare... Un misterioso essere che nessuno vuole nominare?!
 FIGLIO_IVALDI|Non conosco il suo volto. So soltanto che mi hanno ordinato di forgiare un'arma capace di ferire persino gli dèi.
-ARTHUR|...MA CRISTO! E per chi sarebbe quest'arma?!
+ARTHUR|...MA PER TUTTI GLI DÈI! E per chi sarebbe quest'arma?!
 FIGLIO_IVALDI|Per colui che prepara la caduta di Asgard. Le Valchirie hanno tentato di fermare il trasporto delle armi... ma sono state tradite.
 ARTHUR|Quindi è per questo che le ho trovate massacrate?! Qualcuno le ha mandate in una trappola?!
 FIGLIO_IVALDI|Sì... E temo che non saranno le ultime vittime.
@@ -23,6 +23,7 @@ NARRATOR|Il nano abbassa lo sguardo. Arthur nota un piccolo simbolo inciso su un
 ARTHUR|...Aspetta un momento. Quel simbolo... L'ho già visto!
 FIGLIO_IVALDI|Allora sei più vicino alla verità di quanto immagini, Arthur.
 ARTHUR|Ecco, perfetto. Adesso pure le catene mi danno indizi!
+FIGLIO_IVALDI|Prendi questa ampolla di Magma Filtrato di Svartálfaheimr. È ciò che sono riuscito a salvare dalla fucina: servirà al tuo cocktail.
 FIGLIO_IVALDI|Vai, umano. E se riuscirai a fermare tutto questo... ricordati di chi è rimasto qui.
 ARTHUR|Tranquillo, vecchio. Se ne esco vivo, torno con un seghetto e una cassa di birra.
 FIGLIO_IVALDI|Ahahah... Allora porterò io i boccali.

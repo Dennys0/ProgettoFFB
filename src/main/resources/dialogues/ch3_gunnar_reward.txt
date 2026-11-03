@@ -1,11 +1,13 @@
 NARRATOR|Gunnar posa la mano sulla pietra. Stavolta il nano sembra averti aspettato.
 GUNNAR|Sei tornato, Arthur. Non tutti sanno fermarsi ad ascoltare una seconda volta.
 ARTHUR|Dopo quel discorso infinito, almeno una risposta me la sono meritata.
-GUNNAR|Allora ascolta bene. RADICE: la radice trattiene il mondo.
+GUNNAR|L'ordine lo leggerai sulla stele, non in questo elenco. RADICE: la radice trattiene il mondo.
 GUNNAR|BATTITO: il cuore pulsa nel granito.
 GUNNAR|RESPIRO: il vento torna al silenzio.
 ARTHUR|Radice, battito, respiro. Finalmente istruzioni che riesco a ricordare.
 GUNNAR|Ricorda anche questo: il Muschio di Midgard profuma di terra pulita. La Radice Nera non va mai nel boccale.
 ARTHUR|Quindi il calderone potrebbe esplodere se scelgo male. Meraviglioso.
+GUNNAR|Per preparare lo Ymir's Old Fashioned ti servono Muschio di Midgard, Frammento di Yggdrasil e Lacrima di Ymir. Il gigante ti lascerà la lacrima quando lo avrai placato. Niente radice corrotta né polvere d'ossa nel calderone.
+ARTHUR|Finalmente una ricetta senza ossa. Stavo cominciando a rimpiangere le arachidi del bar.
 GUNNAR|La saggezza non impedisce l'errore, ma ti offre la possibilità di evitarlo.
 NARRATOR|Gunnar traccia tre rune sulla roccia. Arthur le ripete e le annota nel diario.

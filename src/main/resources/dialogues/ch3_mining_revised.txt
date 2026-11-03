@@ -15,6 +15,7 @@ BILLINGR|Ah! Dunque conosci la fucina! Attento, ragazzo. Non ogni ingrediente è
 ARTHUR|MA PERCHÉ NESSUNO ME LO DICE PRIMA?!
 BILLINGR|Ahahah! Se vuoi un consiglio, quando il calderone cambierà colore, pensa bene a cosa ci hai versato.
 ARTHUR|Perfetto. Un altro indovinello. Ma voi non avete un manuale di istruzioni?!
+BILLINGR|Tieni questo sacchetto di Polvere d'Ossa di Gigante, raccolta nella vena. Roba da minatori, non da bere: lasciala fuori dal tuo cocktail.
 BILLINGR|Le cose migliori si forgiano sbagliando, umano. Purché tu sopravviva all'errore!
 NARRATOR|Billingr riprende a picconare, mentre piccoli frammenti luminosi cadono ai suoi piedi.
 ARTHUR|Sì, grazie, molto rassicurante. Buon lavoro, Mastro Gimli!

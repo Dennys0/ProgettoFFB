@@ -18,7 +18,7 @@ MOZZO|Già... la polvere.
 
 NARRATOR|Il mozzo continua a spazzare senza alzare lo sguardo.
 
-ARTHUR|Senti, hai mai visto un falco enorme da queste parti?
+ARTHUR|Senti, hai mai visto un'aquila enorme da queste parti?
 
 MOZZO|Quanto enorme?
 
@@ -62,13 +62,13 @@ ARTHUR|Una nuvola con le ali?!
 
 MOZZO|Le nuvole hanno forme strane, quassù.
 
-ARTHUR|Va bene, vado a cercare quel falco.
+ARTHUR|Va bene, vado a cercare quell'aquila.
 
 MOZZO|Buona fortuna. E ricorda: gli dèi guardano sempre dall'alto... raramente si aspettano qualcosa da sotto.
 
 ARTHUR|Sembra quasi un consiglio.
 
-MOZZO|Sembra. Ora lasciami lavorare.
+MOZZO|Sembra. Tieni un pizzico di Polline di Yggdrasil: così almeno questo smette di tornarmi sulla scopa. Ma non metterlo nel cocktail! Ora lasciami lavorare.
 
 NARRATOR|Arthur si allontana, scuotendo la testa.
 
@@ -80,4 +80,4 @@ MOZZO|Devo pur cambiare questa maledetta scopa!
 
 NARRATOR|Il mozzo riprende a spazzare mentre una raffica improvvisa attraversa il ponte.
 
-NARRATOR|FINE DEL DIALOGO.
+# Fine del dialogo.
