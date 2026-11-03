@@ -144,7 +144,7 @@ public class DialogueSystem {
         typewriterTimer = new Timer(15, e -> {
             if (charIndex < currentFullText.length()) {
                 char ch = currentFullText.charAt(charIndex);
-                if (Character.isLetter(ch) && (charIndex == 0 || Character.isWhitespace(currentFullText.charAt(charIndex - 1))))
+                if (textLabel.isShowing() && Character.isLetter(ch) && (charIndex == 0 || Character.isWhitespace(currentFullText.charAt(charIndex - 1))))
                     AudioManager.getInstance().playTypingTick();
                 charIndex++;
                 textLabel.setText(formatLine(currentFullText.substring(0, charIndex)));

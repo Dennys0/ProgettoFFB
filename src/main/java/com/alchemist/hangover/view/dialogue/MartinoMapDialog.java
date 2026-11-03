@@ -109,12 +109,8 @@ public class MartinoMapDialog extends JDialog {
         panel.setName("martinoChoicePanel");
         panel.setPreferredSize(new Dimension(750, 430));
 
-        for (Component child : panel.getComponents()) {
-            if ("storyPromptText".equals(child.getName())) {
-                panel.remove(child);
-                break;
-            }
-        }
+        Component body = ((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+        if (body != null) panel.remove(body);
 
         JPanel content = new JPanel(new BorderLayout(24, 0));
         content.setName("martinoChoiceBody");

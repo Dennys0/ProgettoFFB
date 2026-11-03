@@ -131,6 +131,12 @@ public abstract class AbstractChapterPanel extends JPanel {
                 if (show) setComponentZOrder(hotspot, 0);
             }
         }
+        bringArrowsToFront();
+    }
+
+    protected final void bringArrowsToFront() {
+        for (JButton arrow : new JButton[] {btnUp, btnDown, btnLeft, btnRight})
+            if (arrow != null && arrow.isVisible()) setComponentZOrder(arrow, 0);
     }
 
     /** Crea un hotspot grafico e registra i dati necessari all'oggetto. */
@@ -234,6 +240,7 @@ public abstract class AbstractChapterPanel extends JPanel {
         updateWorldItemsVisibility(state);
         updateArrowVisibility();
         onRoomChanged();
+        bringArrowsToFront();
         hudPanel.updateHUD();
         revalidate();
         repaint();

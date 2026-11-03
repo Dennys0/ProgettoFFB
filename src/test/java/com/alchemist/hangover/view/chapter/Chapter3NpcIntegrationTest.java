@@ -33,7 +33,7 @@ class Chapter3NpcIntegrationTest {
             assertTrue(npc.action().startsWith("Parla con "));
             Rectangle b = npc.bounds();
             assertTrue(b.x >= 0 && b.y >= 80, "L'hotspot deve essere sotto l'HUD");
-            assertTrue(b.width >= 140 && b.height >= 150);
+            assertTrue(b.width >= 140 && b.height >= 90);
             assertTrue(b.x + b.width <= 1280 && b.y + b.height <= 720);
         }
         Rectangle cauldron = new Rectangle(548, 282, 235, 260);

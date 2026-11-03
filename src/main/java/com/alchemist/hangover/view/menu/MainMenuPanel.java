@@ -118,8 +118,9 @@ public class MainMenuPanel extends JPanel {
                     com.alchemist.hangover.model.GameState.getInstance().resetState();
                     ProloguePanel intro = (ProloguePanel)
                             SceneManager.getInstance().getPanel("INTRO");
-                    if (intro != null) intro.restartDialogue();
-                    SceneManager.getInstance().showScene("INTRO");
+                    SceneManager.getInstance().showScene("INTRO", () -> {
+                        if (intro != null) intro.restartDialogue();
+                    });
                     break;
                 case "Carica partita":
                     JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);

@@ -62,7 +62,6 @@ public final class ProloguePanel extends JPanel {
         layers.add(controlButton("SKIP", 1140, 100, 14, true,
                 this::finishPrologue), Integer.valueOf(3));
 
-        restartDialogue();
     }
 
     /** I pannelli sono riutilizzati: Nuova partita ricomincia il testo da capo. */
@@ -74,7 +73,10 @@ public final class ProloguePanel extends JPanel {
 
     private void finishPrologue() {
         dialogue.stop();
-        SceneManager.getInstance().showScene("CHAPTER1");
+        SceneManager manager = SceneManager.getInstance();
+        if (manager.getPanel("CHAPTER1") instanceof com.alchemist.hangover.view.chapter.AbstractChapterPanel chapter)
+            chapter.refreshFromGameState();
+        manager.showScene("CHAPTER1");
     }
 
     private void updatePortrait() {

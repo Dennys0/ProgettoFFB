@@ -5,7 +5,7 @@ import java.awt.event.HierarchyEvent;
 import javax.swing.*;
 
 /**
- * Atmosfera animata condivisa dai tre capitoli.
+ * Atmosfera animata condivisa dai quattro capitoli.
  *
  * Il fondale resta il PNG originale: qui vengono disegnate soltanto
  * poche particelle traslucide. Il componente e' click-through e il Timer

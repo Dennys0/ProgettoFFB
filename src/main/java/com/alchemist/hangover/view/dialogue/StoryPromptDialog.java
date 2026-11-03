@@ -220,7 +220,17 @@ public final class StoryPromptDialog {
         body.setFont(new Font("Georgia", Font.PLAIN, 19));
         body.setForeground(new Color(242, 229, 207));
         body.setBorder(new EmptyBorder(12, 12, 6, 12));
-        panel.add(body, BorderLayout.CENTER);
+        if (message.length() > 300) {
+            JScrollPane scroll = new JScrollPane(body);
+            scroll.setOpaque(false);
+            scroll.getViewport().setOpaque(false);
+            scroll.setBorder(BorderFactory.createEmptyBorder());
+            body.setCaretPosition(0);
+            panel.add(scroll, BorderLayout.CENTER);
+            panel.setPreferredSize(new Dimension(750, 550));
+        } else {
+            panel.add(body, BorderLayout.CENTER);
+        }
 
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         actions.setOpaque(false);

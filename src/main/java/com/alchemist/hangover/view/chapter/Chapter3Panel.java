@@ -40,7 +40,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     /** Hotspot invisibili: gli NPC sono gia' raffigurati nei PNG delle stanze. */
     record NpcDefinition(int room, Rectangle bounds, String action, String dialogue) { }
     static final List<NpcDefinition> NPC_DEFINITIONS = List.of(
-            new NpcDefinition(3, new Rectangle(987, 363, 270, 205),
+            new NpcDefinition(3, new Rectangle(1000, 387, 152, 100),
                     "Parla con lo sgherro", "/dialogues/ch3_caldron_revised.txt"),
             new NpcDefinition(4, new Rectangle(737, 293, 225, 175),
                     "Parla con il Vanir", "/dialogues/ch3_vanir_revised.txt"),
@@ -309,6 +309,15 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         repaint();
     }
 
+    private void readStele() {
+        GameState state = GameState.getInstance();
+        String inscription = com.alchemist.hangover.gameplay.boss.YmirRuneRitual.steleInscription(
+                com.alchemist.hangover.gameplay.boss.YmirRuneRitual.current(state));
+        state.setYmirSteleRead(true);
+        StoryPromptDialog.message(mainFrameRef, StoryPromptDialog.Theme.EARTH,
+                "LA STELE DEL SONNO", inscription);
+    }
+
     private void createSteleHotspot() {
         steleHotspot = new HotspotButton();
         // La pietra iscritta a sinistra diventa una zona cliccabile.
@@ -317,7 +326,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         steleHotspot.getAccessibleContext().setAccessibleName(
                 "Leggi la stele dei tre versi sulla Rupe dell'Eco");
         steleHotspot.addActionListener(e ->
-                new RuneSteleDialog(mainFrameRef).setVisible(true));
+                readStele());
         add(steleHotspot);
         steleHotspot.setVisible(false);
     }
