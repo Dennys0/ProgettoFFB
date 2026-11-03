@@ -32,17 +32,17 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
 
         SceneManager manager = SceneManager.getInstance();
-        manager.addPanel("MENU", new MainMenuPanel());
-        manager.addPanel("INTRO", new ProloguePanel());
-        manager.addPanel("CHAPTER1", new Chapter1Panel(this));
-        manager.addPanel("TRANSITION_CH1_CH2", new ChapterCompletionPanel(this, 1));
-        manager.addPanel("CHAPTER2", new Chapter2Panel(this));
-        manager.addPanel("CHAPTER3", new Chapter3Panel(this));
-        manager.addPanel("CHAPTER4", new Chapter4Panel(this));
-        manager.addPanel("EPILOGUE", new EpiloguePanel(this));
-        manager.addPanel("CHAPTER3_COMPLETE", new ChapterCompletionPanel(this, 3));
-        manager.addPanel("TRANSITION_CH2_CH3", new ChapterCompletionPanel(this, 2));
-        manager.addPanel("GAMEOVER", new GameOverPanel());
+        manager.registerScene("MENU", () -> new MainMenuPanel());
+        manager.registerScene("INTRO", () -> new ProloguePanel());
+        manager.registerScene("CHAPTER1", () -> new Chapter1Panel(this));
+        manager.registerScene("TRANSITION_CH1_CH2", () -> new ChapterCompletionPanel(this, 1));
+        manager.registerScene("CHAPTER2", () -> new Chapter2Panel(this));
+        manager.registerScene("CHAPTER3", () -> new Chapter3Panel(this));
+        manager.registerScene("CHAPTER4", () -> new Chapter4Panel(this));
+        manager.registerScene("EPILOGUE", () -> new EpiloguePanel(this));
+        manager.registerScene("CHAPTER3_COMPLETE", () -> new ChapterCompletionPanel(this, 3));
+        manager.registerScene("TRANSITION_CH2_CH3", () -> new ChapterCompletionPanel(this, 2));
+        manager.registerScene("GAMEOVER", () -> new GameOverPanel());
 
         add(manager.getMainPanel());
         manager.showScene("MENU");
@@ -64,6 +64,10 @@ public class MainFrame extends JFrame {
             }
         });
 
+        if (Boolean.getBoolean("alchemist.debug")) installDebugBindings(manager);
+    }
+
+    private void installDebugBindings(SceneManager manager) {
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "skipToCh2");
         getRootPane().getActionMap().put("skipToCh2", new AbstractAction() {

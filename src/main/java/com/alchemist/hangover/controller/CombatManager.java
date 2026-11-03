@@ -10,7 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.Timer;
 
 /**
- * Common health, checkpoint and victory handling for all three chapter bosses.
+ * Common health, checkpoint and victory handling for all four chapter bosses.
  * Each boss keeps its own mechanic (WASD, Rán riddles, Ymir runes).
  */
 public final class CombatManager {
@@ -22,6 +22,7 @@ public final class CombatManager {
         boolean defeated = BossRules.takeHit(state);
         AudioManager.getInstance().playEffect(AudioManager.Effect.DAMAGE);
         if (!defeated) return false;
+        com.alchemist.hangover.network.ChallengeClient.report(state.getChapter(), false);
         GameOverPanel panel = (GameOverPanel) SceneManager.getInstance().getPanel("GAMEOVER");
         if (panel != null) panel.showReason(defeatReason);
         return true;
@@ -64,6 +65,7 @@ public final class CombatManager {
 
     public static void victory(int chapter) {
         BossRules.victory(GameState.getInstance(), chapter);
+        com.alchemist.hangover.network.ChallengeClient.report(chapter, true);
         AudioManager.getInstance().playEffect(AudioManager.Effect.SUCCESS);
     }
 }

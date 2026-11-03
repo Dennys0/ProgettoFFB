@@ -19,6 +19,72 @@ public final class AudioManager {
             AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 1, 2,
             SAMPLE_RATE, false);
 
+    private final java.util.concurrent.ExecutorService worker =
+            java.util.concurrent.Executors.newSingleThreadExecutor(task -> {
+                Thread thread = new Thread(task, "alchemist-audio");
+                thread.setDaemon(true);
+                return thread;
+            });
+    private final java.util.concurrent.atomic.AtomicLong sceneVersion = new java.util.concurrent.atomic.AtomicLong();
+    private final java.util.concurrent.atomic.AtomicBoolean typingPending = new java.util.concurrent.atomic.AtomicBoolean();
+    private final java.util.concurrent.atomic.AtomicInteger pendingEffects = new java.util.concurrent.atomic.AtomicInteger();
+    private final java.util.Map<Effect, byte[]> effectSamples = new java.util.EnumMap<>(Effect.class);
+    private final java.util.Map<String, byte[]> sceneSamples = new java.util.HashMap<>();
+    private final java.util.Set<Clip> effects = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    private volatile boolean closed;
+
+    public void playScene(String scene) {
+        long version = sceneVersion.incrementAndGet();
+        submit(() -> { if (version == sceneVersion.get()) playSceneNow(scene); });
+    }
+
+    public void refreshSettings() {
+        long version = sceneVersion.incrementAndGet();
+        submit(() -> {
+            if (version != sceneVersion.get()) return;
+            String scene = activeScene;
+            activeScene = null;
+            playSceneNow(scene);
+        });
+    }
+
+    public void playTypingTick() {
+        if (!typingPending.compareAndSet(false, true)) return;
+        if (!submit(() -> { try { playTypingTickNow(); } finally { typingPending.set(false); } }))
+            typingPending.set(false);
+    }
+
+    public void playEffect(Effect effect) {
+        if (effect == null || pendingEffects.incrementAndGet() > 8) {
+            if (effect != null) pendingEffects.decrementAndGet();
+            return;
+        }
+        if (!submit(() -> { try { playEffectNow(effect); } finally { pendingEffects.decrementAndGet(); } }))
+            pendingEffects.decrementAndGet();
+    }
+
+    private boolean submit(Runnable task) {
+        if (closed || java.awt.GraphicsEnvironment.isHeadless()) return false;
+        try { worker.execute(task); return true; }
+        catch (java.util.concurrent.RejectedExecutionException ex) { return false; }
+    }
+
+    /** La chiusura è ordinata dopo le operazioni già accodate, fuori dall'EDT. */
+    public void close() {
+        closed = true;
+        try {
+            worker.execute(() -> {
+                stopAmbience();
+                if (typingClip != null) typingClip.close();
+                effects.forEach(Clip::close);
+                effects.clear();
+            });
+        } catch (java.util.concurrent.RejectedExecutionException ignored) { }
+        worker.shutdown();
+        try { worker.awaitTermination(2, java.util.concurrent.TimeUnit.SECONDS); }
+        catch (InterruptedException ex) { Thread.currentThread().interrupt(); }
+    }
+
     private Clip ambience;
     private Clip typingClip;
     private boolean typingUnavailable;
@@ -27,7 +93,7 @@ public final class AudioManager {
     private AudioManager() { }
     public static AudioManager getInstance() { return INSTANCE; }
 
-    public synchronized void playScene(String scene) {
+    private void playSceneNow(String scene) {
         if (scene == null) return;
         if (scene.equals(activeScene) && ambience != null && ambience.isRunning()) return;
         stopAmbience();
@@ -39,7 +105,7 @@ public final class AudioManager {
                 || "CHAPTER2".equals(scene) || "CHAPTER3".equals(scene)
                 || "CHAPTER4".equals(scene) || "EPILOGUE".equals(scene) || "MENU".equals(scene))) return;
         try {
-            byte[] samples = battleMusic ? makeStormMusic() : makeAmbience(scene);
+            byte[] samples = sceneSamples.computeIfAbsent(scene, key -> battleMusic ? makeStormMusic() : makeAmbience(key));
             ambience = AudioSystem.getClip();
             ambience.open(FORMAT, samples, 0, samples.length);
             setLevel(ambience, -12f);
@@ -47,16 +113,6 @@ public final class AudioManager {
         } catch (LineUnavailableException | IllegalArgumentException | SecurityException ex) {
             // Nessun dispositivo sonoro: disattiviamo solo l'audio.
             stopAmbience();
-        }
-    }
-
-    public synchronized void refreshSettings() {
-        if (!GameSettings.getInstance().isSoundEnabled()) {
-            stopAmbience();
-        } else {
-            String scene = activeScene;
-            activeScene = null;
-            playScene(scene);
         }
     }
 
@@ -104,7 +160,7 @@ public final class AudioManager {
         playEffect(cue == null ? Effect.FOOTSTEP : cue);
     }
 
-    public synchronized void playTypingTick() {
+    private void playTypingTickNow() {
         GameSettings settings = GameSettings.getInstance();
         if (!settings.isSoundEnabled() || !settings.isTypingEnabled() || typingUnavailable) return;
         try {
@@ -127,18 +183,21 @@ public final class AudioManager {
         }
     }
 
-    public void playEffect(Effect effect) {
+    private void playEffectNow(Effect effect) {
         if (!GameSettings.getInstance().isSoundEnabled()) return;
         try {
-            byte[] samples = makeEffect(effect);
+            if (effects.size() >= 8) return;
+            byte[] samples = effectSamples.computeIfAbsent(effect, AudioManager::makeEffect);
             Clip sound = AudioSystem.getClip();
             sound.open(FORMAT, samples, 0, samples.length);
             setLevel(sound, effect == Effect.DAMAGE ? -7f : -16f);
             sound.addLineListener(event -> {
                 if (event.getType() == LineEvent.Type.STOP) {
                     sound.close();
+                    effects.remove(sound);
                 }
             });
+            effects.add(sound);
             sound.start();
         } catch (LineUnavailableException | IllegalArgumentException | SecurityException ignored) {
             // Gli effetti sono facoltativi, mai bloccare l'esplorazione.

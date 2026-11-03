@@ -70,11 +70,7 @@ public final class DialogueBox extends JPanel {
      * gia' utilizzato dall'intro e dai primi due capitoli.
      */
     public static ImageIcon scaledPortrait(String resource, int height) {
-        URL url = DialogueBox.class.getResource(resource);
-        if (url == null) return null;
-        Image image = new ImageIcon(url).getImage()
-                .getScaledInstance(-1, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(image);
+        return com.alchemist.hangover.view.ImageAssets.scaled(resource, -1, height);
     }
 
     private static Image loadArtwork() {

@@ -60,6 +60,7 @@ public final class DialogueManager {
         private final DialogueBox box = new DialogueBox();
         private final DialogueSystem dialogue;
         private final Map<String, ImageIcon> portraits = new HashMap<>();
+        private final Map<String, String> portraitPaths = new HashMap<>();
         private final Set<String> fittedPortraits = new HashSet<>();
         private final Function<String, Rectangle> portraitBounds;
         private String fixedPortraitSpeaker;
@@ -98,19 +99,12 @@ public final class DialogueManager {
         }
 
         public void addPortrait(String speaker, String path) {
-            ImageIcon icon = DialogueBox.scaledPortrait(path, 520);
-            if (icon != null) portraits.put(speaker, icon);
-            else System.err.println("Sprite non trovato per " + speaker + " in " + path);
+            portraitPaths.put(speaker, path);
         }
 
-        /** Carica un'immagine senza alterarne le proporzioni originali. */
+        /** Registra la risorsa; viene caricata solo alla prima battuta del personaggio. */
         public void addFittedPortrait(String speaker, String path) {
-            java.net.URL resource = chapter.getClass().getResource(path);
-            if (resource == null) {
-                System.err.println("Sprite non trovato per " + speaker + " in " + path);
-                return;
-            }
-            portraits.put(speaker, new ImageIcon(resource));
+            portraitPaths.put(speaker, path);
             fittedPortraits.add(speaker);
         }
 
@@ -158,6 +152,14 @@ public final class DialogueManager {
             String speaker = fixedPortraitSpeaker != null ? fixedPortraitSpeaker
                     : line == null ? null : line.getSpeaker();
             ImageIcon icon = portraits.get(speaker);
+            if (icon == null && portraitPaths.containsKey(speaker)) {
+                String path = portraitPaths.get(speaker);
+                if (fittedPortraits.contains(speaker)) {
+                    java.net.URL resource = chapter.getClass().getResource(path);
+                    icon = resource == null ? null : new ImageIcon(resource);
+                } else icon = DialogueBox.scaledPortrait(path, 520);
+                if (icon != null) portraits.put(speaker, icon);
+            }
             portrait.setVisible(icon != null);
             if (icon == null) {
                 portrait.setIcon(null);
@@ -170,8 +172,8 @@ public final class DialogueManager {
                         (double) bounds.height / Math.max(1, icon.getIconHeight()));
                 int width = Math.max(1, (int) Math.round(icon.getIconWidth() * scale));
                 int height = Math.max(1, (int) Math.round(icon.getIconHeight() * scale));
-                portrait.setIcon(new ImageIcon(icon.getImage().getScaledInstance(
-                        width, height, java.awt.Image.SCALE_SMOOTH)));
+                portrait.setIcon(com.alchemist.hangover.view.ImageAssets.scaled(
+                        portraitPaths.get(speaker), width, height));
             } else {
                 portrait.setIcon(icon);
             }

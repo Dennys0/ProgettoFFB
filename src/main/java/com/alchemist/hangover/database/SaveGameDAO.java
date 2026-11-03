@@ -177,6 +177,19 @@ public class SaveGameDAO {
      * Carica i dati salvati nello slot e aggiorna l'istanza di GameState.
      */
     public static boolean loadGame(int slotId) {
+        try {
+            GameSaveSnapshot snapshot = readSnapshot(slotId);
+            if (snapshot == null) return false;
+            GameState.getInstance().restoreFrom(snapshot);
+            return true;
+        } catch (SQLException e) {
+            System.err.println("[SaveGameDAO] Caricamento fallito: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /** Lettura pura: non accede allo stato Swing e può essere eseguita in background. */
+    public static GameSaveSnapshot readSnapshot(int slotId) throws SQLException {
         String sql = "SELECT * FROM save_slots WHERE slot_id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -209,16 +222,11 @@ public class SaveGameDAO {
                             health, maxHealth, givenMap, dragonKey, dragonUnlocked,
                             bossDefeated, ymirPacified, runeSeed, gunnarWisdom,
                             gunnarIntro, steleRead, cocktail, finalCocktail, inventory);
-                    GameState.getInstance().restoreFrom(snapshot);
-                    System.out.println("[SaveGameDAO] Partita caricata dallo slot "
-                            + slotId + ". Stanza: " + room);
-                    return true;
+                    return snapshot;
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("[SaveGameDAO] Errore caricamento slot " + slotId + ": " + e.getMessage());
         }
-        return false;
+        return null;
     }
 
     /** Legge l'inventario per intero prima di applicare il caricamento. */

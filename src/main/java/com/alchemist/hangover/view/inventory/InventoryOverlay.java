@@ -24,7 +24,6 @@ public final class InventoryOverlay extends JDialog {
     private static final Color LIST_BACKGROUND = new Color(27, 25, 36);
 
     private final DefaultListModel<Item> inventoryModel = new DefaultListModel<>();
-    private final Map<String, ImageIcon> iconCache = new HashMap<>();
     private final JList<Item> itemList;
     private final JLabel itemCountLabel = new JLabel();
     private final JLabel itemNameLabel = new JLabel();
@@ -35,6 +34,7 @@ public final class InventoryOverlay extends JDialog {
 
     public InventoryOverlay(Frame parent) {
         super(parent, "Inventario di Arthur", true);
+        long started = System.nanoTime();
         setUndecorated(true);
         setSize(1030, 650);
         setLocationRelativeTo(parent);
@@ -207,6 +207,7 @@ public final class InventoryOverlay extends JDialog {
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         refreshInventory();
+        com.alchemist.hangover.controller.PerformanceLog.finished("Costruzione inventario", started);
     }
 
     /** Ricostruisce la lista mantenendo, se possibile, l'oggetto selezionato. */
@@ -273,15 +274,7 @@ public final class InventoryOverlay extends JDialog {
     }
 
     private ImageIcon loadIcon(String path, int width, int height) {
-        if (path == null || path.isBlank()) return null;
-        String key = path + "#" + width + "x" + height;
-        if (iconCache.containsKey(key)) return iconCache.get(key);
-        URL resource = getClass().getResource(path);
-        ImageIcon icon = resource == null ? null : new ImageIcon(
-                new ImageIcon(resource).getImage().getScaledInstance(
-                        width, height, Image.SCALE_SMOOTH));
-        iconCache.put(key, icon);
-        return icon;
+        return com.alchemist.hangover.view.ImageAssets.scaled(path, width, height);
     }
 
     private static String escapeHtml(String value) {

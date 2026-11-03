@@ -238,6 +238,7 @@ public abstract class AbstractChapterPanel extends JPanel {
     }
 
     public void loadRoom(int roomId) {
+        long started = System.nanoTime();
         if (!roomBgPaths.containsKey(roomId)) {
             System.err.println("[AbstractChapterPanel] Stanza non configurata: " + roomId);
             return;
@@ -261,6 +262,7 @@ public abstract class AbstractChapterPanel extends JPanel {
         hudPanel.updateHUD();
         revalidate();
         repaint();
+        com.alchemist.hangover.controller.PerformanceLog.finished("Stanza " + roomId, started);
     }
 
     protected void onRoomChanged() { }

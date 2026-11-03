@@ -6,10 +6,10 @@ import java.util.prefs.Preferences;
 public final class GameSettings {
     private static final GameSettings INSTANCE = new GameSettings();
     private final Preferences preferences;
-    private boolean typingEnabled;
-    private boolean ambienceEnabled = true;
-    private boolean soundEnabled = true;
-    private boolean transitionsEnabled = true;
+    private volatile boolean typingEnabled;
+    private volatile boolean ambienceEnabled = true;
+    private volatile boolean soundEnabled = true;
+    private volatile boolean transitionsEnabled = true;
 
     private GameSettings() {
         Preferences store = null;

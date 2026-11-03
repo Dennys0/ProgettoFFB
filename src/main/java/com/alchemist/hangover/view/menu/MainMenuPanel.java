@@ -16,7 +16,7 @@ public class MainMenuPanel extends JPanel {
             super.paintComponent(g);
         }
     };
-    private final JPanel entries = new JPanel(new GridLayout(6, 1, 0, 4));
+    private final JPanel entries = new JPanel(new GridLayout(0, 1, 0, 4));
     private JButton selected;
 
     public MainMenuPanel() {
@@ -37,6 +37,8 @@ public class MainMenuPanel extends JPanel {
                 {"Esci", "Chiudi il gioco."}
         };
         for (String[] action : actions) entries.add(createCustomButton(action[0], action[1]));
+        if (Boolean.getBoolean("alchemist.registry"))
+            entries.add(createCustomButton("Registro sfide", "Consulta vittorie e sconfitte dei boss."), entries.getComponentCount() - 1);
         select((JButton) entries.getComponent(0));
         bind("UP", () -> step(-1));
         bind("DOWN", () -> step(1));
@@ -135,6 +137,27 @@ public class MainMenuPanel extends JPanel {
                     break;
                 case "Crediti":
                     openPage(MenuBookDialog.Page.CREDITS);
+                    break;
+                case "Registro sfide":
+                    button.setEnabled(false);
+                    String oldHint = hint.getText();
+                    hint.setText("Lettura del registro…");
+                    new SwingWorker<String, Void>() {
+                        @Override protected String doInBackground() throws Exception {
+                            return com.alchemist.hangover.network.ChallengeClient.fetchStats();
+                        }
+                        @Override protected void done() {
+                            button.setEnabled(true);
+                            hint.setText(oldHint);
+                            try { JOptionPane.showMessageDialog(MainMenuPanel.this, get(), "Registro sfide", JOptionPane.INFORMATION_MESSAGE); }
+                            catch (InterruptedException ex) { Thread.currentThread().interrupt(); }
+                            catch (java.util.concurrent.ExecutionException ex) {
+                                JOptionPane.showMessageDialog(MainMenuPanel.this,
+                                        "Il registro non è disponibile. Puoi continuare a giocare offline.",
+                                        "Registro sfide", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+                    }.execute();
                     break;
                 case "Esci":
                     System.exit(0);

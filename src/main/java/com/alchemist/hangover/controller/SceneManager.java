@@ -12,6 +12,8 @@ public final class SceneManager {
     private final CardLayout cardLayout;
     private final Map<String, JPanel> scenes;
 
+    private final Map<String, java.util.function.Supplier<JPanel>> factories = new HashMap<>();
+
     private float alpha = 0f;
     private boolean isFading = false;
     private String currentSceneName = "MENU";
@@ -30,7 +32,28 @@ public final class SceneManager {
     }
 
     public JPanel getMainPanel() { return mainPanel; }
-    public JPanel getPanel(String name) { return scenes.get(name); }
+    public JPanel getPanel(String name) {
+        JPanel panel = scenes.get(name);
+        if (panel != null || !factories.containsKey(name)) return panel;
+        // I costruttori dei capitoli inizializzano una stanza: preserva lo stato caricato.
+        var state = com.alchemist.hangover.model.GameState.getInstance();
+        var snapshot = com.alchemist.hangover.model.GameSaveSnapshot.capture(state);
+        boolean retry = state.isBossRetryAvailable();
+        long started = System.nanoTime();
+        try {
+            panel = factories.get(name).get();
+            addPanel(name, panel);
+            return panel;
+        } finally {
+            state.restoreFrom(snapshot);
+            state.setBossRetryAvailable(retry);
+            PerformanceLog.finished("Prima creazione " + name, started);
+        }
+    }
+
+    public void registerScene(String name, java.util.function.Supplier<JPanel> factory) {
+        factories.put(name, factory);
+    }
     public String getCurrentSceneName() { return currentSceneName; }
 
     public void addPanel(String name, JPanel panel) {
@@ -44,7 +67,7 @@ public final class SceneManager {
 
     /** Callback richiamata solo dopo il completamento della dissolvenza. */
     public void showScene(String name, Runnable onShown) {
-        if (!scenes.containsKey(name) || isFading) return;
+        if ((!scenes.containsKey(name) && !factories.containsKey(name)) || isFading) return;
         if (!GameSettings.getInstance().isTransitionsEnabled()) {
             activateScene(name);
             if (onShown != null) SwingUtilities.invokeLater(onShown);
@@ -91,6 +114,7 @@ public final class SceneManager {
     }
 
     private void activateScene(String name) {
+        if (getPanel(name) == null) return;
         cardLayout.show(mainPanel, name);
         currentSceneName = name;
         AudioManager.getInstance().playScene(name);

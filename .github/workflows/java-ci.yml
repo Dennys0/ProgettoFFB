@@ -3,6 +3,7 @@ name: Java build and tests
 on:
   push:
     branches:
+      - refactor/organizzazione-gioco
       - fix/ui-chapter1-polish
       - feat/chapter3
       - refactor/view-model-cleanup

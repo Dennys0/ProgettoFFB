@@ -30,6 +30,8 @@ public class SaveLoadDialog extends JDialog {
     private final Mode mode;
     private final GameSaveSnapshot saveSnapshot;
     private JPanel slotsContainer;
+    private boolean busy;
+    private final JLabel operationStatus = new JLabel(" ");
 
     public SaveLoadDialog(JFrame parent, Mode mode) {
         this(parent, mode, null);
@@ -73,6 +75,7 @@ public class SaveLoadDialog extends JDialog {
         bottomPanel.setOpaque(false);
         JButton btnClose = createFantasyButton("Chiudi", new Color(120, 40, 40));
         btnClose.addActionListener(e -> dispose());
+        bottomPanel.add(operationStatus);
         bottomPanel.add(btnClose);
         rootPanel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -80,19 +83,18 @@ public class SaveLoadDialog extends JDialog {
     }
 
     private void refreshSlots() {
-        slotsContainer.removeAll();
+        runDatabaseTask("Lettura salvataggi…", () -> SaveGameDAO.getAllSlots().stream()
+                .collect(Collectors.toMap(SaveSlotInfo::getSlotId, slot -> slot)), slotsMap -> {
+            slotsContainer.removeAll();
+            for (int i = 1; i <= 3; i++) {
+                final int slotId = i;
+                SaveSlotInfo slotInfo = slotsMap.get(slotId);
+                slotsContainer.add(createSlotPanel(slotId, slotInfo));
+            }
 
-        Map<Integer, SaveSlotInfo> slotsMap = SaveGameDAO.getAllSlots().stream()
-                .collect(Collectors.toMap(SaveSlotInfo::getSlotId, s -> s));
-
-        for (int i = 1; i <= 3; i++) {
-            final int slotId = i;
-            SaveSlotInfo slotInfo = slotsMap.get(slotId);
-            slotsContainer.add(createSlotPanel(slotId, slotInfo));
-        }
-
-        slotsContainer.revalidate();
-        slotsContainer.repaint();
+            slotsContainer.revalidate();
+            slotsContainer.repaint();
+        });
     }
 
     private JPanel createSlotPanel(int slotId, SaveSlotInfo slotInfo) {
@@ -163,23 +165,26 @@ public class SaveLoadDialog extends JDialog {
         String defaultName = current != null ? current.getSlotName() : "Partita " + slotId;
         String name = JOptionPane.showInputDialog(this, "Inserisci un nome per questo salvataggio:", defaultName);
         if (name != null && !name.trim().isEmpty()) {
-            boolean ok = saveSnapshot == null
-                    ? SaveGameDAO.saveGame(slotId, name.trim())
-                    : SaveGameDAO.saveGame(slotId, name.trim(), saveSnapshot);
+            GameState state = GameState.getInstance();
+            if (saveSnapshot == null && state.getChapter() == 3) state.ensureYmirRuneSeed();
+            GameSaveSnapshot snapshot = saveSnapshot == null ? GameSaveSnapshot.capture(state) : saveSnapshot;
+            runDatabaseTask("Salvataggio…", () -> SaveGameDAO.saveGame(slotId, name.trim(), snapshot), ok -> {
             if (ok) {
                 JOptionPane.showMessageDialog(this, "Partita salvata con successo!", "Salvataggio", JOptionPane.INFORMATION_MESSAGE);
                 refreshSlots();
             } else {
                 JOptionPane.showMessageDialog(this, "Errore durante il salvataggio nel database.", "Errore", JOptionPane.ERROR_MESSAGE);
             }
+            });
         }
     }
 
     private void onLoadClicked(int slotId) {
         int confirm = JOptionPane.showConfirmDialog(this, "Vuoi caricare lo Slot " + slotId + "?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            boolean ok = SaveGameDAO.loadGame(slotId);
-            if (ok) {
+            runDatabaseTask("Caricamento…", () -> SaveGameDAO.readSnapshot(slotId), snapshot -> {
+            if (snapshot != null) {
+                GameState.getInstance().restoreFrom(snapshot);
                 dispose();
 
                 GameState state = GameState.getInstance();
@@ -216,14 +221,57 @@ public class SaveLoadDialog extends JDialog {
             } else {
                 JOptionPane.showMessageDialog(this, "Errore nel caricamento della partita.", "Errore", JOptionPane.ERROR_MESSAGE);
             }
+            });
         }
     }
 
     private void onDeleteClicked(int slotId) {
         int confirm = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler eliminare lo Slot " + slotId + "?", "Elimina Salvataggio", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            SaveGameDAO.deleteSave(slotId);
-            refreshSlots();
+            runDatabaseTask("Eliminazione…", () -> SaveGameDAO.deleteSave(slotId), ok -> {
+                if (ok) refreshSlots();
+                else JOptionPane.showMessageDialog(this, "Eliminazione non riuscita.");
+            });
+        }
+    }
+
+    /** Un solo task alla volta; stato e componenti vengono aggiornati esclusivamente sull'EDT. */
+    private <T> void runDatabaseTask(String label, java.util.concurrent.Callable<T> work,
+                                     java.util.function.Consumer<T> success) {
+        if (busy) return;
+        busy = true;
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        java.util.Map<java.awt.Component, Boolean> enabled = new java.util.IdentityHashMap<>();
+        rememberAndDisable(getContentPane(), enabled);
+        operationStatus.setText(label);
+        new SwingWorker<T, Void>() {
+            @Override protected T doInBackground() throws Exception {
+                long started = System.nanoTime();
+                try { return work.call(); }
+                finally { com.alchemist.hangover.controller.PerformanceLog.finished(label, started); }
+            }
+            @Override protected void done() {
+                busy = false;
+                enabled.forEach(java.awt.Component::setEnabled);
+                setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                operationStatus.setText(" ");
+                try { success.accept(get()); }
+                catch (InterruptedException ex) { Thread.currentThread().interrupt(); }
+                catch (java.util.concurrent.ExecutionException ex) {
+                    JOptionPane.showMessageDialog(SaveLoadDialog.this,
+                            "Operazione non riuscita. La partita corrente è stata conservata.",
+                            "Salvataggi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }.execute();
+    }
+
+    private static void rememberAndDisable(java.awt.Container root,
+                                           java.util.Map<java.awt.Component, Boolean> enabled) {
+        for (java.awt.Component child : root.getComponents()) {
+            enabled.put(child, child.isEnabled());
+            child.setEnabled(false);
+            if (child instanceof java.awt.Container container) rememberAndDisable(container, enabled);
         }
     }
 

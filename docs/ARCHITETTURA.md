@@ -31,3 +31,22 @@ Il punto di ingresso è `com.alchemist.hangover.Main`. Inizializza H2 e apre la 
 ## Verifica
 
 Dalla cartella che contiene `pom.xml`, eseguire `mvn clean test` con JDK 25. I test dei salvataggi usano H2 in memoria. Per verificare le modifiche del branch, usare `git diff --stat origin/fix/ch4-gameplay-polish...HEAD`.
+
+## Esecuzione e risorse
+
+`SceneManager.registerScene` registra una factory `Supplier<JPanel>`;
+`getPanel` crea la scena una volta e preserva lo stato della partita durante
+il costruttore. I pannelli restano confinati all'EDT.
+`ImageAssets` condivide le immagini ridimensionate con cache LRU limitata.
+`PerformanceLog` stampa misure solo con `alchemist.profile=true`.
+
+`SaveGameDAO.readSnapshot` legge senza aggiornare GameState. `SaveLoadDialog`
+usa SwingWorker e applica lo snapshot in `done`, sull'EDT. L'API sincrona
+`loadGame` resta disponibile per compatibilità e test.
+`AudioManager` possiede un esecutore audio daemon e riusa i campioni PCM.
+
+Il package `network` contiene solo `ChallengeServer` e `ChallengeClient`.
+Il server locale HTTP mantiene contatori atomici di vittorie e sconfitte;
+il client invia gli eventi di CombatManager su una coda limitata. Il menu
+legge le statistiche tramite SwingWorker. Il registro è opzionale e non
+sostituisce i salvataggi H2; i contatori sono volatili tra riavvii del servizio.
