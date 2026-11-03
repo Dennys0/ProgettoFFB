@@ -4,7 +4,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/** World definitions are now identical in structure for all four chapters. */
+/** Verifica che i quattro mondi condividano lo stesso formato di configurazione. */
 class ChapterLayoutsTest {
     private static final Map<String, String> OPPOSITES = Map.of(
             "UP", "DOWN", "DOWN", "UP", "LEFT", "RIGHT", "RIGHT", "LEFT");

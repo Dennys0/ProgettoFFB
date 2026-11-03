@@ -5,6 +5,9 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla avvio e interruzione della sessione condivisa senza alterare i progressi del gioco.
+ */
 class DialogueSceneSessionTest {
     @Test void sharedSessionStartsAndStopsWithoutChangingSceneOrGameProgress() throws Exception {
         SwingUtilities.invokeAndWait(() -> {

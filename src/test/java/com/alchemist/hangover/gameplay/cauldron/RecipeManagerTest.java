@@ -5,6 +5,9 @@ import java.util.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla combinazioni esatte, esche, requisiti di apertura e messaggi di errore.
+ */
 class RecipeManagerTest {
     private static Item item(String id) { return new Item(id, id, "Item", "/images/chapter1/items/map.png"); }
 

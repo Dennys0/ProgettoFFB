@@ -7,8 +7,8 @@ import java.net.URL;
 import javax.swing.*;
 
 /**
- * Indicatore di salute condiviso fra HUD e combattimenti.
- * Si iscrive agli eventi solo mentre il componente e' nella gerarchia Swing.
+ * Indicatore dei cuori utilizzato durante i combattimenti.
+ * Si iscrive agli eventi di salute solo mentre appartiene alla gerarchia Swing.
  */
 public class HealthDisplayPanel extends JPanel {
     private final JLabel[] hearts;
@@ -44,6 +44,9 @@ public class HealthDisplayPanel extends JPanel {
         return new ImageIcon(image);
     }
 
+    /**
+     * Collega l’indicatore agli eventi di salute quando viene inserito nella gerarchia grafica.
+     */
     @Override
     public void addNotify() {
         super.addNotify();
@@ -51,12 +54,19 @@ public class HealthDisplayPanel extends JPanel {
         refresh();
     }
 
+    /**
+     * Rimuove l’ascoltatore quando il componente viene scollegato, evitando aggiornamenti a
+     * pannelli non più utilizzati.
+     */
     @Override
     public void removeNotify() {
         GameState.getInstance().removeHealthChangeListener(healthListener);
         super.removeNotify();
     }
 
+    /**
+     * Ridisegna cuori pieni e vuoti in base alla salute corrente.
+     */
     public void refresh() {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(this::refresh);

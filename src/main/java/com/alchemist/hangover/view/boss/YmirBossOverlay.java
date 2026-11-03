@@ -136,6 +136,9 @@ public final class YmirBossOverlay extends JDialog {
                 KeyStroke.getKeyStroke("ESCAPE"), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
+    /**
+     * Mostra gli indizi ricavati dalla stessa sequenza usata nel combattimento.
+     */
     private void readClues() {
         String text = YmirRuneRitual.steleInscription(ritual)
                 + "\n\n--- L'INSEGNAMENTO DI GUNNAR ---\n"
@@ -168,6 +171,9 @@ public final class YmirBossOverlay extends JDialog {
         return button;
     }
 
+    /**
+     * Memorizza la piattaforma scelta prima del tentativo con la runa.
+     */
     private void choosePlatform(YmirRuneRitual.Zone zone) {
         selectedZone = zone;
         for (YmirRuneRitual.Zone other : YmirRuneRitual.Zone.values()) {
@@ -180,6 +186,9 @@ public final class YmirBossOverlay extends JDialog {
         for (JButton rune : runeButtons) rune.setEnabled(true);
     }
 
+    /**
+     * Valida insieme runa e posizione, poi applica avanzamento del rituale o danno.
+     */
     private void tryRune(YmirRuneRitual.Rune rune) {
         if (selectedZone == null || phase >= ritual.size()) return;
         YmirRuneRitual.Step current = ritual.get(phase);
@@ -208,6 +217,9 @@ public final class YmirBossOverlay extends JDialog {
         refreshPhase("La runa risuona nella pietra. Il prossimo verso è pronto.");
     }
 
+    /**
+     * Aggiorna indicazioni e controlli in base alla fase del rituale.
+     */
     private void refreshPhase(String feedback) {
         selectedZone = null;
         phaseLabel.setText("VERSO " + (phase + 1) + " / " + ritual.size());

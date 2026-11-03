@@ -73,6 +73,9 @@ public final class DialogueBox extends JPanel {
         return com.alchemist.hangover.view.ImageAssets.scaled(resource, -1, height);
     }
 
+    /**
+     * Carica la cornice comune dei dialoghi dalle risorse del gioco.
+     */
     private static Image loadArtwork() {
         URL url = DialogueBox.class.getResource(ART_PATH);
         return url == null ? null : new ImageIcon(url).getImage();

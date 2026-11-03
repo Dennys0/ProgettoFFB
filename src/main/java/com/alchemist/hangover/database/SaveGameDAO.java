@@ -8,8 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Accesso JDBC agli slot e ai relativi inventari. Salva in una transazione e ricostruisce uno
+ * stato completo prima di applicarlo alla partita.
+ */
 public class SaveGameDAO {
 
+    /** Metadati di uno slot per l’elenco dei salvataggi, separati dall’inventario completo. */
     public static class SaveSlotInfo {
         private int slotId;
         private String slotName;
@@ -262,6 +267,9 @@ public class SaveGameDAO {
         }
     }
 
+    /**
+     * Converte la riga SQL nei metadati dell’elenco dei salvataggi, senza caricare l’inventario.
+     */
     private static SaveSlotInfo mapRowToSlotInfo(ResultSet rs) throws SQLException {
         return new SaveSlotInfo(
                 rs.getInt("slot_id"),

@@ -237,6 +237,9 @@ public final class InventoryOverlay extends JDialog {
         itemList.ensureIndexIsVisible(selection);
     }
 
+    /**
+     * Aggiorna la scheda con descrizione, provenienza e anteprima della stanza dell’oggetto.
+     */
     private void showItemDetails(Item item) {
         if (item == null) {
             itemNameLabel.setText("Nessun oggetto raccolto");
@@ -273,15 +276,23 @@ public final class InventoryOverlay extends JDialog {
         return label;
     }
 
+    /**
+     * Richiede un’immagine ridimensionata alla cache condivisa, evitando di rielaborarla a ogni
+     * apertura.
+     */
     private ImageIcon loadIcon(String path, int width, int height) {
         return com.alchemist.hangover.view.ImageAssets.scaled(path, width, height);
     }
 
+    /**
+     * Protegge il testo descrittivo prima di inserirlo nelle etichette HTML Swing.
+     */
     private static String escapeHtml(String value) {
         return value == null ? "" : value.replace("&", "&amp;")
                 .replace("<", "&lt;").replace(">", "&gt;");
     }
 
+    /** Disegna una riga dell’inventario distinguendo l’oggetto selezionato. */
     private final class ItemRowRenderer extends JPanel implements ListCellRenderer<Item> {
         private final JLabel image = new JLabel();
         private final JLabel name = new JLabel();

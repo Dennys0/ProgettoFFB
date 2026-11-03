@@ -6,6 +6,7 @@ import javax.swing.*;
 
 /** Tre pagine dello stesso taccuino, accessibili anche dalla pausa. */
 final class MenuBookDialog extends JDialog {
+    /** Pagine del taccuino condiviso: guida, preferenze e crediti. */
     enum Page {
         GUIDE("01   /   GUIDA", "Come giocare"),
         OPTIONS("02   /   PREFERENZE", "Opzioni"),
@@ -34,6 +35,10 @@ final class MenuBookDialog extends JDialog {
         setLocationRelativeTo(owner);
     }
 
+    /**
+     * Costruisce la pagina e collega le preferenze a GameSettings. Il contenuto si può
+     * verificare senza aprire una finestra.
+     */
     static JPanel pagePanel(Page page, Runnable close) {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBorder(BorderFactory.createEmptyBorder(26, 32, 24, 32));

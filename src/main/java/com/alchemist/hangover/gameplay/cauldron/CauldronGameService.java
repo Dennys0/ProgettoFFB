@@ -11,11 +11,18 @@ import java.util.Objects;
 public final class CauldronGameService {
     private CauldronGameService() { }
 
+    /**
+     * Verifica la disponibilità di tre ingredienti ammessi per il capitolo corrente, incluse le
+     * esche.
+     */
     public static boolean canOpen(GameState state) {
         Objects.requireNonNull(state, "state");
         return RecipeManager.canOpen(state.getChapter(), state.getInventory());
     }
 
+    /**
+     * Associa ogni capitolo alla destinazione prevista dopo la miscela riuscita.
+     */
     public static String completionScene(int chapter) {
         return switch (chapter) {
             case 1 -> "TRANSITION_CH1_CH2";
@@ -45,6 +52,10 @@ public final class CauldronGameService {
         state.resetHealth();
     }
 
+    /**
+     * Porta la salute a zero e disabilita la ripresa del boss: la sconfitta proviene dalla
+     * ricetta.
+     */
     public static void registerFailure(GameState state) {
         Objects.requireNonNull(state, "state");
         state.setCurrentHealth(0);

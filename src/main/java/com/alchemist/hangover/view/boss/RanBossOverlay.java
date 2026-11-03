@@ -12,6 +12,11 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.*;
 
+/**
+ * Combattimento del capitolo 2 basato sul codice del capitano. Estrae segnali e risposte esca
+ * senza ripetizioni finché le rispettive riserve non sono esaurite e impone una scadenza a ogni
+ * prova.
+ */
 public class RanBossOverlay extends JDialog {
 
     private static final String[] RIDDLE_PHRASES = {
@@ -32,6 +37,10 @@ public class RanBossOverlay extends JDialog {
             "Affondo il ferro nella schiuma", "Sciolgo il nodo della risacca");
     private static final int TOTAL_TURNS = 3;
 
+    /**
+     * Compone la corrispondenza fra numeri e ordini usata anche come indizio nel diario del
+     * capitano.
+     */
     public static String journalCode() {
         StringBuilder code = new StringBuilder("CODICE DEL CAPITANO");
         for (int i = 0; i < RIDDLE_PHRASES.length; i++)
@@ -120,6 +129,10 @@ public class RanBossOverlay extends JDialog {
         super.dispose();
     }
 
+    /**
+     * Estrae un segnale e due risposte esca dalle riserve mescolate, poi avvia la scadenza della
+     * prova.
+     */
     private void startTurn() {
         if (signals.isEmpty()) {
             for (int i = 1; i <= RIDDLE_PHRASES.length; i++) signals.add(i);
@@ -158,6 +171,10 @@ public class RanBossOverlay extends JDialog {
         timer.start();
     }
 
+    /**
+     * Aggiorna barra e secondi rimanenti rispetto alla scadenza monotona; allo zero risolve la
+     * prova come errore.
+     */
     private void tick() {
         if (!accepting) return;
         long remaining = Math.max(0, deadline - System.nanoTime());
@@ -166,6 +183,9 @@ public class RanBossOverlay extends JDialog {
         if (remaining == 0) resolve(false);
     }
 
+    /**
+     * Disabilita ulteriori risposte alla stessa prova e applica avanzamento, danno o vittoria.
+     */
     private void resolve(boolean correct) {
         if (!accepting) return;
         accepting = false;
@@ -186,6 +206,9 @@ public class RanBossOverlay extends JDialog {
         startTurn();
     }
 
+    /**
+     * Registra la vittoria di Rán e mostra la Schiuma di Ægir già assegnata dalle regole.
+     */
     private void winBossFight() {
         CombatManager.victory(2);
         Item foam = BossRules.rewardForChapter(2);

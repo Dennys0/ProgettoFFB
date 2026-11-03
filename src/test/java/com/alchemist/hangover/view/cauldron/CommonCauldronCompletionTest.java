@@ -3,6 +3,9 @@ package com.alchemist.hangover.view.cauldron;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica la destinazione unica di ogni capitolo dopo una miscela riuscita.
+ */
 class CommonCauldronCompletionTest {
     @Test void eachChapterHasExactlyOneCompletionScene() {
         assertEquals("TRANSITION_CH1_CH2",CauldronController.completionScene(1));

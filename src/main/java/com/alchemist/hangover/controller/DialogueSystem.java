@@ -7,8 +7,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Legge dialoghi UTF-8 nel formato PERSONAGGIO|testo e li riproduce nelle etichette Swing.
+ * Gestisce avanzamento, scrittura progressiva e completamento; i comandi vanno usati sul thread
+ * degli eventi Swing.
+ */
 public class DialogueSystem {
 
+    /** Una battuta del file: nome del parlante e testo da mostrare. */
     public static class DialogueLine {
         private String speaker;
         private String text;
@@ -30,7 +36,7 @@ public class DialogueSystem {
     private List<DialogueLine> dialogueLines;
     private int currentIndex = -1;
 
-    // Gestione Macchina da Scrivere (Typewriter Effect)
+    // Animazione del testo con effetto macchina da scrivere.
     private Timer typewriterTimer;
     private String currentFullText = "";
     private int charIndex = 0;
@@ -52,6 +58,10 @@ public class DialogueSystem {
         this.dialogueLines = new ArrayList<>();
     }
 
+    /**
+     * Interrompe la conversazione precedente e legge la risorsa UTF-8. Ignora righe vuote e
+     * commenti e divide soltanto al primo separatore verticale.
+     */
     public void loadDialogue(String resourcePath) {
         stop();
         dialogueLines.clear();
@@ -80,6 +90,9 @@ public class DialogueSystem {
         }
     }
 
+    /**
+     * Mostra la prima battuta; se non ci sono righe, completa subito la conversazione.
+     */
     public void startDialogue() {
         if (!dialogueLines.isEmpty()) {
             currentIndex = 0;
@@ -99,6 +112,10 @@ public class DialogueSystem {
         if (currentIndex >= 0 && !finished) finishDialogue();
     }
 
+    /**
+     * Il primo comando completa la battuta ancora in scrittura; il successivo passa alla
+     * seguente.
+     */
     public void nextLine() {
         if (finished || currentIndex < 0) return;
         if (isTyping) {
@@ -115,6 +132,10 @@ public class DialogueSystem {
         }
     }
 
+    /**
+     * Esegue la funzione conclusiva una sola volta, anche se arrivano più comandi di
+     * avanzamento.
+     */
     private void finishDialogue() {
         if (finished) return;
         finished = true;
@@ -122,6 +143,9 @@ public class DialogueSystem {
         if (onDialogueComplete != null) onDialogueComplete.run();
     }
 
+    /**
+     * Aggiorna il parlante e avvia il timer Swing della battuta, con pause sulla punteggiatura.
+     */
     private void displayCurrentLine() {
         DialogueLine line = getCurrentLine();
         if (line == null) return;
@@ -164,6 +188,10 @@ public class DialogueSystem {
         isTyping = false;
     }
 
+    /**
+     * Protegge i caratteri speciali HTML e applica, se configurato, il limite di larghezza del
+     * testo.
+     */
     private String formatLine(String source) {
         String escaped = source.replace("&", "&amp;")
                 .replace("<", "&lt;").replace(">", "&gt;")
@@ -185,6 +213,9 @@ public class DialogueSystem {
         isTyping = false;
     }
 
+    /**
+     * Restituisce la battuta corrente oppure null quando non è selezionata una riga valida.
+     */
     public DialogueLine getCurrentLine() {
         if (currentIndex >= 0 && currentIndex < dialogueLines.size()) {
             return dialogueLines.get(currentIndex);

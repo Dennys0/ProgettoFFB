@@ -98,6 +98,9 @@ public final class EpiloguePanel extends JPanel {
         refresh();
     }
 
+    /**
+     * Aggiorna il contenuto della pagina corrente dell’epilogo.
+     */
     private void refresh() {
         cocktail.setVisible(page == 0);
         narration.setBounds(page == 0 ? 440 : 110, 208, page == 0 ? 710 : 1060, 280);

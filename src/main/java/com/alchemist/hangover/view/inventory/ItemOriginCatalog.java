@@ -9,6 +9,7 @@ import java.util.Map;
  * Aggiungere qui la provenienza di ogni nuovo oggetto dei capitoli.
  */
 public final class ItemOriginCatalog {
+    /** Provenienza dell’oggetto, con etichette brevi e anteprima della stanza. */
     public record Origin(int chapter, String place, String scenePath) {
         public String chapterLabel() {
             return chapter <= 0 ? "Provenienza ignota" : "Capitolo " + roman(chapter);
@@ -48,6 +49,10 @@ public final class ItemOriginCatalog {
 
     private ItemOriginCatalog() { }
 
+    /**
+     * Restituisce la provenienza ignorando maiuscole e minuscole; per identificatori sconosciuti
+     * usa una descrizione neutra.
+     */
     public static Origin find(String itemId) {
         return itemId == null ? UNKNOWN : ORIGINS.getOrDefault(itemId.toUpperCase(java.util.Locale.ROOT), UNKNOWN);
     }

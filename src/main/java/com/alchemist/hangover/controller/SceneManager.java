@@ -32,6 +32,10 @@ public final class SceneManager {
     }
 
     public JPanel getMainPanel() { return mainPanel; }
+    /**
+     * Restituisce il pannello esistente o lo crea al primo accesso, conservando stato caricato e
+     * punto di ripresa durante l’inizializzazione.
+     */
     public JPanel getPanel(String name) {
         JPanel panel = scenes.get(name);
         if (panel != null || !factories.containsKey(name)) return panel;
@@ -51,11 +55,17 @@ public final class SceneManager {
         }
     }
 
+    /**
+     * Registra una funzione di costruzione senza creare subito la scena e le sue risorse.
+     */
     public void registerScene(String name, java.util.function.Supplier<JPanel> factory) {
         factories.put(name, factory);
     }
     public String getCurrentSceneName() { return currentSceneName; }
 
+    /**
+     * Inserisce il pannello nel contenitore CardLayout e lo associa al nome della scena.
+     */
     public void addPanel(String name, JPanel panel) {
         scenes.put(name, panel);
         mainPanel.add(panel, name);
@@ -65,7 +75,8 @@ public final class SceneManager {
         showScene(name, null);
     }
 
-    /** Callback richiamata solo dopo il completamento della dissolvenza. */
+    /** Avvia la transizione e richiama onShown quando la scena è visibile.
+     * Senza dissolvenze, la funzione viene accodata subito sul thread Swing. */
     public void showScene(String name, Runnable onShown) {
         if ((!scenes.containsKey(name) && !factories.containsKey(name)) || isFading) return;
         if (!GameSettings.getInstance().isTransitionsEnabled()) {
@@ -96,6 +107,10 @@ public final class SceneManager {
         fadeOut.start();
     }
 
+    /**
+     * Riduce la copertura della nuova scena e richiama la funzione prevista quando diventa
+     * visibile.
+     */
     private void fadeIn(JGlassPane glass) {
         Timer fadeIn = new Timer(25, null);
         fadeIn.addActionListener(e -> {
@@ -113,6 +128,10 @@ public final class SceneManager {
         fadeIn.start();
     }
 
+    /**
+     * Rende visibile il pannello, aggiorna il nome della scena e richiede ambiente sonoro e
+     * attenzione della tastiera.
+     */
     private void activateScene(String name) {
         if (getPanel(name) == null) return;
         cardLayout.show(mainPanel, name);
@@ -121,6 +140,9 @@ public final class SceneManager {
         scenes.get(name).requestFocusInWindow();
     }
 
+    /**
+     * Recupera o crea lo strato usato per disegnare le dissolvenze sopra la finestra.
+     */
     private JGlassPane getGlassPane() {
         Window owner = SwingUtilities.getWindowAncestor(mainPanel);
         if (!(owner instanceof JFrame frame)) return null;
@@ -133,6 +155,7 @@ public final class SceneManager {
         return glassPane;
     }
 
+    /** Strato grafico della dissolvenza, dipendente dall’opacità gestita dal coordinatore delle scene. */
     private final class JGlassPane extends JPanel {
         private JGlassPane() { setOpaque(false); }
 

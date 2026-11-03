@@ -20,8 +20,13 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+/**
+ * Interfaccia degli slot H2 per salvare o caricare. SwingWorker esegue l’accesso al database in
+ * background; cattura e ripristino dello stato della partita avvengono sul thread Swing.
+ */
 public class SaveLoadDialog extends JDialog {
 
+    /** Distingue le azioni disponibili: salvataggio oppure caricamento. */
     public enum Mode {
         SAVE,
         LOAD
@@ -82,6 +87,9 @@ public class SaveLoadDialog extends JDialog {
         refreshSlots();
     }
 
+    /**
+     * Legge gli slot in background e ricostruisce l’elenco sul thread Swing.
+     */
     private void refreshSlots() {
         runDatabaseTask("Lettura salvataggi…", () -> SaveGameDAO.getAllSlots().stream()
                 .collect(Collectors.toMap(SaveSlotInfo::getSlotId, slot -> slot)), slotsMap -> {
@@ -161,6 +169,10 @@ public class SaveLoadDialog extends JDialog {
         return panel;
     }
 
+    /**
+     * Chiede il nome, cattura la partita sul thread Swing e passa una fotografia stabile al
+     * salvataggio in background.
+     */
     private void onSaveClicked(int slotId, SaveSlotInfo current) {
         String defaultName = current != null ? current.getSlotName() : "Partita " + slotId;
         String name = JOptionPane.showInputDialog(this, "Inserisci un nome per questo salvataggio:", defaultName);
@@ -179,6 +191,10 @@ public class SaveLoadDialog extends JDialog {
         }
     }
 
+    /**
+     * Legge la fotografia in background; dopo il successo la applica e apre il capitolo o la
+     * conclusione corretta.
+     */
     private void onLoadClicked(int slotId) {
         int confirm = JOptionPane.showConfirmDialog(this, "Vuoi caricare lo Slot " + slotId + "?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -203,8 +219,8 @@ public class SaveLoadDialog extends JDialog {
                     Chapter3Panel chapter3 =
                             (Chapter3Panel) SceneManager.getInstance().getPanel("CHAPTER3");
                     if (chapter3 != null) chapter3.refreshFromGameState();
-                    // Dopo aver completato l'Old Fashioned il giocatore deve
-                    // ritrovare l'epilogo, non una partita che sembra incompleta.
+                    // Dopo aver preparato l’Old Fashioned, il caricamento riapre
+                    // la conclusione del capitolo 3, da cui si può proseguire verso Muspelheim.
                     SceneManager.getInstance().showScene(
                             state.isYmirOldFashionedCreated() ? "CHAPTER3_COMPLETE" : "CHAPTER3");
                 } else if (state.getChapter() == 2) {
@@ -225,6 +241,9 @@ public class SaveLoadDialog extends JDialog {
         }
     }
 
+    /**
+     * Chiede conferma prima di eliminare lo slot in background e aggiornare l’elenco.
+     */
     private void onDeleteClicked(int slotId) {
         int confirm = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler eliminare lo Slot " + slotId + "?", "Elimina Salvataggio", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -242,6 +261,7 @@ public class SaveLoadDialog extends JDialog {
         busy = true;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         java.util.Map<java.awt.Component, Boolean> enabled = new java.util.IdentityHashMap<>();
+        // Conserva anche i controlli già disabilitati: al termine non vanno riattivati tutti.
         rememberAndDisable(getContentPane(), enabled);
         operationStatus.setText(label);
         new SwingWorker<T, Void>() {
@@ -266,6 +286,10 @@ public class SaveLoadDialog extends JDialog {
         }.execute();
     }
 
+    /**
+     * Memorizza ricorsivamente quali controlli erano attivi prima di disabilitarli durante
+     * l’operazione.
+     */
     private static void rememberAndDisable(java.awt.Container root,
                                            java.util.Map<java.awt.Component, Boolean> enabled) {
         for (java.awt.Component child : root.getComponents()) {

@@ -12,6 +12,7 @@ import javax.swing.*;
  * si arresta quando il capitolo non e' visibile.
  */
 public final class RoomAtmosphereEffect extends JComponent {
+    /** Famiglie di particelle scelte in base al fondale. */
     public enum Style { SKY, SEA, EMBERS, FIREFLIES, EARTH }
 
     private final Timer timer;
@@ -28,6 +29,9 @@ public final class RoomAtmosphereEffect extends JComponent {
         });
     }
 
+    /**
+     * Associa il fondale a una famiglia di particelle senza modificare l’immagine della stanza.
+     */
     static Style styleFor(String background) {
         if (background == null) return Style.EARTH;
         if (background.contains("/chapter1/")) {
@@ -43,6 +47,9 @@ public final class RoomAtmosphereEffect extends JComponent {
         return Style.EARTH;
     }
 
+    /**
+     * Sceglie l’atmosfera dal percorso del fondale e riallinea lo stato dell’animazione.
+     */
     public void configure(String background) {
         style = styleFor(background);
         tick = 0;
@@ -50,6 +57,9 @@ public final class RoomAtmosphereEffect extends JComponent {
         repaint();
     }
 
+    /**
+     * Fa lavorare il timer solo quando l’effetto deve essere visibile.
+     */
     private void refreshAnimationState() {
         if (isShowing() && getWidth() > 0 && getHeight() > 0) {
             if (!timer.isRunning()) timer.start();

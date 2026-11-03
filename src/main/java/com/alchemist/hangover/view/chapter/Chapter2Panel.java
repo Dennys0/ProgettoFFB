@@ -11,6 +11,10 @@ import java.awt.*;
 import java.util.List;
 import javax.swing.*;
 
+/**
+ * Interazioni del regno sommerso: ricompense degli NPC, ordini del capitano e accesso a Rán. La
+ * conversazione con Hrönn è distinta dall’introduzione che avvia il combattimento.
+ */
 public class Chapter2Panel extends AbstractChapterPanel {
 
     // Elementi Mondo di Gioco
@@ -21,11 +25,11 @@ public class Chapter2Panel extends AbstractChapterPanel {
     // UI Dialoghi
     private final DialogueManager.SceneSession dialogue;
 
-    /** The meaning of a conversation must not depend on its room number. */
+    /** Le conseguenze del dialogo dipendono dal suo tipo, non dal numero della stanza. */
     enum DialogueKind { NONE, SIEGFRIED, NPC, BOSS_INTRO }
     private DialogueKind activeDialogueKind = DialogueKind.NONE;
 
-    /** 1280 x 720 logical coordinates, aligned to the provided illustrations. */
+    /** Coordinate logiche 1280 × 720, allineate alle illustrazioni dei fondali. */
     record NpcDefinition(int room, Rectangle bounds, String tooltip, String dialogue) { }
 
     static final List<NpcDefinition> NPC_DEFINITIONS = List.of(
@@ -67,6 +71,9 @@ public class Chapter2Panel extends AbstractChapterPanel {
         loadRoom(1);
     }
 
+    /**
+     * Collega personaggi, calderone, boss e oggetti alle aree dei fondali sommersi.
+     */
     private void initHotspots() {
         // NPC Siegfried al Bancone (Stanza 2)
         siegfriedHotspot = registerActionHotspot(
@@ -84,7 +91,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
                 new Rectangle(414, 365, 607, 237),
                 "Affronta Rán", this::triggerRanBossEncounter);
 
-        // NPCs are baked into the seven scenes: only transparent hotzones.
+        // Gli NPC sono già disegnati nei sette fondali: si aggiungono aree cliccabili trasparenti.
         for (NpcDefinition npc : NPC_DEFINITIONS) {
             addNpcHotspot(npc);
             if (npc.room() == 5) {
@@ -113,8 +120,8 @@ public class Chapter2Panel extends AbstractChapterPanel {
 
     @Override
     protected void onRoomChanged() {
-        // Scene changes made by debug navigation or loading must not
-        // accidentally complete the previous room's story or start Rán.
+        // La navigazione di sviluppo e il caricamento interrompono il dialogo senza
+        // completare la storia della stanza precedente né avviare lo scontro con Rán.
         if (dialogue.isVisible()) {
             dialogue.stop();
             activeDialogueKind = DialogueKind.NONE;
@@ -131,7 +138,7 @@ public class Chapter2Panel extends AbstractChapterPanel {
         setRegisteredNpcHotspotsVisible(idle);
     }
 
-    /** One shared entry point for Siegfried, room NPCs and Rán. */
+    /** Avvio condiviso dei dialoghi di Siegfried, degli altri NPC e di Rán. */
     private void startSceneDialogue(String resource, DialogueKind kind) {
         if (dialogue.isVisible()) return;
         activeDialogueKind = kind;
@@ -165,6 +172,9 @@ public class Chapter2Panel extends AbstractChapterPanel {
         hudPanel.updateHUD();
     }
 
+    /**
+     * Avvia la sola introduzione che può aprire lo scontro con Rán.
+     */
     private void triggerRanBossEncounter() {
         GameState gs = GameState.getInstance();
         if (gs.isBossDefeated()) {
@@ -181,8 +191,8 @@ public class Chapter2Panel extends AbstractChapterPanel {
                 + "Vuoi iniziare lo scontro?",
                 "AFFRONTA RAN", "NON ANCORA")) return;
 
-        // Only this explicit boss-introduction dialogue starts the fight.
-        // Talking to Hrönn alone must never trigger the boss.
+        // Soltanto questo dialogo introduttivo avvia il combattimento.
+        // La conversazione con Hrönn non deve attivare il boss.
         startSceneDialogue("/dialogues/ran_boss_dialogue.txt", DialogueKind.BOSS_INTRO);
     }
 
@@ -200,6 +210,10 @@ public class Chapter2Panel extends AbstractChapterPanel {
         };
     }
 
+    /**
+     * Propone gli ordini del capitano e concede il diario solo se le risposte alle richieste
+     * sono corrette.
+     */
     private void captainOrders() {
         if (GameState.getInstance().hasItem("DIARIO_CAPITANO")) return;
         String[] orders = {
@@ -218,6 +232,9 @@ public class Chapter2Panel extends AbstractChapterPanel {
                 RanBossOverlay.journalCode(), "/images/chapter2/items/captain_journal.png"));
     }
 
+    /**
+     * Applica l’esito della conversazione e ripristina le interazioni della stanza.
+     */
     private void onDialogueFinished() {
         DialogueKind completed = activeDialogueKind;
         activeDialogueKind = DialogueKind.NONE;

@@ -8,6 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla ordine della Brace, passaggio al capitolo 4 e conservazione del finale nella
+ * fotografia di salvataggio.
+ */
 class Chapter4RulesTest {
     @Test void correctFlambeRequiresEmberAsLastIngredient() {
         assertEquals(RecipeManager.Result.SUCCESS,

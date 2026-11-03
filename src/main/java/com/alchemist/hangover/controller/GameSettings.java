@@ -38,12 +38,19 @@ public final class GameSettings {
 
     public boolean isAmbienceEnabled() { return ambienceEnabled; }
 
+    /**
+     * Salva la preferenza del sottofondo e aggiorna la riproduzione della scena.
+     */
     public void setAmbienceEnabled(boolean enabled) {
         ambienceEnabled = enabled;
         store("audio.ambience", enabled);
         AudioManager.getInstance().refreshSettings();
     }
 
+    /**
+     * Aggiorna il comando generale dell’audio, salva la preferenza e riapplica le impostazioni
+     * alla scena.
+     */
     public void setSoundEnabled(boolean enabled) {
         soundEnabled = enabled;
         store("audio.enabled", enabled);
@@ -55,6 +62,10 @@ public final class GameSettings {
         store("transitions.enabled", enabled);
     }
 
+    /**
+     * Memorizza la preferenza sul dispositivo. Se l’accesso è negato, resta valida la modifica
+     * in memoria per questa sessione.
+     */
     private void store(String key, boolean value) {
         if (preferences != null) {
             try {

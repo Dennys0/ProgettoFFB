@@ -4,6 +4,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla la presenza delle risorse di stanze e dialoghi di Muspelheim.
+ */
 class Chapter4NpcIntegrationTest {
     @Test void allMuspelheimRoomsAndDialoguesAreBundled() {
         var layout = ChapterLayouts.forChapter(4);

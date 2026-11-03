@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
+/**
+ * Finestra di preparazione dei cocktail: mostra gli ingredienti utilizzabili e conserva l’ordine
+ * delle tre scelte. RecipeManager valuta la miscela; CauldronController applica l’esito e cambia
+ * scena.
+ */
 public class CauldronOverlay extends JDialog {
 
     private final List<Item> selectedItems = new ArrayList<>();
@@ -102,6 +107,9 @@ public class CauldronOverlay extends JDialog {
         refreshSlots();
     }
 
+    /**
+     * Aggiorna le tre posizioni visive secondo l’ordine degli ingredienti selezionati.
+     */
     private void refreshSlots() {
         slotsPanel.removeAll();
         for (int i = 0; i < 3; i++) {
@@ -129,6 +137,10 @@ public class CauldronOverlay extends JDialog {
         slotsPanel.revalidate();
         slotsPanel.repaint();
     }
+    /**
+     * Valuta la selezione e distingue miscela incompleta, successo ed errore prima di delegarne
+     * le conseguenze.
+     */
     private void processMixing() {
         int chapter = GameState.getInstance().getChapter();
         java.util.List<String> selectedIds = selectedItems.stream()

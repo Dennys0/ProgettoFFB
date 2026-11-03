@@ -8,6 +8,7 @@ import java.util.Random;
  * Se il computer non offre un'uscita audio compatibile, il gioco rimane utilizzabile.
  */
 public final class AudioManager {
+    /** Identificatori degli effetti sintetizzati dal servizio audio. */
     public enum Effect {
         CLICK, PICKUP, DAMAGE, SERPENT_CALL, MAGMA_BUBBLE, MAGMA_HEART, SUCCESS, RECIPE_READY, FOOTSTEP, EARTH_BREATH,
         WIND_GUST, WATER_DROP, FORGE_SPARK, STONE_RUMBLE, RUNE_CHIME
@@ -19,6 +20,7 @@ public final class AudioManager {
             AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 1, 2,
             SAMPLE_RATE, false);
 
+    // Sintesi e apertura delle tracce sono serializzate per non bloccare il thread Swing.
     private final java.util.concurrent.ExecutorService worker =
             java.util.concurrent.Executors.newSingleThreadExecutor(task -> {
                 Thread thread = new Thread(task, "alchemist-audio");
@@ -33,11 +35,18 @@ public final class AudioManager {
     private final java.util.Set<Clip> effects = java.util.concurrent.ConcurrentHashMap.newKeySet();
     private volatile boolean closed;
 
+    /**
+     * Accoda l’ambiente della nuova scena. Il contatore di versione scarta le richieste superate
+     * da un cambio scena più recente.
+     */
     public void playScene(String scene) {
         long version = sceneVersion.incrementAndGet();
         submit(() -> { if (version == sceneVersion.get()) playSceneNow(scene); });
     }
 
+    /**
+     * Riapplica le preferenze alla scena attiva sull’esecutore audio.
+     */
     public void refreshSettings() {
         long version = sceneVersion.incrementAndGet();
         submit(() -> {
@@ -48,12 +57,18 @@ public final class AudioManager {
         });
     }
 
+    /**
+     * Accoda un solo tic di scrittura alla volta, evitando accumuli durante l’animazione.
+     */
     public void playTypingTick() {
         if (!typingPending.compareAndSet(false, true)) return;
         if (!submit(() -> { try { playTypingTickNow(); } finally { typingPending.set(false); } }))
             typingPending.set(false);
     }
 
+    /**
+     * Accoda un effetto breve rispettando il limite degli effetti in attesa.
+     */
     public void playEffect(Effect effect) {
         if (effect == null || pendingEffects.incrementAndGet() > 8) {
             if (effect != null) pendingEffects.decrementAndGet();
@@ -63,6 +78,10 @@ public final class AudioManager {
             pendingEffects.decrementAndGet();
     }
 
+    /**
+     * Invia il lavoro all’esecutore audio; rifiuta le richieste dopo la chiusura o in un
+     * ambiente senza schermo.
+     */
     private boolean submit(Runnable task) {
         if (closed || java.awt.GraphicsEnvironment.isHeadless()) return false;
         try { worker.execute(task); return true; }
@@ -93,6 +112,9 @@ public final class AudioManager {
     private AudioManager() { }
     public static AudioManager getInstance() { return INSTANCE; }
 
+    /**
+     * Cambia l’ambiente sull’esecutore audio, riutilizzando i campioni già generati.
+     */
     private void playSceneNow(String scene) {
         if (scene == null) return;
         if (scene.equals(activeScene) && ambience != null && ambience.isRunning()) return;
@@ -116,6 +138,9 @@ public final class AudioManager {
         }
     }
 
+    /**
+     * Ferma e libera la traccia ambientale attualmente aperta.
+     */
     private void stopAmbience() {
         if (ambience != null) {
             ambience.stop();
@@ -155,6 +180,9 @@ public final class AudioManager {
         return null;
     }
 
+    /**
+     * Associa il fondale a un breve accento sonoro di ingresso nella stanza.
+     */
     public void playRoomCue(String resourcePath) {
         Effect cue = cueForRoom(resourcePath);
         playEffect(cue == null ? Effect.FOOTSTEP : cue);
@@ -183,6 +211,9 @@ public final class AudioManager {
         }
     }
 
+    /**
+     * Apre un Clip e ne libera le risorse al termine, limitando le riproduzioni sovrapposte.
+     */
     private void playEffectNow(Effect effect) {
         if (!GameSettings.getInstance().isSoundEnabled()) return;
         try {
@@ -204,6 +235,9 @@ public final class AudioManager {
         }
     }
 
+    /**
+     * Regola il guadagno soltanto se il dispositivo espone il controllo del volume.
+     */
     private static void setLevel(Clip clip, float decibels) {
         if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             FloatControl gain = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -211,6 +245,9 @@ public final class AudioManager {
         }
     }
 
+    /**
+     * Sintetizza il fondo sonoro della scena in campioni PCM riutilizzabili dalla cache.
+     */
     private static byte[] makeAmbience(String scene) {
         int length = SAMPLE_RATE * 12;
         byte[] pcm = new byte[length * 2];
@@ -260,6 +297,9 @@ public final class AudioManager {
         return pcm;
     }
 
+    /**
+     * Costruisce il motivo dello scontro con Hræsvelgr combinando note e pulsazioni ritmiche.
+     */
     private static byte[] makeStormMusic() {
         double[] bass = {110, 110, 130.81, 98, 110, 146.83, 130.81, 98};
         int beat = SAMPLE_RATE / 2;
@@ -277,6 +317,9 @@ public final class AudioManager {
         return pcm;
     }
 
+    /**
+     * Genera il suono del danno con un attacco breve e un decadimento marcato.
+     */
     private static byte[] makeImpact() {
         byte[] pcm = new byte[SAMPLE_RATE]; // Mezzo secondo di PCM a 16 bit.
         Random noise = new Random(71);
@@ -292,6 +335,9 @@ public final class AudioManager {
         return pcm;
     }
 
+    /**
+     * Genera il ribollire della fornace o la variante a battito, in base al parametro.
+     */
     private static byte[] makeMagma(boolean heartbeat) {
         int frames = heartbeat ? SAMPLE_RATE * 3 / 2 : SAMPLE_RATE;
         byte[] pcm = new byte[frames * 2];
@@ -312,6 +358,9 @@ public final class AudioManager {
         return pcm;
     }
 
+    /**
+     * Seleziona la sintesi dell’effetto richiesto e restituisce i campioni da riprodurre.
+     */
     private static byte[] makeEffect(Effect effect) {
         if (effect == Effect.MAGMA_BUBBLE || effect == Effect.MAGMA_HEART)
             return makeMagma(effect == Effect.MAGMA_HEART);
@@ -441,6 +490,9 @@ public final class AudioManager {
         return pcm;
     }
 
+    /**
+     * Limita l’ampiezza del campione e la converte in due byte PCM a 16 bit.
+     */
     private static void writeSample(byte[] target, int index, double normalized) {
         short pcm = (short) (Math.max(-1, Math.min(1, normalized)) * 32767);
         target[index * 2] = (byte) (pcm & 0xff);

@@ -4,6 +4,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla le anteprime delle provenienze e il comportamento per oggetti non catalogati.
+ */
 class ItemOriginCatalogTest {
     @Test
     void allExistingItemsHaveAnExistingRoomPreview() {

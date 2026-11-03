@@ -6,6 +6,10 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla riproducibilità dal seme casuale, validazione di runa e posizione e coerenza
+ * dell’iscrizione.
+ */
 class YmirRuneRitualTest {
     @Test
     void sameSeedAlwaysProducesTheSameThreeSteps() {

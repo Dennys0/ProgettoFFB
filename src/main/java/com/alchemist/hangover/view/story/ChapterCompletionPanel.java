@@ -12,14 +12,18 @@ import java.net.URL;
 import javax.swing.*;
 
 /**
- * One illustrated completion screen for every chapter.
- * Replaces three formerly unrelated panels while retaining their scene IDs.
- * Cocktail images are optional: missing assets show a readable placeholder.
+ * Schermata illustrata condivisa per la conclusione dei capitoli 1, 2 e 3.
+ * Permette di salvare il punto di passaggio oppure avanzare; il capitolo 4 usa l’epilogo.
+ * Se manca l’immagine del cocktail rimane visibile il suo nome.
  */
 public final class ChapterCompletionPanel extends JPanel {
+    /** Contenuti variabili della schermata di completamento per ciascun capitolo. */
     record Details(int chapter, String title, String drink, String imagePath,
                    String narrative, String nextLabel) { }
 
+    /**
+     * Seleziona titolo, cocktail, immagine e testo della conclusione dei primi tre capitoli.
+     */
     static Details detailsFor(int chapter) {
         return switch (chapter) {
             case 1 -> new Details(1, "CAPITOLO I COMPLETATO", "Asgardian Aviation",
@@ -147,6 +151,9 @@ public final class ChapterCompletionPanel extends JPanel {
         return button;
     }
 
+    /**
+     * Applica la progressione e aggiorna il pannello successivo prima di renderlo visibile.
+     */
     private void advance() {
         GameState state = GameState.getInstance();
         SceneManager manager = SceneManager.getInstance();

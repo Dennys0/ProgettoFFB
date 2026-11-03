@@ -6,6 +6,9 @@ import javax.swing.SwingUtilities;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica che i contorni siano disattivati normalmente e attivabili per il collaudo.
+ */
 class HotspotDebugTest {
     @Test void outlinesStayDisabledByDefaultAndCanBeEnabledTemporarily() throws Exception {
         SwingUtilities.invokeAndWait(() -> {

@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Stato condiviso della partita: stanza, capitolo, salute, inventario e progressi narrativi. Le
+ * modifiche durante il gioco avvengono sul thread Swing; per il lavoro in background si usa
+ * GameSaveSnapshot.
+ */
 public class GameState {
 
     private static GameState instance;
@@ -65,6 +70,9 @@ public class GameState {
         return currentHealth;
     }
 
+    /**
+     * Impedisce che la salute diventi negativa e notifica gli osservatori solo quando cambia.
+     */
     public void setCurrentHealth(int health) {
         int newHealth = Math.max(0, health);
         if (currentHealth != newHealth) {
@@ -127,6 +135,9 @@ public class GameState {
         inventory.clear();
     }
 
+    /**
+     * Aggiunge un oggetto non nullo soltanto se non è già presente con lo stesso identificatore.
+     */
     public void addItem(Item item) {
         Item valid = Objects.requireNonNull(item, "item");
         if (!hasItem(valid.getId())) {
@@ -160,8 +171,8 @@ public class GameState {
     public void setDragonUnlocked(boolean val) { this.dragonUnlocked = val; }
 
     /**
-     * The random seed is created once per Chapter III adventure and is persisted
-     * in H2, so Gunnar, the stele and the boss share the exact same ritual.
+     * Genera una sola volta il seme casuale del rituale, poi conservato nei salvataggi H2.
+     * Gunnar, stele e boss ricavano così la stessa soluzione anche dopo un caricamento.
      */
     public int ensureYmirRuneSeed() {
         if (ymirRuneSeed == 0) {
@@ -229,18 +240,24 @@ public class GameState {
         resetYmirProgress();
         maxHealth = 3;
         currentHealth = 3;
-        // Un solo evento: l'HUD non viene aggiornato su uno stato intermedio.
+        // Un solo evento: gli indicatori di salute ricevono lo stato finale del ripristino.
         if (previousHealth != currentHealth || previousMaxHealth != maxHealth) {
             notifyHealthChanged();
         }
     }
 
+    /**
+     * Riporta esplorazione e inventario alla situazione iniziale.
+     */
     private void resetExploration() {
         currentChapter = 1;
         currentRoom = 1;
         clearInventory();
     }
 
+    /**
+     * Azzera i progressi narrativi e le condizioni di ripresa della partita.
+     */
     private void resetStoryProgress() {
         givenMapToMartino = false;
         hasDragonKey = false;
@@ -249,6 +266,9 @@ public class GameState {
         bossRetryAvailable = false;
     }
 
+    /**
+     * Azzera indizi e rituale di Ymir, oltre ai cocktail conclusivi dei capitoli 3 e 4.
+     */
     private void resetYmirProgress() {
         ymirPacified = false;
         ymirRuneSeed = 0;

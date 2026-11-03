@@ -7,6 +7,9 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla pulsanti accessibili di conferme e avvisi e numero corretto delle azioni.
+ */
 class StoryPromptDialogTest {
     @Test
     void skyAndOceanPromptsExposeAccessibleRealActions() throws Exception {

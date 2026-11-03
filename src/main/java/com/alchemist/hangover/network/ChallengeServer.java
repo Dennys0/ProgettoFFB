@@ -13,9 +13,14 @@ import java.util.concurrent.atomic.AtomicIntegerArray;
 public final class ChallengeServer implements AutoCloseable {
     private final HttpServer server;
     private final ExecutorService workers = Executors.newFixedThreadPool(2);
+    // Due richieste possono arrivare insieme: gli incrementi non devono andare persi.
     private final AtomicIntegerArray wins = new AtomicIntegerArray(4);
     private final AtomicIntegerArray losses = new AtomicIntegerArray(4);
 
+    /**
+     * Prepara il servizio sulla sola interfaccia locale e registra i due percorsi REST; start
+     * avvia poi l’ascolto.
+     */
     public ChallengeServer(int port) throws IOException {
         server = HttpServer.create(new InetSocketAddress("127.0.0.1", port), 16);
         server.setExecutor(workers);
@@ -25,6 +30,10 @@ public final class ChallengeServer implements AutoCloseable {
     public void start() { server.start(); }
     public int port() { return server.getAddress().getPort(); }
 
+    /**
+     * Valida percorso, metodo POST e corpo di massimo 256 byte prima di incrementare il
+     * contatore atomico del capitolo.
+     */
     private void record(HttpExchange exchange) throws IOException {
         try (exchange) {
             if (!exchange.getRequestURI().getPath().equals("/results")) { reply(exchange, 404, "Risorsa assente"); return; }
@@ -39,6 +48,9 @@ public final class ChallengeServer implements AutoCloseable {
             reply(exchange, 201, "Risultato registrato");
         }
     }
+    /**
+     * Risponde a GET /stats con il riepilogo testuale dei contatori della sessione.
+     */
     private void stats(HttpExchange exchange) throws IOException {
         try (exchange) {
             if (!exchange.getRequestURI().getPath().equals("/stats")) { reply(exchange, 404, "Risorsa assente"); return; }
@@ -50,6 +62,9 @@ public final class ChallengeServer implements AutoCloseable {
             reply(exchange, 200, text.toString());
         }
     }
+    /**
+     * Codifica il testo in UTF-8 e invia stato HTTP, tipo del contenuto e lunghezza in byte.
+     */
     private static void reply(HttpExchange exchange, int code, String text) throws IOException {
         byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=utf-8");
@@ -57,6 +72,9 @@ public final class ChallengeServer implements AutoCloseable {
         exchange.getResponseBody().write(bytes);
     }
     @Override public void close() { server.stop(0); workers.shutdownNow(); }
+    /**
+     * Avvia il registro come processo separato e ne registra l’arresto alla chiusura della JVM.
+     */
     public static void main(String[] args) throws IOException {
         int port = Integer.getInteger("alchemist.registry.port", 8765);
         ChallengeServer service = new ChallengeServer(port);

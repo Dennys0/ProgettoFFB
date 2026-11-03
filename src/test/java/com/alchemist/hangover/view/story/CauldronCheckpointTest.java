@@ -9,6 +9,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica che riprovare la ricetta conservi ingredienti, ripristini salute e torni al
+ * calderone.
+ */
 class CauldronCheckpointTest {
     @AfterEach void cleanup() { GameState.getInstance().resetState(); }
 

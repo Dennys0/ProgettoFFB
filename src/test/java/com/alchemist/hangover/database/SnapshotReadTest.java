@@ -4,6 +4,9 @@ import com.alchemist.hangover.model.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla che la lettura H2 in background non modifichi la partita attiva.
+ */
 class SnapshotReadTest {
     @Test void backgroundReadDoesNotMutateActiveGame() throws Exception {
         String previous = System.getProperty(DatabaseManager.TEST_DATABASE_PROPERTY);

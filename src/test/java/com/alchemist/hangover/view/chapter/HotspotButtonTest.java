@@ -6,6 +6,9 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica trasparenza, assenza di bordi ordinari e bagliore facoltativo degli oggetti.
+ */
 class HotspotButtonTest {
     @Test
     void narrativeHotspotsShowOnlyLocalizedFeedbackWithoutBorders() throws Exception {

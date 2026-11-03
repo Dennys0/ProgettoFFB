@@ -71,6 +71,9 @@ public final class ProloguePanel extends JPanel {
         dialogue.startDialogue();
     }
 
+    /**
+     * Conclude l’introduzione e passa all’esplorazione del primo capitolo.
+     */
     private void finishPrologue() {
         dialogue.stop();
         SceneManager manager = SceneManager.getInstance();
@@ -79,6 +82,9 @@ public final class ProloguePanel extends JPanel {
         manager.showScene("CHAPTER1");
     }
 
+    /**
+     * Allinea il ritratto al personaggio che pronuncia la battuta.
+     */
     private void updatePortrait() {
         DialogueSystem.DialogueLine line = dialogue.getCurrentLine();
         ImageIcon icon = line == null ? null : portraits.get(line.getSpeaker());

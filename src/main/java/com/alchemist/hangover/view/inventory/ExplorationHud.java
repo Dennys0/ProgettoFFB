@@ -5,6 +5,10 @@ import com.alchemist.hangover.view.menu.SaveLoadDialog;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * Barra dell’esplorazione con capitolo, stanza, diario, inventario e salvataggi. I cuori sono
+ * mostrati nelle finestre dei combattimenti.
+ */
 public class ExplorationHud extends JPanel {
 
     private final JLabel location = new JLabel();
@@ -82,6 +86,9 @@ public class ExplorationHud extends JPanel {
         add(saveButton);
     }
 
+    /**
+     * Aggiorna capitolo e nome della stanza, adattando la larghezza dell’etichetta al testo.
+     */
     public void updateHUD() {
         var state = com.alchemist.hangover.model.GameState.getInstance();
         String room = ChapterLayouts.roomName(state.getChapter(), state.getCurrentRoom());

@@ -6,6 +6,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla le due fasi del dialogo di Gunnar: interruzione e caricamento non devono assegnare
+ * progressi impropri.
+ */
 class GunnarConversationTest {
     @AfterEach void reset() { GameState.getInstance().resetState(); }
 
@@ -34,7 +38,7 @@ class GunnarConversationTest {
         GameState state=GameState.getInstance();
         state.resetState();
         assertFalse(state.hasHeardGunnarIntroduction());
-        // Cancelling does not invoke a completion callback.
+        // L’annullamento non esegue la funzione di completamento.
         assertEquals("/dialogues/ch3_gunnar.txt",EarthChapterRules.gunnarDialoguePath(state));
         state.setGunnarWisdomLearned(true);
         assertEquals("/dialogues/ch3_gunnar_repeat.txt",EarthChapterRules.gunnarDialoguePath(state));

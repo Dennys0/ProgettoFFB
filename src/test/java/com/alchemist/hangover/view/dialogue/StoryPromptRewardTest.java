@@ -8,6 +8,9 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica immagine della ricompensa e funzionamento dell’azione di continuazione.
+ */
 class StoryPromptRewardTest {
     @Test
     void bothChapterThemesDisplayRealBossLootWithOneWorkingContinueButton() throws Exception {

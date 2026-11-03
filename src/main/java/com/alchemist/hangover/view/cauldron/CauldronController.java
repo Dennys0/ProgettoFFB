@@ -11,7 +11,7 @@ import java.awt.Frame;
 import java.awt.Window;
 import javax.swing.SwingUtilities;
 
-/** Entry/exit rules common to the three cauldrons; no save-file mutations. */
+/** Coordina apertura ed esito dei quattro calderoni, senza scrivere nei salvataggi. */
 public final class CauldronController {
     private CauldronController() { }
 
@@ -24,6 +24,9 @@ public final class CauldronController {
         };
     }
 
+    /**
+     * Controlla gli ingredienti e mostra l’avviso con il tema del capitolo quando mancano.
+     */
     public static boolean allowOpening(Frame frame) {
         GameState state = GameState.getInstance();
         if (CauldronGameService.canOpen(state)) return true;
@@ -34,8 +37,8 @@ public final class CauldronController {
         return false;
     }
 
-    /** A common outcome for all three cauldrons; no pickup popup is shown.
-     * Completion scenes are responsible for the illustrated drink and actions. */
+    /** Applica il successo e apre la scena conclusiva del capitolo.
+     * La rappresentazione del cocktail è affidata alla scena di destinazione. */
     public static String completionScene(int chapter) {
         return CauldronGameService.completionScene(chapter);
     }
@@ -51,6 +54,9 @@ public final class CauldronController {
         SceneManager.getInstance().showScene(scene);
     }
 
+    /**
+     * Registra il fallimento e prepara la schermata di sconfitta con ripresa della ricetta.
+     */
     public static void fail(String reason) {
         GameState state = GameState.getInstance();
         CauldronGameService.registerFailure(state);

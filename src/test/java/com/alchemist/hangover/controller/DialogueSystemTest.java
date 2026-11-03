@@ -7,6 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla larghezza del testo e completamento unico quando si salta la conversazione.
+ */
 class DialogueSystemTest {
     @Test
     void wrappedGunnarDialogueFitsInItsTextPanel() throws Exception {

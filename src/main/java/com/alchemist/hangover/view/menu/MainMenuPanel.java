@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
+/**
+ * Menu iniziale con selezione tramite mouse e tastiera, nuova partita, caricamento e pagine
+ * informative. Il registro delle sfide compare soltanto quando la funzione di rete è abilitata.
+ */
 public class MainMenuPanel extends JPanel {
 
     private final Image backgroundImage = new ImageIcon(getClass().getResource("/images/intro/menu_bg.png")).getImage();
@@ -57,12 +61,18 @@ public class MainMenuPanel extends JPanel {
         SwingUtilities.invokeLater(() -> { if (isShowing()) selected.requestFocusInWindow(); });
     }
 
+    /**
+     * Sposta la selezione da tastiera ciclicamente fra i pulsanti.
+     */
     private void step(int delta) {
         int i = (entries.getComponentZOrder(selected) + delta + entries.getComponentCount())
                 % entries.getComponentCount();
         ((JButton) entries.getComponent(i)).requestFocusInWindow();
     }
 
+    /**
+     * Aggiorna l’evidenziazione della voce selezionata e la sua descrizione.
+     */
     private void select(JButton button) {
         if (selected != null) selected.repaint();
         selected = button;
@@ -171,6 +181,9 @@ public class MainMenuPanel extends JPanel {
         return button;
     }
 
+    /**
+     * Apre la pagina richiesta del taccuino per guida, opzioni e crediti.
+     */
     private void openPage(MenuBookDialog.Page page) {
         new MenuBookDialog((Frame) SwingUtilities.getWindowAncestor(this), page).setVisible(true);
     }

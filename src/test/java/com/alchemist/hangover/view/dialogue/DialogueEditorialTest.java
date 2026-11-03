@@ -10,8 +10,7 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/** Ensures scene headings stay out of spoken narration and the chapter guides teach the playable recipes.
- */
+/** Verifica che le intestazioni non siano recitate e che gli indizi descrivano le ricette giocabili. */
 class DialogueEditorialTest {
     private static final List<String> ALL_DIALOGUES = List.of(
             "boss_intro_dialogue.txt",

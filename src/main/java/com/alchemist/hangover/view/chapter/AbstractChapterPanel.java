@@ -105,13 +105,16 @@ public abstract class AbstractChapterPanel extends JPanel {
         return hotspot;
     }
 
-    /** Registra un NPC gia' visibile nel PNG della stanza, senza sovrapporre sprite. */
+    /** Adatta le aree registrate dalle coordinate logiche 1280 × 720 alle dimensioni del pannello. */
     @Override public void doLayout() {
         super.doLayout();
         sceneBounds.forEach((button, r) -> button.setBounds(r.x * getWidth() / 1280,
                 r.y * getHeight() / 720, r.width * getWidth() / 1280, r.height * getHeight() / 720));
     }
 
+    /**
+     * Associa un’area trasparente a una stanza e all’azione dell’NPC già disegnato nel fondale.
+     */
     protected final HotspotButton registerNpcHotspot(int room, Rectangle bounds,
             String label, Runnable action) {
         HotspotButton hotspot = registerActionHotspot(bounds, label, action);
@@ -134,6 +137,10 @@ public abstract class AbstractChapterPanel extends JPanel {
         bringArrowsToFront();
     }
 
+    /**
+     * Porta le frecce visibili davanti alle altre aree interattive, così gli NPC non impediscono
+     * l’uscita.
+     */
     protected final void bringArrowsToFront() {
         for (JButton arrow : new JButton[] {btnUp, btnDown, btnLeft, btnRight})
             if (arrow != null && arrow.isVisible()) setComponentZOrder(arrow, 0);
@@ -180,6 +187,9 @@ public abstract class AbstractChapterPanel extends JPanel {
         button.setIcon(new ImageIcon(muted));
     }
 
+    /**
+     * Controlla duplicati e condizioni del capitolo prima di nascondere l’oggetto e consegnarlo.
+     */
     private void collectWorldItem(WorldItemDefinition definition, JButton button) {
         GameState state = GameState.getInstance();
         if (state.hasItem(definition.id)) {
@@ -192,6 +202,9 @@ public abstract class AbstractChapterPanel extends JPanel {
         receiveItem(item);
     }
 
+    /**
+     * Aggiunge una sola copia dell’oggetto e aggiorna barra, suono e notifica di raccolta.
+     */
     protected final void receiveItem(Item item) {
         GameState state = GameState.getInstance();
         if (state.hasItem(item.getId())) return;
@@ -202,9 +215,20 @@ public abstract class AbstractChapterPanel extends JPanel {
         ToastNotification.show(this, "Hai ricevuto: " + item.getName(), item.getIconPath());
     }
 
+    /**
+     * Punto di estensione per imporre condizioni narrative alla raccolta; normalmente la
+     * consente.
+     */
     protected boolean canCollectWorldItem(String itemId, GameState state) { return true; }
+    /**
+     * Punto di estensione per nascondere oggetti non più coerenti con la storia.
+     */
     protected boolean shouldShowWorldItem(String itemId, GameState state) { return true; }
 
+    /**
+     * Mostra solo gli oggetti della stanza corrente non presenti nell’inventario e ammessi dal
+     * capitolo.
+     */
     private void updateWorldItemsVisibility(GameState state) {
         for (WorldItemDefinition item : worldItems.values()) {
             JButton button = itemButtons.get(item.id);
@@ -216,27 +240,41 @@ public abstract class AbstractChapterPanel extends JPanel {
         }
     }
 
-    /** Checkpoint della ricetta: comune ai tre capitoli, senza consumare oggetti. */
+    /** Punto di estensione: ogni capitolo riapre il proprio boss dopo una sconfitta. */
     public void retryBossEncounter() {
         throw new UnsupportedOperationException("Boss non configurato per questo capitolo");
     }
 
+    /**
+     * Torna alla stanza della ricetta e riapre il calderone senza consumare gli ingredienti.
+     */
     public final void retryCauldronAfterFailure() {
         int chapter = GameState.getInstance().getChapter();
         loadRoom(RecipeManager.forChapter(chapter).cauldronRoom());
         showCauldron();
     }
 
+    /**
+     * Verifica i requisiti comuni prima di aprire la finestra modale della miscela.
+     */
     protected final void showCauldron() {
         if (CauldronController.allowOpening(mainFrameRef)) {
             new CauldronOverlay(mainFrameRef).setVisible(true);
         }
     }
 
+    /**
+     * Riallinea la scena riutilizzata alla stanza presente nella partita caricata o
+     * ripristinata.
+     */
     public void refreshFromGameState() {
         loadRoom(GameState.getInstance().getCurrentRoom());
     }
 
+    /**
+     * Carica il fondale e riallinea oggetti, uscite, atmosfera e interazioni specifiche. Una
+     * stanza sconosciuta non modifica quella corrente.
+     */
     public void loadRoom(int roomId) {
         long started = System.nanoTime();
         if (!roomBgPaths.containsKey(roomId)) {
@@ -265,12 +303,19 @@ public abstract class AbstractChapterPanel extends JPanel {
         com.alchemist.hangover.controller.PerformanceLog.finished("Stanza " + roomId, started);
     }
 
+    /**
+     * Punto di estensione chiamato dopo l’aggiornamento comune della stanza; i capitoli vi
+     * riallineano dialoghi e NPC.
+     */
     protected void onRoomChanged() { }
     protected void setArrowsVisible(boolean visible) {
         btnUp.setVisible(visible); btnDown.setVisible(visible);
         btnLeft.setVisible(visible); btnRight.setVisible(visible);
     }
 
+    /**
+     * Mostra solo le direzioni che hanno una destinazione nella mappa della stanza.
+     */
     protected void updateArrowVisibility() {
         Map<String, Integer> exits = roomExits.getOrDefault(currentRoom, Map.of());
         btnUp.setVisible(exits.containsKey("UP"));
@@ -279,6 +324,9 @@ public abstract class AbstractChapterPanel extends JPanel {
         btnRight.setVisible(exits.containsKey("RIGHT"));
     }
 
+    /**
+     * Segue l’uscita configurata per la direzione; una direzione assente non causa spostamenti.
+     */
     protected void navigate(String direction) {
         Integer destination = roomExits.getOrDefault(currentRoom, Map.of()).get(direction);
         if (destination != null) {
@@ -300,6 +348,7 @@ public abstract class AbstractChapterPanel extends JPanel {
         }
     }
 
+    /** Dati dell’oggetto nella stanza; la sua visibilità è gestita separatamente dal pulsante. */
     private static final class WorldItemDefinition {
         private final String id, iconPath, name, description;
         private final int roomId;

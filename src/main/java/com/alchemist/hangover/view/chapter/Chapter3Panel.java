@@ -91,8 +91,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         add(breathingEffect);
         breathingEffect.setVisible(false);
 
-        // Overlay artistico opzionale: quando crepa.png verra' pubblicato
-        // sara' disegnato sulla roccia con opacita' tenue.
+        // L’illustrazione opzionale della crepa si sovrappone al fondale
+        // con opacità tenue, se la risorsa è disponibile.
         java.net.URL crackResource = getClass().getResource("/images/ui/crepa.png");
         if (crackResource != null) {
             Image crack = new ImageIcon(crackResource).getImage();
@@ -121,6 +121,9 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         }
     }
 
+    /**
+     * Riproduce il respiro della terra e mostra l’indizio associato alla crepa.
+     */
     private void inspectBreathingCrack() {
         if (currentRoom != 1) return;
         if (GameState.getInstance().isYmirPacified()) {
@@ -142,7 +145,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
     private void createGunnarHotspot() {
         // Gunnar e' gia' raffigurato seduto a sinistra in room2_rune.png.
         // L'area di clic e' trasparente: il ritratto va mostrato solo
-        // nella finestra di dialogo GunnarDialogueDialog.
+        // nella sessione condivisa dei dialoghi.
         // Coordinate in base alla risoluzione di gioco 1280x720.
         gunnarHotspot = new HotspotButton();
         gunnarHotspot.setBounds(143, 268, 139, 174);
@@ -194,6 +197,10 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         });
     }
 
+    /**
+     * Sceglie il dialogo di Gunnar in base ai progressi e mantiene il suo ritratto durante lo
+     * scambio.
+     */
     private void startGunnarDialogue() {
         if (gunnarConversationActive || npcConversationActive || currentRoom != 2) return;
         gunnarConversationActive = true;
@@ -207,6 +214,10 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         repaint();
     }
 
+    /**
+     * Distingue conclusione e interruzione: i progressi sono riconosciuti solo a dialogo
+     * terminato.
+     */
     private void closeGunnarDialogue(boolean completed) {
         if (!gunnarConversationActive) return;
         gunnarConversationActive = false;
@@ -261,6 +272,9 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 );
     }
 
+    /**
+     * Apre la conversazione dell’NPC e sospende le altre interazioni della stanza.
+     */
     private void startNpcDialogue(NpcDefinition npc) {
         if (gunnarConversationActive || npcConversationActive
                 || currentRoom != npc.room()) return;
@@ -275,6 +289,9 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         repaint();
     }
 
+    /**
+     * Consegna l’eventuale ricompensa narrativa e chiude la conversazione.
+     */
     private void finishNpcDialogue() {
         if (npcConversationActive && currentRoom == 4) {
             receiveItem(new Item("RADICE_NIDHOGG", "Radice Nera di Nidhogg",
@@ -288,6 +305,9 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         closeNpcDialogue();
     }
 
+    /**
+     * Ferma il testo senza eseguire le conseguenze della conclusione e ripristina i comandi.
+     */
     private void closeNpcDialogue() {
         if (!npcConversationActive) return;
         npcConversationActive = false;
@@ -299,6 +319,9 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         repaint();
     }
 
+    /**
+     * Mostra i versi derivati dal seme del rituale e registra la lettura dell’indizio.
+     */
     private void readStele() {
         GameState state = GameState.getInstance();
         String inscription = com.alchemist.hangover.gameplay.boss.YmirRuneRitual.steleInscription(
@@ -326,8 +349,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 "Apri il calderone della Forgia", this::openForge);
     }
 
-    /** I tre capitoli aprono esattamente lo stesso calderone, con la ricetta
-     * scelta da RecipeManager. Il dialogo modale impedisce click sul mondo. */
+    /** Apre il calderone condiviso con la ricetta scelta da RecipeManager.
+     * La finestra modale impedisce di interagire contemporaneamente con la stanza. */
     private void openForge() {
         if (npcConversationActive || gunnarConversationActive) return;
         showCauldron();
@@ -338,8 +361,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         // del fondale: NON sovrapporre il PNG del boss a questa stanza.
         // Il sprite completo boss_ymir.png resta nel combattimento.
         ymirHotspot = new HotspotButton();
-        // Area provvisoria al centro della scena: verra' affinata
-        // controllando il fondale aggiornato su GitHub.
+        // Area cliccabile del boss in coordinate logiche della scena.
+        // F6 permette di controllarne l’allineamento in modalità sviluppatore.
         ymirHotspot.setBounds(445, 175, 390, 415);
         ymirHotspot.setToolTipText("Parla con Ymir");
         ymirHotspot.getAccessibleContext().setAccessibleName(
@@ -349,6 +372,9 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         ymirHotspot.setVisible(false);
     }
 
+    /**
+     * Controlla saggezza e stele, propone la conferma se richiesta e apre il rituale di Ymir.
+     */
     private void triggerYmirEncounter(boolean askConfirmation) {
         GameState state = GameState.getInstance();
         if (state.isYmirPacified()) return;
@@ -383,6 +409,9 @@ public final class Chapter3Panel extends AbstractChapterPanel {
         triggerYmirEncounter(false);
     }
 
+    /**
+     * Ferma dialoghi ed effetti precedenti e riallinea NPC, indizi e accesso al boss.
+     */
     @Override
     protected void onRoomChanged() {
         if (!GameState.getInstance().isYmirPacified()) heardQuietGlade = false;
@@ -413,8 +442,8 @@ public final class Chapter3Panel extends AbstractChapterPanel {
             forgeHotspot.setVisible(currentRoom == 3);
             if (currentRoom == 3) setComponentZOrder(forgeHotspot, 0);
         }
-        // Dopo la vittoria il gigante si placa e appare la sua lacrima.
-        // Lo sprite compare solo nella stanza 7, senza coprire l'HUD.
+        // La ricompensa è già assegnata dal combattimento: qui si riallinea
+        // la visibilità dell’oggetto nel mondo allo stato della partita.
         if (ymirHotspot != null) {
             boolean visible = currentRoom == 7 && !GameState.getInstance().isYmirPacified();
             ymirHotspot.setVisible(visible);
