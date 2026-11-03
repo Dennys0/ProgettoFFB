@@ -6,14 +6,14 @@ import com.alchemist.hangover.model.GameState;
 public final class EarthChapterRules {
     private EarthChapterRules() { }
 
-    /** Stage choice stays independent from visual rendering and can be tested headlessly. */
+    /** Sceglie la fase del dialogo dai progressi, indipendentemente dalla grafica. */
     public static String gunnarDialoguePath(GameState state) {
         if (state.hasLearnedGunnarWisdom()) return "/dialogues/ch3_gunnar_repeat.txt";
         return state.hasHeardGunnarIntroduction()
                 ? "/dialogues/ch3_gunnar_reward.txt" : "/dialogues/ch3_gunnar.txt";
     }
 
-    /** Invoked only after the final line, never on ESC or a room change. */
+    /** Da chiamare alla fine del dialogo, mai su ESC o dopo un cambio stanza. */
     public static boolean completeGunnarStage(GameState state, boolean rewardConversation) {
         if (state.hasLearnedGunnarWisdom()) return false;
         if (!state.hasHeardGunnarIntroduction()) {

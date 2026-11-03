@@ -9,6 +9,10 @@ import java.net.URL;
 public final class ToastNotification {
     private ToastNotification() { }
 
+    /**
+     * Mostra un messaggio temporaneo vicino alla finestra di origine; la variante con percorso
+     * aggiunge l’icona dell’oggetto.
+     */
     public static void show(Component source, String message, String iconPath) {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(() -> show(source, message, iconPath));
@@ -47,6 +51,10 @@ public final class ToastNotification {
         timer.start();
     }
 
+    /**
+     * Mostra un messaggio temporaneo vicino alla finestra di origine; la variante con percorso
+     * aggiunge l’icona dell’oggetto.
+     */
     public static void show(Component source, String message) {
         show(source, message, null);
     }

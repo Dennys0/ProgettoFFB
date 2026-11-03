@@ -9,6 +9,9 @@ import javax.swing.border.EmptyBorder;
 
 /** Menu accessibile con ESC, senza modificare i salvataggi. */
 public final class PauseMenuDialog extends JDialog {
+    /**
+     * Costruisce le azioni dell’esplorazione e collega la ripresa alla chiusura della finestra.
+     */
     public PauseMenuDialog(JFrame owner) {
         super(owner, "Pausa", true);
         setSize(470, 480);

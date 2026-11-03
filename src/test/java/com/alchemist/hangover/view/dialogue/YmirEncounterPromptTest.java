@@ -7,7 +7,7 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/** The Ymir encounter uses the same accessible fantasy prompt as other bosses. */
+/** Verifica che Ymir usi la stessa finestra narrativa accessibile degli altri boss. */
 class YmirEncounterPromptTest {
     @Test void displaysCorrectMissingRequirementsWithoutBakedText() {
         String both = EarthChapterRules.missingYmirClues(false, false);

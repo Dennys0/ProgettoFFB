@@ -7,8 +7,11 @@ import java.util.Set;
 /** Surtur segue Arthur durante la mira. Una volta piantato il piede, la lama
  * cade sul punto fissato anche se Arthur si è già spostato. */
 public final class SurturDuel {
+    /** Corsie disponibili per spostamenti, attacchi e sigilli. */
     public enum Lane { LEFT, CENTER, RIGHT }
+    /** Fasi del duello: ondata, mira che segue Arthur e colpo sul bersaglio fissato. */
     public enum Attack { SURGE, AIM, STRIKE }
+    /** Esito della fase, interpretato dalla finestra per danni, messaggi e avanzamento. */
     public enum Result { DODGED, LOCKED, HIT, MISS, BROKEN, VICTORY }
 
     private final Random random;
@@ -31,12 +34,19 @@ public final class SurturDuel {
     public Attack attack() { return attack; }
     public Set<Lane> danger() { return Set.copyOf(danger); }
 
+    /**
+     * Individua il prossimo sigillo: prima un lato casuale, poi quello opposto e infine il
+     * centro.
+     */
     public Lane seal() {
         if (seals == 0) return firstSeal;
         if (seals == 1) return firstSeal == Lane.LEFT ? Lane.RIGHT : Lane.LEFT;
         return Lane.CENTER;
     }
 
+    /**
+     * Riduce il tempo della fase man mano che vengono spezzati i sigilli.
+     */
     public int durationMs() {
         return switch (attack) {
             case SURGE -> 1500 - seals * 200;
@@ -45,6 +55,10 @@ public final class SurturDuel {
         };
     }
 
+    /**
+     * Prepara un’ondata sulla posizione corrente e, dopo il primo sigillo, su una seconda
+     * corsia.
+     */
     private void startSurge() {
         attack = Attack.SURGE;
         danger = EnumSet.of(position);
@@ -54,6 +68,10 @@ public final class SurturDuel {
         }
     }
 
+    /**
+     * Risolve la fase: la mira fissa il bersaglio, l’ondata controlla la schivata e la lama
+     * rompe il sigillo solo se Arthur si è spostato.
+     */
     public Result impact() {
         if (attack == Attack.AIM) {
             danger = EnumSet.of(position);
@@ -70,6 +88,7 @@ public final class SurturDuel {
             }
             return hit ? Result.HIT : Result.DODGED;
         }
+        // Il sigillo si rompe attirando la lama su di esso e lasciando libera la corsia.
         boolean broken = !hit && danger.contains(seal());
         if (broken && ++seals == 3) return Result.VICTORY;
         waves = 0;

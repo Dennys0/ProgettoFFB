@@ -21,6 +21,9 @@ public final class EarthBreathEffect extends JComponent {
         setVisible(false);
     }
 
+    /**
+     * Riavvia una pulsazione di durata limitata; il timer si arresta all’ultimo fotogramma.
+     */
     public void startEffect() {
         stopEffect();
         frame = 0;
@@ -34,6 +37,9 @@ public final class EarthBreathEffect extends JComponent {
         repaint();
     }
 
+    /**
+     * Ferma il timer e nasconde la pulsazione, anche in caso di cambio stanza.
+     */
     public void stopEffect() {
         if (timer != null) {
             timer.stop();

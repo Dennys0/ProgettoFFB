@@ -41,6 +41,9 @@ public record GameSaveSnapshot(
                 ragnarokFlambeCreated, inventory);
     }
 
+    /**
+     * Genera un seme positivo da conservare nella fotografia della partita.
+     */
     private static int nextRuneSeed() {
         return ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
     }

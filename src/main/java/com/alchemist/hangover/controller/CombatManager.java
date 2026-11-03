@@ -9,14 +9,12 @@ import java.awt.Point;
 import javax.swing.JDialog;
 import javax.swing.Timer;
 
-/**
- * Common health, checkpoint and victory handling for all four chapter bosses.
- * Each boss keeps its own mechanic (WASD, Rán riddles, Ymir runes).
- */
+/** Coordina salute, ripresa e vittoria dei quattro boss.
+ * Le meccaniche specifiche restano nelle regole e nelle finestre dei combattimenti. */
 public final class CombatManager {
     private CombatManager() { }
 
-    /** @return true when Arthur has lost all available hearts */
+    /** @return true se Arthur ha esaurito tutti i cuori disponibili */
     public static boolean takeHit(String defeatReason) {
         GameState state = GameState.getInstance();
         boolean defeated = BossRules.takeHit(state);
@@ -28,6 +26,10 @@ public final class CombatManager {
         return true;
     }
 
+    /**
+     * Applica il danno comune e, quando è presente la finestra, aggiunge una breve scossa visiva
+     * senza sovrapporne altre.
+     */
     public static boolean takeHit(JDialog battle, String reason) {
         boolean defeated = takeHit(reason);
         if (battle.getRootPane().getClientProperty("hitShake") == null) {
@@ -50,6 +52,10 @@ public final class CombatManager {
         return defeated;
     }
 
+    /**
+     * Lascia percepire l’impatto, poi chiude il combattimento e mostra avviso e schermata di
+     * sconfitta.
+     */
     public static void finishDefeat(JDialog battle, StoryPromptDialog.Theme theme,
                                     String title, String message) {
         battle.setEnabled(false);
@@ -63,6 +69,10 @@ public final class CombatManager {
         afterImpact.start();
     }
 
+    /**
+     * Applica la ricompensa, segnala l’esito al registro facoltativo e riproduce il suono di
+     * successo.
+     */
     public static void victory(int chapter) {
         BossRules.victory(GameState.getInstance(), chapter);
         com.alchemist.hangover.network.ChallengeClient.report(chapter, true);

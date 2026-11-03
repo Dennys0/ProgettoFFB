@@ -4,7 +4,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/** Ymir now follows the same three-ingredient rule as the previous chapters. */
+/** Verifica la ricetta di Ymir secondo la regola comune dei tre ingredienti. */
 class RecipeManagerEarthTest {
     @Test void onlyTheCorrectEarthTrioWins() {
         RecipeManager.Recipe recipe=RecipeManager.forChapter(3);

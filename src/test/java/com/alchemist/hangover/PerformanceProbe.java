@@ -1,11 +1,12 @@
 package com.alchemist.hangover;
 
-/** Microbenchmark manuale headless: non misura la finestra o il rendering completo. */
 import com.alchemist.hangover.database.*;
 import com.alchemist.hangover.model.*;
 import com.alchemist.hangover.view.chapter.*;
 import javax.swing.*;
 import java.awt.Image;
+/** Misure manuali senza schermo: costruzione del pannello, stanze, icone e H2 in memoria.
+ * Non rappresentano il tempo di una partita completa o della finestra visibile. */
 public class PerformanceProbe {
  static void timed(String label, Runnable r) { long t=System.nanoTime(); r.run(); System.out.printf("BENCH %s %.2f ms%n",label,(System.nanoTime()-t)/1e6); }
  public static void main(String[] args) throws Exception {

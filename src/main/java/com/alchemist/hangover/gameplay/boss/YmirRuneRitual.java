@@ -8,6 +8,7 @@ import java.util.Random;
 
 /** Rituale deterministico generato da un seed di partita, non da ogni apertura del boss. */
 public final class YmirRuneRitual {
+    /** Rune e versi che permettono di riconoscerle nella stele. */
     public enum Rune {
         RADICE("Radice", "la radice trattiene il mondo"),
         BATTITO("Battito", "il cuore pulsa nel granito"),
@@ -23,6 +24,7 @@ public final class YmirRuneRitual {
         public String verse() { return verse; }
     }
 
+    /** Piattaforme tra cui scegliere prima di tracciare una runa. */
     public enum Zone {
         SINISTRA("Sinistra"), CENTRO("Centro"), DESTRA("Destra");
         private final String label;
@@ -30,10 +32,15 @@ public final class YmirRuneRitual {
         public String label() { return label; }
     }
 
+    /** Una fase del rituale lega una runa alla piattaforma sicura corrispondente. */
     public record Step(Rune rune, Zone safeZone) { }
 
     private YmirRuneRitual() { }
 
+    /**
+     * Mescola rune e zone con lo stesso seme casuale, producendo tre coppie senza ripetizioni in
+     * una lista non modificabile.
+     */
     public static List<Step> fromSeed(int seed) {
         if (seed <= 0) throw new IllegalArgumentException("Seed del rituale non inizializzato");
         Random random = new Random(seed);
@@ -46,11 +53,18 @@ public final class YmirRuneRitual {
         return List.copyOf(result);
     }
 
+    /**
+     * Richiede contemporaneamente la runa attesa e la piattaforma corretta.
+     */
     public static boolean isCorrectStep(Step expected, Rune attemptedRune, Zone attemptedZone) {
         return expected != null && expected.rune() == attemptedRune
                 && expected.safeZone() == attemptedZone;
     }
 
+    /**
+     * Ricostruisce il rituale dal seme persistente della partita, inizializzandolo se
+     * necessario.
+     */
     public static List<Step> current(GameState state) {
         return fromSeed(state.ensureYmirRuneSeed());
     }

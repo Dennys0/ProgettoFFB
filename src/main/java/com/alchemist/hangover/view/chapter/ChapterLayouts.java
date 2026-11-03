@@ -7,6 +7,7 @@ import java.util.Map;
  * Un solo formato di configurazione per tutti i capitoli.
  */
 public final class ChapterLayouts {
+    /** Fondali e uscite: la costruzione rifiuta collegamenti verso stanze non definite. */
     record Layout(Map<Integer, String> backgrounds,
                   Map<Integer, Map<String, Integer>> exits) {
         Layout {
@@ -120,6 +121,9 @@ public final class ChapterLayouts {
                 .getOrDefault(room, "Stanza " + room);
     }
 
+    /**
+     * Restituisce la configurazione di fondali e collegamenti per il capitolo richiesto.
+     */
     static Layout forChapter(int chapter) {
         Layout layout = CHAPTERS.get(chapter);
         if (layout == null) {

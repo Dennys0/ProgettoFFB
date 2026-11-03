@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import static com.alchemist.hangover.gameplay.boss.SurturDuel.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Simula mira, schivata e rottura dei sigilli, inclusi gli errori di anticipo e ritardo.
+ */
 class SurturDuelTest {
     private void dodge(SurturDuel duel) {
         for (Lane lane : Lane.values()) {

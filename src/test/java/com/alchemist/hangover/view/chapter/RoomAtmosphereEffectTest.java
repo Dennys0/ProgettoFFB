@@ -6,6 +6,10 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica stili ambientali, disegno senza finestra e passaggio dei clic attraverso le
+ * particelle.
+ */
 class RoomAtmosphereEffectTest {
   @Test void distinctiveEffectsAcrossThreeChapters() {
     assertEquals(RoomAtmosphereEffect.Style.SKY, RoomAtmosphereEffect.styleFor("/images/chapter1/room1_deck.png"));

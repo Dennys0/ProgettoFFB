@@ -6,11 +6,9 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.*;
 
 /**
- * Shared world interaction feedback for Chapters I, II and III.
- *
- * Every hotspot remains visually transparent at rest. Hovering shows a
- * small localized light and an elegant dark interaction label close to
- * the pointer. No rectangles around characters, cauldrons or scenery.
+ * Pulsante trasparente per le interazioni nei quattro capitoli.
+ * Al passaggio del mouse mostra un bagliore e la descrizione dell’azione.
+ * I contorni delle aree cliccabili compaiono soltanto in modalità sviluppatore.
  */
 public final class HotspotButton extends JButton {
     // Modalita' di sviluppo: inattiva di default, quindi mai visibile al giocatore.
@@ -45,7 +43,7 @@ public final class HotspotButton extends JButton {
         });
     }
 
-    /** Collectibles have a warmer, slightly stronger glint than scenery. */
+    /** Gli oggetti raccoglibili possono mostrare un bagliore più evidente dello scenario. */
     public void setHoverHighlightEnabled(boolean enabled) {
         collectibleEmphasis = enabled;
         repaint();
@@ -55,6 +53,9 @@ public final class HotspotButton extends JButton {
         return collectibleEmphasis;
     }
 
+    /**
+     * Applica lo stile comune alla descrizione mostrata dal sistema di suggerimenti Swing.
+     */
     @Override
     public JToolTip createToolTip() {
         JToolTip tooltip = super.createToolTip();
@@ -110,7 +111,7 @@ public final class HotspotButton extends JButton {
             int y = pointerY < 0 ? getHeight() / 2 : pointerY;
             int radius = collectibleEmphasis ? 43 : 34;
 
-            // A localized circular light, never a rectangular outline.
+            // Luce circolare localizzata, senza un bordo rettangolare nell’interfaccia normale.
             Paint light = new RadialGradientPaint(new Point(x, y), radius,
                     new float[]{0f, 0.34f, 1f},
                     new Color[]{

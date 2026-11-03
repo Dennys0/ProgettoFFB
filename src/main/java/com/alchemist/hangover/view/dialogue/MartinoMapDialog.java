@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
  * gia' scritte e bottoni, causando click e proporzioni fragili.
  */
 public class MartinoMapDialog extends JDialog {
+    /** Comunica al capitolo l’esito della scelta con Martino. */
     public interface ChoiceCallback {
         void onChoiceMade(boolean gaveMap);
     }
@@ -49,6 +50,9 @@ public class MartinoMapDialog extends JDialog {
         });
     }
 
+    /**
+     * Verifica che la mappa sia disponibile e non già consegnata a Martino.
+     */
     static boolean canDonate(GameState state) {
         return state != null && state.hasItem(MAP_ID)
                 && !state.hasGivenMapToMartino();
@@ -73,6 +77,9 @@ public class MartinoMapDialog extends JDialog {
         return key;
     }
 
+    /**
+     * Chiude la scelta applicando lo scambio solo quando confermato e ancora valido.
+     */
     private void complete(boolean wantsToDonate) {
         if (completed) return;
         Item reward = wantsToDonate ? donateMap(GameState.getInstance()) : null;
@@ -212,6 +219,9 @@ public class MartinoMapDialog extends JDialog {
         return panel;
     }
 
+    /**
+     * Cerca ricorsivamente il pulsante identificato dal nome nel contenuto condiviso.
+     */
     private static JButton findButton(Container container, String name) {
         for (Component child : container.getComponents()) {
             if (child instanceof JButton button && name.equals(button.getName())) {

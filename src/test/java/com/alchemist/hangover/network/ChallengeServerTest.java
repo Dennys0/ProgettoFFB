@@ -6,6 +6,10 @@ import java.net.http.*;
 import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Prova il registro su HTTP locale: esiti validi, dati errati, limiti del corpo e metodi non
+ * consentiti.
+ */
 class ChallengeServerTest {
     @Test void recordsValidatedResultsAndRejectsInvalidRequests() throws Exception {
         try (ChallengeServer server = new ChallengeServer(0)) {

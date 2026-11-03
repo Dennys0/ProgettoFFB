@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica che la scena sia costruita una sola volta senza alterare stato caricato e ripresa del
+ * boss.
+ */
 class LazySceneTest {
     @Test void createsOnceAndPreservesLoadedStateAndRetryCheckpoint() throws Exception {
         SwingUtilities.invokeAndWait(() -> {

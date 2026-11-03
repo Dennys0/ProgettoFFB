@@ -8,6 +8,9 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Controlla schermate condivise e salvataggi di passaggio senza modificare la partita attiva.
+ */
 class ChapterCompletionPanelTest {
     @Test void oneScreenProvidesThreeChapterCompletionsAndOptionalArtwork() throws Exception {
         SwingUtilities.invokeAndWait(() -> {

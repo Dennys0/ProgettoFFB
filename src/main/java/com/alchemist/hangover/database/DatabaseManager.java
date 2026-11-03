@@ -10,6 +10,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.h2.tools.RunScript;
 
+/**
+ * Gestisce connessioni H2, schema SQL e arresto del database. Ogni chiamante deve chiudere la
+ * connessione ottenuta al termine dell’operazione.
+ */
 public class DatabaseManager {
 
     private static final String DB_DIR = "saves";

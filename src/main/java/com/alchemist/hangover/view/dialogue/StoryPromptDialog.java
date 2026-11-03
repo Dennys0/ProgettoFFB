@@ -9,13 +9,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 /**
- * Reusable adventure-style choice and warning dialog for older chapters.
- * Unlike the Chapter III Ymir prompt, Chapters I and II do not yet have
- * dedicated illustration assets, so this is painted by Swing at runtime.
- *
- * Keeping the story UI separate lets upcoming ship NPCs reuse it.
+ * Finestre condivise per avvisi, conferme e ricompense dei quattro capitoli.
+ * Disegna la cornice con Swing e applica il tema del capitolo; le scelte usano pulsanti reali.
  */
 public final class StoryPromptDialog {
+    /** Colori delle finestre narrative per ciascun ambiente. */
     public enum Theme {
         SKY("IL CIELO DI ASGARD", new Color(210, 159, 84), new Color(41, 42, 54)),
         OCEAN("LE PROFONDITA' DI RAN", new Color(103, 200, 215), new Color(24, 50, 61)),
@@ -35,7 +33,7 @@ public final class StoryPromptDialog {
 
     private StoryPromptDialog() { }
 
-    /** One full-screen-style reward panel, including the item's real sprite. */
+    /** Mostra la ricompensa con l’immagine dell’oggetto, senza modificare l’inventario. */
     public static void reward(Frame owner, StoryPromptDialog.Theme theme,
                               String title, String narrative, Item item) {
         JDialog dialog = new JDialog(owner, title, true);
@@ -49,8 +47,8 @@ public final class StoryPromptDialog {
     }
 
     /**
-     * Non-window factory for layout tests; the actual action button remains
-     * a Swing button with the same styling as the existing story choices.
+     * Costruisce il contenuto senza aprire finestre, così il risultato è verificabile nei test.
+     * Il pulsante mantiene lo stile delle altre scelte narrative.
      */
     static JPanel buildRewardContent(StoryPromptDialog.Theme theme, String title,
                                      String narrative, Item item, Runnable onContinue) {
@@ -146,6 +144,9 @@ public final class StoryPromptDialog {
         return panel;
     }
 
+    /**
+     * Mostra una scelta modale e restituisce true solo per l’azione principale.
+     */
     public static boolean confirm(Frame owner, Theme theme, String title,
                                   String message, String accept, String decline) {
         JDialog dialog = new JDialog(owner, title, true);
@@ -158,6 +159,9 @@ public final class StoryPromptDialog {
         return accepted[0];
     }
 
+    /**
+     * Mostra un avviso con una sola azione di chiusura.
+     */
     public static void message(Frame owner, Theme theme, String title, String text) {
         JDialog dialog = new JDialog(owner, title, true);
         JPanel content = buildContent(theme, title, text, "HO CAPITO", null,
@@ -166,8 +170,8 @@ public final class StoryPromptDialog {
     }
 
     /**
-     * Package-private for headless UI tests; all actions are real Swing controls.
-     * A null secondary label represents an informational prompt.
+     * Costruisce i controlli Swing anche nei test senza schermo.
+     * Un’etichetta secondaria nulla indica un avviso con una sola azione.
      */
     static JPanel buildContent(Theme theme, String title, String message,
                                String accept, String decline,
@@ -295,6 +299,9 @@ public final class StoryPromptDialog {
         });
     }
 
+    /**
+     * Configura dimensioni, posizione e contenuto della finestra modale prima di visualizzarla.
+     */
     private static void show(Frame owner, JDialog dialog, JPanel content) {
         dialog.setUndecorated(true);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

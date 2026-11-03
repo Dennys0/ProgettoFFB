@@ -27,6 +27,9 @@ public final class BossRules {
         state.addItem(reward);
     }
 
+    /**
+     * Costruisce la ricompensa del boss richiesto senza aggiungerla direttamente all’inventario.
+     */
     public static Item rewardForChapter(int chapter) {
         return switch (chapter) {
             case 1 -> new Item(

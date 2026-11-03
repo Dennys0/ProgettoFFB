@@ -7,6 +7,10 @@ import com.alchemist.hangover.view.chapter.AbstractChapterPanel;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * Schermata di sconfitta che distingue boss e miscele errate. La ripresa ripristina la salute e
+ * riapre la prova corretta dopo il ritorno alla scena del capitolo.
+ */
 public class GameOverPanel extends JPanel {
 
     private JLabel reasonLabel;
@@ -29,6 +33,10 @@ public class GameOverPanel extends JPanel {
 
     boolean isCauldronFailure() { return cauldronFailure; }
 
+    /**
+     * Collega ripresa e ritorno al menu. La prova viene riaperta dopo la transizione alla scena
+     * del capitolo.
+     */
     public GameOverPanel() {
         setLayout(null);
         setBackground(new Color(15, 10, 15));

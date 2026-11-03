@@ -11,6 +11,10 @@ import java.util.Objects;
 public final class ChapterProgression {
     private ChapterProgression() { }
 
+    /**
+     * Prepara lo stato da salvare all’inizio del capitolo successivo senza spostare la partita
+     * attiva. All’ingresso nel capitolo 3 assegna un seme persistente al rituale.
+     */
     public static GameSaveSnapshot saveAfterCompletion(GameState state, int completedChapter) {
         GameSaveSnapshot s = GameSaveSnapshot.capture(Objects.requireNonNull(state, "state"));
         return switch (completedChapter) {
@@ -38,6 +42,10 @@ public final class ChapterProgression {
         };
     }
 
+    /**
+     * Avanza realmente la partita: imposta capitolo e stanza iniziale e ripristina salute e
+     * condizioni di ripresa previste.
+     */
     public static void advanceToNextChapter(GameState state, int completedChapter) {
         Objects.requireNonNull(state, "state");
         switch (completedChapter) {

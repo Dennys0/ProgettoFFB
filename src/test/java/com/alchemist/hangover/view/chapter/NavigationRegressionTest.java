@@ -9,6 +9,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Protegge l’uscita presso il serpente e il corretto riavvio di prologo e nuova partita.
+ */
 class NavigationRegressionTest {
     @Test
     void serpentCannotCoverTheExit() throws Exception {

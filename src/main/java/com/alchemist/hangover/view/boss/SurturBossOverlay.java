@@ -11,6 +11,10 @@ import java.awt.event.MouseEvent;
 import java.util.Random;
 import javax.swing.*;
 
+/**
+ * Interfaccia del duello con Surtur: visualizza corsie, pericoli e sigilli. Swing gestisce tempo
+ * e comandi, mentre SurturDuel determina gli esiti degli attacchi.
+ */
 public final class SurturBossOverlay extends JDialog {
     private final SurturDuel duel = new SurturDuel(new Random());
     private final JLabel phaseLabel = label(22, Font.BOLD);
@@ -126,6 +130,9 @@ public final class SurturBossOverlay extends JDialog {
         return text;
     }
 
+    /**
+     * Aggiorna la corsia scelta e la rappresentazione del giocatore nell’arena.
+     */
     private void move(SurturDuel.Lane lane) {
         if (finished) return;
         duel.move(lane);
@@ -137,6 +144,9 @@ public final class SurturBossOverlay extends JDialog {
                 path)).getImage();
     }
 
+    /**
+     * Imposta la durata della nuova fase secondo le regole del duello.
+     */
     private void startCountdown() {
         countdownMs = duel.durationMs();
         deadlineNanos = System.nanoTime() + countdownMs * 1_000_000L;
@@ -145,6 +155,9 @@ public final class SurturBossOverlay extends JDialog {
         clockLabel.setText(String.format("%.1f s", countdownMs / 1000.0));
     }
 
+    /**
+     * Traduce la fase in indicazioni visive per schivata, mira e impatto.
+     */
     private void refreshInstructions() {
         phaseLabel.setText(duel.seals() == 2 ? "III  •  IL CALDERONE D’OSSIDIANA"
                 : "SIGILLI INFRANTI   " + duel.seals() + " / 2");
@@ -156,6 +169,9 @@ public final class SurturBossOverlay extends JDialog {
         arena.repaint();
     }
 
+    /**
+     * Fa avanzare l’animazione e controlla quando risolvere l’impatto della fase.
+     */
     private void tick() {
         if (finished) return;
         long now = System.nanoTime();
@@ -174,6 +190,9 @@ public final class SurturBossOverlay extends JDialog {
         if (millisRemaining == 0) resolveImpact();
     }
 
+    /**
+     * Interroga il duello, applica eventuali danni o vittoria e prepara la fase seguente.
+     */
     private void resolveImpact() {
         SurturDuel.Result result = duel.impact();
         switch (result) {
@@ -219,6 +238,7 @@ public final class SurturBossOverlay extends JDialog {
         super.dispose();
     }
 
+    /** Disegna corsie, sigilli e segnali usando lo stato di SurturDuel. */
     private final class ArenaPanel extends JPanel {
         ArenaPanel() {
             setOpaque(false);

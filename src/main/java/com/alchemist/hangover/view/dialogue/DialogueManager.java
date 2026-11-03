@@ -13,13 +13,16 @@ import java.util.function.Function;
 import javax.swing.*;
 
 /**
- * Shared interaction wiring for dialogue panels in every chapter and prologue.
- * The underlying DialogueSystem still owns typing, reading and completion;
- * narrative callbacks remain in the chapter (Gunnar, boss, Martino, NPC).
+ * Collega clic, tastiera e ritratti al motore dei dialoghi di prologo e capitoli.
+ * DialogueSystem gestisce testo e avanzamento; il capitolo decide gli esiti narrativi.
  */
 public final class DialogueManager {
     private DialogueManager() { }
 
+    /**
+     * Collega clic sulla cornice e sul ritratto all’avanzamento, rispettando la condizione di
+     * dialogo attivo.
+     */
     public static void connect(DialogueBox box, JLabel portrait,
                                DialogueSystem dialogue, BooleanSupplier active) {
         box.getRevealLabel().addMouseListener(new MouseAdapter() {
@@ -38,6 +41,9 @@ public final class DialogueManager {
         if (portrait != null) portrait.addMouseListener(advance);
     }
 
+    /**
+     * Associa spazio e invio all’avanzamento solo quando la conversazione è attiva.
+     */
     public static void bindAdvance(JComponent owner, String actionName,
                                    BooleanSupplier active, DialogueSystem dialogue) {
         InputMap inputs = owner.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -51,8 +57,8 @@ public final class DialogueManager {
         });
     }
     /**
-     * C1/C2 share the same portrait, dialogue frame and input lifecycle.
-     * The chapter keeps ownership of the narrative onComplete callback.
+     * Riunisce ritratto, cornice e comandi di una conversazione nella scena.
+     * La funzione di completamento resta definita dal capitolo che crea la sessione.
      */
     public static final class SceneSession {
         private final JPanel chapter;
@@ -98,6 +104,9 @@ public final class DialogueManager {
             if (bindKeys) bindAdvance(chapter, "advanceDialogue", this::isVisible, dialogue);
         }
 
+        /**
+         * Registra il percorso del ritratto senza decodificare subito l’immagine.
+         */
         public void addPortrait(String speaker, String path) {
             portraitPaths.put(speaker, path);
         }
@@ -129,6 +138,10 @@ public final class DialogueManager {
             return box.isVisible();
         }
 
+        /**
+         * Porta cornice e ritratto in primo piano e avvia la risorsa narrativa, evitando avvii
+         * sovrapposti.
+         */
         public void start(String resource) {
             if (isVisible()) return;
             box.setVisible(true);
@@ -139,7 +152,7 @@ public final class DialogueManager {
             if (fixedPortraitSpeaker != null) updatePortrait();
         }
 
-        /** Closing by navigation must never call a narrative completion callback. */
+        /** Interrompe la conversazione senza eseguirne le conseguenze narrative. */
         public void stop() {
             dialogue.stop();
             box.setVisible(false);
@@ -147,6 +160,9 @@ public final class DialogueManager {
             portrait.setVisible(false);
         }
 
+        /**
+         * Sceglie il ritratto, lo carica al primo utilizzo e applica posizione e proporzioni.
+         */
         private void updatePortrait() {
             DialogueSystem.DialogueLine line = dialogue.getCurrentLine();
             String speaker = fixedPortraitSpeaker != null ? fixedPortraitSpeaker

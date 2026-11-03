@@ -1,6 +1,9 @@
 package com.alchemist.hangover.controller;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+/**
+ * Verifica l’associazione fra fondali e accenti sonori senza richiedere un dispositivo audio.
+ */
 class AudioManagerRoomCueTest {
  @Test void dedicatedRoomSoundCuesAreCorrect() {
    assertEquals(AudioManager.Effect.WIND_GUST, AudioManager.cueForRoom("/images/chapter1/room1_deck.png"));

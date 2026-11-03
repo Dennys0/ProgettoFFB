@@ -9,6 +9,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Protegge gli invarianti di salute, inventario, progressi, seme del rituale e ripristino della
+ * partita.
+ */
 class GameStateTest {
     @AfterEach
     void restoreState() {
@@ -87,7 +91,7 @@ class GameStateTest {
         assertEquals(1, state.getInventory().size());
         assertThrows(UnsupportedOperationException.class,
                 () -> state.getInventory().clear());
-        state.addItem(first); // duplicate ID must still be rejected
+        state.addItem(first); // Un identificatore duplicato deve essere rifiutato anche con un’altra istanza.
         state.addItem(second);
         assertEquals(2, state.getInventory().size());
         state.clearInventory();

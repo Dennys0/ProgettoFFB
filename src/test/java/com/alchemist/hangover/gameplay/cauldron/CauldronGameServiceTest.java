@@ -6,6 +6,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica consumo selettivo degli ingredienti e conseguenze delle miscele senza interfaccia.
+ */
 class CauldronGameServiceTest {
     @AfterEach void resetState() { GameState.getInstance().resetState(); }
 

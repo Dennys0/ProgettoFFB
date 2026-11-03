@@ -19,6 +19,7 @@ import javax.swing.*;
  */
 public final class Chapter4Panel extends AbstractChapterPanel {
 
+    /** Associa un personaggio a stanza, area cliccabile e risorsa narrativa. */
     record Npc(int room, Rectangle bounds, String label, String dialogue) { }
 
     static final List<Npc> NPCS = List.of(
@@ -91,6 +92,9 @@ public final class Chapter4Panel extends AbstractChapterPanel {
                 () -> startDialogue(npc.dialogue()));
     }
 
+    /**
+     * Nasconde le interazioni concorrenti durante la conversazione con l’NPC.
+     */
     private void startDialogue(String resource) {
         if (dialogues.isVisible()) return;
         setArrowsVisible(false);
@@ -99,6 +103,9 @@ public final class Chapter4Panel extends AbstractChapterPanel {
         dialogues.start(resource);
     }
 
+    /**
+     * Applica la lezione o la ricompensa dell’NPC e riattiva le interazioni della stanza.
+     */
     private void endDialogue() {
         dialogues.stop();
         switch (currentRoom) {
@@ -123,6 +130,9 @@ public final class Chapter4Panel extends AbstractChapterPanel {
         onRoomChanged();
     }
 
+    /**
+     * Se il cocktail finale esiste già, riapre l’epilogo; altrimenti usa il calderone comune.
+     */
     private void openCauldron() {
         GameState state = GameState.getInstance();
         if (state.isRagnarokFlambeCreated()) {
@@ -134,6 +144,9 @@ public final class Chapter4Panel extends AbstractChapterPanel {
         showCauldron();
     }
 
+    /**
+     * Evita di ripetere un boss già sconfitto e apre il duello dopo l’eventuale conferma.
+     */
     private void startSurtur(boolean confirm) {
         GameState state = GameState.getInstance();
         if (state.isBossDefeated()) {
@@ -154,6 +167,9 @@ public final class Chapter4Panel extends AbstractChapterPanel {
         startSurtur(false);
     }
 
+    /**
+     * Filtra cuore, scudo, calderone, stele e boss secondo la stanza corrente.
+     */
     private void setExtrasVisible(boolean visible) {
         pulse.setVisible(visible && currentRoom == 1);
         shield.setVisible(visible && currentRoom == 2);

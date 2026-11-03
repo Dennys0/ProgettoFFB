@@ -6,6 +6,9 @@ import javax.swing.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica che la pulsazione si arresti e lasci passare i clic verso le interazioni sottostanti.
+ */
 class EarthBreathEffectTest {
     @Test
     void pulseIsNonInteractiveAndCanStopWithoutCoveringNavigation() throws Exception {

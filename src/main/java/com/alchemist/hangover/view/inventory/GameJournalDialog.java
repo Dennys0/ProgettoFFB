@@ -64,6 +64,9 @@ public final class GameJournalDialog extends JDialog {
         return scroll;
     }
 
+    /**
+     * Ricava gli obiettivi ancora aperti dallo stato della partita.
+     */
     private String goals() {
         if (state.getChapter() >= 3) {
             if (state.isYmirOldFashionedCreated()) {
@@ -95,6 +98,9 @@ public final class GameJournalDialog extends JDialog {
         return "Ho superato la prova di Hræsvelgr. Mi resta da preparare la miscela nel calderone.";
     }
 
+    /**
+     * Compone gli indizi delle ricette collegati ai progressi del giocatore.
+     */
     private String recipes() {
         StringBuilder text = new StringBuilder("Annotazioni alchemiche\n\n");
         boolean found = false;
@@ -126,6 +132,9 @@ public final class GameJournalDialog extends JDialog {
         return text.toString();
     }
 
+    /**
+     * Riepiloga i fatti narrativi già riconosciuti nella partita.
+     */
     private String story() {
         StringBuilder text = new StringBuilder();
         text.append("CAPITOLO I — Il segreto del calderone\n")

@@ -16,10 +16,17 @@ public final class ChallengeClient {
                 return thread;
             }, new ThreadPoolExecutor.AbortPolicy());
     private ChallengeClient() { }
+    /**
+     * Costruisce l’indirizzo del registro sulla macchina locale, usando la porta configurata.
+     */
     private static URI endpoint(String path) {
         int port = Integer.getInteger("alchemist.registry.port", 8765);
         return URI.create("http://127.0.0.1:" + port + path);
     }
+    /**
+     * Invia l’esito in background solo se il registro è abilitato. Con coda piena o servizio
+     * assente l’evento non viene ritentato e il gioco prosegue.
+     */
     public static void report(int chapter, boolean won) {
         if (!Boolean.getBoolean("alchemist.registry")) return;
         if (chapter < 1 || chapter > 4) throw new IllegalArgumentException("Capitolo non valido");

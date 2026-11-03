@@ -5,6 +5,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica che preparare un salvataggio non anticipi la progressione della partita attiva.
+ */
 class ChapterProgressionTest {
     @AfterEach void clear() { GameState.getInstance().resetState(); }
 

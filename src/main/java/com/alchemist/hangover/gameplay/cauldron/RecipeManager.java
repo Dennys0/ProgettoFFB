@@ -7,10 +7,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/** Only one canonical recipe per chapter. UI and penalties are kept separate. */
+/** Una ricetta per capitolo; interfaccia e conseguenze sulla partita sono separate. */
 public final class RecipeManager {
+    /** Esiti della valutazione, senza effetti diretti sulla partita. */
     public enum Result { INCOMPLETE, SUCCESS, WRONG_INGREDIENT }
 
+    /** Configurazione con tre ingredienti corretti e insieme degli ingredienti ammessi, comprese le esche. */
     public record Recipe(int chapter, int cauldronRoom, String drinkName,
                          Set<String> correct, Set<String> available) {
         public Recipe {
@@ -40,8 +42,12 @@ public final class RecipeManager {
                             "ZOLFO_LOKI", "LACRIMA_HEL"))
     );
 
+    // Classe di sole regole statiche: il costruttore privato impedisce istanze inutili.
     private RecipeManager() { }
 
+    /**
+     * Restituisce la configurazione della ricetta e rifiuta i capitoli non definiti.
+     */
     public static Recipe forChapter(int chapter) {
         Recipe recipe = RECIPES.get(chapter);
         if (recipe == null) throw new IllegalArgumentException(
@@ -49,7 +55,7 @@ public final class RecipeManager {
         return recipe;
     }
 
-    /** Decoys count toward the THREE available ingredients, but not toward success. */
+    /** Le esche contano fra i tre ingredienti necessari per aprire il calderone, ma non per riuscire nella miscela. */
     public static boolean canOpen(int chapter, Collection<Item> inventory) {
         if (inventory == null) return false;
         Set<String> available = forChapter(chapter).available();
@@ -57,6 +63,9 @@ public final class RecipeManager {
                 .filter(available::contains).distinct().limit(3).count() >= 3;
     }
 
+    /**
+     * Filtra l’inventario conservando solo gli ingredienti ammessi nel capitolo.
+     */
     public static List<Item> usableItems(int chapter, Collection<Item> inventory) {
         Set<String> available = forChapter(chapter).available();
         if (inventory == null) return List.of();
@@ -64,6 +73,10 @@ public final class RecipeManager {
                 .filter(item -> available.contains(item.getId())).toList();
     }
 
+    /**
+     * Richiede tre identificatori distinti e la combinazione esatta. Nel capitolo 4 controlla
+     * anche che la Brace sia stata scelta per ultima.
+     */
     public static Result evaluate(int chapter, Collection<String> ids) {
         if (ids == null || ids.size() != 3 || ids.stream().anyMatch(Objects::isNull)
                 || ids.stream().distinct().count() != 3) return Result.INCOMPLETE;
@@ -75,7 +88,7 @@ public final class RecipeManager {
         return Result.SUCCESS;
     }
 
-    /** Gives the player a meaningful failure message without destroying items. */
+    /** Spiega il fallimento della miscela senza consumare gli oggetti. */
     public static String failureText(int chapter, Collection<String> selection,
                                      Collection<Item> inventory) {
         Set<String> required = forChapter(chapter).correct();

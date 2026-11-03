@@ -12,16 +12,21 @@ import com.alchemist.hangover.view.dialogue.StoryPromptDialog;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * Interazioni del veliero: dialoghi, scambio della mappa con Martino, baule e accesso a
+ * Hræsvelgr. Riutilizza navigazione e raccolta della classe base e distingue gli esiti per tipo
+ * di dialogo.
+ */
 public class Chapter1Panel extends AbstractChapterPanel {
 
     private JButton room7ScreenClickHotspot;
     private HotspotButton chest;
     private static final Rectangle CHEST_AREA = new Rectangle(438, 550, 84, 72);
 
-    // Elementi UI per il sistema di dialogo in-game
+    // Componenti dell’interfaccia condivisa dei dialoghi.
     private final DialogueManager.SceneSession dialogue;
 
-    // Hotspots
+    // Aree interattive della stanza.
     private JButton martinoHotspot;
     private JButton cauldronHotspot;
 
@@ -35,7 +40,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
 
     public Chapter1Panel(JFrame mainFrame) {
         initializeChapterBase(mainFrame, ChapterLayouts.forChapter(1));
-        // 2. Caricamento Risorse Grafiche Dialoghi
+        // Registrazione dei ritratti delle conversazioni.
 
         dialogue = new DialogueManager.SceneSession(this,
                 speaker -> ("HRAESVELGR".equals(speaker) || "GRIFONE".equals(speaker)) ? new Rectangle(100, 12, 1080, 450)
@@ -49,14 +54,17 @@ public class Chapter1Panel extends AbstractChapterPanel {
         dialogue.addPortrait("DIAVOLETTO", "/images/shared/npc/diavoletto_realms.png");
         dialogue.addFittedPortrait("GRIFONE", "/images/chapter1/npc/grifone_realms.png");
 
-        // 4. Inizializzazione Hotspots & Oggetti
+        // Inizializzazione delle aree interattive e degli oggetti.
         initHotspots();
 
-        // 5. Inizializzazione UI Dialoghi
+        // Collegamento dei dialoghi all’interfaccia.
 
         loadRoom(1);
     }
 
+    /**
+     * Registra interazioni e oggetti raccoglibili del veliero nelle rispettive stanze.
+     */
     private void initHotspots() {
         room7ScreenClickHotspot = registerActionHotspot(
                 new Rectangle(150, 100, 980, 500),
@@ -73,7 +81,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
                 new Rectangle(500, 350, 280, 250),
                 "Interagisci con il calderone d'ottone", this::interactWithCauldron);
 
-        // Gli NPC sono gia' disegnati nelle cinque nuove immagini delle stanze.
+        // Gli NPC sono già disegnati nei fondali delle stanze.
         // Usiamo quindi soltanto aree invisibili e lo sprite nei dialoghi.
         addNpcHotspot(1, new Rectangle(710, 130, 150, 180),
                 "Parla con il mozzo", "/dialogues/mozzo_dialogue.txt");
@@ -136,9 +144,13 @@ public class Chapter1Panel extends AbstractChapterPanel {
         }
     }
 
+    /**
+     * Interrompe i dialoghi precedenti e aggiorna le interazioni senza assegnare ricompense di
+     * conversazioni incomplete.
+     */
     @Override
     protected void onRoomChanged() {
-        // Un cambio stanza (anche tramite F4 o caricamento) chiude un
+        // Un cambio stanza, anche durante un caricamento, chiude il
         // dialogo in corso senza attivarne la callback narrativa.
         if (dialogue.isVisible()) {
             dialogue.stop();
@@ -159,6 +171,9 @@ public class Chapter1Panel extends AbstractChapterPanel {
         setRegisteredNpcHotspotsVisible(idle);
     }
 
+    /**
+     * Controlla la chiave ricevuta da Martino prima di consegnare la rugiada del baule.
+     */
     private void openChest() {
         GameState state = GameState.getInstance();
         if (state.hasItem("RUGIADA_ASGARD")) {
@@ -178,6 +193,9 @@ public class Chapter1Panel extends AbstractChapterPanel {
         return !("MAPPA_CIELO".equals(itemId) && state.hasGivenMapToMartino());
     }
 
+    /**
+     * Seleziona la conversazione di Martino coerente con lo scambio della mappa.
+     */
     private void startMartinoDialogue() {
         GameState state = GameState.getInstance();
         if (state.hasDragonKey()) {
@@ -189,6 +207,9 @@ public class Chapter1Panel extends AbstractChapterPanel {
         }
     }
 
+    /**
+     * Applica l’esito del dialogo concluso: scambio, ricompensa dell’NPC o avvio del boss.
+     */
     private void onDialogueFinished() {
         DialogueKind completed = activeDialogueKind;
         activeDialogueKind = DialogueKind.NONE;
@@ -232,6 +253,9 @@ public class Chapter1Panel extends AbstractChapterPanel {
         hudPanel.updateHUD();
     }
 
+    /**
+     * Prepara il fondale dello scontro e avvia l’introduzione dedicata a Hræsvelgr.
+     */
     private void triggerBossEncounter() {
     GameState gs = GameState.getInstance();
     if (gs.isBossDefeated()) {

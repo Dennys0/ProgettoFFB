@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Legge il catalogo da H2 e converte le righe SQL in oggetti Item. La raccolta nell’inventario
+ * resta responsabilità del modello di gioco.
+ */
 public class ItemDAO {
 
     /**

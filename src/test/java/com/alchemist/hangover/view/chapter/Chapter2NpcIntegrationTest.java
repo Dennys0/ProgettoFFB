@@ -14,9 +14,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * The PNGs and NPC dialogues are delivered as a separate artist asset pack.
- * Use -Dalchemist.require.chapter2.assets=true after importing the pack:
- * it makes the classpath image and dialogue checks mandatory.
+ * Verifica dialoghi e immagini degli NPC del secondo capitolo.
+ * Con -Dalchemist.require.chapter2.assets=true la presenza delle risorse
+ * nel percorso delle risorse dell’applicazione diventa obbligatoria.
  */
 class Chapter2NpcIntegrationTest {
     private static final Map<Integer, String> SPEAKERS = Map.of(
@@ -74,7 +74,7 @@ class Chapter2NpcIntegrationTest {
             assertTrue(rect.y + rect.height <= 720);
         }
 
-        // Hrönn on the right must not be hidden beneath the boss whirlpool.
+        // Hrönn sulla destra non deve essere coperta dall’area cliccabile del vortice.
         Rectangle hronn = npcs.stream().filter(n -> n.room() == 7)
                 .findFirst().orElseThrow().bounds();
         assertFalse(hronn.intersects(new Rectangle(400, 300, 470, 265)));

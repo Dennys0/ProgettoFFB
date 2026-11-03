@@ -18,6 +18,10 @@ public class CauldronArtworkPanel extends JPanel {
         setOpaque(false);
     }
 
+    /**
+     * Adatta la cornice illustrata alle dimensioni del pannello senza applicare regole di
+     * miscela.
+     */
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -39,6 +43,9 @@ public class CauldronArtworkPanel extends JPanel {
         }
     }
 
+    /**
+     * Carica l’illustrazione condivisa dalle finestre del calderone.
+     */
     private static Image loadImage() {
         URL resource = CauldronArtworkPanel.class.getResource(IMAGE_PATH);
         return resource == null ? null : new ImageIcon(resource).getImage();

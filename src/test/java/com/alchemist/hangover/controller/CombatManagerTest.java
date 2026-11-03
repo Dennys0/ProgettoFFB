@@ -6,6 +6,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica danni, sconfitta al terzo colpo, punto di ripresa e vittoria specifica di capitolo.
+ */
 class CombatManagerTest {
     @AfterEach void reset(){ GameState.getInstance().resetState(); }
 

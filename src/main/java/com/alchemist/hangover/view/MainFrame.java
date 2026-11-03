@@ -23,6 +23,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
+/**
+ * Finestra principale: registra le scene da creare al primo utilizzo e i comandi globali. Le
+ * scorciatoie di sviluppo sono installate soltanto con alchemist.debug=true.
+ */
 public class MainFrame extends JFrame {
     public MainFrame() {
         setTitle("The Alchemist's Hangover");
@@ -67,6 +71,10 @@ public class MainFrame extends JFrame {
         if (Boolean.getBoolean("alchemist.debug")) installDebugBindings(manager);
     }
 
+    /**
+     * Installa salti di capitolo, scelta della stanza e visualizzazione delle aree cliccabili. È
+     * chiamato solo con la modalità sviluppatore abilitata.
+     */
     private void installDebugBindings(SceneManager manager) {
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "skipToCh2");
@@ -84,7 +92,7 @@ public class MainFrame extends JFrame {
             }
         });
 
-        // Accesso provvisorio al capitolo 3 per verificare le sette stanze,
+        // Accesso al capitolo 3 riservato alla modalità sviluppatore,
         // senza passare dal boss o dalla ricetta del capitolo 2.
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "previewChapter3");
@@ -133,6 +141,9 @@ public class MainFrame extends JFrame {
         bindRoomPicker(KeyEvent.VK_F7, 4);
     }
 
+    /**
+     * Associa un tasto alla scelta delle stanze del capitolo indicato.
+     */
     private void bindRoomPicker(int key, int chapter) {
         String action = "chapter" + chapter + "RoomPicker";
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
@@ -155,6 +166,9 @@ public class MainFrame extends JFrame {
         });
     }
 
+    /**
+     * Controlla se la scena attuale è un capitolo esplorabile prima di aprire i comandi globali.
+     */
     private boolean isPlayingChapter() {
         String scene = SceneManager.getInstance().getCurrentSceneName();
         return "CHAPTER1".equals(scene) || "CHAPTER2".equals(scene)

@@ -5,6 +5,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Verifica danni e ricompense uniche senza dipendere dalle finestre Swing.
+ */
 class BossRulesTest {
     @AfterEach void reset() { GameState.getInstance().resetState(); }
 

@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.Random;
 import javax.swing.*;
 
+/**
+ * Combattimento del capitolo 1: sequenze casuali di tasti da completare entro un tempo limite.
+ * Coordina comandi e presentazione, delegando danni e ricompense a CombatManager.
+ */
 public class HraesvelgrBossOverlay extends JDialog {
 
     private int currentStep = 1;
@@ -73,14 +77,14 @@ public class HraesvelgrBossOverlay extends JDialog {
         titleLabel.setBounds(20, 20, 760, 35);
         contentPanel.add(titleLabel);
 
-        // Indicatori Step e Timer
+        // Indicatori della fase e del tempo disponibile.
         stepLabel = new JLabel("STEP 1 / 7", SwingConstants.CENTER);
         stepLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
         stepLabel.setForeground(new Color(255, 215, 0));
         stepLabel.setBounds(50, 255, 700, 30);
         contentPanel.add(stepLabel);
 
-        // Display della Sequenza di Tasti
+        // Visualizzazione della sequenza di tasti.
         sequenceDisplayLabel = new JLabel("", SwingConstants.CENTER);
         sequenceDisplayLabel.setFont(new Font("Monospaced", Font.BOLD, 36));
         sequenceDisplayLabel.setForeground(Color.CYAN);
@@ -116,14 +120,14 @@ public class HraesvelgrBossOverlay extends JDialog {
         bossHearts.setBounds(355, 451, 150, 36);
         contentPanel.add(bossHearts);
 
-        // Istruzioni Input
+        // Istruzioni dei comandi.
         JLabel infoInput = new JLabel("Usa i tasti [W] [A] [S] [D] oppure le Frecce Direzionali", SwingConstants.CENTER);
         infoInput.setFont(new Font("SansSerif", Font.PLAIN, 13));
         infoInput.setForeground(new Color(180, 180, 180));
         infoInput.setBounds(50, 500, 700, 25);
         contentPanel.add(infoInput);
 
-        // Key Listener per catturare WASD e Frecce
+        // Ascoltatore della tastiera per WASD e frecce.
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -153,12 +157,15 @@ public class HraesvelgrBossOverlay extends JDialog {
         super.dispose();
     }
 
+    /**
+     * Prepara la sequenza della fase e riavvia il relativo limite di tempo.
+     */
     private void currentRoomStep(int step) {
         this.currentStep = step;
         this.userIndex = 0;
         stepLabel.setText("RAFFICA " + currentStep + " / " + MAX_STEPS);
 
-        // Genera sequenza casuale (lunghezza = numero dello step)
+        // La lunghezza della sequenza casuale cresce con il numero della fase.
         currentSequence = new ArrayList<>();
         Random rand = new Random();
         for (int i = 0; i < currentStep; i++) {
@@ -185,6 +192,9 @@ public class HraesvelgrBossOverlay extends JDialog {
         countdownTimer.start();
     }
 
+    /**
+     * Distingue i tasti già corretti, quello atteso e quelli ancora da premere.
+     */
     private void updateSequenceDisplay() {
         StringBuilder sb = new StringBuilder("<html>");
         for (int i = 0; i < currentSequence.size(); i++) {
@@ -200,6 +210,9 @@ public class HraesvelgrBossOverlay extends JDialog {
         sequenceDisplayLabel.setText(sb.toString());
     }
 
+    /**
+     * Converte il tasto in un comando della sequenza e decide se avanzare o applicare un errore.
+     */
     private void handleKeyPress(KeyEvent e) {
         if (!isEnabled() || currentSequence == null || userIndex >= currentSequence.size()) return;
 
@@ -220,7 +233,7 @@ public class HraesvelgrBossOverlay extends JDialog {
             updateSequenceDisplay();
 
             if (userIndex >= currentSequence.size()) {
-                // Step completato
+                // Fase completata.
                 countdownTimer.stop();
                 if (currentStep < MAX_STEPS) {
                     statusLabel.setText("Step " + currentStep + " superato! Preparati per il prossimo...");
@@ -237,6 +250,9 @@ public class HraesvelgrBossOverlay extends JDialog {
         }
     }
 
+    /**
+     * Applica il danno e gestisce la ripresa della fase oppure la sconfitta.
+     */
     private void failStep(String reason) {
         boolean defeated = CombatManager.takeHit(this,
                 "Le ali di Hræsvelgr travolgono il vascello.");
@@ -253,6 +269,9 @@ public class HraesvelgrBossOverlay extends JDialog {
         }
     }
 
+    /**
+     * Registra la vittoria del primo capitolo e presenta la ricompensa ottenuta.
+     */
     private void winBossFight() {
         dispose();
         CombatManager.victory(1);
