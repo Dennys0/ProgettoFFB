@@ -63,17 +63,7 @@ public final class Chapter3Panel extends AbstractChapterPanel {
                 303, 481, 62, 44, 5, "Frammento di Yggdrasil",
                 "Una scheggia di legno millenario che emette una debole luce dorata.");
         // Il frammento sul terreno riflette meno luce rispetto all’icona nell’inventario.
-        JButton fragment = itemButtons.get("FRAMMENTO_YGGDRASIL");
-        ImageIcon source = (ImageIcon) fragment.getIcon();
-        if (source != null) {
-            java.awt.image.BufferedImage muted = new java.awt.image.BufferedImage(
-                    source.getIconWidth(), source.getIconHeight(), java.awt.image.BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g = muted.createGraphics();
-            g.setComposite(AlphaComposite.SrcOver.derive(0.55f));
-            source.paintIcon(fragment, g, 0, 0);
-            g.dispose();
-            fragment.setIcon(new ImageIcon(muted));
-        }
+        muteWorldItem("FRAMMENTO_YGGDRASIL", 0.55f);
         createBreathingCrackHotspot();
         createGunnarHotspot();
         initGunnarDialogue();

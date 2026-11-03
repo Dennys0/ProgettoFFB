@@ -38,7 +38,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
         // 2. Caricamento Risorse Grafiche Dialoghi
 
         dialogue = new DialogueManager.SceneSession(this,
-                speaker -> "HRAESVELGR".equals(speaker) ? new Rectangle(100, 12, 1080, 450)
+                speaker -> ("HRAESVELGR".equals(speaker) || "GRIFONE".equals(speaker)) ? new Rectangle(100, 12, 1080, 450)
                         : new Rectangle(340, 30, 600, 620),
                 this::onDialogueFinished);
         dialogue.addPortrait("MARTINO", "/images/chapter1/npc/martino_realms.png");
@@ -47,7 +47,7 @@ public class Chapter1Panel extends AbstractChapterPanel {
         dialogue.addPortrait("GUNNAR", "/images/shared/npc/gunnar_realms.png");
         dialogue.addPortrait("MOZZO", "/images/chapter1/npc/mozzo_realms.png");
         dialogue.addPortrait("DIAVOLETTO", "/images/shared/npc/diavoletto_realms.png");
-        dialogue.addPortrait("GRIFONE", "/images/chapter1/npc/grifone_realms.png");
+        dialogue.addFittedPortrait("GRIFONE", "/images/chapter1/npc/grifone_realms.png");
 
         // 4. Inizializzazione Hotspots & Oggetti
         initHotspots();
@@ -87,8 +87,9 @@ public class Chapter1Panel extends AbstractChapterPanel {
                 "Parla con Veðrfölnir", "/dialogues/vedrfolnir_dialogue.txt");
 
         // Creazione bottoni visibili per gli oggetti raccolti a schermo
-        addItemWorldButton("MAPPA_CIELO", "/images/chapter1/items/map.png", 968, 348, 78, 44, 5,
+        addItemWorldButton("MAPPA_CIELO", "/images/chapter1/items/map.png", 1050, 294, 78, 44, 5,
                 "Mappa del Cielo", "Una pergamena cosmica trovata nella stiva.");
+        muteWorldItem("MAPPA_CIELO", 0.55f);
 
         addItemWorldButton("NEBBIA_NIFLHEIM", "/images/chapter1/items/fog.png", 322, 529, 55, 55, 5,
                 "Nebbia di Niflheim", "Una fiala sigillata contenente fumo denso e gelido.");

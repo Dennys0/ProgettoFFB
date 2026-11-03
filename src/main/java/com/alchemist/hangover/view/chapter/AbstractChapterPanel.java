@@ -163,6 +163,23 @@ public abstract class AbstractChapterPanel extends JPanel {
         add(button);
     }
 
+    /** Attenua solo l'icona nella stanza; l'inventario mantiene l'originale. */
+    protected final void muteWorldItem(String id, float opacity) {
+        JButton button = itemButtons.get(id);
+        Icon source = button.getIcon();
+        if (source == null) return;
+        java.awt.image.BufferedImage muted = new java.awt.image.BufferedImage(
+                source.getIconWidth(), source.getIconHeight(), java.awt.image.BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = muted.createGraphics();
+        try {
+            graphics.setComposite(AlphaComposite.SrcOver.derive(opacity));
+            source.paintIcon(button, graphics, 0, 0);
+        } finally {
+            graphics.dispose();
+        }
+        button.setIcon(new ImageIcon(muted));
+    }
+
     private void collectWorldItem(WorldItemDefinition definition, JButton button) {
         GameState state = GameState.getInstance();
         if (state.hasItem(definition.id)) {

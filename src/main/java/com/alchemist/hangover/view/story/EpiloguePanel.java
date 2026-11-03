@@ -15,6 +15,7 @@ public final class EpiloguePanel extends JPanel {
     private final JLabel heading = new JLabel("", SwingConstants.CENTER);
     private final JLabel narration = new JLabel("", SwingConstants.CENTER);
     private final JButton next = new JButton("CONTINUA");
+    private final JLabel cocktail = new JLabel();
     private int page;
     private final Image backdrop;
 
@@ -45,6 +46,18 @@ public final class EpiloguePanel extends JPanel {
         setPreferredSize(new Dimension(1280, 720));
         URL url = getClass().getResource("/images/intro/menu_bg.png");
         backdrop = url == null ? null : new ImageIcon(url).getImage();
+
+        URL drinkUrl = getClass().getResource("/images/chapter4/items/ragnarok_flambe.png");
+        if (drinkUrl != null) {
+            ImageIcon source = new ImageIcon(drinkUrl);
+            double scale = Math.min(300.0 / source.getIconWidth(), 300.0 / source.getIconHeight());
+            cocktail.setIcon(new ImageIcon(source.getImage().getScaledInstance(
+                    (int) (source.getIconWidth() * scale),
+                    (int) (source.getIconHeight() * scale), Image.SCALE_SMOOTH)));
+        }
+        cocktail.setBounds(115, 200, 300, 300);
+        cocktail.setHorizontalAlignment(SwingConstants.CENTER);
+        add(cocktail);
 
         heading.setBounds(110, 95, 1060, 85);
         heading.setFont(new Font("Georgia", Font.BOLD, 47));
@@ -86,6 +99,8 @@ public final class EpiloguePanel extends JPanel {
     }
 
     private void refresh() {
+        cocktail.setVisible(page == 0);
+        narration.setBounds(page == 0 ? 440 : 110, 208, page == 0 ? 710 : 1060, 280);
         heading.setText(TITLES[page]);
         narration.setText(STORY[page]);
         next.setText(page == STORY.length - 1 ? "TORNA AL MENU" : "CONTINUA");
